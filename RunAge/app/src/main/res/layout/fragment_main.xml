@@ -14,9 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".fragment.MainFragment">
-        
+
+        <xevenition.com.runage.view.NonSwipeableViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.stfalcon.swipeablebutton.SwipeableButton
+            android:id="@+id/swipeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dip"
@@ -28,10 +37,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:textChecked="@string/swipe_to_stop"
             app:textColorChecked="@color/colorPrimary"
             app:textColorUnChecked="@color/white"
             app:textUnchecked="@string/swipe_to_start"
-            app:textChecked="@string/swipe_to_stop"
             app:uncheckedBackground="@drawable/square_rounded"
             app:uncheckedIcon="@drawable/ic_run_blue"
             app:uncheckedToggleBackground="@drawable/circle_light" />
