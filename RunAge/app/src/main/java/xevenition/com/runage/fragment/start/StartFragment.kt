@@ -1,21 +1,24 @@
-package xevenition.com.runage.fragment
+package xevenition.com.runage.fragment.start
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import androidx.lifecycle.ViewModelProviders
+import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.architecture.BaseFragment
+import javax.inject.Inject
 
-class StartFragment : Fragment() {
+class StartFragment : BaseFragment<StartViewModel>() {
 
-    companion object {
-        fun newInstance() = StartFragment()
+    @Inject
+    lateinit var factory: StartViewModelFactory
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.applicationContext as MainApplication).appComponent.inject(this)
     }
-
-    private lateinit var viewModel: StartViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +31,10 @@ class StartFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(StartViewModel::class.java)
         // TODO: Use the ViewModel
+    }
+
+    companion object {
+        fun newInstance() = StartFragment()
     }
 
 }

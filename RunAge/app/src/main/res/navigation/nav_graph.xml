@@ -5,6 +5,6 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="xevenition.com.runage.fragment.MainFragment"
+        android:name="xevenition.com.runage.fragment.main.MainFragment"
         android:label="MainFragment" />
 </navigation>

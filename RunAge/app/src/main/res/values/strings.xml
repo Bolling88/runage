@@ -6,4 +6,12 @@
     <string name="swipe_to_start">SWIPE TO START</string>
     <string name="swipe_to_stop">SWIPE TO STOP</string>
     <string name="title_activity_maps">Map</string>
+    <string name="notification_title">Running quest active</string>
+    <string name="notification_message">Good luck!</string>
+    <string name="ticker_text">Ticker</string>
+    <string name="walking">Walking</string>
+    <string name="running">Running</string>
+    <string name="driving">Driving</string>
+    <string name="on_bicycle">On Bicycle</string>
+    <string name="still">Still</string>
 </resources>

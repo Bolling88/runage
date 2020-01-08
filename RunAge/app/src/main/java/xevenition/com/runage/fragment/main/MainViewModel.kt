@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment
+package xevenition.com.runage.fragment.main
 
 import xevenition.com.runage.architecture.BaseViewModel
 

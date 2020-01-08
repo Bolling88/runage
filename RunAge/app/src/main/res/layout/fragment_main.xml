@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="xevenition.com.runage.fragment.MainViewModel" />
+            type="xevenition.com.runage.fragment.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragment.MainFragment">
+        tools:context=".fragment.main.MainFragment">
 
         <xevenition.com.runage.view.NonSwipeableViewPager
             android:id="@+id/viewPager"
