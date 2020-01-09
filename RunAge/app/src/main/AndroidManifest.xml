@@ -27,7 +27,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".ActivityBroadcastReceiver"
+        <receiver
+            android:name=".ActivityBroadcastReceiver"
             android:exported="false"
             android:permission="com.google.android.gms.permission.ACTIVITY_RECOGNITION">
             <intent-filter>
@@ -42,7 +43,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/maps_key" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

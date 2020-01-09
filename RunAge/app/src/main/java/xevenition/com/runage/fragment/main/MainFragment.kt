@@ -53,6 +53,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if(EventService.serviceIsRunning){
+            binding.viewPager.currentItem = 1
+            binding.swipeButton.isChecked = true
+        }
+
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
             startEventService()
@@ -80,9 +85,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
     }
 
     companion object {
-        const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
-        const val ONGOING_NOTIFICATION_ID = 532632
-
         fun newInstance() = MainFragment()
     }
 

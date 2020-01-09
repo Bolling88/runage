@@ -11,11 +11,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.databinding.FragmentMapBinding
-import xevenition.com.runage.service.EventService.Companion.KEY_EVENT_BROADCAST_ID
+import xevenition.com.runage.service.EventService
+import xevenition.com.runage.service.EventService.Companion.KEY_LOCATION_BROADCAST_ID
 import javax.inject.Inject
 
 
@@ -28,16 +30,23 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            viewModel.onUserEventChanged(intent)
+            if (intent.action.equals(KEY_EVENT_BROADCAST_ID)) {
+                viewModel.onUserEventChanged(intent)
+            } else if (intent.action.equals(EventService.KEY_LOCATION_BROADCAST_ID)) {
+                viewModel.onUserLocationChanged(intent)
+            }
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.applicationContext as MainApplication).appComponent.inject(this)
+        (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
 
-        LocalBroadcastManager.getInstance(activity!!).registerReceiver(
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
+        )
+        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
+            currentActivityReceiver, IntentFilter(KEY_LOCATION_BROADCAST_ID)
         )
     }
 

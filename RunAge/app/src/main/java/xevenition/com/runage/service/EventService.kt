@@ -8,21 +8,26 @@ import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
+import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.location.*
 import io.reactivex.disposables.CompositeDisposable
 import xevenition.com.runage.ActivityActivator
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainActivity
 import xevenition.com.runage.R
-import xevenition.com.runage.fragment.main.MainFragment
 
 
 class EventService : Service() {
 
+    private var locationRequest: LocationRequest? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -32,12 +37,56 @@ class EventService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        serviceIsRunning = true
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        createLocationRequest()
+        handleLocationCallbacks(this)
+        startLocationUpdates()
         eventHandler = ActivityActivator(this)
         eventHandler.startActivityTracking()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceIsRunning = false
+        eventHandler.endActivityTracking()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
+        compositeDisposable.dispose()
+    }
+
+    private fun handleLocationCallbacks(context: Context) {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult?) {
+                Log.d(TAG, "Got location update")
+                locationResult ?: return
+                val intent = Intent(KEY_LOCATION_BROADCAST_ID)
+                intent.putExtra(
+                    KEY_LOCATION, locationResult
+                )
+                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+            }
+        }
+    }
+
+    private fun startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest.create()?.apply {
+            interval = 10000
+            fastestInterval = 5000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -50,7 +99,7 @@ class EventService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notification: Notification = Notification.Builder(
                 this,
-                MainFragment.CHANNEL_DEFAULT_IMPORTANCE
+                CHANNEL_DEFAULT_IMPORTANCE
             )
                 .setContentTitle(getText(R.string.notification_title))
                 .setChannelId(createNotificationChannel("my_service", "My Background Service"))
@@ -78,21 +127,16 @@ class EventService : Service() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun createNotificationChannel(channelId: String, channelName: String): String{
-        val chan = NotificationChannel(channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE)
+    private fun createNotificationChannel(channelId: String, channelName: String): String {
+        val chan = NotificationChannel(
+            channelId,
+            channelName, NotificationManager.IMPORTANCE_NONE
+        )
         chan.lightColor = Color.BLUE
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        eventHandler.endActivityTracking()
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
-        compositeDisposable.dispose()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -102,8 +146,13 @@ class EventService : Service() {
 
     companion object {
         const val NOTIFICATION_ID = 2345235
+        const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
+        const val KEY_LOCATION = "KEY_LOCATION"
+        const val KEY_LOCATION_BROADCAST_ID = "KEY_LOCATION_BROADCAST_ID"
 
-        val TAG = EventService::class.java.name
+        private val TAG = EventService::class.java.name
+
+        var serviceIsRunning = false
     }
 
 }
