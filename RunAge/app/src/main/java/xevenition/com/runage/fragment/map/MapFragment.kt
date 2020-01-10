@@ -12,12 +12,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import io.reactivex.subjects.BehaviorSubject
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
@@ -128,8 +126,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
         binding.mapView.onSaveInstanceState(outState)
     }
 
-    fun passLocationUpdatesObservable(observable: BehaviorSubject<LocationResult>) {
-        viewModel.passLocationUpdatesObservable(observable)
+    fun onNewQuestCreated(id: Int) {
+        viewModel.onNewQuestCreated(id)
     }
 
     companion object {

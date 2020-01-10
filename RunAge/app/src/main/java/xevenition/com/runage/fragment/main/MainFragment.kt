@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProviders
+import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
@@ -35,11 +36,17 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private val connection = object : ServiceConnection {
 
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            Timber.d("onServiceConnected")
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             val binder = service as EventService.LocalBinder
             mService = binder.getService()
             mBound = true
-            (adapter.getItem(1) as MapFragment).passLocationUpdatesObservable(mService.observableLocationUpdates)
+            mService.registerCallback(object: EventService.EventCallback{
+                override fun onQuestCreated(id: Int) {
+                    Timber.d("onQuestCreated: $id")
+                    (adapter.getItem(1) as MapFragment).onNewQuestCreated(id)
+                }
+            })
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -109,8 +116,10 @@ class MainFragment : BaseFragment<MainViewModel>() {
     }
 
     private fun unbindService() {
-        activity?.unbindService(connection)
-        mBound = false
+        if(mBound) {
+            activity?.unbindService(connection)
+            mBound = false
+        }
     }
 
     private fun startEventService() {

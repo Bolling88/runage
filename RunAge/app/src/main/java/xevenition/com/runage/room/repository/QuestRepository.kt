@@ -1,5 +1,6 @@
 package xevenition.com.runage.room.repository
 
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -13,8 +14,8 @@ class QuestRepository @Inject constructor(private val db: AppDatabase) {
     fun startNewQuest(): Single<Quest> {
         return Single.fromCallable {
             val currentQuest = Quest(startTimeMillis = Instant.now().epochSecond)
-            db.questDao().insert(currentQuest)
-            currentQuest
+            val questId = db.questDao().insert(currentQuest)
+            db.questDao().getQuest(questId)
         }
             .subscribeOn(Schedulers.io())
             .doOnError {
@@ -30,5 +31,17 @@ class QuestRepository @Inject constructor(private val db: AppDatabase) {
             .doOnError {
                 Timber.e(it)
             }
+    }
+
+    fun getFlowableQuest(questId: Int): Flowable<Quest> {
+        return db.questDao().getFlowableQuest(questId)
+            .subscribeOn(Schedulers.io())
+            .doOnError {
+                Timber.e(it)
+            }
+    }
+
+    fun dbUpdateQuest(quest: Quest) {
+        db.questDao().update(quest)
     }
 }

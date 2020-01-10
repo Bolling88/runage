@@ -22,7 +22,7 @@ class AppModule(private val application: Application) {
         return Room.databaseBuilder(
             app,
             AppDatabase::class.java, RUN_AGE_DATABASE
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 
     companion object {

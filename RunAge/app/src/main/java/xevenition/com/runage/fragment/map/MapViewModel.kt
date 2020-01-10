@@ -4,28 +4,57 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.DetectedActivity
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.disposables.Disposable
+import timber.log.Timber
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ACTIVITY_TYPE
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ELAPSED_TIME
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_TRANSTITION_TYPE
 import xevenition.com.runage.R
 import xevenition.com.runage.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.model.PositionPoint
+import xevenition.com.runage.room.repository.QuestRepository
 
 
-class MapViewModel(private val resourceUtil: ResourceUtil) : BaseViewModel() {
+class MapViewModel(
+    private val resourceUtil: ResourceUtil,
+    private val questRepository: QuestRepository
+) : BaseViewModel() {
 
+    private var questDisposable: Disposable? = null
     private var userMarker: Marker? = null
     val observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
     val observableUserMarkerPosition = MutableLiveData<LatLng>()
 
     val liveTextActivityType = MutableLiveData<String>()
+
+    fun onNewQuestCreated(id: Int) {
+        setUpObservableQuest(id)
+    }
+
+    private fun setUpObservableQuest(id: Int) {
+        Timber.d("Register quest flowable with id: $id")
+        questDisposable?.dispose()
+        questDisposable = questRepository.getFlowableQuest(id)
+            .subscribe({ quest ->
+                Timber.d("Got quest update")
+                for(loc in quest.locations){
+                    Timber.d("${loc.latitude} ${loc.longitude}")
+                }
+                quest.locations.lastOrNull()?.let {
+                    moveToCurrentLocation(it)
+                }
+            }, {
+                Timber.e(it)
+            })
+        questDisposable?.let {
+            addDisposable(it)
+        }
+    }
 
     fun onUserEventChanged(intent: Intent) {
         val transtitionType = intent.getIntExtra(KEY_TRANSTITION_TYPE, 0)
@@ -59,24 +88,14 @@ class MapViewModel(private val resourceUtil: ResourceUtil) : BaseViewModel() {
         }
     }
 
-    fun passLocationUpdatesObservable(observable: BehaviorSubject<LocationResult>) {
-        val disposable = observable.subscribeOn(Schedulers.io())
-            .subscribe({
-                val lastLocation = it?.lastLocation
-
-                lastLocation?.let {
-                    val latLng = LatLng(it.latitude, it.longitude)
-                    val userLocation = CameraUpdateFactory.newLatLngZoom(
-                        latLng,
-                        19f
-                    )
-                    observableAnimateMapPosition.postValue(userLocation)
-                    observableUserMarkerPosition.postValue(latLng)
-                }
-            },{
-                Log.e(TAG, it.message)
-            })
-        addDisposable(disposable)
+    private fun moveToCurrentLocation(lastLocation: PositionPoint) {
+        val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+        val userLocation = CameraUpdateFactory.newLatLngZoom(
+            latLng,
+            19f
+        )
+        observableAnimateMapPosition.postValue(userLocation)
+        observableUserMarkerPosition.postValue(latLng)
     }
 
     companion object {

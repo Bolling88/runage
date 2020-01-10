@@ -15,14 +15,16 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.ActivityActivator
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainActivity
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import javax.inject.Inject
@@ -37,11 +39,14 @@ class EventService : Service() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private val binder = LocalBinder()
+    private var callback: EventCallback? = null
+
+    interface EventCallback {
+        fun onQuestCreated(id: Int)
+    }
 
     @Inject
     lateinit var questRepository: QuestRepository
-
-    lateinit var observableLocationUpdates: BehaviorSubject<LocationResult>
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -53,21 +58,22 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
+        serviceIsRunning = true
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
             .subscribe({
+                callback?.onQuestCreated(it.id)
                 currentQuest = it
+
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                createLocationRequest()
+                handleLocationCallbacks(this)
+                startLocationUpdates()
+                eventHandler = ActivityActivator(this)
+                eventHandler.startActivityTracking()
             }, {
-               Timber.e(it)
+                Timber.e(it)
             })
-        serviceIsRunning = true
-        observableLocationUpdates = BehaviorSubject.create()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        createLocationRequest()
-        handleLocationCallbacks(this)
-        startLocationUpdates()
-        eventHandler = ActivityActivator(this)
-        eventHandler.startActivityTracking()
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
@@ -87,11 +93,25 @@ class EventService : Service() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 Timber.d("Got location update")
-                locationResult?.let {
-                    observableLocationUpdates.onNext(it)
-                    currentQuest.locations = it.locations
-                    questRepository.updateQuest(currentQuest)
-                        .subscribe()
+                locationResult?.let { locationResult ->
+                    Observable.just(locationResult)
+                        .subscribeOn(Schedulers.io())
+                        .map {
+                            Timber.d("${it.lastLocation.latitude} ${it.lastLocation.longitude}")
+                            currentQuest.locations.add(
+                                PositionPoint(
+                                    it.lastLocation.latitude,
+                                    it.lastLocation.longitude
+                                )
+                            )
+                            questRepository.dbUpdateQuest(currentQuest)
+                        }
+                        .subscribe({
+                            Timber.d("Quest location updated")
+                        }, {
+                            Timber.e(it)
+                        })
+
                 }
             }
         }
@@ -161,6 +181,13 @@ class EventService : Service() {
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
+    }
+
+    fun registerCallback(callback: EventCallback) {
+        this.callback = callback
+        if (::currentQuest.isInitialized) {
+            callback.onQuestCreated(currentQuest.id)
+        }
     }
 
     /**
