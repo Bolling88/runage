@@ -9,20 +9,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import io.reactivex.subjects.BehaviorSubject
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.databinding.FragmentMapBinding
-import xevenition.com.runage.service.EventService
-import xevenition.com.runage.service.EventService.Companion.KEY_LOCATION_BROADCAST_ID
 import javax.inject.Inject
 
 
 class MapFragment : BaseFragment<MapViewModel>() {
 
+    private var userMarker: Marker? = null
+    private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentMapBinding
 
     @Inject
@@ -32,8 +39,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action.equals(KEY_EVENT_BROADCAST_ID)) {
                 viewModel.onUserEventChanged(intent)
-            } else if (intent.action.equals(EventService.KEY_LOCATION_BROADCAST_ID)) {
-                viewModel.onUserLocationChanged(intent)
             }
         }
     }
@@ -44,9 +49,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
-        )
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            currentActivityReceiver, IntentFilter(KEY_LOCATION_BROADCAST_ID)
         )
     }
 
@@ -65,8 +67,27 @@ class MapFragment : BaseFragment<MapViewModel>() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.mapView.getMapAsync {
-            viewModel.onMapReady(it)
+            googleMap = it
+            googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
+
+        viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                googleMap?.animateCamera(it)
+            }
+        })
+
+        viewModel.observableUserMarkerPosition.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if (userMarker != null) {
+                    userMarker?.position = it
+                } else {
+                    val options = MarkerOptions().position(it)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
+                    userMarker = googleMap?.addMarker(options);
+                }
+            }
+        })
     }
 
     override fun onStart() {
@@ -92,7 +113,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onDestroy() {
         super.onDestroy()
         binding.mapView.onDestroy()
-        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(currentActivityReceiver)
+        context?.let {
+            LocalBroadcastManager.getInstance(it).unregisterReceiver(currentActivityReceiver)
+        }
     }
 
     override fun onLowMemory() {
@@ -103,6 +126,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.mapView.onSaveInstanceState(outState)
+    }
+
+    fun passLocationUpdatesObservable(observable: BehaviorSubject<LocationResult>) {
+        viewModel.passLocationUpdatesObservable(observable)
     }
 
     companion object {

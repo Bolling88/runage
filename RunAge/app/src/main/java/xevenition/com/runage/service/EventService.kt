@@ -1,33 +1,47 @@
 package xevenition.com.runage.service
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
+import timber.log.Timber
 import xevenition.com.runage.ActivityActivator
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainActivity
+import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.room.entity.Quest
+import xevenition.com.runage.room.repository.QuestRepository
+import javax.inject.Inject
 
 
 class EventService : Service() {
 
+    private lateinit var currentQuest: Quest
     private var locationRequest: LocationRequest? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private val binder = LocalBinder()
+
+    @Inject
+    lateinit var questRepository: QuestRepository
+
+    lateinit var observableLocationUpdates: BehaviorSubject<LocationResult>
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -35,9 +49,19 @@ class EventService : Service() {
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
+        (applicationContext as MainApplication).appComponent.inject(this)
+        //TODO add start delay of 10 seconds
+        questRepository.startNewQuest()
+            .subscribe({
+                currentQuest = it
+            }, {
+               Timber.e(it)
+            })
         serviceIsRunning = true
+        observableLocationUpdates = BehaviorSubject.create()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         createLocationRequest()
         handleLocationCallbacks(this)
@@ -62,13 +86,13 @@ class EventService : Service() {
     private fun handleLocationCallbacks(context: Context) {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
-                Log.d(TAG, "Got location update")
-                locationResult ?: return
-                val intent = Intent(KEY_LOCATION_BROADCAST_ID)
-                intent.putExtra(
-                    KEY_LOCATION, locationResult
-                )
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
+                Timber.d("Got location update")
+                locationResult?.let {
+                    observableLocationUpdates.onNext(it)
+                    currentQuest.locations = it.locations
+                    questRepository.updateQuest(currentQuest)
+                        .subscribe()
+                }
             }
         }
     }
@@ -139,18 +163,23 @@ class EventService : Service() {
         return channelId
     }
 
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    inner class LocalBinder : Binder() {
+        // Return this instance of LocalService so clients can call public methods
+        fun getService(): EventService = this@EventService
+    }
+
+    override fun onBind(intent: Intent): IBinder {
+        return binder
     }
 
 
     companion object {
         const val NOTIFICATION_ID = 2345235
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
-        const val KEY_LOCATION = "KEY_LOCATION"
-        const val KEY_LOCATION_BROADCAST_ID = "KEY_LOCATION_BROADCAST_ID"
-
-        private val TAG = EventService::class.java.name
 
         var serviceIsRunning = false
     }

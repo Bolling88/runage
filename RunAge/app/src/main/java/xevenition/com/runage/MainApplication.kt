@@ -6,14 +6,16 @@ import xevenition.com.runage.architecture.AppModule
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.map.MapFragment
 import xevenition.com.runage.fragment.start.StartFragment
+import xevenition.com.runage.service.EventService
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [AppModule::class])
 interface ApplicationComponent {
-    fun inject(activity: StartFragment)
-    fun inject(activity: MapFragment)
-    fun inject(activity: MainFragment)
+    fun inject(component: StartFragment)
+    fun inject(component: MapFragment)
+    fun inject(component: MainFragment)
+    fun inject(component: EventService)
 }
 
 class MainApplication: Application() {

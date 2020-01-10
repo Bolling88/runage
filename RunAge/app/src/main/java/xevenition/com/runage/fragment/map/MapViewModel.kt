@@ -5,26 +5,27 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ACTIVITY_TYPE
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ELAPSED_TIME
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_TRANSTITION_TYPE
 import xevenition.com.runage.R
 import xevenition.com.runage.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.service.EventService.Companion.KEY_LOCATION
 
 
 class MapViewModel(private val resourceUtil: ResourceUtil) : BaseViewModel() {
 
-    private var googleMap: GoogleMap? = null
-    val liveTextActivityType = MutableLiveData<String>()
+    private var userMarker: Marker? = null
+    val observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
+    val observableUserMarkerPosition = MutableLiveData<LatLng>()
 
-    fun onMapReady(map: GoogleMap) {
-        googleMap = map
-    }
+    val liveTextActivityType = MutableLiveData<String>()
 
     fun onUserEventChanged(intent: Intent) {
         val transtitionType = intent.getIntExtra(KEY_TRANSTITION_TYPE, 0)
@@ -58,18 +59,24 @@ class MapViewModel(private val resourceUtil: ResourceUtil) : BaseViewModel() {
         }
     }
 
-    fun onUserLocationChanged(intent: Intent) {
-        Log.d(TAG, "On location changed")
-        val locationResult = intent.getParcelableExtra<LocationResult>(KEY_LOCATION)
-        val lastLocation = locationResult?.lastLocation
+    fun passLocationUpdatesObservable(observable: BehaviorSubject<LocationResult>) {
+        val disposable = observable.subscribeOn(Schedulers.io())
+            .subscribe({
+                val lastLocation = it?.lastLocation
 
-        lastLocation?.let {
-            val yourLocation = CameraUpdateFactory.newLatLngZoom(
-                LatLng(it.latitude, it.longitude),
-                19f
-            )
-            googleMap?.animateCamera(yourLocation)
-        }
+                lastLocation?.let {
+                    val latLng = LatLng(it.latitude, it.longitude)
+                    val userLocation = CameraUpdateFactory.newLatLngZoom(
+                        latLng,
+                        19f
+                    )
+                    observableAnimateMapPosition.postValue(userLocation)
+                    observableUserMarkerPosition.postValue(latLng)
+                }
+            },{
+                Log.e(TAG, it.message)
+            })
+        addDisposable(disposable)
     }
 
     companion object {

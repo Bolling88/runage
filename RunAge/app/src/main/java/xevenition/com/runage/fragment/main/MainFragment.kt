@@ -1,7 +1,11 @@
 package xevenition.com.runage.fragment.main
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +29,23 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     private lateinit var adapter: MainPagerAdapter
     private lateinit var binding: FragmentMainBinding
+    private lateinit var mService: EventService
+    private var mBound: Boolean = false
+    /** Defines callbacks for service binding, passed to bindService()  */
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            val binder = service as EventService.LocalBinder
+            mService = binder.getService()
+            mBound = true
+            (adapter.getItem(1) as MapFragment).passLocationUpdatesObservable(mService.observableLocationUpdates)
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mBound = false
+        }
+    }
 
     @Inject
     lateinit var factory: MainViewModelFactory
@@ -53,7 +74,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(EventService.serviceIsRunning){
+        if (EventService.serviceIsRunning) {
             binding.viewPager.currentItem = 1
             binding.swipeButton.isChecked = true
         }
@@ -69,12 +90,37 @@ class MainFragment : BaseFragment<MainViewModel>() {
         }
     }
 
-    private fun startEventService(){
-        val myService = Intent(activity, EventService::class.java)
-        startForegroundService(requireContext(), myService)
+    override fun onStart() {
+        super.onStart()
+        if(EventService.serviceIsRunning) {
+            bindToService()
+        }
     }
 
-    private fun stopEventService(){
+    private fun bindToService() {
+        Intent(activity, EventService::class.java).also { intent ->
+            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unbindService()
+    }
+
+    private fun unbindService() {
+        activity?.unbindService(connection)
+        mBound = false
+    }
+
+    private fun startEventService() {
+        val myService = Intent(activity, EventService::class.java)
+        startForegroundService(requireContext(), myService)
+        bindToService()
+    }
+
+    private fun stopEventService() {
+        unbindService()
         val myService = Intent(activity, EventService::class.java)
         activity?.stopService(myService)
     }
@@ -90,11 +136,14 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     private class MainPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+        private var fragments: Array<Fragment> = arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
+
         override fun getCount(): Int =
             NUM_PAGES
 
         override fun getItem(position: Int): Fragment {
-            return if (position == 0) StartFragment.newInstance() else MapFragment.newInstance()
+            return fragments[position]
         }
 
         companion object {
