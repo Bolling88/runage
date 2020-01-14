@@ -10,6 +10,7 @@ import xevenition.com.runage.model.PositionPoint
 data class Quest(
     @PrimaryKey(autoGenerate = true) val id: Int,
     @ColumnInfo(name = "start_time_millis") val startTimeMillis: Long,
+    @ColumnInfo(name = "speed") val speed: Float,
     @ColumnInfo(name = "locations") var locations: MutableList<PositionPoint>
 ){
 
@@ -17,6 +18,7 @@ data class Quest(
     constructor(startTimeMillis: Long): this(
         id = 0,
         startTimeMillis = startTimeMillis,
+        speed = 0f,
         locations = mutableListOf<PositionPoint>()
     )
 }

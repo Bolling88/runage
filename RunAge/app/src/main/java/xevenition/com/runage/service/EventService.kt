@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.location.Location
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
@@ -34,6 +35,7 @@ class EventService : Service() {
 
     private lateinit var currentQuest: Quest
     private var locationRequest: LocationRequest? = null
+    private var previousLocation: Location? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -96,12 +98,29 @@ class EventService : Service() {
                 locationResult?.let { locationResult ->
                     Observable.just(locationResult)
                         .subscribeOn(Schedulers.io())
+                        .filter { it.lastLocation != null }
                         .map {
-                            Timber.d("${it.lastLocation.latitude} ${it.lastLocation.longitude}")
+                            it.lastLocation
+                        }
+                        .filter {
+                            if (previousLocation == null) {
+                                previousLocation = it
+                                true
+                            } else {
+                                newPointIsMinDistanceAway(it, previousLocation)
+                            }
+                        }
+                        .map {
+                            Timber.d("${it.latitude} ${it.longitude}")
                             currentQuest.locations.add(
                                 PositionPoint(
-                                    it.lastLocation.latitude,
-                                    it.lastLocation.longitude
+                                    it.latitude,
+                                    it.longitude,
+                                    it.speed,
+                                    it.accuracy,
+                                    it.altitude,
+                                    it.bearing,
+                                    it.elapsedRealtimeNanos
                                 )
                             )
                             questRepository.dbUpdateQuest(currentQuest)
@@ -117,6 +136,16 @@ class EventService : Service() {
         }
     }
 
+    private fun newPointIsMinDistanceAway(
+        lastLocation: Location,
+        previousLocation: Location?
+    ): Boolean {
+        if (previousLocation == null)
+            return true
+        val distance = lastLocation.distanceTo(previousLocation)
+        return distance >= 20
+    }
+
     private fun startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
@@ -127,8 +156,8 @@ class EventService : Service() {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create()?.apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 1000
+            fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
