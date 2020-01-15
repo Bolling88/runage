@@ -1,5 +1,6 @@
 package xevenition.com.runage.fragment.map
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -7,13 +8,14 @@ import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.PolylineOptions
+import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ACTIVITY_TYPE
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ELAPSED_TIME
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_TRANSTITION_TYPE
+import xevenition.com.runage.R
 import xevenition.com.runage.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
@@ -26,9 +28,9 @@ class MapViewModel(
 ) : BaseViewModel() {
 
     private var questDisposable: Disposable? = null
-    private var userMarker: Marker? = null
     val observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
     val observableUserMarkerPosition = MutableLiveData<LatLng>()
+    val observableRunningPath = MutableLiveData<List<LatLng>>()
 
     val liveTextActivityType = MutableLiveData<String>()
 
@@ -42,18 +44,34 @@ class MapViewModel(
         questDisposable = questRepository.getFlowableQuest(id)
             .subscribe({ quest ->
                 Timber.d("Got quest update")
-                for(loc in quest.locations){
+                for (loc in quest.locations) {
                     Timber.d("${loc.latitude} ${loc.longitude}")
                 }
                 quest.locations.lastOrNull()?.let {
                     moveToCurrentLocation(it)
                 }
+                displayRunningRoute(quest.locations)
             }, {
                 Timber.e(it)
             })
         questDisposable?.let {
             addDisposable(it)
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun displayRunningRoute(locations: MutableList<PositionPoint>) {
+        Observable.fromIterable(locations)
+            .subscribeOn(Schedulers.computation())
+            .map {
+                LatLng(it.latitude, it.longitude)
+            }
+            .toList()
+            .subscribe({
+                observableRunningPath.postValue(it)
+            }, {
+                Timber.e(it)
+            })
     }
 
     fun onUserEventChanged(intent: Intent) {

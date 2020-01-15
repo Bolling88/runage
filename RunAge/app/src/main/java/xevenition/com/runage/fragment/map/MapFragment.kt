@@ -90,6 +90,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 }
             }
         })
+
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                setUpPolyline(it)
+            }
+        })
     }
 
     override fun onStart() {
@@ -121,8 +127,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
 
-    private fun setUpPolyline(positions: ArrayList<LatLng>) {
-        if (positions.size == 0 || googleMap == null) return
+    private fun setUpPolyline(positions: List<LatLng>) {
+        if (positions.isEmpty() || googleMap == null) return
 
         moveCamera(positions)
         val positionPointsArray = ArrayList(positions)
@@ -139,10 +145,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
 
-    private fun moveCamera(coordinated: ArrayList<LatLng>) {
+    private fun moveCamera(coordinated: List<LatLng>) {
         if (googleMap == null) return
         try {
-            if (coordinated.size > 0) {
+            if (coordinated.isNotEmpty()) {
                 val builder = LatLngBounds.Builder()
                 for (latLng in coordinated) {
                     builder.include(latLng)
