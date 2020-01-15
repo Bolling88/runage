@@ -1,9 +1,5 @@
 package xevenition.com.runage.fragment.map
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +8,9 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.TypedValueUtil
@@ -37,21 +31,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
 
-    private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action.equals(KEY_EVENT_BROADCAST_ID)) {
-                viewModel.onUserEventChanged(intent)
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
-
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
-        )
     }
 
     override fun onCreateView(
@@ -121,9 +103,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onDestroy() {
         super.onDestroy()
         binding.mapView.onDestroy()
-        context?.let {
-            LocalBroadcastManager.getInstance(it).unregisterReceiver(currentActivityReceiver)
-        }
     }
 
 

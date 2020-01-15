@@ -20,10 +20,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.ActivityActivator
+import xevenition.com.runage.*
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
-import xevenition.com.runage.MainActivity
-import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
@@ -33,6 +31,7 @@ import javax.inject.Inject
 
 class EventService : Service() {
 
+    private var activityType: Int = DetectedActivity.WALKING
     private lateinit var currentQuest: Quest
     private var locationRequest: LocationRequest? = null
     private var previousLocation: Location? = null
@@ -52,7 +51,9 @@ class EventService : Service() {
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            //Here we get the users current activity
+            if (intent.action.equals(KEY_EVENT_BROADCAST_ID)) {
+                activityType = intent.getIntExtra(ActivityBroadcastReceiver.KEY_ACTIVITY_TYPE, 0)
+            }
         }
     }
 
@@ -104,7 +105,7 @@ class EventService : Service() {
                         }
                         .filter {
                             //Filter away crazy values
-                            it.speed > 10f || it.speed == 0f || it.accuracy > 20
+                            it.accuracy > 20
                         }
                         .filter {
                             if (previousLocation == null) {
@@ -124,7 +125,8 @@ class EventService : Service() {
                                     it.accuracy,
                                     it.altitude,
                                     it.bearing,
-                                    it.elapsedRealtimeNanos
+                                    it.elapsedRealtimeNanos,
+                                    activityType
                                 )
                             )
                             questRepository.dbUpdateQuest(currentQuest)

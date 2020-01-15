@@ -1,7 +1,6 @@
 package xevenition.com.runage.fragment.map
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.DetectedActivity
@@ -12,9 +11,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ACTIVITY_TYPE
-import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_ELAPSED_TIME
-import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_TRANSTITION_TYPE
 import xevenition.com.runage.R
 import xevenition.com.runage.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
@@ -49,6 +45,7 @@ class MapViewModel(
                 }
                 quest.locations.lastOrNull()?.let {
                     moveToCurrentLocation(it)
+                    displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
             }, {
@@ -72,13 +69,6 @@ class MapViewModel(
             }, {
                 Timber.e(it)
             })
-    }
-
-    fun onUserEventChanged(intent: Intent) {
-        val transtitionType = intent.getIntExtra(KEY_TRANSTITION_TYPE, 0)
-        val activityType = intent.getIntExtra(KEY_ACTIVITY_TYPE, 0)
-        val elapsedTime = intent.getLongExtra(KEY_ELAPSED_TIME, 0)
-        displayActivityType(activityType)
     }
 
     private fun displayActivityType(activityType: Int) {
