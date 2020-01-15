@@ -15,43 +15,43 @@ class MainActivity : AppCompatActivity() {
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACTIVITY_RECOGNITION
-            )
-            != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(
-                this, Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
+                        this, Manifest.permission.ACTIVITY_RECOGNITION
+                )
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(
+                        this, Manifest.permission.ACCESS_FINE_LOCATION
+                )
+                != PackageManager.PERMISSION_GRANTED
         ) {
 
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.ACTIVITY_RECOGNITION
-                )
+                            this,
+                            Manifest.permission.ACTIVITY_RECOGNITION
+                    )
             ) {
                 //TODO
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
                 ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.ACTIVITY_RECOGNITION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ),
-                    MY_PERMISSIONS_REQUEST
+                        this,
+                        arrayOf(
+                                Manifest.permission.ACTIVITY_RECOGNITION,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        ),
+                        MY_PERMISSIONS_REQUEST
                 )
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(
-                        Manifest.permission.ACTIVITY_RECOGNITION,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ),
-                    MY_PERMISSIONS_REQUEST
+                        this,
+                        arrayOf(
+                                Manifest.permission.ACTIVITY_RECOGNITION,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        ),
+                        MY_PERMISSIONS_REQUEST
                 )
             }
         } else {
@@ -60,8 +60,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             MY_PERMISSIONS_REQUEST -> {

@@ -8,17 +8,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.databinding.FragmentMapBinding
 import javax.inject.Inject
@@ -26,12 +27,15 @@ import javax.inject.Inject
 
 class MapFragment : BaseFragment<MapViewModel>() {
 
+    private var polyLine: Polyline? = null
     private var userMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentMapBinding
 
     @Inject
     lateinit var factory: MapViewModelFactory
+    @Inject
+    lateinit var typedValueUtil: TypedValueUtil
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -82,7 +86,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 } else {
                     val options = MarkerOptions().position(it)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
-                    userMarker = googleMap?.addMarker(options);
+                    userMarker = googleMap?.addMarker(options)
                 }
             }
         })
@@ -113,6 +117,44 @@ class MapFragment : BaseFragment<MapViewModel>() {
         binding.mapView.onDestroy()
         context?.let {
             LocalBroadcastManager.getInstance(it).unregisterReceiver(currentActivityReceiver)
+        }
+    }
+
+
+    private fun setUpPolyline(positions: ArrayList<LatLng>) {
+        if (positions.size == 0 || googleMap == null) return
+
+        moveCamera(positions)
+        val positionPointsArray = ArrayList(positions)
+
+        if (polyLine == null) { // Instantiates a new Polyline object and adds points to define a rectangle
+            val rectOptions = PolylineOptions().addAll(positionPointsArray)
+            // Get back the mutable Polyline
+            polyLine = googleMap?.addPolyline(rectOptions)
+            polyLine?.color = ContextCompat.getColor(context!!, R.color.colorAccent)
+            polyLine?.width = typedValueUtil.dipToPixels(5f).toFloat()
+        } else {
+            polyLine?.points = positionPointsArray
+        }
+    }
+
+
+    private fun moveCamera(coordinated: ArrayList<LatLng>) {
+        if (googleMap == null) return
+        try {
+            if (coordinated.size > 0) {
+                val builder = LatLngBounds.Builder()
+                for (latLng in coordinated) {
+                    builder.include(latLng)
+                }
+                val bounds = builder.build()
+                val padding =
+                    typedValueUtil.dipToPixels(50f) // offset from edges of the map in pixels
+                val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+                googleMap?.animateCamera(cu, 500, null)
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
         }
     }
 

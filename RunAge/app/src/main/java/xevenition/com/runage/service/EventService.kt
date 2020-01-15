@@ -63,22 +63,22 @@ class EventService : Service() {
         serviceIsRunning = true
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
-            .subscribe({
-                callback?.onQuestCreated(it.id)
-                currentQuest = it
+                .subscribe({
+                    callback?.onQuestCreated(it.id)
+                    currentQuest = it
 
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                createLocationRequest()
-                handleLocationCallbacks(this)
-                startLocationUpdates()
-                eventHandler = ActivityActivator(this)
-                eventHandler.startActivityTracking()
-            }, {
-                Timber.e(it)
-            })
+                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                    createLocationRequest()
+                    handleLocationCallbacks(this)
+                    startLocationUpdates()
+                    eventHandler = ActivityActivator(this)
+                    eventHandler.startActivityTracking()
+                }, {
+                    Timber.e(it)
+                })
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-            currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
+                currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
     }
 
@@ -97,39 +97,39 @@ class EventService : Service() {
                 Timber.d("Got location update")
                 locationResult?.let { locationResult ->
                     Observable.just(locationResult)
-                        .subscribeOn(Schedulers.io())
-                        .filter { it.lastLocation != null }
-                        .map {
-                            it.lastLocation
-                        }
-                        .filter {
-                            if (previousLocation == null) {
-                                previousLocation = it
-                                true
-                            } else {
-                                newPointIsMinDistanceAway(it, previousLocation)
+                            .subscribeOn(Schedulers.io())
+                            .filter { it.lastLocation != null }
+                            .map {
+                                it.lastLocation
                             }
-                        }
-                        .map {
-                            Timber.d("${it.latitude} ${it.longitude}")
-                            currentQuest.locations.add(
-                                PositionPoint(
-                                    it.latitude,
-                                    it.longitude,
-                                    it.speed,
-                                    it.accuracy,
-                                    it.altitude,
-                                    it.bearing,
-                                    it.elapsedRealtimeNanos
+                            .filter {
+                                if (previousLocation == null) {
+                                    previousLocation = it
+                                    true
+                                } else {
+                                    newPointIsMinDistanceAway(it, previousLocation)
+                                }
+                            }
+                            .map {
+                                Timber.d("${it.latitude} ${it.longitude}")
+                                currentQuest.locations.add(
+                                        PositionPoint(
+                                                it.latitude,
+                                                it.longitude,
+                                                it.speed,
+                                                it.accuracy,
+                                                it.altitude,
+                                                it.bearing,
+                                                it.elapsedRealtimeNanos
+                                        )
                                 )
-                            )
-                            questRepository.dbUpdateQuest(currentQuest)
-                        }
-                        .subscribe({
-                            Timber.d("Quest location updated")
-                        }, {
-                            Timber.e(it)
-                        })
+                                questRepository.dbUpdateQuest(currentQuest)
+                            }
+                            .subscribe({
+                                Timber.d("Quest location updated")
+                            }, {
+                                Timber.e(it)
+                            })
 
                 }
             }
@@ -137,8 +137,8 @@ class EventService : Service() {
     }
 
     private fun newPointIsMinDistanceAway(
-        lastLocation: Location,
-        previousLocation: Location?
+            lastLocation: Location,
+            previousLocation: Location?
     ): Boolean {
         if (previousLocation == null)
             return true
@@ -148,9 +148,9 @@ class EventService : Service() {
 
     private fun startLocationUpdates() {
         fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
         )
     }
 
@@ -165,31 +165,31 @@ class EventService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val pendingIntent: PendingIntent =
-            Intent(this, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(this, 0, notificationIntent, 0)
-            }
+                Intent(this, MainActivity::class.java).let { notificationIntent ->
+                    PendingIntent.getActivity(this, 0, notificationIntent, 0)
+                }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notification: Notification = Notification.Builder(
-                this,
-                CHANNEL_DEFAULT_IMPORTANCE
+                    this,
+                    CHANNEL_DEFAULT_IMPORTANCE
             )
-                .setContentTitle(getText(R.string.notification_title))
-                .setChannelId(createNotificationChannel("my_service", "My Background Service"))
-                .setContentText(getText(R.string.notification_message))
-                .setSmallIcon(R.drawable.ic_run_blue)
-                .setContentIntent(pendingIntent)
-                .setTicker(getText(R.string.ticker_text))
-                .build()
+                    .setContentTitle(getText(R.string.notification_title))
+                    .setChannelId(createNotificationChannel("my_service", "My Background Service"))
+                    .setContentText(getText(R.string.notification_message))
+                    .setSmallIcon(R.drawable.ic_run_blue)
+                    .setContentIntent(pendingIntent)
+                    .setTicker(getText(R.string.ticker_text))
+                    .build()
 
             startForeground(NOTIFICATION_ID, notification)
         } else {
 
             val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getText(R.string.notification_message))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getText(R.string.notification_message))
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
 
             val notification: Notification = builder.build()
 
@@ -202,8 +202,8 @@ class EventService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val chan = NotificationChannel(
-            channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE
+                channelId,
+                channelName, NotificationManager.IMPORTANCE_NONE
         )
         chan.lightColor = Color.BLUE
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
