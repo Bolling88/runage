@@ -33,6 +33,7 @@ class MapViewModel(
     val observableClearMap = SingleLiveEvent<Unit>()
 
     val liveTextActivityType = MutableLiveData<String>()
+    val liveTotalDistance = MutableLiveData<String>()
 
     fun onNewQuestCreated(id: Int) {
         setUpObservableQuest(id)
@@ -52,6 +53,7 @@ class MapViewModel(
                     displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
+                liveTotalDistance.postValue("Distance: ${quest.totalDistance} m")
             }, {
                 Timber.e(it)
             })
