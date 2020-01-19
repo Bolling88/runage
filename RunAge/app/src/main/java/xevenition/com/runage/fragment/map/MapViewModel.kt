@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.map
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,10 +24,13 @@ class MapViewModel(
     private val questRepository: QuestRepository
 ) : BaseViewModel() {
 
+    private var currentPath: MutableList<LatLng> = mutableListOf()
     private var questDisposable: Disposable? = null
     val observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
     val observableUserMarkerPosition = MutableLiveData<LatLng>()
     val observableRunningPath = MutableLiveData<List<LatLng>>()
+
+    val observableClearMap = SingleLiveEvent<Unit>()
 
     val liveTextActivityType = MutableLiveData<String>()
 
@@ -65,6 +69,7 @@ class MapViewModel(
             }
             .toList()
             .subscribe({
+                currentPath = it
                 observableRunningPath.postValue(it)
             }, {
                 Timber.e(it)
@@ -104,6 +109,14 @@ class MapViewModel(
         )
         observableAnimateMapPosition.postValue(userLocation)
         observableUserMarkerPosition.postValue(latLng)
+    }
+
+    fun onMapCreated() {
+        observableRunningPath.postValue(currentPath)
+    }
+
+    fun onQuestFinished() {
+        observableClearMap.call()
     }
 
     companion object {

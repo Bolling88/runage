@@ -105,14 +105,15 @@ class EventService : Service() {
                         }
                         .filter {
                             //Filter away crazy values
-                            it.accuracy > 20
+                            it.accuracy < 20
                         }
                         .filter {
                             if (previousLocation == null) {
                                 previousLocation = it
                                 true
                             } else {
-                                newPointIsMinDistanceAway(it, previousLocation)
+                                true
+                                //newPointIsMinDistanceAway(it, previousLocation)
                             }
                         }
                         .map {

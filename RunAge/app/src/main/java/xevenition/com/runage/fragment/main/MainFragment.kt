@@ -94,6 +94,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         binding.swipeButton.onSwipedOffListener = {
             binding.viewPager.setCurrentItem(0, true)
             stopEventService()
+            (adapter.getItem(1) as MapFragment).onQuestFinished()
         }
     }
 

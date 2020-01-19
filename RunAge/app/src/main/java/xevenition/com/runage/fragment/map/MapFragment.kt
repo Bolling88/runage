@@ -21,6 +21,7 @@ import javax.inject.Inject
 
 class MapFragment : BaseFragment<MapViewModel>() {
 
+    private var currentQuestId: Int = -1
     private var polyLine: Polyline? = null
     private var userMarker: Marker? = null
     private var googleMap: GoogleMap? = null
@@ -48,10 +49,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this, factory).get(MapViewModel::class.java)
+        if(currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.mapView.getMapAsync {
             googleMap = it
+            viewModel.onMapCreated()
             googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
 
@@ -71,6 +74,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
                     userMarker = googleMap?.addMarker(options)
                 }
             }
+        })
+
+        viewModel.observableClearMap.observe(viewLifecycleOwner, Observer {
+            googleMap?.clear()
         })
 
         viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
@@ -118,9 +125,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
             polyLine = googleMap?.addPolyline(rectOptions)
             polyLine?.color = ContextCompat.getColor(context!!, R.color.colorAccent)
             polyLine?.width = typedValueUtil.dipToPixels(5f).toFloat()
-        } else {
-            polyLine?.points = positionPointsArray
         }
+        polyLine?.points = positionPointsArray
     }
 
 
@@ -154,7 +160,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     fun onNewQuestCreated(id: Int) {
-        viewModel.onNewQuestCreated(id)
+        try {
+            viewModel.onNewQuestCreated(id)
+        }catch(e: Exception){
+            //viewmodel not initialised
+            currentQuestId = id
+        }
+    }
+
+    fun onQuestFinished() {
+        viewModel.onQuestFinished()
     }
 
     companion object {
