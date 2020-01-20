@@ -44,5 +44,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textCurrentStatus" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textAccuracy"
+            android:layout_width="wrap_content"
+            tools:text="1000 m"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.liveCurrentAccuracy}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDistance" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

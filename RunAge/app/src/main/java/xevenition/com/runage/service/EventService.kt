@@ -11,7 +11,6 @@ import android.location.Location
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -22,6 +21,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.*
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
+import xevenition.com.runage.LocationReceiver.Companion.KEY_LOCATION_BROADCAST_ID
 import xevenition.com.runage.R
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
@@ -57,6 +57,16 @@ class EventService : Service() {
         }
     }
 
+    private val currentLocationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if(intent.action.equals(KEY_LOCATION_BROADCAST_ID)){
+                Timber.d("Service got location update")
+                val location = intent.getParcelableExtra(LocationReceiver.KEY_LOCATION) as Location
+                handleLocation(location)
+            }
+        }
+    }
+
     @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
@@ -64,117 +74,114 @@ class EventService : Service() {
         serviceIsRunning = true
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
-                .subscribe({
-                    callback?.onQuestCreated(it.id)
-                    currentQuest = it
+            .subscribe({
+                callback?.onQuestCreated(it.id)
+                currentQuest = it
 
-                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                    createLocationRequest()
-                    handleLocationCallbacks(this)
-                    startLocationUpdates()
-                    eventHandler = ActivityActivator(this)
-                    eventHandler.startActivityTracking()
-                }, {
-                    Timber.e(it)
-                })
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+                createLocationRequest()
+                startLocationUpdates()
+                eventHandler = ActivityActivator(this)
+                eventHandler.startActivityTracking()
+            }, {
+                Timber.e(it)
+            })
 
         LocalBroadcastManager.getInstance(this).registerReceiver(
-                currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
+            currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
+        )
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+            currentLocationReceiver, IntentFilter(KEY_LOCATION_BROADCAST_ID)
         )
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Timber.e("Service destroyed")
         serviceIsRunning = false
         eventHandler.endActivityTracking()
         fusedLocationClient.removeLocationUpdates(locationCallback)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(currentLocationReceiver)
         compositeDisposable.dispose()
     }
 
-    private fun handleLocationCallbacks(context: Context) {
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                Timber.d("Got location update")
-                locationResult?.let { locationResult ->
-                    Observable.just(locationResult)
-                            .subscribeOn(Schedulers.computation())
-                            .filter { it.lastLocation != null }
-                            .map {
-                                it.lastLocation
-                            }
-                            .filter {
-                                //Filter away crazy values
-                                it.accuracy < 20
-                            }
-                            .filter {
-                                if (previousLocation == null) {
-                                    previousLocation = it
-                                    true
-                                } else {
-                                    true
-                                    //newPointIsMinDistanceAway(it, previousLocation)
-                                }
-                            }
-                            .map {
-                                Timber.d("${it.latitude} ${it.longitude}")
-                                val newPoint = PositionPoint(
-                                        it.latitude,
-                                        it.longitude,
-                                        it.speed,
-                                        it.accuracy,
-                                        it.altitude,
-                                        it.bearing,
-                                        it.elapsedRealtimeNanos,
-                                        activityType
-                                )
-                                calculateTotalDistance(newPoint)
-                                currentQuest.locations.add(
-                                        newPoint
-                                )
-                                questRepository.dbUpdateQuest(currentQuest)
-                            }
-                            .subscribe({
-                                Timber.d("Quest location updated")
-                            }, {
-                                Timber.e(it)
-                            })
-
+    @SuppressLint("CheckResult")
+    private fun handleLocation(location: Location) {
+        Observable.just(location)
+            .subscribeOn(Schedulers.computation())
+            .filter {
+                //Filter away crazy values
+                it.accuracy < 20
+            }
+            .filter {
+                if (previousLocation == null) {
+                    true
+                } else {
+                    newPointIsMinDistanceAway(it, previousLocation!!)
                 }
             }
-        }
+            .map {
+                Timber.d("${it.latitude} ${it.longitude}")
+                val newPoint = PositionPoint(
+                    it.latitude,
+                    it.longitude,
+                    it.speed,
+                    it.accuracy,
+                    it.altitude,
+                    it.bearing,
+                    it.elapsedRealtimeNanos,
+                    activityType
+                )
+                updateTotalDistance(newPoint)
+                currentQuest.locations.add(newPoint)
+                Timber.d("Storing ${currentQuest.locations.size} locations")
+                questRepository.dbUpdateQuest(currentQuest)
+                previousLocation = it
+            }
+            .subscribe({
+                Timber.d("Quest location updated")
+            }, {
+                Timber.e(it)
+            })
     }
 
-    private fun calculateTotalDistance(newPoint: PositionPoint) {
+    private fun updateTotalDistance(newPoint: PositionPoint) {
         val lastPoint = currentQuest.locations.lastOrNull()
         lastPoint?.let {
             val resultArray = FloatArray(4)
             Location.distanceBetween(
-                    lastPoint.latitude,
-                    lastPoint.longitude,
-                    newPoint.latitude,
-                    newPoint.longitude,
-                    resultArray
+                lastPoint.latitude,
+                lastPoint.longitude,
+                newPoint.latitude,
+                newPoint.longitude,
+                resultArray
             )
             currentQuest.totalDistance += resultArray.first()
         }
     }
 
     private fun newPointIsMinDistanceAway(
-            lastLocation: Location,
-            previousLocation: Location?
+        lastLocation: Location,
+        previousLocation: Location
     ): Boolean {
-        if (previousLocation == null)
-            return true
         val distance = lastLocation.distanceTo(previousLocation)
-        return distance >= 20
+        Timber.d("Distance to prev point: $distance")
+        return distance >= 1
     }
 
     private fun startLocationUpdates() {
+        val intent = Intent(this, LocationReceiver::class.java)
+        val locationIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            LOCATION_REQUEST_CODE,
+            intent,
+            PendingIntent.FLAG_CANCEL_CURRENT
+        )
+
         fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
+            locationRequest,
+            locationIntent
         )
     }
 
@@ -189,31 +196,31 @@ class EventService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         val pendingIntent: PendingIntent =
-                Intent(this, MainActivity::class.java).let { notificationIntent ->
-                    PendingIntent.getActivity(this, 0, notificationIntent, 0)
-                }
+            Intent(this, MainActivity::class.java).let { notificationIntent ->
+                PendingIntent.getActivity(this, 0, notificationIntent, 0)
+            }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notification: Notification = Notification.Builder(
-                    this,
-                    CHANNEL_DEFAULT_IMPORTANCE
+                this,
+                CHANNEL_DEFAULT_IMPORTANCE
             )
-                    .setContentTitle(getText(R.string.notification_title))
-                    .setChannelId(createNotificationChannel("my_service", "My Background Service"))
-                    .setContentText(getText(R.string.notification_message))
-                    .setSmallIcon(R.drawable.ic_run_blue)
-                    .setContentIntent(pendingIntent)
-                    .setTicker(getText(R.string.ticker_text))
-                    .build()
+                .setContentTitle(getText(R.string.notification_title))
+                .setChannelId(createNotificationChannel("my_service", "My Background Service"))
+                .setContentText(getText(R.string.notification_message))
+                .setSmallIcon(R.drawable.ic_run_blue)
+                .setContentIntent(pendingIntent)
+                .setTicker(getText(R.string.ticker_text))
+                .build()
 
             startForeground(NOTIFICATION_ID, notification)
         } else {
 
             val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(getText(R.string.notification_message))
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(getText(R.string.notification_message))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true)
 
             val notification: Notification = builder.build()
 
@@ -226,8 +233,8 @@ class EventService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val chan = NotificationChannel(
-                channelId,
-                channelName, NotificationManager.IMPORTANCE_NONE
+            channelId,
+            channelName, NotificationManager.IMPORTANCE_NONE
         )
         chan.lightColor = Color.BLUE
         chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
@@ -259,6 +266,7 @@ class EventService : Service() {
 
     companion object {
         const val NOTIFICATION_ID = 2345235
+        const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
 
         var serviceIsRunning = false

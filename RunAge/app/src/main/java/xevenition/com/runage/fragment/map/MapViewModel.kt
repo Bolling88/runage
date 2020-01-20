@@ -34,6 +34,7 @@ class MapViewModel(
 
     val liveTextActivityType = MutableLiveData<String>()
     val liveTotalDistance = MutableLiveData<String>()
+    val liveCurrentAccuracy = MutableLiveData<String>()
 
     fun onNewQuestCreated(id: Int) {
         setUpObservableQuest(id)
@@ -45,15 +46,13 @@ class MapViewModel(
         questDisposable = questRepository.getFlowableQuest(id)
             .subscribe({ quest ->
                 Timber.d("Got quest update")
-                for (loc in quest.locations) {
-                    Timber.d("${loc.latitude} ${loc.longitude}")
-                }
                 quest.locations.lastOrNull()?.let {
                     moveToCurrentLocation(it)
                     displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
                 liveTotalDistance.postValue("Distance: ${quest.totalDistance} m")
+                liveCurrentAccuracy.postValue("Accuracy: ${quest.locations.lastOrNull()?.accuracy} m")
             }, {
                 Timber.e(it)
             })
@@ -72,6 +71,7 @@ class MapViewModel(
             .toList()
             .subscribe({
                 currentPath = it
+                Timber.d("Posting ${it.size} locations")
                 observableRunningPath.postValue(it)
             }, {
                 Timber.e(it)

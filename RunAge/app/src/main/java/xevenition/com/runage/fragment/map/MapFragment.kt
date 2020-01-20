@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.TypedValueUtil
@@ -127,6 +128,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
             polyLine?.width = typedValueUtil.dipToPixels(5f).toFloat()
         }
         polyLine?.points = positionPointsArray
+        Timber.d("Polyline has ${polyLine?.points?.size} points")
     }
 
 
