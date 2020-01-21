@@ -1,6 +1,7 @@
 package xevenition.com.runage
 
 import android.Manifest
+import android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,11 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.checkSelfPermission(
                         this, Manifest.permission.ACCESS_FINE_LOCATION
                 )
-                != PackageManager.PERMISSION_GRANTED
+                != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
         ) {
 
             // Permission is not granted
@@ -39,7 +44,8 @@ class MainActivity : AppCompatActivity() {
                         this,
                         arrayOf(
                                 Manifest.permission.ACTIVITY_RECOGNITION,
-                                Manifest.permission.ACCESS_FINE_LOCATION
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                            ACCESS_BACKGROUND_LOCATION
                         ),
                         MY_PERMISSIONS_REQUEST
                 )

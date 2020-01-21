@@ -56,7 +56,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         binding.mapView.getMapAsync {
             googleMap = it
             viewModel.onMapCreated()
-            googleMap?.uiSettings?.setAllGesturesEnabled(false)
+            //googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
 
         viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, Observer {

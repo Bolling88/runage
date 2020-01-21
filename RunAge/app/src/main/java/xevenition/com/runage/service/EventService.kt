@@ -31,6 +31,7 @@ import javax.inject.Inject
 
 class EventService : Service() {
 
+    // private var wakeLock: PowerManager.WakeLock? = null
     private var activityType: Int = DetectedActivity.WALKING
     private lateinit var currentQuest: Quest
     private var locationRequest: LocationRequest? = null
@@ -59,7 +60,7 @@ class EventService : Service() {
 
     private val currentLocationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if(intent.action.equals(KEY_LOCATION_BROADCAST_ID)){
+            if (intent.action.equals(KEY_LOCATION_BROADCAST_ID)) {
                 Timber.d("Service got location update")
                 val location = intent.getParcelableExtra(LocationReceiver.KEY_LOCATION) as Location
                 handleLocation(location)
@@ -71,6 +72,12 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
+//         wakeLock =
+//            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+//                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyApp::MyWakelockTag").apply {
+//                    acquire()
+//                }
+//            }
         serviceIsRunning = true
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
@@ -97,6 +104,7 @@ class EventService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        //wakeLock?.release()
         Timber.e("Service destroyed")
         serviceIsRunning = false
         eventHandler.endActivityTracking()
@@ -112,6 +120,7 @@ class EventService : Service() {
             .subscribeOn(Schedulers.computation())
             .filter {
                 //Filter away crazy values
+                Timber.d("Current accuracy: ${it.accuracy}")
                 it.accuracy < 20
             }
             .filter {
@@ -171,17 +180,25 @@ class EventService : Service() {
     }
 
     private fun startLocationUpdates() {
-        val intent = Intent(this, LocationReceiver::class.java)
-        val locationIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            LOCATION_REQUEST_CODE,
-            intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        )
+//        val intent = Intent(this, LocationReceiver::class.java)
+//        val locationIntent = PendingIntent.getService(
+//            applicationContext,
+//            LOCATION_REQUEST_CODE,
+//            intent,
+//            PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult?) {
+                result?.lastLocation?.let {
+                    Timber.d("LOCATION UPDATE")
+                    handleLocation(it)
+                }
+            }
+        }
 
         fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationIntent
+            locationRequest, locationCallback, this.mainLooper
         )
     }
 
@@ -263,13 +280,12 @@ class EventService : Service() {
         return binder
     }
 
-
     companion object {
+        const val TAG = "Event Service"
         const val NOTIFICATION_ID = 2345235
         const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
 
         var serviceIsRunning = false
     }
-
 }
