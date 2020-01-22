@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit
 
 class SplashViewModel : BaseViewModel() {
 
+    private var permissionsGranted = false
+
     init {
         if(EventService.serviceIsRunning){
             observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
@@ -21,10 +23,18 @@ class SplashViewModel : BaseViewModel() {
         val disposable = Observable.timer(2000, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.computation())
             .subscribe({
-                observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
+                if(permissionsGranted) {
+                    observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
+                }else{
+                    observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToPermissionFragment())
+                }
             }, {
                 Timber.e(it)
             })
         addDisposable(disposable)
+    }
+
+    fun permissionsGranted(granted: Boolean) {
+        permissionsGranted = granted
     }
 }

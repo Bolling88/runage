@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.permission.PermissionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPermissionLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="@string/permission_location"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switchLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_basic"
+            app:layout_constraintBottom_toBottomOf="@+id/textPermissionLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textPermissionLocation" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPermissionLocationInfo"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/quicksand_light"
+            android:text="@string/explanation_permission_location"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textPermissionLocation" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPermissionActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:fontFamily="@font/quicksand_bold"
+            android:text="@string/permission_activity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textPermissionLocationInfo" />
+
+        <Switch
+            android:id="@+id/switchActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_basic"
+            app:layout_constraintBottom_toBottomOf="@+id/textPermissionActivity"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onCheckedChanged="@{viewModel::onActivityCheckChanged}"
+            app:layout_constraintTop_toTopOf="@+id/textPermissionActivity" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPermissionActivityInfo"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/quicksand_light"
+            android:text="@string/explanation_permission_activity"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textPermissionActivity" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:text="@string/runage_continue"
+            android:fontFamily="@font/quicksand_bold"
+            android:enabled="@{viewModel.liveButtonEnabled}"
+            android:onClick="@{()-> viewModel.onContinueClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/margin_basic"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,13 +1,18 @@
 package xevenition.com.runage.fragment.splash
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.databinding.FragmentSplashBinding
 import javax.inject.Inject
@@ -40,6 +45,18 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         setUpObservables()
+
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+        ) {
+            viewModel.permissionsGranted(false)
+        } else {
+            viewModel.permissionsGranted(true)
+        }
     }
 
     @Override
