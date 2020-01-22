@@ -11,6 +11,7 @@ import android.location.Location
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
+import android.speech.tts.TextToSpeech
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
@@ -21,16 +22,18 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.*
 import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
-import xevenition.com.runage.LocationReceiver.Companion.KEY_LOCATION_BROADCAST_ID
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import java.util.*
 import javax.inject.Inject
 
 
 class EventService : Service() {
 
+    private var textToSpeech: TextToSpeech? = null
     // private var wakeLock: PowerManager.WakeLock? = null
     private var activityType: Int = DetectedActivity.WALKING
     private lateinit var currentQuest: Quest
@@ -58,26 +61,16 @@ class EventService : Service() {
         }
     }
 
-    private val currentLocationReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (intent.action.equals(KEY_LOCATION_BROADCAST_ID)) {
-                Timber.d("Service got location update")
-                val location = intent.getParcelableExtra(LocationReceiver.KEY_LOCATION) as Location
-                handleLocation(location)
-            }
-        }
-    }
-
     @SuppressLint("CheckResult")
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
-//         wakeLock =
-//            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-//                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyApp::MyWakelockTag").apply {
-//                    acquire()
-//                }
-//            }
+
+        textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener {
+            textToSpeech?.language = Locale.US
+            textToSpeech?.speak("Fuck yeah lets go mother fucker", TextToSpeech.QUEUE_ADD, null,null)
+        })
+
         serviceIsRunning = true
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
@@ -97,9 +90,6 @@ class EventService : Service() {
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-            currentLocationReceiver, IntentFilter(KEY_LOCATION_BROADCAST_ID)
-        )
     }
 
     override fun onDestroy() {
@@ -107,10 +97,10 @@ class EventService : Service() {
         //wakeLock?.release()
         Timber.e("Service destroyed")
         serviceIsRunning = false
+        textToSpeech?.shutdown()
         eventHandler.endActivityTracking()
         fusedLocationClient.removeLocationUpdates(locationCallback)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(currentLocationReceiver)
         compositeDisposable.dispose()
     }
 
@@ -118,18 +108,18 @@ class EventService : Service() {
     private fun handleLocation(location: Location) {
         Observable.just(location)
             .subscribeOn(Schedulers.computation())
-            .filter {
-                //Filter away crazy values
-                Timber.d("Current accuracy: ${it.accuracy}")
-                it.accuracy < 20
-            }
-            .filter {
-                if (previousLocation == null) {
-                    true
-                } else {
-                    newPointIsMinDistanceAway(it, previousLocation!!)
-                }
-            }
+//            .filter {
+//                //Filter away crazy values
+//                Timber.d("Current accuracy: ${it.accuracy}")
+//                it.accuracy < 20
+//            }
+//            .filter {
+//                if (previousLocation == null) {
+//                    true
+//                } else {
+//                    newPointIsMinDistanceAway(it, previousLocation!!)
+//                }
+//            }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
                 val newPoint = PositionPoint(

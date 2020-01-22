@@ -67,13 +67,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         viewModel.observableUserMarkerPosition.observe(viewLifecycleOwner, Observer {
             it?.let {
-                if (userMarker != null) {
-                    userMarker?.position = it
-                } else {
-                    val options = MarkerOptions().position(it)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
-                    userMarker = googleMap?.addMarker(options)
-                }
+                drawUserMarker(it)
             }
         })
 
@@ -86,6 +80,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 setUpPolyline(it)
             }
         })
+    }
+
+    private fun drawUserMarker(it: LatLng) {
+        if (userMarker != null) {
+            userMarker?.position = it
+        } else {
+            val options = MarkerOptions().position(it)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
+            userMarker = googleMap?.addMarker(options)
+        }
     }
 
     override fun onStart() {
@@ -122,6 +126,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         if (polyLine == null) { // Instantiates a new Polyline object and adds points to define a rectangle
             val rectOptions = PolylineOptions().addAll(positionPointsArray)
+                .jointType(JointType.ROUND)
             // Get back the mutable Polyline
             polyLine = googleMap?.addPolyline(rectOptions)
             polyLine?.color = ContextCompat.getColor(context!!, R.color.colorAccent)

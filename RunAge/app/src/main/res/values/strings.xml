@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RunAge</string>
+    <string name="app_name_padding">\u0020RunAge\u0020</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="begin_run">Begin Run</string>
