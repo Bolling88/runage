@@ -170,13 +170,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
         try {
             viewModel.onNewQuestCreated(id)
         }catch(e: Exception){
-            //viewmodel not initialised
+            //viewModel not initialised
             currentQuestId = id
         }
     }
 
     fun onQuestFinished() {
         viewModel.onQuestFinished()
+        googleMap?.clear()
+        userMarker = null
+        polyLine = null
+        currentQuestId = -1
     }
 
     companion object {
