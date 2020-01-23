@@ -58,6 +58,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
             viewModel.onMapCreated()
             //googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
+        setUpObservables()
+    }
+
+    override fun setUpObservables() {
+        super.setUpObservables()
 
         viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, Observer {
             it?.let {

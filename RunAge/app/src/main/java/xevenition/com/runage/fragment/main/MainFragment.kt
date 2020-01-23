@@ -67,7 +67,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
             )
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -96,6 +95,13 @@ class MainFragment : BaseFragment<MainViewModel>() {
             stopEventService()
             (adapter.getItem(1) as MapFragment).onQuestFinished()
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     override fun onStart() {
@@ -133,11 +139,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
         unbindService()
         val myService = Intent(activity, EventService::class.java)
         activity?.stopService(myService)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
     }
 
     companion object {
