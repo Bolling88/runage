@@ -1,11 +1,10 @@
-package xevenition.com.runage.fragment.permission
+package xevenition.com.runage.fragment.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import xevenition.com.runage.fragment.settings.SettingsViewModel
 import javax.inject.Inject
 
-class PermissionViewModelFactory @Inject constructor() :
+class SettingsViewModelFactory @Inject constructor() :
     ViewModelProvider.NewInstanceFactory() {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

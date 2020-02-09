@@ -5,6 +5,7 @@ import xevenition.com.runage.architecture.AppModule
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.map.MapFragment
 import xevenition.com.runage.fragment.permission.PermissionFragment
+import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.splash.SplashFragment
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.service.EventService
@@ -19,4 +20,5 @@ interface ApplicationComponent {
     fun inject(component: EventService)
     fun inject(component: SplashFragment)
     fun inject(component: PermissionFragment)
+    fun inject(component: SettingsFragment)
 }

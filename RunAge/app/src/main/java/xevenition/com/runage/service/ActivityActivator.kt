@@ -1,4 +1,4 @@
-package xevenition.com.runage
+package xevenition.com.runage.service
 
 import android.app.PendingIntent
 import android.content.Context

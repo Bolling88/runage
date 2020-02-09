@@ -1,11 +1,11 @@
-package xevenition.com.runage.fragment.permission
+package xevenition.com.runage.fragment.settings
 
 import android.widget.CompoundButton
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
 
-class PermissionViewModel : BaseViewModel() {
+class SettingsViewModel : BaseViewModel() {
 
     private var locationOn: Boolean = false
     private var activityOn: Boolean = false
@@ -20,7 +20,6 @@ class PermissionViewModel : BaseViewModel() {
     }
 
     fun onContinueClicked(){
-        observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToSettingsFragment())
     }
 
     fun onActivityCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {

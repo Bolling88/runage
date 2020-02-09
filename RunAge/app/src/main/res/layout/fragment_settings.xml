@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="xevenition.com.runage.fragment.permission.PermissionViewModel" />
+            type="xevenition.com.runage.fragment.settings.SettingsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -30,7 +30,7 @@
             android:foregroundServiceType="location" />
 
         <receiver
-            android:name=".ActivityBroadcastReceiver"
+            android:name=".service.ActivityBroadcastReceiver"
             android:exported="false"
             android:permission="com.google.android.gms.permission.ACTIVITY_RECOGNITION">
             <intent-filter>

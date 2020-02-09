@@ -2,7 +2,7 @@ package xevenition.com.runage.fragment.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import xevenition.com.runage.ResourceUtil
+import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.room.repository.QuestRepository
 import javax.inject.Inject
 

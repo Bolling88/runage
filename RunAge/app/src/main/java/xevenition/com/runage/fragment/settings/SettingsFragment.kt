@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.permission
+package xevenition.com.runage.fragment.settings
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -14,19 +14,16 @@ import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
-import xevenition.com.runage.databinding.FragmentPermissionBinding
-import xevenition.com.runage.fragment.settings.SettingsFragment
-import xevenition.com.runage.fragment.settings.SettingsViewModel
-import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
+import xevenition.com.runage.databinding.FragmentSettingsBinding
 import javax.inject.Inject
 
 
-class PermissionFragment : BaseFragment<PermissionViewModel>() {
+class SettingsFragment : BaseFragment<SettingsViewModel>() {
 
-    private lateinit var binding: FragmentPermissionBinding
+    private lateinit var binding: FragmentSettingsBinding
 
     @Inject
-    lateinit var factory: PermissionViewModelFactory
+    lateinit var factory: SettingsViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +35,13 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_permission, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, factory).get(PermissionViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, factory).get(SettingsViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         setUpObservables()

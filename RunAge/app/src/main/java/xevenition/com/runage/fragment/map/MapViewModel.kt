@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.R
-import xevenition.com.runage.ResourceUtil
+import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.repository.QuestRepository

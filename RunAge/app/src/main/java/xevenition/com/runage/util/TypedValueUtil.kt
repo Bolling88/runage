@@ -1,4 +1,4 @@
-package xevenition.com.runage
+package xevenition.com.runage.util
 
 import android.app.Application
 import android.util.TypedValue

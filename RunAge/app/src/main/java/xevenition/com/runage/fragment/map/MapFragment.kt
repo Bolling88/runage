@@ -14,7 +14,7 @@ import com.google.android.gms.maps.model.*
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
-import xevenition.com.runage.TypedValueUtil
+import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.databinding.FragmentMapBinding
 import javax.inject.Inject

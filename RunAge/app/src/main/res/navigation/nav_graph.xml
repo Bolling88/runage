@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
 
@@ -14,14 +15,11 @@
         android:name="xevenition.com.runage.fragment.permission.PermissionFragment"
         android:label="PermissionFragment" >
         <action
+            android:id="@+id/action_permissionFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
             android:id="@+id/action_permissionFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/permissionFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/mainFragment" />
     </fragment>
 
     <fragment
@@ -32,21 +30,23 @@
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
             app:destination="@id/mainFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
 
         <action
             android:id="@+id/action_splashFragment_to_permissionFragment"
             app:destination="@id/permissionFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment android:id="@+id/settingsFragment"
+        tools:layout="SettingsFragment"
+        android:name="xevenition.com.runage.fragment.settings.SettingsFragment">
+        <action
+            android:id="@+id/action_settingsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

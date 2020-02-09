@@ -21,7 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.*
-import xevenition.com.runage.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
+import xevenition.com.runage.service.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
@@ -81,7 +81,8 @@ class EventService : Service() {
                 fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
                 createLocationRequest()
                 startLocationUpdates()
-                eventHandler = ActivityActivator(this)
+                eventHandler =
+                    ActivityActivator(this)
                 eventHandler.startActivityTracking()
             }, {
                 Timber.e(it)

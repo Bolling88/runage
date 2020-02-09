@@ -17,8 +17,9 @@
     <string name="still">Still</string>
     <string name="runage_continue">Continue</string>
     <string name="explanation_permission_location">In order for us to track your running we need to be able to retrieve your location.</string>
-    <string name="explanation_permission_activity">We also need to make sure that cheaters that try to score running points by using a electric scooter or driving a car etc are getting no points. Hence we need your permission to track your current physical activity</string>
+    <string name="explanation_permission_activity">We also need to make sure that cheaters that try to score running points by using a electric scooter or driving a car etc are getting no points. Hence we need your permission to track your physical activity during a run.</string>
     <string name="permission_location">Location tracking</string>
     <string name="permission_activity">Physical activity</string>
     <string name="runage_permissions">Permissions</string>
+    <string name="get_started">Get started</string>
 </resources>
