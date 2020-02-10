@@ -14,7 +14,9 @@ import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentPermissionBinding
+import xevenition.com.runage.fragment.map.MapViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.settings.SettingsViewModel
 import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
@@ -24,9 +26,6 @@ import javax.inject.Inject
 class PermissionFragment : BaseFragment<PermissionViewModel>() {
 
     private lateinit var binding: FragmentPermissionBinding
-
-    @Inject
-    lateinit var factory: PermissionViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +43,7 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val factory = PermissionViewModelFactory(getApplication())
         viewModel = ViewModelProviders.of(this, factory).get(PermissionViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

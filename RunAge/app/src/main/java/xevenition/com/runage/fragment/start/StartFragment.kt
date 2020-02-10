@@ -8,12 +8,11 @@ import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
+import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 import javax.inject.Inject
 
 class StartFragment : BaseFragment<StartViewModel>() {
-
-    @Inject
-    lateinit var factory: StartViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +28,8 @@ class StartFragment : BaseFragment<StartViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(StartViewModel::class.java)
+        val factory = StartViewModelFactory(getApplication())
+        viewModel = ViewModelProviders.of(this, factory).get(StartViewModel::class.java)
     }
 
     companion object {

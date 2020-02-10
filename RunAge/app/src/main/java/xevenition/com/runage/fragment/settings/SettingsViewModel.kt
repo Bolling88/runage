@@ -1,19 +1,11 @@
 package xevenition.com.runage.fragment.settings
 
-import android.widget.CompoundButton
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
 
 class SettingsViewModel : BaseViewModel() {
 
-    private var locationOn: Boolean = false
-    private var activityOn: Boolean = false
-
     val liveButtonEnabled = MutableLiveData<Boolean>()
-
-    val observableCheckPermissionActivity = SingleLiveEvent<Unit>()
-    val observableCheckPermissionLocation = SingleLiveEvent<Unit>()
 
     init {
         liveButtonEnabled.postValue(false)
@@ -22,21 +14,11 @@ class SettingsViewModel : BaseViewModel() {
     fun onContinueClicked(){
     }
 
-    fun onActivityCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        activityOn = isChecked
-        if(isChecked){
-            observableCheckPermissionActivity.call()
-        }
+    fun onMetricClicked(){
 
-        liveButtonEnabled.postValue(locationOn && activityOn)
     }
 
-    fun onLocationCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
-        locationOn = isChecked
-        if(isChecked){
-            observableCheckPermissionLocation.call()
-        }
+    fun onImperialClicked(){
 
-        liveButtonEnabled.postValue(locationOn && activityOn)
     }
 }

@@ -4,8 +4,10 @@ import android.widget.CompoundButton
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.util.SaveUtil
+import javax.inject.Inject
 
-class PermissionViewModel : BaseViewModel() {
+class PermissionViewModel @Inject constructor(private val saveUtil: SaveUtil) : BaseViewModel() {
 
     private var locationOn: Boolean = false
     private var activityOn: Boolean = false

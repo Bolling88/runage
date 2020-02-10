@@ -19,8 +19,11 @@ import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMainBinding
 import xevenition.com.runage.fragment.map.MapFragment
+import xevenition.com.runage.fragment.splash.SplashViewModel
+import xevenition.com.runage.fragment.splash.SplashViewModelFactory
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.service.EventService
 import javax.inject.Inject
@@ -53,9 +56,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
             mBound = false
         }
     }
-
-    @Inject
-    lateinit var factory: MainViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +99,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val factory = MainViewModelFactory(getApplication())
         viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

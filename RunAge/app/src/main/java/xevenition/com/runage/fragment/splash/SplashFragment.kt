@@ -14,6 +14,7 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentSplashBinding
 import javax.inject.Inject
 
@@ -21,9 +22,6 @@ import javax.inject.Inject
 class SplashFragment : BaseFragment<SplashViewModel>() {
 
     private lateinit var binding: FragmentSplashBinding
-
-    @Inject
-    lateinit var factory: SplashViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +39,9 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val factory = SplashViewModelFactory(getApplication())
         viewModel = ViewModelProviders.of(this, factory).get(SplashViewModel::class.java)
+
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         setUpObservables()

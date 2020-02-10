@@ -21,7 +21,7 @@
             android:layout_marginTop="@dimen/margin_big"
             android:fontFamily="@font/azonix"
             android:gravity="center"
-            android:text="@string/get_started"
+            android:text="@string/settings"
             android:textColor="@color/colorAccent"
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -37,7 +37,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textTitle"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/location"
+            app:lottie_rawRes="@raw/lottie_earth"
             app:lottie_scale="0.3" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -45,95 +45,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bold"
-            android:text="@string/permission_location"
+            android:text="@string/unit_type"
             android:textSize="@dimen/textSizeBig"
             app:layout_constraintBottom_toBottomOf="@+id/lottieLocation"
             app:layout_constraintStart_toEndOf="@+id/lottieLocation"
             app:layout_constraintTop_toTopOf="@+id/lottieLocation" />
 
-        <Switch
-            android:id="@+id/switchLocation"
+        <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_basic"
-            android:onCheckedChanged="@{viewModel::onLocationCheckChanged}"
-            app:layout_constraintBottom_toBottomOf="@+id/textPermissionLocation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textPermissionLocation" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textPermissionLocationInfo"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_basic"
-            android:layout_marginEnd="@dimen/margin_basic"
-            android:fontFamily="@font/light"
-            android:text="@string/explanation_permission_location"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSizeNormal"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="20dip"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lottieLocation" />
+            app:layout_constraintTop_toBottomOf="@+id/textPermissionLocation">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textPermissionLocationInfo"
-            app:lottie_autoPlay="true"
-            app:lottie_colorFilter="@color/colorPrimary"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/running_man"
-            app:lottie_scale="0.3" />
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_pirates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onMetricClicked()}"
+                android:text="@string/metric" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textPermissionActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:text="@string/permission_activity"
-            android:textSize="@dimen/textSizeBig"
-            app:layout_constraintBottom_toBottomOf="@+id/lottieActivity"
-            app:layout_constraintStart_toEndOf="@+id/lottieActivity"
-            app:layout_constraintTop_toTopOf="@+id/lottieActivity" />
-
-        <Switch
-            android:id="@+id/switchActivity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_basic"
-            android:onCheckedChanged="@{viewModel::onActivityCheckChanged}"
-            app:layout_constraintBottom_toBottomOf="@+id/textPermissionActivity"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textPermissionActivity" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textPermissionActivityInfo"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_basic"
-            android:layout_marginEnd="@dimen/margin_basic"
-            android:fontFamily="@font/light"
-            android:text="@string/explanation_permission_activity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/textSizeNormal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lottieActivity" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_basic"
-            android:enabled="@{viewModel.liveButtonEnabled}"
-            android:fontFamily="@font/bold"
-            android:onClick="@{()-> viewModel.onContinueClicked()}"
-            android:text="@string/runage_continue"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_ninjas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onImperialClicked()}"
+                android:text="@string/imperial" />
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

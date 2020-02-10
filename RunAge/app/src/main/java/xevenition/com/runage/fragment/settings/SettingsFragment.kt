@@ -14,21 +14,15 @@ import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentSettingsBinding
+import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 import javax.inject.Inject
 
 
 class SettingsFragment : BaseFragment<SettingsViewModel>() {
 
     private lateinit var binding: FragmentSettingsBinding
-
-    @Inject
-    lateinit var factory: SettingsViewModelFactory
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity?.applicationContext as MainApplication).appComponent.inject(this)
-    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -41,6 +35,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val factory = SettingsViewModelFactory(getApplication())
         viewModel = ViewModelProviders.of(this, factory).get(SettingsViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -50,72 +45,9 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
-
-        viewModel.observableCheckPermissionActivity.observe(viewLifecycleOwner, Observer {
-            // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                binding.switchActivity.isChecked = false
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    requestPermissions(
-                            arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-                            PERMISSIONS_REQUEST_ACTIVITY
-                    )
-                } else {
-                    //earlier version is enough with manifest permission
-                    binding.switchActivity.isChecked = true
-                }
-            } else {
-                binding.switchActivity.isChecked = true
-            }
-        })
-
-        viewModel.observableCheckPermissionLocation.observe(viewLifecycleOwner, Observer {
-            // Here, thisActivity is the current activity
-            if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                binding.switchLocation.isChecked = false
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    requestPermissions(
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                            PERMISSIONS_REQUEST_LOCATION
-                    )
-                } else {
-                    //earlier version is enough with manifest permission
-                    requestPermissions(
-                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            PERMISSIONS_REQUEST_LOCATION
-                    )
-                }
-            } else {
-                binding.switchLocation.isChecked = true
-            }
-        })
     }
-
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
-    ) {
-        when (requestCode) {
-            PERMISSIONS_REQUEST_ACTIVITY -> {
-                binding.switchActivity.isChecked = permissionGranted(grantResults)
-            }
-            PERMISSIONS_REQUEST_LOCATION -> {
-                binding.switchLocation.isChecked = permissionGranted(grantResults)
-            }
-        }
-    }
-
-    private fun permissionGranted(grantResults: IntArray) =
-            (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 
     companion object {
         fun newInstance() = SettingsFragment()
-        const val PERMISSIONS_REQUEST_ACTIVITY = 1001
-        const val PERMISSIONS_REQUEST_LOCATION = 1002
     }
 }

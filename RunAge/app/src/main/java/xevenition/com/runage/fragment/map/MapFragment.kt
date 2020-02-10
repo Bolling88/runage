@@ -16,7 +16,9 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
+import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
+import xevenition.com.runage.fragment.main.MainViewModelFactory
 import javax.inject.Inject
 
 
@@ -28,8 +30,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
     private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentMapBinding
 
-    @Inject
-    lateinit var factory: MapViewModelFactory
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
 
@@ -49,6 +49,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProviders.of(this, factory).get(MapViewModel::class.java)
         if(currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
         binding.lifecycleOwner = viewLifecycleOwner

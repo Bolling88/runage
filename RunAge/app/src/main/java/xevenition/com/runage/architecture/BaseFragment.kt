@@ -6,6 +6,8 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import xevenition.com.runage.MainApplication
+import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 
 open abstract class BaseFragment<T: BaseViewModel> : Fragment() {
 
