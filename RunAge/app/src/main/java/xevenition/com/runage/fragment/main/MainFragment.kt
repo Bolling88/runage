@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat.startForegroundService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -44,7 +45,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
             val binder = service as EventService.LocalBinder
             mService = binder.getService()
             mBound = true
-            mService.registerCallback(object: EventService.EventCallback{
+            mService.registerCallback(object : EventService.EventCallback {
                 override fun onQuestCreated(id: Int) {
                     Timber.d("onQuestCreated: $id")
                     (adapter.getItem(1) as MapFragment).onNewQuestCreated(id)
@@ -61,10 +62,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
         super.onCreate(savedInstanceState)
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
 
-        adapter =
-            MainPagerAdapter(
-                childFragmentManager
-            )
+        adapter = MainPagerAdapter(childFragmentManager)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
     }
 
     override fun onCreateView(
@@ -107,7 +109,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onStart() {
         super.onStart()
-        if(EventService.serviceIsRunning) {
+        if (EventService.serviceIsRunning) {
             bindToService()
         }
     }
@@ -124,7 +126,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     }
 
     private fun unbindService() {
-        if(mBound) {
+        if (mBound) {
             activity?.unbindService(connection)
             mBound = false
         }
@@ -149,7 +151,8 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private class MainPagerAdapter(fm: FragmentManager) :
         FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        private var fragments: Array<Fragment> = arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
+        private var fragments: Array<Fragment> =
+            arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
 
         override fun getCount(): Int =
             NUM_PAGES

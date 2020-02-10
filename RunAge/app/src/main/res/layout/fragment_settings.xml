@@ -32,6 +32,7 @@
             android:id="@+id/lottieLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dip"
             android:layout_marginTop="@dimen/margin_big"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textTitle"
@@ -54,26 +55,38 @@
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginStart="20dip"
-            android:layout_marginTop="10dip"
-            android:orientation="vertical"
+            android:layout_marginTop="20dip"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textPermissionLocation">
 
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/radio_pirates"
+                android:id="@+id/radio_metric"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:onClick="@{()-> viewModel.onMetricClicked()}"
                 android:text="@string/metric" />
 
             <androidx.appcompat.widget.AppCompatRadioButton
-                android:id="@+id/radio_ninjas"
+                android:id="@+id/radio_imperial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{()-> viewModel.onImperialClicked()}"
                 android:text="@string/imperial" />
         </RadioGroup>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_basic"
+            android:fontFamily="@font/bold"
+            android:onClick="@{()-> viewModel.onContinueClicked()}"
+            android:text="@string/runage_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

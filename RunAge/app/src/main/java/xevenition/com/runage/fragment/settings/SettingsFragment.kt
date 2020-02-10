@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -23,6 +24,14 @@ import javax.inject.Inject
 class SettingsFragment : BaseFragment<SettingsViewModel>() {
 
     private lateinit var binding: FragmentSettingsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+       requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -50,4 +59,5 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     companion object {
         fun newInstance() = SettingsFragment()
     }
+
 }

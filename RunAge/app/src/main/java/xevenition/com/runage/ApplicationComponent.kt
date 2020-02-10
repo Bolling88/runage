@@ -8,7 +8,9 @@ import xevenition.com.runage.fragment.map.MapViewModelFactory
 import xevenition.com.runage.fragment.permission.PermissionFragment
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
+import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
 import xevenition.com.runage.fragment.splash.SplashFragment
+import xevenition.com.runage.fragment.splash.SplashViewModelFactory
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.service.EventService
 import javax.inject.Singleton
@@ -23,6 +25,8 @@ interface ApplicationComponent {
     fun inject(component: SplashFragment)
     fun inject(component: PermissionFragment)
     fun inject(component: SettingsFragment)
+    fun inject(component: SplashViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
     fun inject(component: MapViewModelFactory)
+    fun inject(component: SettingsViewModelFactory)
 }

@@ -16,15 +16,20 @@ class SaveUtil @Inject constructor(app: Application) {
         )
     }
 
-    fun save(key: String, value: Boolean){
+    fun saveBoolean(key: String, value: Boolean){
         with (sharedPref.edit()) {
             putBoolean(key, value)
             apply()
         }
     }
 
+    fun getBoolean(key: String, default: Boolean = false): Boolean {
+        return sharedPref.getBoolean(key, default)
+    }
+
     companion object {
         const val KEY_INITIAL_SETTINGS_COMPLETED = "key_initial_settings_completed"
+        const val KEY_IS_USING_METRIC = "key_is_using_metric"
 
         private const val KEY = "evenition.com.runage.SAVE_KEY"
     }
