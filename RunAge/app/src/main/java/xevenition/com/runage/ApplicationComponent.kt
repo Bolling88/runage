@@ -2,6 +2,7 @@ package xevenition.com.runage
 
 import dagger.Component
 import xevenition.com.runage.architecture.AppModule
+import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.map.MapFragment
 import xevenition.com.runage.fragment.map.MapViewModelFactory
@@ -23,10 +24,11 @@ interface ApplicationComponent {
     fun inject(component: MainFragment)
     fun inject(component: EventService)
     fun inject(component: SplashFragment)
-    fun inject(component: PermissionFragment)
     fun inject(component: SettingsFragment)
-    fun inject(component: SplashViewModelFactory)
-    fun inject(component: PermissionViewModelFactory)
+    fun inject(component: PermissionFragment)
     fun inject(component: MapViewModelFactory)
+    fun inject(component: LoginViewModelFactory)
+    fun inject(component: SplashViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
+    fun inject(component: PermissionViewModelFactory)
 }
