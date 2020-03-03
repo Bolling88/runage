@@ -12,7 +12,7 @@ data class Quest(
         @ColumnInfo(name = "start_time_millis") val startTimeMillis: Long,
         @ColumnInfo(name = "speed") val speed: Float,
         @ColumnInfo(name = "locations") var locations: MutableList<PositionPoint>,
-        @ColumnInfo(name = "total_distance") var totalDistance: Float
+        @ColumnInfo(name = "total_distance") var totalDistance: Double
 ) {
 
     @Ignore
@@ -21,6 +21,6 @@ data class Quest(
             startTimeMillis = startTimeMillis,
             speed = 0f,
             locations = mutableListOf<PositionPoint>(),
-            totalDistance = 0f
+            totalDistance = 0.0
     )
 }

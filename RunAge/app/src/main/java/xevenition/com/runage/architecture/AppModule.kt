@@ -1,9 +1,11 @@
 package xevenition.com.runage.architecture
 
 import android.app.Application
+import android.speech.tts.TextToSpeech
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import timber.log.Timber
 import xevenition.com.runage.room.AppDatabase
 import javax.inject.Singleton
 
@@ -14,6 +16,13 @@ class AppModule(private val application: Application) {
     @Singleton
     fun providesApplication(): Application {
         return application
+    }
+
+    @Provides
+    fun provideTextToSpeech(app: Application): TextToSpeech {
+        return TextToSpeech(app, TextToSpeech.OnInitListener {
+            Timber.d("Text to speech initiated")
+        })
     }
 
     @Provides

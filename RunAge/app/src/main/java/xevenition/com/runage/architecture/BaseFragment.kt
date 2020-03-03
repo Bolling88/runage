@@ -13,10 +13,6 @@ open abstract class BaseFragment<T: BaseViewModel> : Fragment() {
 
      lateinit var viewModel: T
 
-     override fun onActivityCreated(savedInstanceState: Bundle?) {
-          super.onActivityCreated(savedInstanceState)
-     }
-
      @CallSuper
      open fun setUpObservables(){
           viewModel.observableNavigateTo.observe(viewLifecycleOwner, Observer {

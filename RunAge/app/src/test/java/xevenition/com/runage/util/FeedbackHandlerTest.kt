@@ -29,31 +29,31 @@ class FeedbackHandlerTest {
 
     @Test
     fun reportDistance() {
-        feedbackHandler.reportDistance(500)
+        feedbackHandler.reportDistance(500.0)
     }
 
     @Test
     fun testShouldNotReport() {
-        val shouldReport = feedbackHandler.shouldReport(500)
+        val shouldReport = feedbackHandler.shouldReport(500.0)
         assertFalse(shouldReport)
     }
 
     @Test
     fun testShouldReport() {
-        val shouldReport = feedbackHandler.shouldReport(1900)
+        val shouldReport = feedbackHandler.shouldReport(1900.0)
         assertTrue(shouldReport)
     }
 
     @Test
     fun testNextReportDistance(){
         val distance = feedbackHandler.getNextDistanceForReport()
-        assertEquals(1000, distance)
+        assertEquals(1000.0, distance, 0.0)
     }
 
     @Test
     fun testNextReportDistanceIncrement(){
-        assertEquals(1000, feedbackHandler.getNextDistanceForReport())
-        feedbackHandler.reportDistance(1200)
-        assertEquals(2000, feedbackHandler.getNextDistanceForReport())
+        assertEquals(1000.0, feedbackHandler.getNextDistanceForReport(), 0.0)
+        feedbackHandler.reportDistance(1200.0)
+        assertEquals(2000.0, feedbackHandler.getNextDistanceForReport(), 0.0)
     }
 }

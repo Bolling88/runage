@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -27,7 +28,9 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.util.FeedbackHandler
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -52,6 +55,8 @@ class EventService : Service() {
 
     @Inject
     lateinit var questRepository: QuestRepository
+    @Inject
+    lateinit var feedbackHandler: FeedbackHandler
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -65,11 +70,6 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
-
-        textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener {
-            textToSpeech?.language = Locale.US
-            textToSpeech?.speak("Fuck yeah lets go mother fucker", TextToSpeech.QUEUE_ADD, null,null)
-        })
 
         serviceIsRunning = true
         //TODO add start delay of 10 seconds
@@ -88,6 +88,10 @@ class EventService : Service() {
                 Timber.e(it)
             })
 
+        Observable.timer(1000, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.computation())
+            .subscribe { feedbackHandler.giveInitialFeedback() }
+
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
@@ -95,7 +99,6 @@ class EventService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        //wakeLock?.release()
         Timber.e("Service destroyed")
         serviceIsRunning = false
         textToSpeech?.shutdown()
@@ -109,18 +112,18 @@ class EventService : Service() {
     private fun handleLocation(location: Location) {
         Observable.just(location)
             .subscribeOn(Schedulers.computation())
-//            .filter {
-//                //Filter away crazy values
-//                Timber.d("Current accuracy: ${it.accuracy}")
-//                it.accuracy < 20
-//            }
-//            .filter {
-//                if (previousLocation == null) {
-//                    true
-//                } else {
-//                    newPointIsMinDistanceAway(it, previousLocation!!)
-//                }
-//            }
+            .filter {
+                //Filter away crazy values
+                Timber.d("Current accuracy: ${it.accuracy}")
+                it.accuracy < 20
+            }
+            .filter {
+                if (previousLocation == null) {
+                    true
+                } else {
+                    newPointIsMinDistanceAway(it, previousLocation!!)
+                }
+            }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
                 val newPoint = PositionPoint(
@@ -159,6 +162,7 @@ class EventService : Service() {
             )
             currentQuest.totalDistance += resultArray.first()
         }
+        feedbackHandler.reportDistance(currentQuest.totalDistance)
     }
 
     private fun newPointIsMinDistanceAway(
@@ -171,14 +175,6 @@ class EventService : Service() {
     }
 
     private fun startLocationUpdates() {
-//        val intent = Intent(this, LocationReceiver::class.java)
-//        val locationIntent = PendingIntent.getService(
-//            applicationContext,
-//            LOCATION_REQUEST_CODE,
-//            intent,
-//            PendingIntent.FLAG_UPDATE_CURRENT
-//        )
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult?) {
                 result?.lastLocation?.let {

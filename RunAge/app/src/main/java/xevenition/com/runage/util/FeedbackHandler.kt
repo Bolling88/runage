@@ -10,7 +10,7 @@ class FeedbackHandler @Inject constructor(saveUtil: SaveUtil, private val textTo
     private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
     private var nextDistanceFeedback = 1
 
-    fun reportDistance(totalDistanceInMeters: Int) {
+    fun reportDistance(totalDistanceInMeters: Double) {
         if (shouldReport(totalDistanceInMeters)) {
 
             textToSpeech.speak(
@@ -26,16 +26,20 @@ class FeedbackHandler @Inject constructor(saveUtil: SaveUtil, private val textTo
         }
     }
 
-    fun shouldReport(totalDistanceInMeters: Int): Boolean {
+    fun shouldReport(totalDistanceInMeters: Double): Boolean {
         return totalDistanceInMeters >= getNextDistanceForReport()
     }
 
-    fun getNextDistanceForReport(): Int {
+    fun getNextDistanceForReport(): Double {
         return if (isMetric) {
-            nextDistanceFeedback.times(METERS_IN_KILOMETER)
+            nextDistanceFeedback.times(METERS_IN_KILOMETER).toDouble()
         } else {
-            nextDistanceFeedback.times(METERS_IN_MILE).toInt()
+            nextDistanceFeedback.times(METERS_IN_MILE)
         }
+    }
+
+    fun giveInitialFeedback() {
+        textToSpeech.speak("Fuck yeah lets go mother fucker", TextToSpeech.QUEUE_ADD, null,null)
     }
 
     companion object {
