@@ -15,6 +15,8 @@ class FeedbackHandlerTest {
     @Mock
     lateinit var saveUtil: SaveUtil
     @Mock
+    lateinit var resourceUtil: ResourceUtil
+    @Mock
     lateinit var textToSpeech: TextToSpeech
 
     private lateinit var feedbackHandler: FeedbackHandler
@@ -24,7 +26,7 @@ class FeedbackHandlerTest {
         MockitoAnnotations.initMocks(this)
         Mockito.`when`(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true))
             .thenReturn(true)
-        feedbackHandler = FeedbackHandler(saveUtil, textToSpeech)
+        feedbackHandler = FeedbackHandler(saveUtil, resourceUtil, textToSpeech)
     }
 
     @Test
@@ -47,13 +49,13 @@ class FeedbackHandlerTest {
     @Test
     fun testNextReportDistance(){
         val distance = feedbackHandler.getNextDistanceForReport()
-        assertEquals(1000.0, distance, 0.0)
+        assertEquals(FeedbackHandler.METERS_IN_KILOMETER, distance, 0.0)
     }
 
     @Test
     fun testNextReportDistanceIncrement(){
-        assertEquals(1000.0, feedbackHandler.getNextDistanceForReport(), 0.0)
+        assertEquals(FeedbackHandler.METERS_IN_KILOMETER, feedbackHandler.getNextDistanceForReport(), 0.0)
         feedbackHandler.reportDistance(1200.0)
-        assertEquals(2000.0, feedbackHandler.getNextDistanceForReport(), 0.0)
+        assertEquals(FeedbackHandler.METERS_IN_KILOMETER*2, feedbackHandler.getNextDistanceForReport(), 0.0)
     }
 }

@@ -26,4 +26,7 @@
     <string name="unit_type">Unit type</string>
     <string name="metric">Metric (km)</string>
     <string name="imperial">Imperial (mi)</string>
+    <string name="runage_passed_info">Congratulations, you have now completed</string>
+    <string name="kilometer">kilometer</string>
+    <string name="miles">miles</string>
 </resources>
