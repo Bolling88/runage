@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- app_id -->
+    <string name="app_id" translatable="false">864182662755</string>
+    <!-- package_name -->
+    <string name="package_name" translatable="false">xevenition.com.runage</string>
+    <!-- leaderboard Runner of the week -->
+    <string name="leaderboard_runner_of_the_week" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
+</resources>

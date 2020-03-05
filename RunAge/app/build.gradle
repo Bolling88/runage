@@ -73,4 +73,5 @@ dependencies {
     def nav_version = "2.2.1"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 }

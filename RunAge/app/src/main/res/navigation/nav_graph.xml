@@ -11,40 +11,51 @@
         android:label="MainFragment" />
 
     <fragment
+        android:id="@+id/splashFragment"
+        android:name="xevenition.com.runage.fragment.splash.SplashFragment"
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_permissionFragment"
+            app:destination="@id/permissionFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/permissionFragment"
         android:name="xevenition.com.runage.fragment.permission.PermissionFragment"
-        android:label="PermissionFragment" >
+        android:label="PermissionFragment">
         <action
             android:id="@+id/action_permissionFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_permissionFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_permissionFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
-
     <fragment
-        android:id="@+id/splashFragment"
-        android:name="xevenition.com.runage.fragment.splash.SplashFragment"
-        android:label="SplashFragment">
-
+        android:id="@+id/loginFragment"
+        android:name="xevenition.com.runage.fragment.login.LoginFragment"
+        android:label="LoginFragment">
         <action
-            android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-
-        <action
-            android:id="@+id/action_splashFragment_to_permissionFragment"
-            app:destination="@id/permissionFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_splashFragment_to_settingsFragment"
+            android:id="@+id/action_loginFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
-    <fragment android:id="@+id/settingsFragment"
-        tools:layout="SettingsFragment"
-        android:name="xevenition.com.runage.fragment.settings.SettingsFragment">
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="xevenition.com.runage.fragment.settings.SettingsFragment"
+        tools:layout="SettingsFragment">
         <action
             android:id="@+id/action_settingsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

@@ -2,6 +2,7 @@ package xevenition.com.runage.architecture
 
 
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
