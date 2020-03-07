@@ -38,7 +38,7 @@ class EventService : Service() {
 
     private var textToSpeech: TextToSpeech? = null
     // private var wakeLock: PowerManager.WakeLock? = null
-    private var activityType: Int = DetectedActivity.WALKING
+    private var activityType: Int = DetectedActivity.STILL
     private lateinit var currentQuest: Quest
     private var locationRequest: LocationRequest? = null
     private var previousLocation: Location? = null
