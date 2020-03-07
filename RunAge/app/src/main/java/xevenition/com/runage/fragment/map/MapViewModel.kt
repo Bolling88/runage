@@ -1,7 +1,7 @@
 package xevenition.com.runage.fragment.map
 
 import android.annotation.SuppressLint
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
@@ -26,15 +26,26 @@ class MapViewModel(
 
     private var currentPath: MutableList<LatLng> = mutableListOf()
     private var questDisposable: Disposable? = null
-    val observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
-    val observableUserMarkerPosition = MutableLiveData<LatLng>()
-    val observableRunningPath = MutableLiveData<List<LatLng>>()
+
+    private val _observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
+    val observableAnimateMapPosition: LiveData<CameraUpdate> = _observableAnimateMapPosition
+    
+    private val _observableUserMarkerPosition = MutableLiveData<LatLng>()
+    val observableUserMarkerPosition: LiveData<LatLng> = _observableUserMarkerPosition
+    
+    private val _observableRunningPath = MutableLiveData<List<LatLng>>()
+    val observableRunningPath: LiveData<List<LatLng>> = _observableRunningPath
+
+    private val _liveTextActivityType = MutableLiveData<String>()
+    val liveTextActivityType: LiveData<String> = _liveTextActivityType
+
+    private val _liveTotalDistance = MutableLiveData<String>()
+    val liveTotalDistance: LiveData<String> = _liveTotalDistance
+
+    private val _liveCurrentAccuracy = MutableLiveData<String>()
+    val liveCurrentAccuracy: LiveData<String> = _liveCurrentAccuracy
 
     val observableClearMap = SingleLiveEvent<Unit>()
-
-    val liveTextActivityType = MutableLiveData<String>()
-    val liveTotalDistance = MutableLiveData<String>()
-    val liveCurrentAccuracy = MutableLiveData<String>()
 
     fun onNewQuestCreated(id: Int) {
         setUpObservableQuest(id)
@@ -51,8 +62,8 @@ class MapViewModel(
                     displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
-                liveTotalDistance.postValue("Distance: ${quest.totalDistance} m")
-                liveCurrentAccuracy.postValue("Accuracy: ${quest.locations.lastOrNull()?.accuracy} m")
+                _liveTotalDistance.postValue("Distance: ${quest.totalDistance} m")
+                _liveCurrentAccuracy.postValue("Accuracy: ${quest.locations.lastOrNull()?.accuracy} m")
             }, {
                 Timber.e(it)
             })
@@ -72,7 +83,7 @@ class MapViewModel(
             .subscribe({
                 currentPath = it
                 Timber.d("Posting ${it.size} locations")
-                observableRunningPath.postValue(it)
+                _observableRunningPath.postValue(it)
             }, {
                 Timber.e(it)
             })
@@ -81,24 +92,24 @@ class MapViewModel(
     private fun displayActivityType(activityType: Int) {
         when (activityType) {
             DetectedActivity.WALKING -> {
-                liveTextActivityType.postValue(resourceUtil.getString(R.string.walking))
-                Log.d(TAG, "walking")
+                _liveTextActivityType.postValue(resourceUtil.getString(R.string.walking))
+                Timber.d("walking")
             }
             DetectedActivity.RUNNING -> {
-                liveTextActivityType.postValue(resourceUtil.getString(R.string.running))
-                Log.d(TAG, "running")
+                _liveTextActivityType.postValue(resourceUtil.getString(R.string.running))
+                Timber.d("running")
             }
             DetectedActivity.IN_VEHICLE -> {
-                liveTextActivityType.postValue(resourceUtil.getString(R.string.driving))
-                Log.d(TAG, "driving")
+                _liveTextActivityType.postValue(resourceUtil.getString(R.string.driving))
+                Timber.d("driving")
             }
             DetectedActivity.ON_BICYCLE -> {
-                liveTextActivityType.postValue(resourceUtil.getString(R.string.on_bicycle))
-                Log.d(TAG, "cycle")
+                _liveTextActivityType.postValue(resourceUtil.getString(R.string.on_bicycle))
+                Timber.d("cycle")
             }
             DetectedActivity.STILL -> {
-                liveTextActivityType.postValue(resourceUtil.getString(R.string.still))
-                Log.d(TAG, "still")
+                _liveTextActivityType.postValue(resourceUtil.getString(R.string.still))
+                Timber.d("still")
             }
         }
     }
@@ -109,12 +120,12 @@ class MapViewModel(
             latLng,
             19f
         )
-        observableAnimateMapPosition.postValue(userLocation)
-        observableUserMarkerPosition.postValue(latLng)
+        _observableAnimateMapPosition.postValue(userLocation)
+        _observableUserMarkerPosition.postValue(latLng)
     }
 
     fun onMapCreated() {
-        observableRunningPath.postValue(currentPath)
+        _observableRunningPath.postValue(currentPath)
     }
 
     fun onQuestFinished() {
