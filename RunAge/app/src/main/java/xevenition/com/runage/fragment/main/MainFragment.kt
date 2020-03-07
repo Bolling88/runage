@@ -15,7 +15,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.google.android.gms.common.images.ImageManager
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
@@ -23,11 +26,8 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMainBinding
 import xevenition.com.runage.fragment.map.MapFragment
-import xevenition.com.runage.fragment.splash.SplashViewModel
-import xevenition.com.runage.fragment.splash.SplashViewModelFactory
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.service.EventService
-import javax.inject.Inject
 
 
 class MainFragment : BaseFragment<MainViewModel>() {
@@ -62,6 +62,9 @@ class MainFragment : BaseFragment<MainViewModel>() {
         super.onCreate(savedInstanceState)
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
 
+        val factory = MainViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+
         adapter = MainPagerAdapter(childFragmentManager)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -75,6 +78,8 @@ class MainFragment : BaseFragment<MainViewModel>() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewPager.adapter = adapter
         return binding.root
     }
@@ -85,26 +90,41 @@ class MainFragment : BaseFragment<MainViewModel>() {
         if (EventService.serviceIsRunning) {
             binding.viewPager.currentItem = 1
             binding.swipeButton.isChecked = true
+            binding.lottieSwipeEnd.visibility = View.VISIBLE
+            binding.lottieSwipeEnd.playAnimation()
+            setLottieSwipeState(true)
+        }else{
+            binding.lottieSwipeStart.visibility = View.VISIBLE
+            binding.lottieSwipeStart.playAnimation()
+            setLottieSwipeState(false)
         }
 
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
             startEventService()
+            setLottieSwipeState(true)
         }
 
         binding.swipeButton.onSwipedOffListener = {
             binding.viewPager.setCurrentItem(0, true)
             stopEventService()
             (adapter.getItem(1) as MapFragment).onQuestFinished()
+            setLottieSwipeState(false)
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val factory = MainViewModelFactory(getApplication())
-        viewModel = ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun setLottieSwipeState(active: Boolean) {
+        if(active) {
+            binding.lottieSwipeEnd.visibility = View.VISIBLE
+            binding.lottieSwipeEnd.playAnimation()
+            binding.lottieSwipeStart.visibility = View.GONE
+            binding.lottieSwipeStart.pauseAnimation()
+        }else{
+            binding.lottieSwipeStart.visibility = View.VISIBLE
+            binding.lottieSwipeStart.playAnimation()
+            binding.lottieSwipeEnd.visibility = View.GONE
+            binding.lottieSwipeEnd.pauseAnimation()
+        }
     }
 
     override fun onStart() {

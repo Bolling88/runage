@@ -1,13 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment.start.StartFragment">
+<layout>
 
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.start.StartViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context=".fragment.start.StartFragment">
 
-</FrameLayout>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_autoPlay="true"
+            app:layout_constraintEnd_toEndOf="@+id/card_profile"
+            app:layout_constraintStart_toStartOf="@+id/card_profile"
+            app:layout_constraintTop_toTopOf="@+id/card_profile"
+            app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+            app:lottie_loop="true"
+            app:lottie_speed="0.4"
+            app:lottie_scale="0.3"
+            app:lottie_rawRes="@raw/ripple" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_profile"
+            android:layout_width="155dp"
+            android:layout_height="155dp"
+            android:layout_marginTop="@dimen/margin_huge"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="250dp"
+            app:cardElevation="10dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="250dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_profile"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/azonix"
+            android:singleLine="true"
+            android:text="@{viewModel.liveTextName}"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_profile"
+            tools:text="Ludwig Bolling" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

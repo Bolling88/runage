@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import timber.log.Timber
 import xevenition.com.runage.room.AppDatabase
+import java.util.*
 import javax.inject.Singleton
 
 @Module
@@ -20,9 +21,12 @@ class AppModule(private val application: Application) {
 
     @Provides
     fun provideTextToSpeech(app: Application): TextToSpeech {
-        return TextToSpeech(app, TextToSpeech.OnInitListener {
+        var speech : TextToSpeech? = null
+        speech = TextToSpeech(app, TextToSpeech.OnInitListener {
             Timber.d("Text to speech initiated")
+            speech?.language = Locale.US
         })
+        return speech
     }
 
     @Provides

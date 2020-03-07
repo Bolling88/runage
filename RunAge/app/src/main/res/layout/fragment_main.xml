@@ -37,13 +37,43 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:textChecked="@string/swipe_to_stop"
+            app:textChecked=""
             app:textColorChecked="@color/colorPrimary"
             app:textColorUnChecked="@color/white"
-            app:textUnchecked="@string/swipe_to_start"
+            app:textUnchecked=""
             app:uncheckedBackground="@drawable/square_rounded"
             app:uncheckedIcon="@drawable/ic_run_blue"
             app:uncheckedToggleBackground="@drawable/circle_light" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_swipe_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_autoPlay="false"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/swipeButton"
+            app:layout_constraintStart_toStartOf="@+id/swipeButton"
+            app:layout_constraintTop_toTopOf="@+id/swipeButton"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
+            app:lottie_loop="true"
+            android:rotation="90"
+            app:lottie_speed="0.5"
+            app:lottie_rawRes="@raw/swipe" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_swipe_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_autoPlay="false"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/swipeButton"
+            app:layout_constraintStart_toStartOf="@+id/swipeButton"
+            app:layout_constraintTop_toTopOf="@+id/swipeButton"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
+            app:lottie_loop="true"
+            android:rotation="270"
+            app:lottie_speed="0.5"
+            app:lottie_rawRes="@raw/swipe_blue" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

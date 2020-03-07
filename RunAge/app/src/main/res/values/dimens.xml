@@ -4,4 +4,5 @@
     <dimen name="textSizeBig">18sp</dimen>
     <dimen name="textSizeNormal">14sp</dimen>
     <dimen name="margin_big">40dip</dimen>
+    <dimen name="margin_huge">80dip</dimen>
 </resources>

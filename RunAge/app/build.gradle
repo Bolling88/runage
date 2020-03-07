@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.3.1'
     kapt 'com.google.dagger:dagger-compiler:2.25.3'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //Test
     testImplementation 'junit:junit:4.12'
@@ -74,4 +76,5 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.android.gms:play-services-games:19.0.0'
 }
