@@ -24,10 +24,16 @@
     <string name="get_started">Get started</string>
     <string name="settings">Settings</string>
     <string name="unit_type">Unit type</string>
-    <string name="metric">Metric (km)</string>
-    <string name="imperial">Imperial (mi)</string>
+    <string name="metric">Metric (km, kg)</string>
+    <string name="imperial">Imperial (mi, lb)</string>
     <string name="runage_passed_info">Congratulations, you have now completed</string>
     <string name="kilometer">kilometer</string>
     <string name="miles">miles</string>
     <string name="signin_other_error">Failed to sign in</string>
+    <string name="runage_your_weight">Your weight</string>
+    <string name="runage_your_weight_here">Your weight here...</string>
+    <string name="runage_calories">calories</string>
+    <string name="runage_distance">Distance</string>
+    <string name="runage_accuracy">Accuracy</string>
+    <string name="runage_weight">Weight</string>
 </resources>

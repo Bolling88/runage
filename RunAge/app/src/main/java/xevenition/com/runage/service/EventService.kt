@@ -28,7 +28,9 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.util.CalorieCalculator
 import xevenition.com.runage.util.FeedbackHandler
+import xevenition.com.runage.util.SaveUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -57,6 +59,8 @@ class EventService : Service() {
     lateinit var questRepository: QuestRepository
     @Inject
     lateinit var feedbackHandler: FeedbackHandler
+    @Inject
+    lateinit var saveUtil: SaveUtil
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -161,6 +165,7 @@ class EventService : Service() {
                 resultArray
             )
             currentQuest.totalDistance += resultArray.first()
+            currentQuest.calories = CalorieCalculator.getCaloriesBurned(distance = currentQuest.totalDistance, weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT))
         }
         feedbackHandler.reportDistance(currentQuest.totalDistance)
     }

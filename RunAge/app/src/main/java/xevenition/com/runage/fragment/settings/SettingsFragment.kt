@@ -11,6 +11,7 @@ import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
@@ -45,7 +46,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val factory = SettingsViewModelFactory(getApplication())
-        viewModel = ViewModelProviders.of(this, factory).get(SettingsViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         setUpObservables()

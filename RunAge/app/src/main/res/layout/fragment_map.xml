@@ -47,12 +47,22 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textAccuracy"
             android:layout_width="wrap_content"
-            tools:text="1000 m"
+            tools:text="10 m"
             android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.liveCurrentAccuracy}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textDistance" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textCalories"
+            android:layout_width="wrap_content"
+            tools:text="100 m"
+            android:textSize="20sp"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.liveCalories}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textAccuracy" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

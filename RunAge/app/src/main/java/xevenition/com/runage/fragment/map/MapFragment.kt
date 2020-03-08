@@ -129,16 +129,23 @@ class MapFragment : BaseFragment<MapViewModel>() {
         moveCamera(positions)
         val positionPointsArray = ArrayList(positions)
 
-        if (polyLine == null) { // Instantiates a new Polyline object and adds points to define a rectangle
-            val rectOptions = PolylineOptions().addAll(positionPointsArray)
+        if (polyLine == null) {
+            val polylineOptions = PolylineOptions().addAll(positionPointsArray)
                 .jointType(JointType.ROUND)
-            // Get back the mutable Polyline
-            polyLine = googleMap?.addPolyline(rectOptions)
-            polyLine?.color = ContextCompat.getColor(context!!, R.color.colorAccent)
-            polyLine?.width = typedValueUtil.dipToPixels(5f).toFloat()
+                .color(ContextCompat.getColor(context!!, R.color.colorAccent))
+                .width(typedValueUtil.dipToPixels(5f).toFloat())
+            polyLine = googleMap?.addPolyline(polylineOptions)
         }
         polyLine?.points = positionPointsArray
         Timber.d("Polyline has ${polyLine?.points?.size} points")
+    }
+
+    private fun addPolyline(start: LatLng, end: LatLng, color: Int){
+        val polylineOptions = PolylineOptions()
+            .add(start, end)
+            .color(color)
+            .jointType(JointType.ROUND)
+        val polyline = googleMap?.addPolyline(polylineOptions)
     }
 
 

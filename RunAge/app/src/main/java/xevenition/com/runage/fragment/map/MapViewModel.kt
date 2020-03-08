@@ -45,6 +45,9 @@ class MapViewModel(
     private val _liveCurrentAccuracy = MutableLiveData<String>()
     val liveCurrentAccuracy: LiveData<String> = _liveCurrentAccuracy
 
+    private val _liveCalories = MutableLiveData<String>()
+    val liveCalories: LiveData<String> = _liveCalories
+
     val observableClearMap = SingleLiveEvent<Unit>()
 
     fun onNewQuestCreated(id: Int) {
@@ -62,8 +65,10 @@ class MapViewModel(
                     displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
-                _liveTotalDistance.postValue("Distance: ${quest.totalDistance} m")
-                _liveCurrentAccuracy.postValue("Accuracy: ${quest.locations.lastOrNull()?.accuracy} m")
+                //TODO check if imperial or metric
+                _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance} m")
+                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories}")
+                _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy} m")
             }, {
                 Timber.e(it)
             })
