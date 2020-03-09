@@ -26,10 +26,10 @@ class PermissionViewModel @Inject constructor(
     }
 
     fun onContinueClicked() {
-        if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {
-            observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToSettingsFragment())
-        } else if (!accountUtil.isAccountActive()) {
+        if (!accountUtil.isAccountActive()) {
             observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToLoginFragment())
+        } else if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {
+            observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToSettingsFragment())
         } else {
             observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToMainFragment())
         }

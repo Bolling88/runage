@@ -75,5 +75,18 @@
             app:lottie_speed="0.5"
             app:lottie_rawRes="@raw/swipe_blue" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:lottie_autoPlay="false"
+             android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_countdown" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

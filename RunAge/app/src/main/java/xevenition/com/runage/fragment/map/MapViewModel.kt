@@ -66,9 +66,9 @@ class MapViewModel(
                 }
                 displayRunningRoute(quest.locations)
                 //TODO check if imperial or metric
-                _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance} m")
-                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories}")
-                _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy} m")
+                _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance.toInt()} m")
+                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.div(1000).toInt()}")
+                _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy?.toInt()} m")
             }, {
                 Timber.e(it)
             })

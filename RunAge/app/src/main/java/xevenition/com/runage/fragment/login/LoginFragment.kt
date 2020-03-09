@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -48,21 +49,29 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObservables()
-
-        startSignInIntent()
     }
 
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
+
+        viewModel.observableLoginClicked.observe(viewLifecycleOwner, Observer {
+            startSignInIntent()
+        })
     }
 
     private fun startSignInIntent() {
-        val signInClient = GoogleSignIn.getClient(
-            requireContext(),
-            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
-        )
-        val intent = signInClient.signInIntent
+//        val signInClient = GoogleSignIn.getClient(
+//            requireContext(),
+//            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
+//        )
+//        val intent = signInClient.signInIntent
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+           // .requestServerAuthCode(getString(R.string.default_web_client_id))
+            .build()
+        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
+        val intent = googleSignInClient.signInIntent
         startActivityForResult(intent, RC_SIGN_IN)
     }
 

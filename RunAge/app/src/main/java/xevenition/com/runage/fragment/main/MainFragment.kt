@@ -103,6 +103,8 @@ class MainFragment : BaseFragment<MainViewModel>() {
             binding.viewPager.setCurrentItem(1, true)
             startEventService()
             setLottieSwipeState(true)
+            binding.lottieCountDown.visibility = View.VISIBLE
+            binding.lottieCountDown.playAnimation()
         }
 
         binding.swipeButton.onSwipedOffListener = {
@@ -110,6 +112,8 @@ class MainFragment : BaseFragment<MainViewModel>() {
             stopEventService()
             (adapter.getItem(1) as MapFragment).onQuestFinished()
             setLottieSwipeState(false)
+            binding.lottieCountDown.visibility = View.GONE
+            binding.lottieCountDown.pauseAnimation()
         }
     }
 

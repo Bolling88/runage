@@ -6,4 +6,5 @@
     <string name="package_name" translatable="false">xevenition.com.runage</string>
     <!-- leaderboard Runner of the week -->
     <string name="leaderboard_runner_of_the_week" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
+    <string name="default_web_client_id" translatable="false">455333475416-nom9bcvegksg2tgk1716f367rbif5u23.apps.googleusercontent.com</string>
 </resources>
