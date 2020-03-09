@@ -27,12 +27,12 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val factory = LoginViewModelFactory(getApplication())
-        viewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
-
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
         }
+
+        val factory = LoginViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -61,14 +61,8 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
     }
 
     private fun startSignInIntent() {
-//        val signInClient = GoogleSignIn.getClient(
-//            requireContext(),
-//            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
-//        )
-//        val intent = signInClient.signInIntent
-
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-           // .requestServerAuthCode(getString(R.string.default_web_client_id))
+            .requestServerAuthCode(getString(R.string.default_web_client_id))
             .build()
         val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso);
         val intent = googleSignInClient.signInIntent

@@ -28,10 +28,11 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
        requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
         }
+        val factory = SettingsViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -40,15 +41,13 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
             savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_settings, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val factory = SettingsViewModelFactory(getApplication())
-        viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setUpObservables()
     }
 

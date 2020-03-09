@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -31,7 +32,9 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity?.applicationContext as MainApplication).appComponent.inject(this)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
         val factory = PermissionViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(PermissionViewModel::class.java)
     }
