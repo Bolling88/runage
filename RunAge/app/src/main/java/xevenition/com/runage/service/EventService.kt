@@ -81,10 +81,7 @@ class EventService : Service() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
         serviceIsRunning = true
-
-        locationUtil.getLastLocation().addOnSuccessListener {
-
-        }
+        startCountDown()
 
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
@@ -100,13 +97,23 @@ class EventService : Service() {
                 Timber.e(it)
             })
 
-        Observable.timer(1000, TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.computation())
-            .subscribe { feedbackHandler.giveInitialFeedback() }
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
+    }
+
+    private fun startCountDown(){
+        var count = 10
+        val disposable = Observable.interval(0,1, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.computation())
+            .take(10) // up to 30 items
+            .map { count - it }
+            .subscribe({
+                feedbackHandler.speak(it.toString())
+            },{
+                Timber.e(it)
+            })
+        compositeDisposable.add(disposable)
     }
 
     override fun onDestroy() {

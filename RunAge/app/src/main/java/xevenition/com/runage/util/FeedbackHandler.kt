@@ -5,7 +5,9 @@ import android.speech.tts.TextToSpeech
 import timber.log.Timber
 import xevenition.com.runage.R
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FeedbackHandler @Inject constructor(saveUtil: SaveUtil, private val resourceUtil: ResourceUtil, private val textToSpeech: TextToSpeech) {
 
     private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
@@ -38,8 +40,8 @@ class FeedbackHandler @Inject constructor(saveUtil: SaveUtil, private val resour
         }
     }
 
-    fun giveInitialFeedback() {
-        textToSpeech.speak("Fuck yeah lets go mother fucker", TextToSpeech.QUEUE_ADD, null,null)
+    fun speak(string: String) {
+        textToSpeech.speak(string, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
     companion object {
