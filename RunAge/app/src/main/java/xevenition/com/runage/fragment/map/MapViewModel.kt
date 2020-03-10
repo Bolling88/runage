@@ -5,6 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
@@ -17,11 +20,13 @@ import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.util.LocationUtil
 
 
 class MapViewModel(
     private val resourceUtil: ResourceUtil,
-    private val questRepository: QuestRepository
+    private val questRepository: QuestRepository,
+    private val locationUtil: LocationUtil
 ) : BaseViewModel() {
 
     private var currentPath: MutableList<LatLng> = mutableListOf()
@@ -120,7 +125,11 @@ class MapViewModel(
     }
 
     private fun moveToCurrentLocation(lastLocation: PositionPoint) {
-        val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+        updateUserLocationOnMap(lastLocation.latitude, lastLocation.longitude)
+    }
+
+    private fun updateUserLocationOnMap(latitude: Double, longitude: Double) {
+        val latLng = LatLng(latitude, longitude)
         val userLocation = CameraUpdateFactory.newLatLngZoom(
             latLng,
             19f
@@ -131,6 +140,31 @@ class MapViewModel(
 
     fun onMapCreated() {
         _observableRunningPath.postValue(currentPath)
+        startLocationUpdates()
+    }
+
+    private lateinit var locationCallback: LocationCallback
+
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.create()?.apply {
+            interval = 1000
+            fastestInterval = 1000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult?) {
+                result?.let {
+                    updateUserLocationOnMap(it.lastLocation.latitude, it.lastLocation.longitude)
+                }
+            }
+        }
+
+        locationUtil.requestLocationUpdates(locationRequest, locationCallback)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationUtil.removeLocationUpdates(locationCallback)
     }
 
     fun onQuestFinished() {

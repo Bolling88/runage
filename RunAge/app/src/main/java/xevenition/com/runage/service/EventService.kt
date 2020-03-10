@@ -30,6 +30,7 @@ import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.CalorieCalculator
 import xevenition.com.runage.util.FeedbackHandler
+import xevenition.com.runage.util.LocationUtil
 import xevenition.com.runage.util.SaveUtil
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -39,14 +40,14 @@ import javax.inject.Inject
 class EventService : Service() {
 
     private var textToSpeech: TextToSpeech? = null
+
     // private var wakeLock: PowerManager.WakeLock? = null
     private var activityType: Int = DetectedActivity.STILL
     private lateinit var currentQuest: Quest
-    private var locationRequest: LocationRequest? = null
     private var previousLocation: Location? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var locationRequest: LocationRequest? = null
     private lateinit var locationCallback: LocationCallback
     private val binder = LocalBinder()
     private var callback: EventCallback? = null
@@ -57,10 +58,15 @@ class EventService : Service() {
 
     @Inject
     lateinit var questRepository: QuestRepository
+
     @Inject
     lateinit var feedbackHandler: FeedbackHandler
+
     @Inject
     lateinit var saveUtil: SaveUtil
+
+    @Inject
+    lateinit var locationUtil: LocationUtil
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -74,16 +80,18 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
-
         serviceIsRunning = true
+
+        locationUtil.getLastLocation().addOnSuccessListener {
+
+        }
+
         //TODO add start delay of 10 seconds
         questRepository.startNewQuest()
             .subscribe({
                 callback?.onQuestCreated(it.id)
                 currentQuest = it
 
-                fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                createLocationRequest()
                 startLocationUpdates()
                 eventHandler =
                     ActivityActivator(this)
@@ -107,7 +115,7 @@ class EventService : Service() {
         serviceIsRunning = false
         textToSpeech?.shutdown()
         eventHandler.endActivityTracking()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        locationUtil.removeLocationUpdates(locationCallback)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
         compositeDisposable.dispose()
     }
@@ -165,7 +173,10 @@ class EventService : Service() {
                 resultArray
             )
             currentQuest.totalDistance += resultArray.first()
-            currentQuest.calories = CalorieCalculator.getCaloriesBurned(distance = currentQuest.totalDistance, weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT))
+            currentQuest.calories = CalorieCalculator.getCaloriesBurned(
+                distance = currentQuest.totalDistance,
+                weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
+            )
         }
         feedbackHandler.reportDistance(currentQuest.totalDistance)
     }
@@ -180,6 +191,11 @@ class EventService : Service() {
     }
 
     private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.create()?.apply {
+            interval = 1000
+            fastestInterval = 1000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult?) {
                 result?.lastLocation?.let {
@@ -189,17 +205,7 @@ class EventService : Service() {
             }
         }
 
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest, locationCallback, this.mainLooper
-        )
-    }
-
-    private fun createLocationRequest() {
-        locationRequest = LocationRequest.create()?.apply {
-            interval = 1000
-            fastestInterval = 1000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
+        locationUtil.requestLocationUpdates(locationRequest, locationCallback)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -211,9 +217,9 @@ class EventService : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notification: Notification = Notification.Builder(
-                this,
-                CHANNEL_DEFAULT_IMPORTANCE
-            )
+                    this,
+                    CHANNEL_DEFAULT_IMPORTANCE
+                )
                 .setContentTitle(getText(R.string.notification_title))
                 .setChannelId(createNotificationChannel("my_service", "My Background Service"))
                 .setContentText(getText(R.string.notification_message))

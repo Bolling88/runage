@@ -12,7 +12,7 @@ class StartViewModel(accountUtil: AccountUtil) : BaseViewModel() {
     val observableProfileImage = MutableLiveData<Uri>()
 
     init {
-        val task = accountUtil.getPlayerInfo()
+        val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
             liveTextName.postValue(it.displayName)
             observableProfileImage.postValue(it.iconImageUri)

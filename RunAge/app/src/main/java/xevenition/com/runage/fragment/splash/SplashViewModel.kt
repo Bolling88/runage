@@ -1,5 +1,6 @@
 package xevenition.com.runage.fragment.splash
 
+import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
