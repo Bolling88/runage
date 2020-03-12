@@ -10,12 +10,10 @@ import xevenition.com.runage.util.ResourceUtil
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    feedbackHandler: FeedbackHandler,
-    resourceUtil: ResourceUtil
 ) : BaseViewModel() {
 
     init {
-        feedbackHandler.speak(resourceUtil.getString(R.string.runage_welcome_back))
+
     }
 
 }

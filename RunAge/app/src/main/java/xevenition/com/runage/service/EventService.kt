@@ -28,10 +28,7 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.util.CalorieCalculator
-import xevenition.com.runage.util.FeedbackHandler
-import xevenition.com.runage.util.LocationUtil
-import xevenition.com.runage.util.SaveUtil
+import xevenition.com.runage.util.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -44,6 +41,7 @@ class EventService : Service() {
     // private var wakeLock: PowerManager.WakeLock? = null
     private var activityType: Int = DetectedActivity.STILL
     private lateinit var currentQuest: Quest
+    private var countdownFinished = false
     private var previousLocation: Location? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
@@ -68,6 +66,9 @@ class EventService : Service() {
     @Inject
     lateinit var locationUtil: LocationUtil
 
+    @Inject
+    lateinit var resourceUtil: ResourceUtil
+
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action.equals(KEY_EVENT_BROADCAST_ID)) {
@@ -83,16 +84,15 @@ class EventService : Service() {
         serviceIsRunning = true
         startCountDown()
 
-        //TODO add start delay of 10 seconds
+        startLocationUpdates()
+        eventHandler =
+            ActivityActivator(this)
+        eventHandler.startActivityTracking()
+
         questRepository.startNewQuest()
             .subscribe({
                 callback?.onQuestCreated(it.id)
                 currentQuest = it
-
-                startLocationUpdates()
-                eventHandler =
-                    ActivityActivator(this)
-                eventHandler.startActivityTracking()
             }, {
                 Timber.e(it)
             })
@@ -102,15 +102,22 @@ class EventService : Service() {
         )
     }
 
-    private fun startCountDown(){
+    private fun startCountDown() {
         var count = 10
-        val disposable = Observable.interval(0,1, TimeUnit.SECONDS)
+        val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())
-            .take(10) // up to 30 items
+            .take(12) // up to 30 items
             .map { count - it }
+            .doFinally {
+                countdownFinished = true
+            }
             .subscribe({
-                feedbackHandler.speak(it.toString())
-            },{
+                if (it < 0L) {
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_go_go_go))
+                } else {
+                    feedbackHandler.speak(it.toString())
+                }
+            }, {
                 Timber.e(it)
             })
         compositeDisposable.add(disposable)
@@ -207,7 +214,8 @@ class EventService : Service() {
             override fun onLocationResult(result: LocationResult?) {
                 result?.lastLocation?.let {
                     Timber.d("LOCATION UPDATE")
-                    handleLocation(it)
+                    if (countdownFinished)
+                        handleLocation(it)
                 }
             }
         }

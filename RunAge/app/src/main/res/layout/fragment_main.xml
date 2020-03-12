@@ -49,43 +49,43 @@
             android:id="@+id/lottie_swipe_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_autoPlay="false"
+            android:rotation="90"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
             app:layout_constraintEnd_toEndOf="@+id/swipeButton"
             app:layout_constraintStart_toStartOf="@+id/swipeButton"
             app:layout_constraintTop_toTopOf="@+id/swipeButton"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
+            app:lottie_autoPlay="false"
             app:lottie_loop="true"
-            android:rotation="90"
-            app:lottie_speed="0.5"
-            app:lottie_rawRes="@raw/swipe" />
+            app:lottie_rawRes="@raw/swipe"
+            app:lottie_speed="0.5" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_swipe_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_autoPlay="false"
+            android:rotation="270"
             android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
             app:layout_constraintEnd_toEndOf="@+id/swipeButton"
             app:layout_constraintStart_toStartOf="@+id/swipeButton"
             app:layout_constraintTop_toTopOf="@+id/swipeButton"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
+            app:lottie_autoPlay="false"
             app:lottie_loop="true"
-            android:rotation="270"
-            app:lottie_speed="0.5"
-            app:lottie_rawRes="@raw/swipe_blue" />
+            app:lottie_rawRes="@raw/swipe_blue"
+            app:lottie_speed="0.5" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_count_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_autoPlay="false"
-             android:visibility="gone"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:lottie_loop="true"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
             app:lottie_rawRes="@raw/lottie_countdown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
