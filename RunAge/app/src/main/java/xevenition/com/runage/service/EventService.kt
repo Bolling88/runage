@@ -17,7 +17,6 @@ import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -29,7 +28,6 @@ import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -106,7 +104,7 @@ class EventService : Service() {
         var count = 10
         val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())
-            .take(12) // up to 30 items
+            .take(12)
             .map { count - it }
             .doFinally {
                 countdownFinished = true
@@ -192,7 +190,7 @@ class EventService : Service() {
                 weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
             )
         }
-        feedbackHandler.reportDistance(currentQuest.totalDistance)
+        feedbackHandler.reportCheckpoint(currentQuest)
     }
 
     private fun newPointIsMinDistanceAway(

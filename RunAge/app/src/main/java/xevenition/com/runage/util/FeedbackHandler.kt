@@ -4,25 +4,36 @@ import android.app.Application
 import android.speech.tts.TextToSpeech
 import timber.log.Timber
 import xevenition.com.runage.R
+import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FeedbackHandler @Inject constructor(saveUtil: SaveUtil, private val resourceUtil: ResourceUtil, private val textToSpeech: TextToSpeech) {
+class FeedbackHandler @Inject constructor(
+    saveUtil: SaveUtil,
+    private val resourceUtil: ResourceUtil,
+    private val textToSpeech: TextToSpeech
+) {
 
     private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
     private var nextDistanceFeedback = 1
 
-    fun reportDistance(totalDistanceInMeters: Double) {
+    fun reportCheckpoint(quest: Quest) {
+        val totalDistanceInMeters = quest.totalDistance
         if (shouldReport(totalDistanceInMeters)) {
-            textToSpeech.speak(
-                "${resourceUtil.getString(R.string.runage_passed_info)} $nextDistanceFeedback ${if (isMetric) {
-                    resourceUtil.getString(R.string.kilometer)
-                } else {
-                    resourceUtil.getString(R.string.miles)
-                }
-                }", TextToSpeech.QUEUE_FLUSH, null, null
-            )
+
+            val reportString =
+                "${resourceUtil.getString(R.string.runage_passed_info)} " +
+                        "$nextDistanceFeedback " +
+                        if (isMetric) {
+                            resourceUtil.getString(R.string.kilometer)
+                        } else {
+                            resourceUtil.getString(R.string.miles)
+                        } +
+                        ". ${resourceUtil.getString(R.string.runage_calories_burned)} " +
+                        "${quest.calories.toInt()}. "
+
+            speak(reportString)
 
             nextDistanceFeedback++
         }

@@ -39,4 +39,5 @@
     <string name="runage_welcome_back">Welcome back</string>
     <string name="runage_go_go_go">Running quest started!</string>
     <string name="runage_completed_runs">Completed runs</string>
+    <string name="runage_calories_burned">Calories burned</string>
 </resources>

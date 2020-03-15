@@ -1,6 +1,5 @@
 package xevenition.com.runage.util
 
-import android.app.Application
 import android.speech.tts.TextToSpeech
 import org.junit.Before
 import org.junit.Test
@@ -9,6 +8,7 @@ import org.junit.Assert.*
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import xevenition.com.runage.room.entity.Quest
 
 class FeedbackHandlerTest {
 
@@ -31,7 +31,7 @@ class FeedbackHandlerTest {
 
     @Test
     fun reportDistance() {
-        feedbackHandler.reportDistance(500.0)
+        feedbackHandler.reportCheckpoint(500.0)
     }
 
     @Test
@@ -55,7 +55,7 @@ class FeedbackHandlerTest {
     @Test
     fun testNextReportDistanceIncrement(){
         assertEquals(FeedbackHandler.METERS_IN_KILOMETER, feedbackHandler.getNextDistanceForReport(), 0.0)
-        feedbackHandler.reportDistance(1200.0)
+        feedbackHandler.reportCheckpoint(1200.0)
         assertEquals(FeedbackHandler.METERS_IN_KILOMETER*2, feedbackHandler.getNextDistanceForReport(), 0.0)
     }
 }
