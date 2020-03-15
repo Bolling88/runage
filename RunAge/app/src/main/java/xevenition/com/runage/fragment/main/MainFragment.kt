@@ -36,6 +36,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var mService: EventService
     private var mBound: Boolean = false
+
     /** Defines callbacks for service binding, passed to bindService()  */
     private val connection = object : ServiceConnection {
 
@@ -93,7 +94,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
             binding.lottieSwipeEnd.visibility = View.VISIBLE
             binding.lottieSwipeEnd.playAnimation()
             setLottieSwipeState(true)
-        }else{
+        } else {
             binding.lottieSwipeStart.visibility = View.VISIBLE
             binding.lottieSwipeStart.playAnimation()
             setLottieSwipeState(false)
@@ -101,10 +102,12 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
+            if (!EventService.serviceIsRunning) {
+                binding.lottieCountDown.visibility = View.VISIBLE
+                binding.lottieCountDown.playAnimation()
+            }
             startEventService()
             setLottieSwipeState(true)
-            binding.lottieCountDown.visibility = View.VISIBLE
-            binding.lottieCountDown.playAnimation()
         }
 
         binding.swipeButton.onSwipedOffListener = {
@@ -118,12 +121,12 @@ class MainFragment : BaseFragment<MainViewModel>() {
     }
 
     private fun setLottieSwipeState(active: Boolean) {
-        if(active) {
+        if (active) {
             binding.lottieSwipeEnd.visibility = View.VISIBLE
             binding.lottieSwipeEnd.playAnimation()
             binding.lottieSwipeStart.visibility = View.GONE
             binding.lottieSwipeStart.pauseAnimation()
-        }else{
+        } else {
             binding.lottieSwipeStart.visibility = View.VISIBLE
             binding.lottieSwipeStart.playAnimation()
             binding.lottieSwipeEnd.visibility = View.GONE

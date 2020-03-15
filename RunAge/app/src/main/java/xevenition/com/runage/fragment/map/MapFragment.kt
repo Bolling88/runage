@@ -50,7 +50,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
-        if(currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
+        if (currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.mapView.getMapAsync {
@@ -66,7 +66,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, Observer {
             it?.let {
-                googleMap?.animateCamera(it)
+                //only move camera for user position if we don't have a polyline to focus on
+                if (polyLine == null || polyLine?.points?.isEmpty() == true)
+                    googleMap?.animateCamera(it)
             }
         })
 
@@ -140,15 +142,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
         Timber.d("Polyline has ${polyLine?.points?.size} points")
     }
 
-    private fun addPolyline(start: LatLng, end: LatLng, color: Int){
-        val polylineOptions = PolylineOptions()
-            .add(start, end)
-            .color(color)
-            .jointType(JointType.ROUND)
-        val polyline = googleMap?.addPolyline(polylineOptions)
-    }
-
-
     private fun moveCamera(coordinated: List<LatLng>) {
         if (googleMap == null) return
         try {
@@ -181,7 +174,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     fun onNewQuestCreated(id: Int) {
         try {
             viewModel.onNewQuestCreated(id)
-        }catch(e: Exception){
+        } catch (e: Exception) {
             //viewModel not initialised
             currentQuestId = id
         }
