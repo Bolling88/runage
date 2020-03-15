@@ -18,11 +18,35 @@
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/viewInfoBackground" />
+
+        <View
+            android:id="@+id/viewInfoBackground"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_height="220dip" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textCounter"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/azonix"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:text="@{viewModel.liveTextTimer}"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="@dimen/margin_big"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="00:00:00" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCurrentStatus"
@@ -31,38 +55,38 @@
             android:text="@{viewModel.liveTextActivityType}"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCounter"
             tools:text="Running" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textDistance"
             android:layout_width="wrap_content"
-             tools:text="1000 m"
-            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.liveTotalDistance}"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCurrentStatus" />
+            app:layout_constraintTop_toBottomOf="@+id/textCurrentStatus"
+            tools:text="1000 m" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textAccuracy"
             android:layout_width="wrap_content"
-            tools:text="10 m"
-            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.liveCurrentAccuracy}"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDistance" />
+            app:layout_constraintTop_toBottomOf="@+id/textDistance"
+            tools:text="10 m" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCalories"
             android:layout_width="wrap_content"
-            tools:text="100 m"
-            android:textSize="20sp"
             android:layout_height="wrap_content"
             android:text="@{viewModel.liveCalories}"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textAccuracy" />
+            app:layout_constraintTop_toBottomOf="@+id/textAccuracy"
+            tools:text="100 m" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

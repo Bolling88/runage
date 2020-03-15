@@ -21,6 +21,7 @@ import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
+import xevenition.com.runage.util.RunningTimer
 
 
 class MapViewModel(
@@ -30,6 +31,7 @@ class MapViewModel(
 ) : BaseViewModel() {
 
     private var currentPath: MutableList<LatLng> = mutableListOf()
+    private var runningTimerDisposable: Disposable? = null
     private var questDisposable: Disposable? = null
 
     private val _observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
@@ -43,6 +45,9 @@ class MapViewModel(
 
     private val _liveTextActivityType = MutableLiveData<String>()
     val liveTextActivityType: LiveData<String> = _liveTextActivityType
+
+    private val _liveTextTimer = MutableLiveData<String>()
+    val liveTextTimer: LiveData<String> = _liveTextTimer
 
     private val _liveTotalDistance = MutableLiveData<String>()
     val liveTotalDistance: LiveData<String> = _liveTotalDistance
@@ -70,6 +75,11 @@ class MapViewModel(
                     displayActivityType(it.activityType)
                 }
                 displayRunningRoute(quest.locations)
+
+                if(runningTimerDisposable == null){
+                    setUpRunningTimer(quest.startTimeMillis)
+                }
+
                 //TODO check if imperial or metric
                 _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance.toInt()} m")
                 _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.div(1000).toInt()}")
@@ -80,6 +90,16 @@ class MapViewModel(
         questDisposable?.let {
             addDisposable(it)
         }
+    }
+
+    private fun setUpRunningTimer(startDateMillis: Long){
+        runningTimerDisposable = RunningTimer.getRunningTimer(startDateMillis)
+            .subscribe({
+
+            },{
+                Timber.e(it)
+            })
+        runningTimerDisposable?.let { addDisposable(it) }
     }
 
     @SuppressLint("CheckResult")
