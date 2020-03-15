@@ -95,7 +95,7 @@ class MapViewModel(
     private fun setUpRunningTimer(startDateMillis: Long){
         runningTimerDisposable = RunningTimer.getRunningTimer(startDateMillis)
             .subscribe({
-
+                _liveTextTimer.postValue(it)
             },{
                 Timber.e(it)
             })

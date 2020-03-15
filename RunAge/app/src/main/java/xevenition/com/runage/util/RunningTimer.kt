@@ -2,12 +2,13 @@ package xevenition.com.runage.util
 
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 object RunningTimer {
 
     fun getRunningTimer(startDateMillis: Long): Observable<String> {
-        val currentTimeMillis = System.currentTimeMillis()
+        val currentTimeMillis = Instant.now().epochSecond
         val initialValue = currentTimeMillis - startDateMillis
         return Observable.interval(0, 1, TimeUnit.MILLISECONDS)
             .map { it + initialValue }
