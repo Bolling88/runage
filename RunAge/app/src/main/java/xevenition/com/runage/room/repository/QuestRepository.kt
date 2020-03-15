@@ -13,7 +13,7 @@ class QuestRepository @Inject constructor(private val db: AppDatabase) {
 
     fun startNewQuest(): Single<Quest> {
         return Single.fromCallable {
-            val currentQuest = Quest(startTimeMillis = Instant.now().epochSecond)
+            val currentQuest = Quest(startTimeEpochSeconds = Instant.now().epochSecond)
             val questId = db.questDao().insert(currentQuest)
             db.questDao().getQuest(questId)
         }

@@ -76,8 +76,8 @@ class MapViewModel(
                 }
                 displayRunningRoute(quest.locations)
 
-                if(runningTimerDisposable == null){
-                    setUpRunningTimer(quest.startTimeMillis)
+                if(runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true){
+                    setUpRunningTimer(quest.startTimeEpochSeconds)
                 }
 
                 //TODO check if imperial or metric
@@ -92,8 +92,8 @@ class MapViewModel(
         }
     }
 
-    private fun setUpRunningTimer(startDateMillis: Long){
-        runningTimerDisposable = RunningTimer.getRunningTimer(startDateMillis)
+    private fun setUpRunningTimer(startTimeEpochSeconds: Long){
+        runningTimerDisposable = RunningTimer.getRunningTimer(startTimeEpochSeconds)
             .subscribe({
                 _liveTextTimer.postValue(it)
             },{
@@ -189,6 +189,7 @@ class MapViewModel(
 
     fun onQuestFinished() {
         observableClearMap.call()
+        runningTimerDisposable?.dispose()
     }
 
     companion object {
