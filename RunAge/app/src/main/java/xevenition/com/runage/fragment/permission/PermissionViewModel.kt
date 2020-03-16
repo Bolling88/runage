@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.permission
 
 import android.widget.CompoundButton
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
@@ -16,13 +17,14 @@ class PermissionViewModel @Inject constructor(
     private var locationOn: Boolean = false
     private var activityOn: Boolean = false
 
-    val liveButtonEnabled = MutableLiveData<Boolean>()
+    private val _liveButtonEnabled = MutableLiveData<Boolean>()
+    val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
 
     val observableCheckPermissionActivity = SingleLiveEvent<Unit>()
     val observableCheckPermissionLocation = SingleLiveEvent<Unit>()
 
     init {
-        liveButtonEnabled.postValue(false)
+        _liveButtonEnabled.postValue(false)
     }
 
     fun onContinueClicked() {
@@ -41,7 +43,7 @@ class PermissionViewModel @Inject constructor(
             observableCheckPermissionActivity.call()
         }
 
-        liveButtonEnabled.postValue(locationOn && activityOn)
+        _liveButtonEnabled.postValue(locationOn && activityOn)
     }
 
     fun onLocationCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
@@ -50,6 +52,6 @@ class PermissionViewModel @Inject constructor(
             observableCheckPermissionLocation.call()
         }
 
-        liveButtonEnabled.postValue(locationOn && activityOn)
+        _liveButtonEnabled.postValue(locationOn && activityOn)
     }
 }

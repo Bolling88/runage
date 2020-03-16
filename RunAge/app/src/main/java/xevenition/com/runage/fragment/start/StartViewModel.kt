@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.start
 
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
@@ -17,16 +18,17 @@ class StartViewModel(
 
     val liveTextName = MutableLiveData<String>()
 
-    val observableProfileImage = MutableLiveData<Uri>()
+    private val _observableProfileImage = MutableLiveData<Uri>()
+    val observableProfileImage: LiveData<Uri> = _observableProfileImage
 
     init {
         val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
-            if(!EventService.serviceIsRunning) {
+            if (!EventService.serviceIsRunning) {
                 feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}")
             }
             liveTextName.postValue(it.displayName)
-            observableProfileImage.postValue(it.iconImageUri)
+            _observableProfileImage.postValue(it.iconImageUri)
         }
     }
 }

@@ -151,8 +151,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
                     builder.include(latLng)
                 }
                 val bounds = builder.build()
-                val padding =
-                    typedValueUtil.dipToPixels(50f) // offset from edges of the map in pixels
+                val padding = typedValueUtil.dipToPixels(50f) 
                 val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
                 googleMap?.animateCamera(cu, 500, null)
             }

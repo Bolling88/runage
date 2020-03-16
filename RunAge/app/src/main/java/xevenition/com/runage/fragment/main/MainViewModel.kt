@@ -9,11 +9,6 @@ import xevenition.com.runage.util.FeedbackHandler
 import xevenition.com.runage.util.ResourceUtil
 import java.util.concurrent.TimeUnit
 
-class MainViewModel(
-) : BaseViewModel() {
-
-    init {
-
-    }
+class MainViewModel : BaseViewModel() {
 
 }
