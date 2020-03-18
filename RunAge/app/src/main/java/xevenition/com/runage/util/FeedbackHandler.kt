@@ -39,6 +39,13 @@ class FeedbackHandler @Inject constructor(
         }
     }
 
+    fun separateValue(distanceInMeters: Double): Triple<Int, Int, Int> {
+        val thousands = distanceInMeters - (distanceInMeters % 1000)
+        val hundreds = (distanceInMeters - thousands) % 1000 - (distanceInMeters - thousands) % 100
+        val remaining = (distanceInMeters - thousands) % 100
+        return Triple(thousands.toInt(), hundreds.toInt(), remaining.toInt())
+    }
+
     fun shouldReport(totalDistanceInMeters: Double): Boolean {
         return totalDistanceInMeters >= getNextDistanceForReport()
     }

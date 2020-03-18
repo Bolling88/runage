@@ -62,4 +62,12 @@ class FeedbackHandlerTest {
         feedbackHandler.reportCheckpoint(quest)
         assertEquals(FeedbackHandler.METERS_IN_KILOMETER*2, feedbackHandler.getNextDistanceForReport(), 0.0)
     }
+
+    @Test
+    fun testValueSeparator(){
+        val values = feedbackHandler.separateValue(13455.0)
+        assertEquals(13000, values.first)
+        assertEquals(400, values.second)
+        assertEquals(55, values.third)
+    }
 }
