@@ -87,14 +87,6 @@ class EventService : Service() {
             ActivityActivator(this)
         eventHandler.startActivityTracking()
 
-        questRepository.startNewQuest()
-            .subscribe({
-                callback?.onQuestCreated(it.id)
-                currentQuest = it
-            }, {
-                Timber.e(it)
-            })
-
         LocalBroadcastManager.getInstance(this).registerReceiver(
             currentActivityReceiver, IntentFilter(KEY_EVENT_BROADCAST_ID)
         )
@@ -112,9 +104,21 @@ class EventService : Service() {
             .subscribe({
                 if (it < 0L) {
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_go_go_go))
+                    startNewQuest()
                 } else {
                     feedbackHandler.speak(it.toString())
                 }
+            }, {
+                Timber.e(it)
+            })
+        compositeDisposable.add(disposable)
+    }
+
+    private fun startNewQuest(){
+        val disposable = questRepository.startNewQuest()
+            .subscribe({
+                callback?.onQuestCreated(it.id)
+                currentQuest = it
             }, {
                 Timber.e(it)
             })
