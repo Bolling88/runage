@@ -49,4 +49,6 @@
     <string name="runage_minutes">minutes</string>
     <string name="runage_second">second</string>
     <string name="runage_seconds">seconds</string>
+    <string name="kilometers">kilometers</string>
+    <string name="mile">mile</string>
 </resources>

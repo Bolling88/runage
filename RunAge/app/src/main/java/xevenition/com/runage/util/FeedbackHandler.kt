@@ -36,9 +36,17 @@ class FeedbackHandler @Inject constructor(
         return "${resourceUtil.getString(R.string.runage_passed_info)} " +
                 "$nextDistanceFeedback " +
                 if (isMetric) {
-                    resourceUtil.getString(R.string.kilometer)
+                    if(nextDistanceFeedback == 1) {
+                        resourceUtil.getString(R.string.kilometer)
+                    }else{
+                        resourceUtil.getString(R.string.kilometers)
+                    }
                 } else {
-                    resourceUtil.getString(R.string.miles)
+                    if(nextDistanceFeedback == 1) {
+                        resourceUtil.getString(R.string.mile)
+                    }else{
+                        resourceUtil.getString(R.string.miles)
+                    }
                 }
     }
 
@@ -67,12 +75,12 @@ class FeedbackHandler @Inject constructor(
         val caloriesValues = SeparatorUtil.separateValue(quest.calories.toInt())
         return ". ${resourceUtil.getString(R.string.runage_calories_burned)} " +
                 if (caloriesValues.first != 0) {
-                    "${caloriesValues.first} ${resourceUtil.getString(R.string.runage_thousand)}. "
+                    "${caloriesValues.first}. "
                 } else {
                     ""
                 } +
                 if (caloriesValues.second != 0) {
-                    "${caloriesValues.second} ${resourceUtil.getString(R.string.runage_hundred)}. "
+                    "${caloriesValues.second}.  "
                 } else {
                     ""
                 } +
