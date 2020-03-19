@@ -40,4 +40,13 @@
     <string name="runage_go_go_go">Running quest started!</string>
     <string name="runage_completed_runs">Completed runs</string>
     <string name="runage_calories_burned">Calories burned</string>
+    <string name="runage_thousand">thousand</string>
+    <string name="runage_hundred">hundred</string>
+    <string name="runage_duration">Duration</string>
+    <string name="runage_hour">hour</string>
+    <string name="runage_hours">hours</string>
+    <string name="runage_minute">minute</string>
+    <string name="runage_minutes">minutes</string>
+    <string name="runage_second">second</string>
+    <string name="runage_seconds">seconds</string>
 </resources>

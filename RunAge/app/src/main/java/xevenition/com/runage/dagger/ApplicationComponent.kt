@@ -1,7 +1,7 @@
-package xevenition.com.runage
+package xevenition.com.runage.dagger
 
 import dagger.Component
-import xevenition.com.runage.architecture.AppModule
+import xevenition.com.runage.dagger.AppModule
 import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.main.MainViewModelFactory

@@ -82,7 +82,7 @@ class MapViewModel(
 
                 //TODO check if imperial or metric
                 _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance.toInt()} m")
-                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.div(1000).toInt()}")
+                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.toInt()}")
                 _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy?.toInt()} m")
             }, {
                 Timber.e(it)

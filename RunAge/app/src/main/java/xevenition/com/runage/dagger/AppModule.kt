@@ -1,4 +1,4 @@
-package xevenition.com.runage.architecture
+package xevenition.com.runage.dagger
 
 import android.app.Application
 import android.speech.tts.TextToSpeech
@@ -25,6 +25,8 @@ class AppModule(private val application: Application) {
         speech = TextToSpeech(app, TextToSpeech.OnInitListener {
             Timber.d("Text to speech initiated")
             speech?.language = Locale.US
+            speech?.setPitch(0.1f)
+            speech?.setSpeechRate(0.9f)
         })
         return speech
     }
@@ -34,7 +36,8 @@ class AppModule(private val application: Application) {
     fun provideDatabase(app: Application): AppDatabase {
         return Room.databaseBuilder(
             app,
-            AppDatabase::class.java, RUN_AGE_DATABASE
+            AppDatabase::class.java,
+            RUN_AGE_DATABASE
         ).fallbackToDestructiveMigration().build()
     }
 
