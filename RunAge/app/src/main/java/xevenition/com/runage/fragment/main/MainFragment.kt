@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,8 @@ import androidx.core.content.ContextCompat.startForegroundService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.lifecycle.Observer
+import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.google.android.gms.common.images.ImageManager
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
@@ -61,12 +59,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
 
         val factory = MainViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
-
-        adapter = MainPagerAdapter(childFragmentManager)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             requireActivity().finish()
@@ -78,16 +75,18 @@ class MainFragment : BaseFragment<MainViewModel>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Timber.d("onCreateView")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        adapter = MainPagerAdapter(childFragmentManager)
         binding.viewPager.adapter = adapter
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Timber.d("onViewCreated")
         if (EventService.serviceIsRunning) {
             binding.viewPager.currentItem = 1
             binding.swipeButton.isChecked = true
@@ -180,7 +179,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     }
 
     private class MainPagerAdapter(fm: FragmentManager) :
-        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private var fragments: Array<Fragment> =
             arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
@@ -190,6 +189,10 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         override fun getItem(position: Int): Fragment {
             return fragments[position]
+        }
+
+        override fun saveState(): Parcelable? {
+            return null
         }
 
         companion object {

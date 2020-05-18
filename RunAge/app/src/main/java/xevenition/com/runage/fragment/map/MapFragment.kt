@@ -18,6 +18,7 @@ import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
+import java.util.logging.Logger
 import javax.inject.Inject
 
 
@@ -34,15 +35,18 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
         val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
+        Timber.d("Viewmodel created!")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Timber.d("onCreateView")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         binding.mapView.onCreate(arguments)
         return binding.root
@@ -50,6 +54,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Timber.d("onViewCreated")
         if (currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
@@ -101,26 +106,31 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onStart() {
         super.onStart()
+        Timber.d("onStart")
         binding.mapView.onStart()
     }
 
     override fun onStop() {
         super.onStop()
+        Timber.d("onStop")
         binding.mapView.onStop()
     }
 
     override fun onResume() {
         super.onResume()
+        Timber.d("onResume")
         binding.mapView.onResume()
     }
 
     override fun onPause() {
         super.onPause()
+        Timber.d("onPause")
         binding.mapView.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Timber.d("onDestroy")
         binding.mapView.onDestroy()
     }
 
@@ -188,7 +198,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     companion object {
-        fun newInstance() = MapFragment()
+        fun newInstance(): MapFragment {
+            Timber.d("New instance of map fragment created")
+         return MapFragment()
+        }
     }
 
 }
