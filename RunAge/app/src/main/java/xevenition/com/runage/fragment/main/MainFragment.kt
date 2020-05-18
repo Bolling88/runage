@@ -102,7 +102,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
-            if (!EventService.serviceIsRunning) {
+            if(EventService.serviceIsRunning){
+                //don't run the count down if a quest is active
+                binding.lottieCountDown.visibility = View.GONE
+                binding.lottieCountDown.pauseAnimation()
+            }else{
                 binding.lottieCountDown.visibility = View.VISIBLE
                 binding.lottieCountDown.playAnimation()
             }

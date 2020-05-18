@@ -82,7 +82,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
         if (requestCode == RC_SIGN_IN) {
             val result =
                 Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-            if (result.isSuccess) {
+            if (result?.isSuccess == true) {
                 val account = result.signInAccount
                 if(account != null) {
                     firebaseAuthWithPlayGames(account)
@@ -90,7 +90,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
                     handleError(result)
                 }
             } else {
-                handleError(result)
+                handleError(result!!)
             }
         }
     }

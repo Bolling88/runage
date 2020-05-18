@@ -35,6 +35,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
+        val factory = MapViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -48,8 +50,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = MapViewModelFactory(getApplication())
-        viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
         if (currentQuestId != -1) viewModel.onNewQuestCreated(currentQuestId)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
@@ -134,7 +134,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         if (polyLine == null) {
             val polylineOptions = PolylineOptions().addAll(positionPointsArray)
                 .jointType(JointType.ROUND)
-                .color(ContextCompat.getColor(context!!, R.color.colorAccent))
+                .color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
                 .width(typedValueUtil.dipToPixels(5f).toFloat())
             polyLine = googleMap?.addPolyline(polylineOptions)
         }
