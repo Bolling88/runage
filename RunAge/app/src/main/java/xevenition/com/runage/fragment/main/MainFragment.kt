@@ -191,6 +191,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
             return fragments[position]
         }
 
+        //We always want to recreate the fragments if they are destroyed ourselves
         override fun saveState(): Parcelable? {
             return null
         }

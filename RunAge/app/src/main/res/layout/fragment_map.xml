@@ -88,5 +88,15 @@
             app:layout_constraintTop_toBottomOf="@+id/textAccuracy"
             tools:text="100 m" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.livePace}"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCalories"
+            tools:text="100 m" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -28,6 +28,7 @@ import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.*
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -143,7 +144,7 @@ class EventService : Service() {
             .filter {
                 //Filter away crazy values
                 Timber.d("Current accuracy: ${it.accuracy}")
-                it.accuracy < 20
+                it.accuracy < 25
             }
             .filter {
                 if (previousLocation == null) {
@@ -151,6 +152,9 @@ class EventService : Service() {
                 } else {
                     newPointIsMinDistanceAway(it, previousLocation!!)
                 }
+            }
+            .filter{
+                activityType != DetectedActivity.STILL
             }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
@@ -165,6 +169,11 @@ class EventService : Service() {
                     activityType
                 )
                 updateTotalDistance(newPoint)
+
+                val currentTimeMillis = Instant.now().epochSecond
+                val currentDurationInSeconds = currentTimeMillis - currentQuest.startTimeEpochSeconds
+                val pace = RunningTimer.getCurrentPace(currentDurationInSeconds.toDouble()/60, currentQuest.totalDistance/1000)
+                currentQuest.pace = pace
                 currentQuest.locations.add(newPoint)
                 Timber.d("Storing ${currentQuest.locations.size} locations")
                 questRepository.dbUpdateQuest(currentQuest)

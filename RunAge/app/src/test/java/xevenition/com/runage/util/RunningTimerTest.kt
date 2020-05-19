@@ -34,4 +34,19 @@ class RunningTimerTest{
     fun testConvertMillisToTimerString6(){
         assertEquals("00:00:00", RunningTimer.convertMillisToTimerString(0))
     }
+
+    @Test
+    fun textPaceCalculator(){
+        assertEquals(5.0, RunningTimer.getCurrentPace(5.0, 1.0), 0.0)
+    }
+
+    @Test
+    fun textPaceCalculator2(){
+        assertEquals(2.5, RunningTimer.getCurrentPace(5.0, 2.0), 0.0)
+    }
+
+    @Test
+    fun textPaceCalculator3(){
+        assertEquals(2.0, RunningTimer.getCurrentPace(1.0, 0.5), 0.0)
+    }
 }

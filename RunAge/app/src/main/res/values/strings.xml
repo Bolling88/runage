@@ -51,4 +51,6 @@
     <string name="runage_seconds">seconds</string>
     <string name="kilometers">kilometers</string>
     <string name="mile">mile</string>
+    <string name="runage_pace">Pace</string>
+    <string name="runage_avg_pace">Avg. Pace</string>
 </resources>

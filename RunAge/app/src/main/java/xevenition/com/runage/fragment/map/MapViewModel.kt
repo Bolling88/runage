@@ -58,6 +58,9 @@ class MapViewModel(
     private val _liveCalories = MutableLiveData<String>()
     val liveCalories: LiveData<String> = _liveCalories
 
+    private val _livePace = MutableLiveData<String>()
+    val livePace: LiveData<String> = _livePace
+
     val observableClearMap = SingleLiveEvent<Unit>()
 
     fun onNewQuestCreated(id: Int) {
@@ -84,6 +87,7 @@ class MapViewModel(
                 _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance.toInt()} m")
                 _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.toInt()}")
                 _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy?.toInt()} m")
+                _livePace.postValue("${resourceUtil.getString(R.string.runage_avg_pace)}: ${quest.pace.toInt()} min/km")
             }, {
                 Timber.e(it)
             })
