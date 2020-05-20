@@ -44,10 +44,11 @@ class EventService : Service() {
     private var previousLocation: Location? = null
     private lateinit var eventHandler: ActivityActivator
     private val compositeDisposable = CompositeDisposable()
-    private var locationRequest: LocationRequest? = null
+    private var nextDistanceFeedback = 1
     private lateinit var locationCallback: LocationCallback
     private val binder = LocalBinder()
     private var callback: EventCallback? = null
+    private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
 
     interface EventCallback {
         fun onQuestCreated(id: Int)
@@ -170,10 +171,15 @@ class EventService : Service() {
                 )
                 updateTotalDistance(newPoint)
 
+                if (shouldReport(currentQuest.totalDistance)) {
+                    feedbackHandler.reportCheckpoint(currentQuest, nextDistanceFeedback)
+                    nextDistanceFeedback++
+                }
+
                 val currentTimeMillis = Instant.now().epochSecond
                 val currentDurationInSeconds = currentTimeMillis - currentQuest.startTimeEpochSeconds
-                val pace = RunningTimer.getCurrentPace(currentDurationInSeconds.toDouble()/60, currentQuest.totalDistance/1000)
-                currentQuest.pace = pace
+                val avgPace = RunningTimer.getCurrentPace(currentDurationInSeconds.toDouble()/60, currentQuest.totalDistance/1000)
+                currentQuest.pace = avgPace
                 currentQuest.locations.add(newPoint)
                 Timber.d("Storing ${currentQuest.locations.size} locations")
                 questRepository.dbUpdateQuest(currentQuest)
@@ -203,8 +209,20 @@ class EventService : Service() {
                 weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
             )
         }
-        feedbackHandler.reportCheckpoint(currentQuest)
     }
+
+    private fun shouldReport(totalDistanceInMeters: Double): Boolean {
+        return totalDistanceInMeters >= getNextDistanceForReport()
+    }
+
+    private fun getNextDistanceForReport(): Double {
+        return if (isMetric) {
+            nextDistanceFeedback.times(FeedbackHandler.METERS_IN_KILOMETER)
+        } else {
+            nextDistanceFeedback.times(FeedbackHandler.METERS_IN_MILE)
+        }
+    }
+
 
     private fun newPointIsMinDistanceAway(
         lastLocation: Location,

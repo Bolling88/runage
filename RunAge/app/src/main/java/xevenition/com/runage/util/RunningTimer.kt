@@ -28,8 +28,8 @@ object RunningTimer {
         )
     }
 
-    fun getCurrentPace(timeInMinutes: Double, distanceInKm: Double): Double {
-        var pace = timeInMinutes / distanceInKm
+    fun getCurrentPace(timeInMinutes: Double, distance: Double): Double {
+        var pace = timeInMinutes / distance
         if (pace > 1000) pace = 999.0
         return pace
     }

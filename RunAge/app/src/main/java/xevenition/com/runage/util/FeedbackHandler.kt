@@ -15,44 +15,52 @@ class FeedbackHandler @Inject constructor(
 ) {
 
     private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
-    private var nextDistanceFeedback = 1
+    private var checkPointTimeStamp = 0L
 
-    fun reportCheckpoint(quest: Quest) {
-        val totalDistanceInMeters = quest.totalDistance
-        if (shouldReport(totalDistanceInMeters)) {
+    fun reportCheckpoint(quest: Quest, nextDistanceFeedback: Int) {
 
-            val currentTimeMillis = Instant.now().epochSecond
-            val initialValue = currentTimeMillis - quest.startTimeEpochSeconds
-
-            val reportString = getDistanceFeedback() + getDurationFeedback(initialValue) + getCaloriesFeedback(quest)
-
-            speak(reportString)
-
-            nextDistanceFeedback++
+        //if we have not passed any checkpoint, the first checkpoint was at the quest start
+        if (checkPointTimeStamp == 0L) {
+            checkPointTimeStamp = quest.startTimeEpochSeconds
         }
+
+        val currentTimeMillis = Instant.now().epochSecond
+        val initialValue = currentTimeMillis - quest.startTimeEpochSeconds
+        val timeSinceLastCheckpoint = currentTimeMillis - checkPointTimeStamp
+        checkPointTimeStamp = currentTimeMillis
+
+        val reportString = getDistanceFeedback(nextDistanceFeedback) + getDurationFeedback(
+            resourceUtil.getString(R.string.runage_duration),
+            initialValue
+        ) + getCaloriesFeedback(quest) + getDurationFeedback(
+            resourceUtil.getString(R.string.runage_pace),
+            timeSinceLastCheckpoint
+        )
+
+        speak(reportString)
     }
 
-    private fun getDistanceFeedback(): String {
+    private fun getDistanceFeedback(nextDistanceFeedback: Int): String {
         return "${resourceUtil.getString(R.string.runage_passed_info)} " +
                 "$nextDistanceFeedback " +
                 if (isMetric) {
-                    if(nextDistanceFeedback == 1) {
+                    if (nextDistanceFeedback == 1) {
                         resourceUtil.getString(R.string.kilometer)
-                    }else{
+                    } else {
                         resourceUtil.getString(R.string.kilometers)
                     }
                 } else {
-                    if(nextDistanceFeedback == 1) {
+                    if (nextDistanceFeedback == 1) {
                         resourceUtil.getString(R.string.mile)
-                    }else{
+                    } else {
                         resourceUtil.getString(R.string.miles)
                     }
                 }
     }
 
-    private fun getDurationFeedback(durationInSeconds: Long): String {
+    private fun getDurationFeedback(feedback: String, durationInSeconds: Long): String {
         val times = SeparatorUtil.separateTime(durationInSeconds)
-        val part1 = ". ${resourceUtil.getString(R.string.runage_duration)}. "
+        val part1 = ". $feedback. "
         val part2 = when {
             times.first == 1L -> "${times.first} ${resourceUtil.getString(R.string.runage_hour)}. "
             times.first > 1L -> "${times.first} ${resourceUtil.getString(R.string.runage_hours)}. "
@@ -89,18 +97,6 @@ class FeedbackHandler @Inject constructor(
                 } else {
                     ""
                 }
-    }
-
-    fun shouldReport(totalDistanceInMeters: Double): Boolean {
-        return totalDistanceInMeters >= getNextDistanceForReport()
-    }
-
-    fun getNextDistanceForReport(): Double {
-        return if (isMetric) {
-            nextDistanceFeedback.times(METERS_IN_KILOMETER)
-        } else {
-            nextDistanceFeedback.times(METERS_IN_MILE)
-        }
     }
 
     fun speak(string: String) {
