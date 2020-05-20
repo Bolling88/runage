@@ -7,7 +7,7 @@ data class PositionPoint(
     val accuracy: Float,
     val altitude: Double,
     val bearing: Float,
-    val elapsedRealtimeNanos: Long,
+    val timeStampEpochSeconds: Long,
     val activityType: Int
 ) {
 }

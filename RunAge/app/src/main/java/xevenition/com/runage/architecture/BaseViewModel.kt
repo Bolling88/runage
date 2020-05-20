@@ -3,6 +3,7 @@ package xevenition.com.runage.architecture
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
+import com.bokus.play.util.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
@@ -18,5 +19,5 @@ open class BaseViewModel: ViewModel(){
        compositeDisposable.add(disposable)
    }
 
-    val observableNavigateTo = MutableLiveData<NavDirections>()
+    val observableNavigateTo = SingleLiveEvent<NavDirections>()
 }

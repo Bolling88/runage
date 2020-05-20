@@ -167,7 +167,7 @@ class EventService : Service() {
                     it.accuracy,
                     it.altitude,
                     it.bearing,
-                    it.elapsedRealtimeNanos,
+                    Instant.now().epochSecond,
                     activityType
                 )
                 updateTotalDistance(newPoint)

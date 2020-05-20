@@ -41,6 +41,14 @@ class QuestRepository @Inject constructor(private val db: AppDatabase) {
             }
     }
 
+    fun getSingleQuest(questId: Int): Single<Quest> {
+        return db.questDao().getSingleQuest(questId)
+            .subscribeOn(Schedulers.io())
+            .doOnError {
+                Timber.e(it)
+            }
+    }
+
     fun dbUpdateQuest(quest: Quest) {
         db.questDao().update(quest)
     }

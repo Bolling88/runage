@@ -13,12 +13,12 @@ object RunningTimer {
         return Observable.interval(0, 1, TimeUnit.SECONDS)
             .map { it + initialValue }
             .map {
-                convertMillisToTimerString(it)
+                convertTimeToDurationString(it)
             }
             .subscribeOn(Schedulers.computation())
     }
 
-    fun convertMillisToTimerString(seconds: Long): String {
+    fun convertTimeToDurationString(seconds: Long): String {
         val times = SeparatorUtil.separateTime(seconds)
         return String.format(
             "%02d:%02d:%02d",

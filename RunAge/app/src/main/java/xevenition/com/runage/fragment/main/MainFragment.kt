@@ -34,6 +34,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var mService: EventService
     private var mBound: Boolean = false
+    private var currentQuestId = 0
 
     /** Defines callbacks for service binding, passed to bindService()  */
     private val connection = object : ServiceConnection {
@@ -46,6 +47,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
             mBound = true
             mService.registerCallback(object : EventService.EventCallback {
                 override fun onQuestCreated(id: Int) {
+                    currentQuestId = id
                     Timber.d("onQuestCreated: $id")
                     (adapter.getItem(1) as MapFragment).onNewQuestCreated(id)
                 }
@@ -86,6 +88,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpObservables()
         Timber.d("onViewCreated")
         if (EventService.serviceIsRunning) {
             binding.viewPager.currentItem = 1
@@ -120,7 +123,13 @@ class MainFragment : BaseFragment<MainViewModel>() {
             setLottieSwipeState(false)
             binding.lottieCountDown.visibility = View.GONE
             binding.lottieCountDown.pauseAnimation()
+            viewModel.onQuestFinished(currentQuestId)
         }
+    }
+
+    @Override
+    override fun setUpObservables() {
+        super.setUpObservables()
     }
 
     private fun setLottieSwipeState(active: Boolean) {

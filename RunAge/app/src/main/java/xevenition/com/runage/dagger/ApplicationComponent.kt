@@ -15,6 +15,7 @@ import xevenition.com.runage.fragment.splash.SplashFragment
 import xevenition.com.runage.fragment.splash.SplashViewModelFactory
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.fragment.start.StartViewModelFactory
+import xevenition.com.runage.fragment.summary.SummaryViewModelFactory
 import xevenition.com.runage.service.EventService
 import javax.inject.Singleton
 
@@ -33,6 +34,7 @@ interface ApplicationComponent {
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: SplashViewModelFactory)
+    fun inject(component: SummaryViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
 }

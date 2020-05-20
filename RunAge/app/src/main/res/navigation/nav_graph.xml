@@ -8,7 +8,11 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="xevenition.com.runage.fragment.main.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/splashFragment"
@@ -59,5 +63,14 @@
         <action
             android:id="@+id/action_settingsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="xevenition.com.runage.fragment.summary.SummaryFragment"
+        android:label="SummaryFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 </navigation>
