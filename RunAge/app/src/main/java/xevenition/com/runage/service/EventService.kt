@@ -48,7 +48,7 @@ class EventService : Service() {
     private lateinit var locationCallback: LocationCallback
     private val binder = LocalBinder()
     private var callback: EventCallback? = null
-    private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
+    private var isMetric: Boolean = false
 
     interface EventCallback {
         fun onQuestCreated(id: Int)
@@ -81,6 +81,7 @@ class EventService : Service() {
     override fun onCreate() {
         super.onCreate()
         (applicationContext as MainApplication).appComponent.inject(this)
+        isMetric = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
         serviceIsRunning = true
         startCountDown()
 

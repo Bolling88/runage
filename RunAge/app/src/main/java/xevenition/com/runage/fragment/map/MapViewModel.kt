@@ -63,6 +63,14 @@ class MapViewModel(
 
     val observableClearMap = SingleLiveEvent<Unit>()
 
+    init {
+        //TODO check if imperial or metric
+        _liveTextTimer.postValue("00:00:00")
+        _liveTotalDistance.postValue("0 m")
+        _liveCalories.postValue("0")
+        _livePace.postValue("0 min/km")
+    }
+
     fun onNewQuestCreated(id: Int) {
         setUpObservableQuest(id)
     }
@@ -84,10 +92,9 @@ class MapViewModel(
                 }
 
                 //TODO check if imperial or metric
-                _liveTotalDistance.postValue("${resourceUtil.getString(R.string.runage_distance)}: ${quest.totalDistance.toInt()} m")
-                _liveCalories.postValue("${resourceUtil.getString(R.string.runage_calories)}: ${quest.calories.toInt()}")
-                _liveCurrentAccuracy.postValue("${resourceUtil.getString(R.string.runage_accuracy)}: ${quest.locations.lastOrNull()?.accuracy?.toInt()} m")
-                _livePace.postValue("${resourceUtil.getString(R.string.runage_avg_pace)}: ${quest.pace.toInt()} min/km")
+                _liveTotalDistance.postValue("${quest.totalDistance.toInt()} m")
+                _liveCalories.postValue("${quest.calories.toInt()}")
+                _livePace.postValue("${quest.pace.toInt()} min/km")
             }, {
                 Timber.e(it)
             })
