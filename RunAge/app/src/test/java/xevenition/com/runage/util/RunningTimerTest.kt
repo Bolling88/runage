@@ -1,5 +1,6 @@
 package xevenition.com.runage.util
 
+import dalvik.annotation.TestTarget
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -36,17 +37,22 @@ class RunningTimerTest{
     }
 
     @Test
-    fun textPaceCalculator(){
-        assertEquals(5.0, RunningTimer.getCurrentPace(5.0, 1.0), 0.0)
+    fun testPaceString1(){
+        assertEquals("0:0 min/km", RunningTimer.getPaceString(0, 0.0))
     }
 
     @Test
-    fun textPaceCalculator2(){
-        assertEquals(2.5, RunningTimer.getCurrentPace(5.0, 2.0), 0.0)
+    fun testPaceString2(){
+        assertEquals("1:0 min/km", RunningTimer.getPaceString(60, 1000.0))
     }
 
     @Test
-    fun textPaceCalculator3(){
-        assertEquals(2.0, RunningTimer.getCurrentPace(1.0, 0.5), 0.0)
+    fun testPaceString3(){
+        assertEquals("2:20 min/km", RunningTimer.getPaceString(140, 1000.0))
+    }
+
+    @Test
+    fun testPaceString4(){
+        assertEquals("999:00 min/km", RunningTimer.getPaceString(99999999999999, 1000.0))
     }
 }

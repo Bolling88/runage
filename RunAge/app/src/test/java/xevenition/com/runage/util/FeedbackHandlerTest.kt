@@ -33,33 +33,6 @@ class FeedbackHandlerTest {
     fun reportDistance() {
         val quest = Quest(0)
         quest.totalDistance = 500.0
-        feedbackHandler.reportCheckpoint(quest)
-    }
-
-    @Test
-    fun testShouldNotReport() {
-        val shouldReport = feedbackHandler.shouldReport(500.0)
-        assertFalse(shouldReport)
-    }
-
-    @Test
-    fun testShouldReport() {
-        val shouldReport = feedbackHandler.shouldReport(1900.0)
-        assertTrue(shouldReport)
-    }
-
-    @Test
-    fun testNextReportDistance(){
-        val distance = feedbackHandler.getNextDistanceForReport()
-        assertEquals(FeedbackHandler.METERS_IN_KILOMETER, distance, 0.0)
-    }
-
-    @Test
-    fun testNextReportDistanceIncrement(){
-        assertEquals(FeedbackHandler.METERS_IN_KILOMETER, feedbackHandler.getNextDistanceForReport(), 0.0)
-        val quest = Quest(0)
-        quest.totalDistance = 1200.0
-        feedbackHandler.reportCheckpoint(quest)
-        assertEquals(FeedbackHandler.METERS_IN_KILOMETER*2, feedbackHandler.getNextDistanceForReport(), 0.0)
+        feedbackHandler.reportCheckpoint(quest, 1)
     }
 }

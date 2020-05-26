@@ -29,7 +29,7 @@
             android:fontFamily="@font/bold"
             android:gravity="center"
             android:text="@{viewModel.liveTextTimer}"
-            android:textColor="@color/grey2"
+            android:textColor="@{viewModel.liveTimerColor}"
             android:textSize="80sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

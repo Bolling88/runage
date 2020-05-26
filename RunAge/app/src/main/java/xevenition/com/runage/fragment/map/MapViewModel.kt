@@ -22,6 +22,8 @@ import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
 import xevenition.com.runage.util.RunningTimer
+import xevenition.com.runage.util.SeparatorUtil
+import java.time.Instant
 
 
 class MapViewModel(
@@ -92,9 +94,15 @@ class MapViewModel(
                 }
 
                 //TODO check if imperial or metric
-                _liveTotalDistance.postValue("${quest.totalDistance.toInt()} m")
+                val distance = quest.totalDistance
+                _liveTotalDistance.postValue("$distance m")
                 _liveCalories.postValue("${quest.calories.toInt()}")
-                _livePace.postValue("${quest.pace.toInt()} min/km")
+
+                val lastTimeStamp =
+                    quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
+                val duration = lastTimeStamp - quest.startTimeEpochSeconds
+
+                _livePace.postValue(RunningTimer.getPaceString(duration, distance))
             }, {
                 Timber.e(it)
             })

@@ -28,10 +28,16 @@ object RunningTimer {
         )
     }
 
-    fun getCurrentPace(timeInMinutes: Double, distance: Double): Double {
-        var pace = timeInMinutes / distance
-        if (pace > 1000) pace = 999.0
-        return pace
+    fun getPaceString(durationInSeconds: Long, distanceInMeters: Double): String {
+        val secondsPerKm = durationInSeconds.toDouble() / (distanceInMeters/1000)
+        val times = SeparatorUtil.separateTime(secondsPerKm.toLong())
+        var minutes = times.first * 60 + times.second
+        //TODO fix imperial
+        return if(minutes > 999) {
+            "999:00 min/km"
+        }else {
+            val seconds = times.third
+            "$minutes:$seconds min/km"
+        }
     }
-
 }

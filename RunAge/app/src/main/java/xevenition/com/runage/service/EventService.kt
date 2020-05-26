@@ -146,17 +146,21 @@ class EventService : Service() {
             .filter {
                 //Filter away crazy values
                 Timber.d("Current accuracy: ${it.accuracy}")
-                it.accuracy < 25
+                it.accuracy < MIN_ACCURACY
             }
-            .filter {
+//            .filter {
+//                if (previousLocation == null) {
+//                    true
+//                } else {
+//                    newPointIsMinDistanceAway(it, previousLocation!!)
+//                }
+//            }
+            .filter{
                 if (previousLocation == null) {
                     true
                 } else {
-                    newPointIsMinDistanceAway(it, previousLocation!!)
+                    activityType != DetectedActivity.STILL
                 }
-            }
-            .filter{
-                activityType != DetectedActivity.STILL
             }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
@@ -177,10 +181,6 @@ class EventService : Service() {
                     nextDistanceFeedback++
                 }
 
-                val currentTimeMillis = Instant.now().epochSecond
-                val currentDurationInSeconds = currentTimeMillis - currentQuest.startTimeEpochSeconds
-                val avgPace = RunningTimer.getCurrentPace(currentDurationInSeconds.toDouble()/60, currentQuest.totalDistance/1000)
-                currentQuest.pace = avgPace
                 currentQuest.locations.add(newPoint)
                 Timber.d("Storing ${currentQuest.locations.size} locations")
                 questRepository.dbUpdateQuest(currentQuest)
@@ -204,7 +204,7 @@ class EventService : Service() {
                 newPoint.longitude,
                 resultArray
             )
-            currentQuest.totalDistance += resultArray.first()
+            currentQuest.totalDistance += resultArray.first().toInt()
             currentQuest.calories = CalorieCalculator.getCaloriesBurned(
                 distance = currentQuest.totalDistance,
                 weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
@@ -276,7 +276,7 @@ class EventService : Service() {
             startForeground(NOTIFICATION_ID, notification)
         } else {
 
-            val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
+            @Suppress("DEPRECATION") val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getText(R.string.notification_message))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
@@ -326,6 +326,7 @@ class EventService : Service() {
     companion object {
         const val TAG = "Event Service"
         const val NOTIFICATION_ID = 2345235
+        const val MIN_ACCURACY = 25
         const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
 
