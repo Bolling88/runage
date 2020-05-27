@@ -36,4 +36,19 @@ class FireStoreHandler @Inject constructor(){
                     .add(it)
             }
     }
+
+    fun getAllQuests(){
+        val docRef = db.collection("quest")
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Timber.d("DocumentSnapshot data: ${document.documents}")
+                } else {
+                    Timber.d("No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.e("get failed with $exception")
+            }
+    }
 }

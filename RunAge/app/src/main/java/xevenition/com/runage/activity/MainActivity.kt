@@ -15,19 +15,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
         setContentView(R.layout.activity_main)
-
-        val navController = findNavController(R.id.nav_host_fragment)
-        val navMenu = findViewById<NavigationView>(R.id.nav_view)
-        navMenu.setupWithNavController(navController)
-        navMenu.setNavigationItemSelectedListener {
-            when (it.itemId) {
-
-            }
-            true
-        }
-    }
-
-    companion object {
-        const val MY_PERMISSIONS_REQUEST = 3242
     }
 }

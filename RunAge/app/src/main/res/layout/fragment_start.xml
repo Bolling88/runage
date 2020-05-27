@@ -14,6 +14,16 @@
         android:layout_height="match_parent"
         tools:context=".fragment.start.StartFragment">
 
+        <ImageButton
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="60dip"
+            android:onClick="@{() -> viewModel.onHistoryClicked()}"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_margin"
+            android:src="@drawable/ic_history"
+            android:layout_height="60dip" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
             android:layout_width="wrap_content"

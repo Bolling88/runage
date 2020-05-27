@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.main.MainFragmentDirections
 import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.AccountUtil
 import xevenition.com.runage.util.FeedbackHandler
@@ -31,5 +32,9 @@ class StartViewModel(
             liveTextName.postValue(it.displayName)
             _observableProfileImage.postValue(it.iconImageUri)
         }
+    }
+
+    fun onHistoryClicked(){
+        observableNavigateTo.postValue(MainFragmentDirections.actionMainFragmentToHistoryFragment())
     }
 }
