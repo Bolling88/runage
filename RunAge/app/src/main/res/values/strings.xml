@@ -55,4 +55,6 @@
     <string name="runage_avg_pace">Avg. Pace</string>
     <string name="runage_save_progress">Save progress</string>
     <string name="runage_delete_quest">Delete progress</string>
+    <string name="runage_close">Close</string>
+    <string name="runage_quest_completed">Quest completed!</string>
 </resources>
