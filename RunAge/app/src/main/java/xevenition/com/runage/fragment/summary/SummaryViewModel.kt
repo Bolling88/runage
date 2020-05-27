@@ -69,19 +69,23 @@ class SummaryViewModel(
         _liveCalories.postValue("${quest.calories}")
         _livePace.postValue(RunningTimer.getPaceString(duration, distance))
 
-        if(quest.locations.size < 2){
+        if (quest.locations.size < 2) {
             _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
         }
     }
 
     fun onSaveProgressClicked() {
-        quest?.let {
-            fireStoreHandler.storeQuest(it)
-                .addOnSuccessListener {
-                    Timber.d("Quest have been stored")
-                    observableBackNavigation.call()
-                }
-                .addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
+        quest?.let { quest ->
+            fireStoreHandler.storeQuest(quest)
+                .subscribe({
+                    it.addOnSuccessListener {
+                        Timber.d("Quest have been stored")
+                        observableBackNavigation.call()
+                    }
+                        .addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
+                }, { error ->
+                    Timber.e("Quest storing failed $error")
+                })
         }
     }
 }

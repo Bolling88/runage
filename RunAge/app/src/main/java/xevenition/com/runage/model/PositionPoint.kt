@@ -9,5 +9,4 @@ data class PositionPoint(
     val bearing: Float,
     val timeStampEpochSeconds: Long,
     val activityType: Int
-) {
-}
+)

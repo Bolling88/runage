@@ -124,6 +124,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
             binding.lottieCountDown.visibility = View.GONE
             binding.lottieCountDown.pauseAnimation()
             viewModel.onQuestFinished(currentQuestId)
+            currentQuestId = -1
         }
     }
 

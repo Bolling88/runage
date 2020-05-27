@@ -1,6 +1,5 @@
 package xevenition.com.runage.util
 
-import dalvik.annotation.TestTarget
 import org.junit.Assert.*
 import org.junit.Test
 
