@@ -8,10 +8,8 @@ import java.util.concurrent.TimeUnit
 object RunningTimer {
 
     fun getRunningTimer(startDateEpochSeconds: Long): Observable<String> {
-        val currentTimeMillis = Instant.now().epochSecond
-        val initialValue = currentTimeMillis - startDateEpochSeconds
         return Observable.interval(0, 1, TimeUnit.SECONDS)
-            .map { it + initialValue }
+            .map { Instant.now().epochSecond - startDateEpochSeconds}
             .map {
                 convertTimeToDurationString(it)
             }

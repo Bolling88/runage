@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
+import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
@@ -90,7 +91,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         setUpObservables()
         Timber.d("onViewCreated")
-        if (EventService.serviceIsRunning) {
+        if (serviceIsRunning) {
             binding.viewPager.currentItem = 1
             binding.swipeButton.isChecked = true
             binding.lottieSwipeEnd.visibility = View.VISIBLE
@@ -104,7 +105,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
-            if(EventService.serviceIsRunning){
+            if(serviceIsRunning){
                 //don't run the count down if a quest is active
                 binding.lottieCountDown.visibility = View.GONE
                 binding.lottieCountDown.pauseAnimation()
@@ -149,7 +150,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onStart() {
         super.onStart()
-        if (EventService.serviceIsRunning) {
+        if (serviceIsRunning) {
             bindToService()
         }
     }

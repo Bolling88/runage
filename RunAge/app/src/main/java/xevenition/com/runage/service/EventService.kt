@@ -21,6 +21,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.*
+import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.service.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
@@ -83,7 +84,7 @@ class EventService : Service() {
         (applicationContext as MainApplication).appComponent.inject(this)
         isMetric = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
         serviceIsRunning = true
-        startCountDown()
+        startInitalCountdown()
 
         startLocationUpdates()
         eventHandler =
@@ -95,7 +96,7 @@ class EventService : Service() {
         )
     }
 
-    private fun startCountDown() {
+    private fun startInitalCountdown() {
         var count = 10
         val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())
@@ -174,6 +175,7 @@ class EventService : Service() {
                     Instant.now().epochSecond,
                     activityType
                 )
+
                 updateTotalDistance(newPoint)
 
                 if (shouldReport(currentQuest.totalDistance)) {
@@ -254,7 +256,7 @@ class EventService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
+        serviceIsRunning = true
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -329,7 +331,5 @@ class EventService : Service() {
         const val MIN_ACCURACY = 25
         const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
-
-        var serviceIsRunning = false
     }
 }

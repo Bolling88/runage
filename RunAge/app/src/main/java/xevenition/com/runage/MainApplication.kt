@@ -21,4 +21,8 @@ class MainApplication: Application() {
             )
         ).build()
     }
+
+    companion object{
+        var serviceIsRunning = false
+    }
 }

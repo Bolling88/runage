@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.AccountUtil
@@ -15,7 +16,7 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
     private var permissionsGranted = false
 
     init {
-        if (EventService.serviceIsRunning) {
+        if (serviceIsRunning) {
             observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
         } else {
             startSplashTimer()

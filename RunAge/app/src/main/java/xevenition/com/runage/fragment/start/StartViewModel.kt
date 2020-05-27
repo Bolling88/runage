@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.start
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.service.EventService
@@ -24,7 +25,7 @@ class StartViewModel(
     init {
         val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
-            if (!EventService.serviceIsRunning) {
+            if (!serviceIsRunning) {
                 feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}")
             }
             liveTextName.postValue(it.displayName)
