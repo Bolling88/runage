@@ -2,6 +2,7 @@ package xevenition.com.runage.util
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -37,18 +38,8 @@ class FireStoreHandler @Inject constructor(){
             }
     }
 
-    fun getAllQuests(){
+    fun getAllQuests(): Task<QuerySnapshot> {
         val docRef = db.collection("quest")
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    Timber.d("DocumentSnapshot data: ${document.documents}")
-                } else {
-                    Timber.d("No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Timber.e("get failed with $exception")
-            }
+        return docRef.get()
     }
 }

@@ -155,6 +155,12 @@ class MainFragment : BaseFragment<MainViewModel>() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.lottieCountDown.visibility = View.GONE
+        binding.lottieCountDown.pauseAnimation()
+    }
+
     private fun bindToService() {
         Intent(activity, EventService::class.java).also { intent ->
             activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)

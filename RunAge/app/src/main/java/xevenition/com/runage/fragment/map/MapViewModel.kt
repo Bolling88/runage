@@ -96,7 +96,7 @@ class MapViewModel(
                 //TODO check if imperial or metric
                 val distance = quest.totalDistance
                 _liveTotalDistance.postValue("$distance m")
-                _liveCalories.postValue("${quest.calories.toInt()}")
+                _liveCalories.postValue("${quest.calories}")
 
                 val lastTimeStamp =
                     quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
