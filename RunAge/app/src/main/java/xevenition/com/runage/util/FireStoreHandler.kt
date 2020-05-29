@@ -29,6 +29,7 @@ class FireStoreHandler @Inject constructor(){
                     "totalDistance" to quest.totalDistance,
                     "calories" to quest.calories,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
+                    "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
                     "locations" to gson.toJson(it)
                 )
             }

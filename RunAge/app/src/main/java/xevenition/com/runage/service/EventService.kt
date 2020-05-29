@@ -206,7 +206,7 @@ class EventService : Service() {
                 newPoint.longitude,
                 resultArray
             )
-            currentQuest.totalDistance += resultArray.first().toInt()
+            currentQuest.totalDistance += resultArray.first()
             currentQuest.calories = CalorieCalculator.getCaloriesBurned(
                 distance = currentQuest.totalDistance,
                 weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
