@@ -5,18 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.service.FitnessHelper
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
-import xevenition.com.runage.util.RunningTimer
-import xevenition.com.runage.util.SeparatorUtil
+import xevenition.com.runage.util.RunningUtil
 import java.time.Instant
 
 class SummaryViewModel(
+    private val fitnessHelper: FitnessHelper,
     private val questRepository: QuestRepository,
     private val resourceUtil: ResourceUtil,
     private val fireStoreHandler: FireStoreHandler,
@@ -73,39 +75,57 @@ class SummaryViewModel(
             quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
         val duration = lastTimeStamp - quest.startTimeEpochSeconds
         val distance = quest.totalDistance
-        _liveTextTimer.postValue(RunningTimer.convertTimeToDurationString(duration))
+        _liveTextTimer.postValue(RunningUtil.convertTimeToDurationString(duration))
         _liveTotalDistance.postValue("$distance m")
         _liveCalories.postValue("${quest.calories}")
-        _livePace.postValue(RunningTimer.getPaceString(duration, distance))
+        _livePace.postValue(RunningUtil.getPaceString(duration, distance))
 
         if (quest.locations.size < 2) {
             _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
         }
+
+        RunningUtil.calculateActivityPercentage(quest.locations)
     }
 
     fun onSaveProgressClicked() {
         if (quest?.locations?.size ?: 0 < 2) {
             observableBackNavigation.call()
-        }else {
+        } else {
             quest?.let { quest ->
-                fireStoreHandler.storeQuest(quest)
-                    .subscribe({
-                        it.addOnSuccessListener {
-                            Timber.d("Quest have been stored")
-                            observableBackNavigation.call()
-                        }
-                            .addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
-                    }, { error ->
-                        Timber.e("Quest storing failed $error")
-                    })
+                Timber.d("Start time: ${quest.startTimeEpochSeconds}")
+                Timber.d("End time: ${quest.locations.lastOrNull()?.timeStampEpochSeconds
+                    ?: quest.startTimeEpochSeconds + 1}")
+
+                val task = fitnessHelper.storeSession(
+                    quest.id,
+                    "${quest.totalDistance} meters",
+                    quest.startTimeEpochSeconds,
+                    quest.locations.lastOrNull()?.timeStampEpochSeconds
+                        ?: quest.startTimeEpochSeconds + 1
+                )
+                task.addOnCompleteListener {}
+                storeQuestInFirestore(quest)
             }
         }
     }
 
+    private fun storeQuestInFirestore(quest: Quest): Disposable {
+        return fireStoreHandler.storeQuest(quest)
+            .subscribe({
+                it.addOnSuccessListener {
+                    Timber.d("Quest have been stored")
+                    observableBackNavigation.call()
+                }
+                    .addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
+            }, { error ->
+                Timber.e("Quest storing failed $error")
+            })
+    }
+
     fun onMapCreated() {
         val localQuest = quest
-        if(localQuest != null) {
+        if (localQuest != null) {
             displayPath(localQuest)
         }
     }

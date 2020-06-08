@@ -149,13 +149,6 @@ class EventService : Service() {
                 Timber.d("Current accuracy: ${it.accuracy}")
                 it.accuracy < MIN_ACCURACY
             }
-//            .filter {
-//                if (previousLocation == null) {
-//                    true
-//                } else {
-//                    newPointIsMinDistanceAway(it, previousLocation!!)
-//                }
-//            }
             .filter{
                 if (previousLocation == null) {
                     true
@@ -224,16 +217,6 @@ class EventService : Service() {
         } else {
             nextDistanceFeedback.times(FeedbackHandler.METERS_IN_MILE)
         }
-    }
-
-
-    private fun newPointIsMinDistanceAway(
-        lastLocation: Location,
-        previousLocation: Location
-    ): Boolean {
-        val distance = lastLocation.distanceTo(previousLocation)
-        Timber.d("Distance to prev point: $distance")
-        return distance >= 1
     }
 
     private fun startLocationUpdates() {

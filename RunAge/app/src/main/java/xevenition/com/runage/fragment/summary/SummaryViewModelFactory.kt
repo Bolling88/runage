@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.service.FitnessHelper
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
@@ -22,6 +23,8 @@ class SummaryViewModelFactory @Inject constructor(
     lateinit var firestoreHandler: FireStoreHandler
     @Inject
     lateinit var resourceUtil: ResourceUtil
+    @Inject
+    lateinit var fitnessHelper: FitnessHelper
 
     init {
         app.appComponent.inject(this)
@@ -29,6 +32,6 @@ class SummaryViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SummaryViewModel(questRepository, resourceUtil, firestoreHandler, arguments) as T
+        return SummaryViewModel(fitnessHelper, questRepository, resourceUtil, firestoreHandler, arguments) as T
     }
 }

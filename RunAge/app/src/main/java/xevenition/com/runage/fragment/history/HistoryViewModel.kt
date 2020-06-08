@@ -1,6 +1,8 @@
 package xevenition.com.runage.fragment.history
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -15,6 +17,8 @@ class HistoryViewModel(
     firestoreHandler: FireStoreHandler
 ) : BaseViewModel(){
 
+    private val _observableQuests = MutableLiveData<List<SavedQuest>>();
+    val observableQuest: LiveData<List<SavedQuest>> = _observableQuests
 
     init {
             firestoreHandler.getAllQuests()
@@ -40,6 +44,7 @@ class HistoryViewModel(
             }
             .subscribe({
                 Timber.d("Quests processed")
+                _observableQuests.postValue(it)
             },{
                 Timber.e(it)
             })

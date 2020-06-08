@@ -1,5 +1,6 @@
 package xevenition.com.runage.service
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,12 +9,14 @@ import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 class ActivityActivator @Inject constructor(private val context: Context){
 
     private var pendingIntent: PendingIntent? = null
 
+    @SuppressLint("MissingPermission")
     fun startActivityTracking() {
         val transitions = mutableListOf<ActivityTransition>()
 
@@ -58,15 +61,16 @@ class ActivityActivator @Inject constructor(private val context: Context){
 
         task.addOnSuccessListener {
             // Handle success
-            Log.d(TAG, "Registered event receiver")
+            Timber.d("Registered event receiver")
         }
 
         task.addOnFailureListener { e: Exception ->
-            Log.d(TAG, "Failed registering event receiver")
-            Log.d(TAG, e.message)
+            Timber.d("Failed registering event receiver")
+            Timber.d(e)
         }
     }
 
+    @SuppressLint("MissingPermission")
     fun endActivityTracking() {
         // myPendingIntent is the instance of PendingIntent where the app receives callbacks.
         val task = ActivityRecognition.getClient(context)
