@@ -61,7 +61,7 @@ object RunningUtil {
     }
 
     @SuppressLint("CheckResult")
-    fun calculateActivityPercentage(location: List<PositionPoint>): Single<Map<Int, Int>> {
+    fun calculateActivityPercentage(location: List<PositionPoint>): Single<Map<Int, Double>> {
         val activityMap: MutableMap<Int, Int> = mutableMapOf()
         return Observable.fromIterable(location)
             .subscribeOn(Schedulers.computation())
@@ -71,29 +71,18 @@ object RunningUtil {
             .toList()
             .map {
                 val totalPoints = location.size
-                val activityPercentage = mutableMapOf<Int, Int>()
+                val activityPercentage = mutableMapOf<Int, Double>()
                 activityPercentage[DetectedActivity.IN_VEHICLE] = activityMap.getOrDefault(
-                    DetectedActivity.IN_VEHICLE, 0) / totalPoints
+                    DetectedActivity.IN_VEHICLE, 0).toDouble() / totalPoints.toDouble()
                 activityPercentage[DetectedActivity.STILL] = activityMap.getOrDefault(
-                    DetectedActivity.STILL, 0) / totalPoints
+                    DetectedActivity.STILL, 0).toDouble() / totalPoints.toDouble()
                 activityPercentage[DetectedActivity.ON_BICYCLE] = activityMap.getOrDefault(
-                    DetectedActivity.ON_BICYCLE, 0) / totalPoints
+                    DetectedActivity.ON_BICYCLE, 0).toDouble() / totalPoints.toDouble()
                 activityPercentage[DetectedActivity.WALKING] = activityMap.getOrDefault(
-                    DetectedActivity.WALKING, 0) / totalPoints
+                    DetectedActivity.WALKING, 0).toDouble() / totalPoints.toDouble()
                 activityPercentage[DetectedActivity.RUNNING] = activityMap.getOrDefault(
-                    DetectedActivity.RUNNING, 0) / totalPoints
+                    DetectedActivity.RUNNING, 0).toDouble() / totalPoints.toDouble()
 
-                var points = 0
-                for(value in activityPercentage.values){
-                    points += value
-                }
-
-                //even out the points
-                if(points > 100){
-                    activityPercentage[DetectedActivity.RUNNING] = activityPercentage.getOrDefault(DetectedActivity.RUNNING, 0) + (points - 100)
-                }else{
-                    activityPercentage[DetectedActivity.RUNNING] = activityPercentage.getOrDefault(DetectedActivity.RUNNING, 0) - (100 - points)
-                }
                 activityPercentage
             }
     }
