@@ -56,5 +56,6 @@
     <string name="runage_save_progress">Save progress</string>
     <string name="runage_delete_quest">Delete progress</string>
     <string name="runage_close">Close</string>
-    <string name="runage_quest_completed">Quest completed!</string>
+    <string name="runage_quest_completed">Quest completed</string>
+    <string name="runage_quest_failed">Quest failed</string>
 </resources>

@@ -42,20 +42,27 @@ class SummaryViewModel(
     private val _liveTimerColor = MutableLiveData<Int>()
     val liveTimerColor: LiveData<Int> = _liveTimerColor
 
+    private val _liveButtonEnabled = MutableLiveData<Boolean>()
+    val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
+
     private val _liveButtonText = MutableLiveData<String>()
     val liveButtonText: LiveData<String> = _liveButtonText
 
     private val _observableRunningPath = MutableLiveData<List<LatLng>>()
     val observableRunningPath: LiveData<List<LatLng>> = _observableRunningPath
 
+    private val _liveTextTitle = MutableLiveData<String>()
+    val liveTextTitle: LiveData<String> = _liveTextTitle
+
     init {
         //TODO check if imperial or metric
+        _liveButtonEnabled.postValue(false)
         _liveTextTimer.postValue("00:00:00")
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
         _livePace.postValue("0 min/km")
         _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_progress))
-        _liveTimerColor.postValue(resourceUtil.getColor(R.color.grey2))
+        _liveTimerColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
         getQuest()
     }
 
@@ -70,6 +77,7 @@ class SummaryViewModel(
             })
     }
 
+    @SuppressLint("CheckResult")
     private fun setUpQuestInfo(quest: Quest) {
         val lastTimeStamp =
             quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
@@ -82,10 +90,21 @@ class SummaryViewModel(
 
         if (quest.locations.size < 2) {
             _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+            _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+        }else{
+            _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))
         }
 
         RunningUtil.calculateActivityPercentage(quest.locations)
+            .doFinally {
+                _liveButtonEnabled.postValue(true)
+            }
+            .subscribe({
+
+            },{
+                Timber.e(it)
+            })
     }
 
     fun onSaveProgressClicked() {
