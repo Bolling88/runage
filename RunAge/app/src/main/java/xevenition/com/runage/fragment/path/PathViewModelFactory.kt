@@ -20,16 +20,10 @@ class PathViewModelFactory @Inject constructor(
     }
 
     @Inject
-    lateinit var resourceUtil: ResourceUtil
-
-    @Inject
     lateinit var questRepository: QuestRepository
-
-    @Inject
-    lateinit var locationUtil: LocationUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PathViewModel(resourceUtil, questRepository, locationUtil, arguments) as T
+        return PathViewModel(questRepository, arguments) as T
     }
 }

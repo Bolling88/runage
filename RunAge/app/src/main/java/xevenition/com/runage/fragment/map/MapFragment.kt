@@ -18,6 +18,7 @@ import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
+import xevenition.com.runage.util.BitmapUtil
 import java.util.logging.Logger
 import javax.inject.Inject
 
@@ -32,6 +33,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
+    @Inject
+    lateinit var bitmapUtil: BitmapUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +102,8 @@ class MapFragment : BaseFragment<MapViewModel>() {
             userMarker?.position = it
         } else {
             val options = MarkerOptions().position(it)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
+                .anchor(0.5f, 0.5f)
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot)))
             userMarker = googleMap?.addMarker(options)
         }
     }

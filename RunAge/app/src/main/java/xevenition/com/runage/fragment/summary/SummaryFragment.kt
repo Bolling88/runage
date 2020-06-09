@@ -11,16 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.JointType
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentSummaryBinding
+import xevenition.com.runage.util.BitmapUtil
 import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject
 
@@ -31,6 +29,9 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
+
+    @Inject
+    lateinit var bitmapUtil: BitmapUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +72,18 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 setUpPolyline(it)
             }
         })
+
+        viewModel.observableStartMarker.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                drawStartMarker(it)
+            }
+        })
+
+        viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                drawEndMarker(it)
+            }
+        })
     }
 
     override fun onStart() {
@@ -103,17 +116,30 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         binding.mapView.onDestroy()
     }
 
+    private fun drawStartMarker(it: LatLng) {
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot_red)))
+        googleMap?.addMarker(options)
+    }
+
+    private fun drawEndMarker(it: LatLng) {
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot)))
+        googleMap?.addMarker(options)
+    }
 
     private fun setUpPolyline(positions: List<LatLng>) {
         if (positions.isEmpty() || googleMap == null) return
 
         moveCamera(positions)
         val positionPointsArray = ArrayList(positions)
-            val polylineOptions = PolylineOptions().addAll(positionPointsArray)
-                .jointType(JointType.ROUND)
-                .color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-                .width(typedValueUtil.dipToPixels(5f).toFloat())
-           val polyLine = googleMap?.addPolyline(polylineOptions)
+        val polylineOptions = PolylineOptions().addAll(positionPointsArray)
+            .jointType(JointType.ROUND)
+            .color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            .width(typedValueUtil.dipToPixels(5f).toFloat())
+        val polyLine = googleMap?.addPolyline(polylineOptions)
         polyLine?.points = positionPointsArray
         Timber.d("Polyline has ${polyLine?.points?.size} points")
     }
@@ -129,7 +155,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 val bounds = builder.build()
                 val padding = typedValueUtil.dipToPixels(50f)
                 val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-                googleMap?.animateCamera(cu, 500, null)
+                googleMap?.moveCamera(cu)
             }
         } catch (e: IllegalStateException) {
             e.printStackTrace()

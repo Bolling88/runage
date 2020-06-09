@@ -31,13 +31,12 @@ import javax.inject.Inject
 class PathFragment : BaseFragment<PathViewModel>() {
 
     private var polyLine: Polyline? = null
-    private var startMarker: Marker? = null
-    private var endMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentPathBinding
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
+
     @Inject
     lateinit var bitmapUtil: BitmapUtil
 
@@ -96,23 +95,17 @@ class PathFragment : BaseFragment<PathViewModel>() {
     }
 
     private fun drawStartMarker(it: LatLng) {
-        if (startMarker != null) {
-            startMarker?.position = it
-        } else {
-            val options = MarkerOptions().position(it)
-                .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_run_blue)))
-            startMarker = googleMap?.addMarker(options)
-        }
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot_red)))
+        googleMap?.addMarker(options)
     }
 
     private fun drawEndMarker(it: LatLng) {
-        if (endMarker != null) {
-            endMarker?.position = it
-        } else {
-            val options = MarkerOptions().position(it)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user_location))
-            endMarker = googleMap?.addMarker(options)
-        }
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot)))
+        googleMap?.addMarker(options)
     }
 
     override fun onStart() {
@@ -194,7 +187,7 @@ class PathFragment : BaseFragment<PathViewModel>() {
     companion object {
         fun newInstance(): PathFragment {
             Timber.d("New instance of map fragment created")
-         return PathFragment()
+            return PathFragment()
         }
     }
 

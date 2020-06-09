@@ -57,6 +57,12 @@ class SummaryViewModel(
     private val _liveTextTitle = MutableLiveData<String>()
     val liveTextTitle: LiveData<String> = _liveTextTitle
 
+    private val _observableStartMarker = MutableLiveData<LatLng>()
+    val observableStartMarker: LiveData<LatLng> = _observableStartMarker
+
+    private val _observableEndMarker = MutableLiveData<LatLng>()
+    val observableEndMarker: LiveData<LatLng> = _observableEndMarker
+
     init {
         //TODO check if imperial or metric
         _liveButtonEnabled.postValue(false)
@@ -162,8 +168,27 @@ class SummaryViewModel(
     }
 
     @SuppressLint("CheckResult")
-    private fun displayPath(localQuest: Quest) {
-        Observable.fromIterable(localQuest.locations)
+    private fun displayPath(quest: Quest) {
+        if (quest.locations.isNotEmpty()) {
+            val firstLocation = quest.locations.first()
+            _observableStartMarker.postValue(
+                LatLng(
+                    firstLocation.latitude,
+                    firstLocation.longitude
+                )
+            )
+        }
+        if (quest.locations.size > 1) {
+            val lastLocation = quest.locations.last()
+            _observableEndMarker.postValue(
+                LatLng(
+                    lastLocation.latitude,
+                    lastLocation.longitude
+                )
+            )
+        }
+
+        Observable.fromIterable(quest.locations)
             .map { LatLng(it.latitude, it.longitude) }
             .toList()
             .subscribe({

@@ -18,6 +18,7 @@ import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
 import xevenition.com.runage.model.PositionPoint
+import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
 import xevenition.com.runage.util.RunningUtil
@@ -25,13 +26,12 @@ import java.time.Instant
 
 
 class PathViewModel(
-    private val resourceUtil: ResourceUtil,
     private val questRepository: QuestRepository,
-    private val locationUtil: LocationUtil,
     arguments: PathFragmentArgs
 ) : BaseViewModel() {
 
-    private var currentPath: MutableList<LatLng> = mutableListOf()
+    private var mapIsReady: Boolean = false
+    private var currentQuest: Quest? = null
     private var questDisposable: Disposable? = null
     private val questId = arguments.keyQuestId
 
@@ -53,26 +53,9 @@ class PathViewModel(
         questDisposable?.dispose()
         questDisposable = questRepository.getSingleQuest(id)
             .subscribe({ quest ->
-                Timber.d("Got quest update")
-                displayRunningRoute(quest.locations)
-                Timber.d("Quest locations: ${quest.locations.size}")
-                if (quest.locations.isNotEmpty()) {
-                    val firstLocation = quest.locations.first()
-                    _observableStartMarker.postValue(
-                        LatLng(
-                            firstLocation.latitude,
-                            firstLocation.longitude
-                        )
-                    )
-                }
-                if(quest.locations.size > 1) {
-                    val lastLocation = quest.locations.last()
-                    _observableEndMarker.postValue(
-                        LatLng(
-                            lastLocation.latitude,
-                            lastLocation.longitude
-                        )
-                    )
+                currentQuest = quest
+                if(mapIsReady) {
+                    displayPath(quest)
                 }
             }, {
                 Timber.e(it)
@@ -83,16 +66,30 @@ class PathViewModel(
     }
 
     @SuppressLint("CheckResult")
-    private fun displayRunningRoute(locations: MutableList<PositionPoint>) {
-        Observable.fromIterable(locations)
-            .subscribeOn(Schedulers.computation())
-            .map {
-                LatLng(it.latitude, it.longitude)
-            }
+    private fun displayPath(quest: Quest) {
+        if (quest.locations.isNotEmpty()) {
+            val firstLocation = quest.locations.first()
+            _observableStartMarker.postValue(
+                LatLng(
+                    firstLocation.latitude,
+                    firstLocation.longitude
+                )
+            )
+        }
+        if (quest.locations.size > 1) {
+            val lastLocation = quest.locations.last()
+            _observableEndMarker.postValue(
+                LatLng(
+                    lastLocation.latitude,
+                    lastLocation.longitude
+                )
+            )
+        }
+
+        Observable.fromIterable(quest.locations)
+            .map { LatLng(it.latitude, it.longitude) }
             .toList()
             .subscribe({
-                currentPath = it
-                Timber.d("Posting ${it.size} locations")
                 _observableRunningPath.postValue(it)
             }, {
                 Timber.e(it)
@@ -104,6 +101,9 @@ class PathViewModel(
     }
 
     fun onMapCreated() {
-        _observableRunningPath.postValue(currentPath)
+        mapIsReady = true
+        currentQuest?.let {
+            displayPath(it)
+        }
     }
 }
