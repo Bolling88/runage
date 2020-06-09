@@ -84,6 +84,10 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 drawEndMarker(it)
             }
         })
+
+        viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animation.playAnimation()
+        })
     }
 
     override fun onStart() {

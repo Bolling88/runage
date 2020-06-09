@@ -36,6 +36,9 @@ class SummaryViewModel(
     private val _liveCalories = MutableLiveData<String>()
     val liveCalories: LiveData<String> = _liveCalories
 
+    private val _observablePlayAnimation = MutableLiveData<Unit>()
+    val observablePlayAnimation: LiveData<Unit> = _observablePlayAnimation
+
     private val _livePace = MutableLiveData<String>()
     val livePace: LiveData<String> = _livePace
 
@@ -106,6 +109,7 @@ class SummaryViewModel(
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
         }else{
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))
+            _observablePlayAnimation.postValue(Unit)
         }
 
         RunningUtil.calculateActivityPercentage(quest.locations)
