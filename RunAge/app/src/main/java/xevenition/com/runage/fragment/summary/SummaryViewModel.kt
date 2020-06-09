@@ -9,6 +9,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.main.MainFragmentDirections
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.service.FitnessHelper
@@ -24,7 +25,9 @@ class SummaryViewModel(
     private val fireStoreHandler: FireStoreHandler,
     arguments: SummaryFragmentArgs
 ) : BaseViewModel() {
+    private var mapCreated: Boolean = false
     private var quest: Quest? = null
+    private var percentageMap: Map<Int, Double>? = null
     private val questId = arguments.keyQuestId
 
     private val _liveTotalDistance = MutableLiveData<String>()
@@ -71,6 +74,9 @@ class SummaryViewModel(
         questRepository.getSingleQuest(questId)
             .subscribe({
                 quest = it
+                if(mapCreated){
+                    displayPath(it)
+                }
                 setUpQuestInfo(it)
             }, {
                 Timber.e(it)
@@ -84,7 +90,7 @@ class SummaryViewModel(
         val duration = lastTimeStamp - quest.startTimeEpochSeconds
         val distance = quest.totalDistance
         _liveTextTimer.postValue(RunningUtil.convertTimeToDurationString(duration))
-        _liveTotalDistance.postValue("$distance m")
+        _liveTotalDistance.postValue("${distance.toInt()} m")
         _liveCalories.postValue("${quest.calories}")
         _livePace.postValue(RunningUtil.getPaceString(duration, distance))
 
@@ -101,7 +107,8 @@ class SummaryViewModel(
                 _liveButtonEnabled.postValue(true)
             }
             .subscribe({
-
+                percentageMap = it
+                Timber.d("Percentage calculated")
             },{
                 Timber.e(it)
             })
@@ -144,9 +151,14 @@ class SummaryViewModel(
 
     fun onMapCreated() {
         val localQuest = quest
+        mapCreated = true
         if (localQuest != null) {
             displayPath(localQuest)
         }
+    }
+
+    fun onMapClicked(){
+        observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToPathFragment(questId))
     }
 
     @SuppressLint("CheckResult")

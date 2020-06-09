@@ -75,9 +75,21 @@
             android:name="key_quest_id"
             app:argType="integer"
             android:defaultValue="0" />
+        <action
+            android:id="@+id/action_summaryFragment_to_pathFragment"
+            app:destination="@id/pathFragment" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="xevenition.com.runage.fragment.history.HistoryFragment"
         android:label="HistoryFragment" />
+    <fragment
+        android:id="@+id/pathFragment"
+        android:name="xevenition.com.runage.fragment.path.PathFragment"
+        android:label="PathFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

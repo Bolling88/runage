@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
@@ -31,7 +32,7 @@ import xevenition.com.runage.service.EventService
 
 class MainFragment : BaseFragment<MainViewModel>() {
 
-    private lateinit var adapter: MainPagerAdapter
+    private var adapter: MainPagerAdapter? = null
     private lateinit var binding: FragmentMainBinding
     private lateinit var mService: EventService
     private var mBound: Boolean = false
@@ -50,7 +51,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
                 override fun onQuestCreated(id: Int) {
                     currentQuestId = id
                     Timber.d("onQuestCreated: $id")
-                    (adapter.getItem(1) as MapFragment).onNewQuestCreated(id)
+                    (adapter?.getItem(1) as MapFragment).onNewQuestCreated(id)
                 }
             })
         }
@@ -82,6 +83,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        adapter?.clearFragments()
         adapter = MainPagerAdapter(childFragmentManager)
         binding.viewPager.adapter = adapter
         return binding.root
@@ -105,11 +107,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         binding.swipeButton.onSwipedOnListener = {
             binding.viewPager.setCurrentItem(1, true)
-            if(serviceIsRunning){
+            if (serviceIsRunning) {
                 //don't run the count down if a quest is active
                 binding.lottieCountDown.visibility = View.GONE
                 binding.lottieCountDown.pauseAnimation()
-            }else{
+            } else {
                 binding.lottieCountDown.visibility = View.VISIBLE
                 binding.lottieCountDown.playAnimation()
             }
@@ -120,7 +122,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         binding.swipeButton.onSwipedOffListener = {
             binding.viewPager.setCurrentItem(0, true)
             stopEventService()
-            (adapter.getItem(1) as MapFragment).onQuestFinished()
+            (adapter?.getItem(1) as MapFragment).onQuestFinished()
             setLottieSwipeState(false)
             binding.lottieCountDown.visibility = View.GONE
             binding.lottieCountDown.pauseAnimation()
@@ -195,7 +197,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         fun newInstance() = MainFragment()
     }
 
-    private class MainPagerAdapter(fm: FragmentManager) :
+    private class MainPagerAdapter(private val fm: FragmentManager) :
         FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private var fragments: Array<Fragment> =
@@ -211,6 +213,15 @@ class MainFragment : BaseFragment<MainViewModel>() {
         //We always want to recreate the fragments if they are destroyed ourselves
         override fun saveState(): Parcelable? {
             return null
+        }
+
+        fun clearFragments() {
+            val fragments: List<Fragment> = fm.fragments
+            val ft: FragmentTransaction = fm.beginTransaction()
+            for (f in fragments) {
+                ft.remove(f)
+            }
+            ft.commitAllowingStateLoss()
         }
 
         companion object {

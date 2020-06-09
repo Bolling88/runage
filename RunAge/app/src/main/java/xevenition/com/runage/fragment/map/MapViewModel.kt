@@ -58,6 +58,10 @@ class MapViewModel(
 
     init {
         //TODO check if imperial or metric
+        resetTimers()
+    }
+
+    private fun resetTimers() {
         _liveTextTimer.postValue("00:00:00")
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
@@ -174,5 +178,6 @@ class MapViewModel(
     fun onQuestFinished() {
         observableClearMap.call()
         runningTimerDisposable?.dispose()
+        resetTimers()
     }
 }

@@ -42,7 +42,7 @@
             android:id="@+id/textCounter"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_small"
             android:fontFamily="@font/bold"
             android:gravity="center"
             android:text="@{viewModel.liveTextTimer}"
@@ -138,6 +138,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textPace" />
+
+        <View
+            android:layout_width="0dip"
+            app:layout_constraintEnd_toEndOf="@+id/mapView"
+            app:layout_constraintStart_toStartOf="@id/mapView"
+            app:layout_constraintTop_toTopOf="@+id/mapView"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->viewModel.onMapClicked()}"
+            app:layout_constraintBottom_toBottomOf="@+id/mapView"
+            android:layout_height="0dip" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"

@@ -84,7 +84,7 @@ class EventService : Service() {
         (applicationContext as MainApplication).appComponent.inject(this)
         isMetric = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
         serviceIsRunning = true
-        startInitalCountdown()
+        startInitialCountdown()
 
         startLocationUpdates()
         eventHandler =
@@ -96,7 +96,7 @@ class EventService : Service() {
         )
     }
 
-    private fun startInitalCountdown() {
+    private fun startInitialCountdown() {
         var count = 10
         val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())
@@ -145,6 +145,9 @@ class EventService : Service() {
         Observable.just(location)
             .subscribeOn(Schedulers.computation())
             .filter {
+                this::currentQuest.isInitialized
+            }
+            .filter {
                 //Filter away crazy values
                 Timber.d("Current accuracy: ${it.accuracy}")
                 it.accuracy < MIN_ACCURACY
@@ -153,7 +156,7 @@ class EventService : Service() {
                 if (previousLocation == null) {
                     true
                 } else {
-                    activityType != DetectedActivity.STILL
+                    activityType != DetectedActivity.STILL || BuildConfig.DEBUG
                 }
             }
             .map {
@@ -177,7 +180,7 @@ class EventService : Service() {
                 }
 
                 currentQuest.locations.add(newPoint)
-                Timber.d("Storing ${currentQuest.locations.size} locations")
+                Timber.d("STORING for quest id ${currentQuest.id}:  ${currentQuest.locations.size} locations")
                 questRepository.dbUpdateQuest(currentQuest)
                 previousLocation = it
             }
@@ -311,7 +314,7 @@ class EventService : Service() {
     companion object {
         const val TAG = "Event Service"
         const val NOTIFICATION_ID = 2345235
-        const val MIN_ACCURACY = 25
+        const val MIN_ACCURACY = 30
         const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }
