@@ -24,5 +24,6 @@ class MainApplication: Application() {
 
     companion object{
         var serviceIsRunning = false
+        var welcomeMessagePlayed = false
     }
 }

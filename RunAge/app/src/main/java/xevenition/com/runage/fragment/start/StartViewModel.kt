@@ -3,7 +3,9 @@ package xevenition.com.runage.fragment.start
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
+import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.fragment.main.MainFragmentDirections
@@ -18,7 +20,10 @@ class StartViewModel(
     feedbackHandler: FeedbackHandler
 ) : BaseViewModel() {
 
-    val liveTextName = MutableLiveData<String>()
+    private val _liveTextName = MutableLiveData<String>()
+    val liveTextName : LiveData<String> = _liveTextName
+
+    val observableOpenMenu = SingleLiveEvent<Unit>()
 
     private val _observableProfileImage = MutableLiveData<Uri>()
     val observableProfileImage: LiveData<Uri> = _observableProfileImage
@@ -26,15 +31,16 @@ class StartViewModel(
     init {
         val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
-            if (!serviceIsRunning) {
+            if (!serviceIsRunning && !welcomeMessagePlayed) {
                 feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}")
+                welcomeMessagePlayed = true
             }
-            liveTextName.postValue(it.displayName)
+            _liveTextName.postValue(it.displayName)
             _observableProfileImage.postValue(it.iconImageUri)
         }
     }
 
-    fun onHistoryClicked(){
-        observableNavigateTo.postValue(MainFragmentDirections.actionMainFragmentToHistoryFragment())
+    fun onMenuClicked(){
+        observableOpenMenu.call()
     }
 }

@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
             type="xevenition.com.runage.fragment.start.StartViewModel" />
@@ -14,29 +15,30 @@
         android:layout_height="match_parent"
         tools:context=".fragment.start.StartFragment">
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="65dip"
+            android:layout_height="65dip"
+            android:padding="@dimen/default_margin"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:onClick="@{() -> viewModel.onMenuClicked()}"
+            android:src="@drawable/ic_menu"
+            android:tint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="60dip"
-            android:onClick="@{() -> viewModel.onHistoryClicked()}"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginStart="@dimen/default_margin"
-            android:src="@drawable/ic_history"
-            android:layout_height="60dip" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:lottie_autoPlay="true"
+            app:layout_constraintBottom_toBottomOf="@+id/card_profile"
             app:layout_constraintEnd_toEndOf="@+id/card_profile"
             app:layout_constraintStart_toStartOf="@+id/card_profile"
             app:layout_constraintTop_toTopOf="@+id/card_profile"
-            app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+            app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_speed="0.4"
+            app:lottie_rawRes="@raw/ripple"
             app:lottie_scale="0.3"
-            app:lottie_rawRes="@raw/ripple" />
+            app:lottie_speed="0.4" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_profile"
@@ -81,7 +83,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card_profile"
             tools:text="Ludwig Bolling" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

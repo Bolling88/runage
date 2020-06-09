@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +87,13 @@ class MainFragment : BaseFragment<MainViewModel>() {
         adapter?.clearFragments()
         adapter = MainPagerAdapter(childFragmentManager)
         binding.viewPager.adapter = adapter
+        binding.navigation.setNavigationItemSelectedListener {
+             when(it.itemId){
+                R.id.menu_history-> viewModel.onHistoryClicked()
+            }
+             true
+        }
+
         return binding.root
     }
 
@@ -191,6 +199,10 @@ class MainFragment : BaseFragment<MainViewModel>() {
         unbindService()
         val myService = Intent(activity, EventService::class.java)
         activity?.stopService(myService)
+    }
+
+    fun openMenu() {
+        binding.drawerLayout.openDrawer(Gravity.LEFT)
     }
 
     companion object {

@@ -13,6 +13,7 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentStartBinding
+import xevenition.com.runage.fragment.main.MainFragment
 
 class StartFragment : BaseFragment<StartViewModel>() {
 
@@ -47,6 +48,10 @@ class StartFragment : BaseFragment<StartViewModel>() {
                 val manager = ImageManager.create(requireContext())
                 manager.loadImage(binding.imgProfile, it)
             }
+        })
+
+        viewModel.observableOpenMenu.observe(viewLifecycleOwner, Observer {
+            (parentFragment as? MainFragment)?.openMenu()
         })
     }
 
