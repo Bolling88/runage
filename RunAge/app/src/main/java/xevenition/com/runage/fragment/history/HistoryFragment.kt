@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +24,10 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         val factory = HistoryViewModelFactory(getApplication())
         historyRecyclerAdapter = HistoryRecyclerAdapter()
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
     }
 
     override fun onCreateView(

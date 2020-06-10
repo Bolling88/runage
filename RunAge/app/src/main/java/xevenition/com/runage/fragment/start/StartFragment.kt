@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.images.ImageManager
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentStartBinding
@@ -51,7 +52,7 @@ class StartFragment : BaseFragment<StartViewModel>() {
         })
 
         viewModel.observableOpenMenu.observe(viewLifecycleOwner, Observer {
-            (parentFragment as? MainFragment)?.openMenu()
+            (activity as? MainActivity)?.openMenu()
         })
     }
 

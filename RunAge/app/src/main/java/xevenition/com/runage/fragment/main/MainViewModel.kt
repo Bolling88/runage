@@ -26,8 +26,4 @@ class MainViewModel(private  val questRepository: QuestRepository) : BaseViewMod
                 //Quest didn't even start, do nothing
             })
     }
-
-    fun onHistoryClicked() {
-        observableNavigateTo.postValue(MainFragmentDirections.actionMainFragmentToHistoryFragment())
-    }
 }

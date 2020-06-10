@@ -87,12 +87,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
         adapter?.clearFragments()
         adapter = MainPagerAdapter(childFragmentManager)
         binding.viewPager.adapter = adapter
-        binding.navigation.setNavigationItemSelectedListener {
-             when(it.itemId){
-                R.id.menu_history-> viewModel.onHistoryClicked()
-            }
-             true
-        }
 
         return binding.root
     }
@@ -199,10 +193,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
         unbindService()
         val myService = Intent(activity, EventService::class.java)
         activity?.stopService(myService)
-    }
-
-    fun openMenu() {
-        binding.drawerLayout.openDrawer(Gravity.LEFT)
     }
 
     companion object {

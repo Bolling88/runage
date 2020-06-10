@@ -10,11 +10,6 @@
             type="xevenition.com.runage.fragment.main.MainViewModel" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -95,17 +90,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|left"
-            app:itemIconSize="30dip"
-
-            app:itemIconTint="@color/colorAccent"
-            app:itemTextColor="@color/grey2"
-            app:headerLayout="@layout/navigation_header"
-            app:menu="@menu/navigation_menu" />
-    </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>

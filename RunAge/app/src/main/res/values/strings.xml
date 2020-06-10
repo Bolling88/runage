@@ -38,7 +38,7 @@
     <string name="runage_weight">Weight</string>
     <string name="runage_welcome_back">Welcome back</string>
     <string name="runage_go_go_go">Running quest started!</string>
-    <string name="runage_completed_runs">COMPLETED RUNS</string>
+    <string name="runage_completed_runs_uppercase">COMPLETED RUNS</string>
     <string name="runage_calories_burned">Calories burned</string>
     <string name="runage_thousand">thousand</string>
     <string name="runage_hundred">hundred</string>
@@ -59,4 +59,5 @@
     <string name="runage_quest_completed">Quest completed</string>
     <string name="runage_quest_failed">Quest failed</string>
     <string name="runage_history">Histroy</string>
+    <string name="runage_home_uppercase">HOME</string>
 </resources>
