@@ -41,6 +41,14 @@ class MainActivity : AppCompatActivity() {
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
+    fun lockDrawer(){
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
+    fun unlockDrawer(){
+        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)

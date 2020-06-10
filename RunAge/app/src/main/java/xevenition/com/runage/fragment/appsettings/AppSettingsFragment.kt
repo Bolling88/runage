@@ -8,6 +8,7 @@ import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentAppSettingsBinding
@@ -34,6 +35,11 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_app_settings, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.toolbar.setNavigationOnClickListener {
+            (activity as? MainActivity)?.openMenu()
+        }
+
         return binding.root
     }
 

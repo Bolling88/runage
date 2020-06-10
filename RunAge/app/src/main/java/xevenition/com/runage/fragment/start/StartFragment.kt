@@ -34,6 +34,11 @@ class StartFragment : BaseFragment<StartViewModel>() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_start, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.toolbar.setNavigationOnClickListener {
+            (activity as? MainActivity)?.openMenu()
+        }
+
         return binding.root
     }
 

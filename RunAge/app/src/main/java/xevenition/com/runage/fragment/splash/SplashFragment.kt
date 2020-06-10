@@ -59,6 +59,11 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.lockDrawer()
+    }
+
     @Override
     override fun setUpObservables() {
         super.setUpObservables()

@@ -29,6 +29,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
         }
         val factory = HistoryViewModelFactory(getApplication())
         historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil)

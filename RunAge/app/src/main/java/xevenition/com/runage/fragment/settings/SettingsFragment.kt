@@ -46,9 +46,4 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
     }
-
-    companion object {
-        fun newInstance() = SettingsFragment()
-    }
-
 }

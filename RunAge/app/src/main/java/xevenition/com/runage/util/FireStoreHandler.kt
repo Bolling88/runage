@@ -71,7 +71,7 @@ class FireStoreHandler @Inject constructor() {
     }
 
     fun getAllQuests(): Task<QuerySnapshot> {
-        val docRef = db.collection("quest")
+        val docRef = db.collection("quest").orderBy("startTimeEpochSeconds")
         return docRef.get()
     }
 }

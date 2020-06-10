@@ -6,11 +6,21 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listDivider">@android:color/transparent</item>
+        <item name="colorNavigationItem">@color/menu_item_color_state</item>
+        <item name="colorNavigationItemSelected">@color/white</item>
+        <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>
     </style>
 
     <style name="TextAppearance.ToolbarTitle" parent="android:TextAppearance">
         <item name="android:fontFamily">@font/azonix</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">?attr/colorNavigationItem</item>
+        <item name="itemTextColor">?attr/colorNavigationItem</item>
+        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
 
     <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">

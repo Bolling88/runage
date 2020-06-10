@@ -38,7 +38,10 @@ class MapViewModel(
     
     private val _observableUserMarkerPosition = MutableLiveData<LatLng>()
     val observableUserMarkerPosition: LiveData<LatLng> = _observableUserMarkerPosition
-    
+
+    private val _observableStartMarkerPosition = MutableLiveData<LatLng>()
+    val observableStartMarkerPosition: LiveData<LatLng> = _observableStartMarkerPosition
+
     private val _observableRunningPath = MutableLiveData<List<LatLng>>()
     val observableRunningPath: LiveData<List<LatLng>> = _observableRunningPath
 
@@ -123,9 +126,11 @@ class MapViewModel(
                 LatLng(it.latitude, it.longitude)
             }
             .toList()
+            .filter { it.isNotEmpty() }
             .subscribe({
                 currentPath = it
                 Timber.d("Posting ${it.size} locations")
+                _observableStartMarkerPosition.postValue(it.first())
                 _observableRunningPath.postValue(it)
             }, {
                 Timber.e(it)

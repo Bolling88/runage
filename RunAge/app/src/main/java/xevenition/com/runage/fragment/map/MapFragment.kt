@@ -28,6 +28,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     private var currentQuestId: Int = -1
     private var polyLine: Polyline? = null
     private var userMarker: Marker? = null
+    private var startMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentMapBinding
 
@@ -86,6 +87,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
             }
         })
 
+        viewModel.observableStartMarkerPosition.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                drawStartMarker(it)
+            }
+        })
+
         viewModel.observableClearMap.observe(viewLifecycleOwner, Observer {
             googleMap?.clear()
         })
@@ -95,6 +102,17 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 setUpPolyline(it)
             }
         })
+    }
+
+    private fun drawStartMarker(it: LatLng) {
+        if (startMarker != null) {
+            startMarker?.position = it
+        } else {
+            val options = MarkerOptions().position(it)
+                .anchor(0.5f, 0.5f)
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot_red)))
+            startMarker = googleMap?.addMarker(options)
+        }
     }
 
     private fun drawUserMarker(it: LatLng) {

@@ -23,6 +23,7 @@ import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMainBinding
@@ -130,6 +131,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
             viewModel.onQuestFinished(currentQuestId)
             currentQuestId = -1
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.unlockDrawer()
     }
 
     @Override
