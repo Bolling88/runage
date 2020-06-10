@@ -6,21 +6,13 @@
     app:startDestination="@id/splashFragment">
 
     <fragment
-        android:id="@+id/mainFragment"
-        android:name="xevenition.com.runage.fragment.main.MainFragment"
-        android:label="MainFragment" >
-        <action
-            android:id="@+id/action_mainFragment_to_summaryFragment"
-            app:destination="@id/summaryFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/splashFragment"
         android:name="xevenition.com.runage.fragment.splash.SplashFragment"
         android:label="SplashFragment">
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainNavigation"
+            app:popUpTo="@id/nav_graph" />
         <action
             android:id="@+id/action_splashFragment_to_permissionFragment"
             app:destination="@id/permissionFragment" />
@@ -40,7 +32,8 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_permissionFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainNavigation"
+            app:popUpTo="@id/nav_graph" />
         <action
             android:id="@+id/action_permissionFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -54,7 +47,8 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainNavigation"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -62,31 +56,46 @@
         tools:layout="SettingsFragment">
         <action
             android:id="@+id/action_settingsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainNavigation"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
-    <fragment
-        android:id="@+id/summaryFragment"
-        android:name="xevenition.com.runage.fragment.summary.SummaryFragment"
-        android:label="SummaryFragment" >
-        <argument
-            android:name="key_quest_id"
-            app:argType="integer"
-            android:defaultValue="0" />
-        <action
-            android:id="@+id/action_summaryFragment_to_pathFragment"
-            app:destination="@id/pathFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="xevenition.com.runage.fragment.history.HistoryFragment"
-        android:label="HistoryFragment" />
-    <fragment
-        android:id="@+id/pathFragment"
-        android:name="xevenition.com.runage.fragment.path.PathFragment"
-        android:label="PathFragment" >
-        <argument
-            android:name="key_quest_id"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
+    <navigation android:id="@+id/mainNavigation"
+        app:startDestination="@id/mainFragment">
+        <fragment
+            android:id="@+id/mainFragment"
+            android:name="xevenition.com.runage.fragment.main.MainFragment"
+            android:label="MainFragment">
+            <action
+                android:id="@+id/action_mainFragment_to_summaryFragment"
+                app:destination="@id/summaryFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/summaryFragment"
+            android:name="xevenition.com.runage.fragment.summary.SummaryFragment"
+            android:label="SummaryFragment" >
+            <argument
+                android:name="key_quest_id"
+                app:argType="integer"
+                android:defaultValue="0" />
+            <action
+                android:id="@+id/action_summaryFragment_to_pathFragment"
+                app:destination="@id/pathFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/pathFragment"
+            android:name="xevenition.com.runage.fragment.path.PathFragment"
+            android:label="PathFragment" >
+            <argument
+                android:name="key_quest_id"
+                app:argType="integer"
+                android:defaultValue="0" />
+        </fragment>
+    </navigation>
+    <navigation android:id="@+id/historyNavigation"
+        app:startDestination="@id/historyFragment">
+        <fragment
+            android:id="@+id/historyFragment"
+            android:name="xevenition.com.runage.fragment.history.HistoryFragment"
+            android:label="HistoryFragment" />
+    </navigation>
 </navigation>

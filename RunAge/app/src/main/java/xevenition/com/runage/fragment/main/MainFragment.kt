@@ -70,9 +70,9 @@ class MainFragment : BaseFragment<MainViewModel>() {
         val factory = MainViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            requireActivity().finish()
+//        }
     }
 
     override fun onCreateView(

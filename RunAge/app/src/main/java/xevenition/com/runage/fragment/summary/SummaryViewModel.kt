@@ -168,7 +168,7 @@ class SummaryViewModel(
     }
 
     fun onMapClicked(){
-        observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToPathFragment(questId))
+        observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToPathFragment())
     }
 
     @SuppressLint("CheckResult")
