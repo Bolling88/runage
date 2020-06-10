@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.ToolbarTitle" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/azonix</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+
 </resources>

@@ -4,6 +4,7 @@
     <dimen name="margin_basic">20dip</dimen>
     <dimen name="textSizeBig">18sp</dimen>
     <dimen name="textSizeNormal">14sp</dimen>
+    <dimen name="textSizeSmall">12sp</dimen>
     <dimen name="margin_big">40dip</dimen>
     <dimen name="margin_huge">80dip</dimen>
     <dimen name="text_margin">16dp</dimen>

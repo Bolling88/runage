@@ -119,7 +119,7 @@
             android:fontFamily="@font/light"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
-             app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
             app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
             tools:text="5:34 min/km" />
 

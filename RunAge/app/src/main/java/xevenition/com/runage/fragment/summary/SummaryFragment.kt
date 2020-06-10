@@ -170,16 +170,4 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
     }
-
-    companion object {
-        const val KEY_QUEST_ID = "KEY_QUEST_ID"
-
-        fun newInstance(questId: Int): SummaryFragment {
-            val fragment = SummaryFragment()
-            val arguments = Bundle()
-            arguments.putInt(KEY_QUEST_ID, questId)
-            fragment.arguments = arguments
-            return fragment
-        }
-    }
 }

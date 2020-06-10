@@ -64,15 +64,14 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("onCreate")
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
+
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
 
         val factory = MainViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
-
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            requireActivity().finish()
-//        }
     }
 
     override fun onCreateView(

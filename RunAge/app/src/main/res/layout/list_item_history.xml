@@ -17,8 +17,8 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageRunning"
-            android:layout_width="40dip"
-            android:layout_height="40dip"
+            android:layout_width="45dip"
+            android:layout_height="45dip"
             android:layout_margin="@dimen/margin_basic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,113 +29,104 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
-            android:fontFamily="@font/azonix"
+            android:fontFamily="@font/light"
             android:textColor="@color/grey2"
-            app:layout_constraintBottom_toBottomOf="@+id/imageRunning"
+            android:textSize="@dimen/textSizeSmall"
             app:layout_constraintStart_toEndOf="@+id/imageRunning"
             app:layout_constraintTop_toTopOf="@+id/imageRunning"
             tools:text="Running Sunday 2020" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textDistanceTitle"
+            android:id="@+id/textDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
-            android:layout_marginTop="@dimen/margin_basic"
-            android:fontFamily="@font/light"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/textSizeBig"
+            app:layout_constraintStart_toEndOf="@+id/imageRunning"
+            app:layout_constraintBottom_toBottomOf="@+id/imageRunning"
+            tools:text="Duration: 00:00:00" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textDistanceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/runage_distance"
-            android:textColor="@color/grey4"
-            app:layout_constraintEnd_toStartOf="@+id/textDurationTitle"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageRunning" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textDurationTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textAllCaps="true"
             android:layout_marginTop="@dimen/margin_basic"
-            android:fontFamily="@font/light"
-            android:text="@string/runage_duration"
-            android:textColor="@color/grey4"
-            app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
-            app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
-            app:layout_constraintTop_toBottomOf="@+id/imageRunning" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textPaceTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_basic"
-            android:fontFamily="@font/light"
-            android:text="@string/runage_pace"
-            android:textColor="@color/grey4"
+            android:fontFamily="@font/bold"
             app:layout_constraintEnd_toStartOf="@+id/textCaloriesTitle"
-            app:layout_constraintStart_toEndOf="@+id/textDurationTitle"
-            app:layout_constraintTop_toBottomOf="@+id/imageRunning" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textCaloriesTitle"
-            android:layout_width="wrap_content"
-            android:layout_marginEnd="@dimen/margin_basic"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_basic"
-            android:fontFamily="@font/light"
-            android:text="@string/runage_calories"
-            android:textColor="@color/grey4"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textPaceTitle"
-            app:layout_constraintTop_toBottomOf="@+id/imageRunning" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_basic"
-            android:fontFamily="@font/bold"
-            android:textColor="@color/grey2"
-            android:textSize="@dimen/textSizeBig"
+            android:text="@{viewModel.liveTotalDistance}"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+            android:layout_marginBottom="@dimen/margin_basic"
+            android:fontFamily="@font/light"
             app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
             app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
             tools:text="1000 m" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textDuration"
+            android:id="@+id/textCaloriesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/runage_calories"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:textSize="14sp"
             android:fontFamily="@font/bold"
-            android:textSize="@dimen/textSizeBig"
-            android:textColor="@color/grey2"
-            app:layout_constraintEnd_toEndOf="@+id/textDurationTitle"
-            app:layout_constraintStart_toStartOf="@+id/textDurationTitle"
-            app:layout_constraintTop_toBottomOf="@+id/textDurationTitle"
-            tools:text="1000 m" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textPace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:textSize="@dimen/textSizeBig"
-            android:textColor="@color/grey2"
-            app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
-            app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
-            app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
-            tools:text="1000 m" />
+            app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCalories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:textSize="@dimen/textSizeBig"
-            android:textColor="@color/grey2"
-            app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
+            android:text="@{viewModel.liveCalories}"
+            android:fontFamily="@font/light"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
             app:layout_constraintTop_toBottomOf="@+id/textCaloriesTitle"
-            tools:text="1000 m" />
+            tools:text="100" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPaceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bold"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:text="@string/runage_avg_pace"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textCaloriesTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.livePace}"
+            android:fontFamily="@font/light"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
+            tools:text="5:34 min/km" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

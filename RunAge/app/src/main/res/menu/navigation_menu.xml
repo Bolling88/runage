@@ -1,24 +1,33 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-<group
-    android:id="@+id/grp_1"
-    android:checkableBehavior="single">
-    <item
-        android:id="@+id/mainNavigation"
-        android:icon="@drawable/ic_run_blue"
-        android:title="@string/runage_home_uppercase" />
-</group>
+    <group
+        android:id="@+id/grp_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/mainNavigation"
+            android:icon="@drawable/ic_run_blue"
+            android:title="@string/runage_home_uppercase" />
+    </group>
 
-<group
-    android:id="@+id/grp_2"
-    android:checkableBehavior="single">
+    <group
+        android:id="@+id/grp_2"
+        android:checkableBehavior="single">
 
-    <item
-        android:id="@+id/historyNavigation"
-        android:icon="@drawable/ic_history"
-        android:title="@string/runage_completed_runs_uppercase" />
-</group>
+        <item
+            android:id="@+id/historyNavigation"
+            android:icon="@drawable/ic_history"
+            android:title="@string/runage_completed_runs_uppercase" />
+    </group>
+
+    <group
+        android:id="@+id/grp_3"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/appSettingsNavigation"
+            android:icon="@drawable/ic_user_location"
+            android:title="@string/runage_settings" />
+    </group>
 
 
 </menu>

@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.ListAdapter
 import xevenition.com.runage.R
 
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import java.time.Instant
 import java.time.ZoneId
 
-class HistoryRecyclerAdapter: ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback())  {
+class HistoryRecyclerAdapter(private val resourceUtil: ResourceUtil): ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback())  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -42,7 +43,7 @@ class HistoryRecyclerAdapter: ListAdapter<SavedQuest, HistoryRecyclerAdapter.Ite
 
             textDistance.text = "${item.totalDistance} m"
             val duration = item.endTimeEpochSeconds - item.startTimeEpochSeconds
-            textDuration.text = "${RunningUtil.convertTimeToDurationStringMinutes(duration)}"
+            textDuration.text = "${resourceUtil.getString(R.string.runage_duration)}: ${RunningUtil.convertTimeToDurationString(duration)}"
             textPace.text = "${RunningUtil.getPaceString(duration, item.totalDistance.toDouble(), showAbbreviation = false)}"
             textCalories.text = "${item.calories}"
         }
