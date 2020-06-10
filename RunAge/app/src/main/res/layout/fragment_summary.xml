@@ -25,18 +25,30 @@
             app:lottie_rawRes="@raw/lottie_victory"
             app:lottie_scale="1.5" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation2"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            app:layout_constraintBottom_toTopOf="@+id/mapView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_fireworks" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textQuest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="40sp"
+            android:fontFamily="@font/azonix"
             android:gravity="center"
-            android:textColor="@{viewModel.liveTimerColor}"
-            app:layout_constraintTop_toBottomOf="@+id/animation"
-            app:layout_constraintStart_toStartOf="parent"
             android:text="@{viewModel.liveTextTitle}"
-            android:fontFamily="@font/azonix" />
+            android:textColor="@{viewModel.liveTimerColor}"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/animation" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textCounter"
@@ -57,10 +69,10 @@
             android:id="@+id/textDistanceTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/runage_distance"
-            android:textSize="14sp"
-            android:textAllCaps="true"
             android:fontFamily="@font/bold"
+            android:text="@string/runage_distance"
+            android:textAllCaps="true"
+            android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@+id/textCaloriesTitle"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,11 +82,11 @@
             android:id="@+id/textDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/light"
             android:text="@{viewModel.liveTotalDistance}"
             android:textSize="20sp"
-            android:fontFamily="@font/light"
-            app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
             app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+            app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
             app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
             tools:text="1000 m" />
 
@@ -82,10 +94,10 @@
             android:id="@+id/textCaloriesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/bold"
             android:text="@string/runage_calories"
             android:textAllCaps="true"
             android:textSize="14sp"
-            android:fontFamily="@font/bold"
             app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
@@ -95,11 +107,11 @@
             android:id="@+id/textCalories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.liveCalories}"
             android:fontFamily="@font/light"
+            android:text="@{viewModel.liveCalories}"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
             app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
+            app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
             app:layout_constraintTop_toBottomOf="@+id/textCaloriesTitle"
             tools:text="100" />
 
@@ -108,8 +120,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/bold"
-            android:textAllCaps="true"
             android:text="@string/runage_avg_pace"
+            android:textAllCaps="true"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -120,11 +132,11 @@
             android:id="@+id/textPace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.livePace}"
             android:fontFamily="@font/light"
+            android:text="@{viewModel.livePace}"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
             app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+            app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
             app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
             tools:text="5:34 min/km" />
 
@@ -141,25 +153,22 @@
 
         <View
             android:layout_width="0dip"
-            app:layout_constraintEnd_toEndOf="@+id/mapView"
-            app:layout_constraintStart_toStartOf="@id/mapView"
-            app:layout_constraintTop_toTopOf="@+id/mapView"
+            android:layout_height="0dip"
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{()->viewModel.onMapClicked()}"
             app:layout_constraintBottom_toBottomOf="@+id/mapView"
-            android:layout_height="0dip" />
+            app:layout_constraintEnd_toEndOf="@+id/mapView"
+            app:layout_constraintStart_toStartOf="@id/mapView"
+            app:layout_constraintTop_toTopOf="@+id/mapView" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_basic"
-             android:enabled="@{viewModel.liveButtonEnabled}"
-             android:clickable="@{viewModel.liveButtonEnabled}"
-            android:fontFamily="@font/bold"
+            style="@style/ButtonStyle"
             android:onClick="@{()-> viewModel.onSaveProgressClicked()}"
             android:text="@{viewModel.liveButtonText}"
+            android:clickable="@{viewModel.liveButtonEnabled}"
+            android:enabled="@{viewModel.liveButtonEnabled}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

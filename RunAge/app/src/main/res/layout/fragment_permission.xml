@@ -122,14 +122,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lottieActivity" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_basic"
-            android:enabled="@{viewModel.liveButtonEnabled}"
-            android:fontFamily="@font/bold"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
             android:onClick="@{()-> viewModel.onContinueClicked()}"
             android:text="@string/runage_continue"
+            android:clickable="@{viewModel.liveButtonEnabled}"
+            android:enabled="@{viewModel.liveButtonEnabled}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

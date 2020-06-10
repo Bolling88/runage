@@ -12,13 +12,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.gms.common.SignInButton
-            android:layout_width="0dip"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_big"
-            android:layout_marginEnd="@dimen/margin_big"
-            android:layout_marginBottom="@dimen/margin_big"
+            app:srcCompat="@drawable/game_service"
+            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
             android:onClick="@{()-> viewModel.onLoginClicked()}"
+            android:text="@string/runage_sign_in"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

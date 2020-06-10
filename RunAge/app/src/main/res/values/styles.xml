@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -26,6 +26,16 @@
     <style name="Theme.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
         <!-- color used by navigation icon and overflow icon -->
         <item name="colorOnPrimary">@color/white</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:layout_height">50dip</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:fontFamily">@font/bold</item>
+        <item name="cornerRadius">25dip</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:layout_margin">@dimen/margin_basic</item>
     </style>
 
 </resources>

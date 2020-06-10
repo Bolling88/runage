@@ -62,4 +62,5 @@
     <string name="runage_home_uppercase">HOME</string>
     <string name="runage_completed_runs">Completed Runs</string>
     <string name="runage_home">Home</string>
+    <string name="runage_sign_in">Sign in</string>
 </resources>
