@@ -34,7 +34,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         val factory = HistoryViewModelFactory(getApplication())
         historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil)
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
-
     }
 
     override fun onCreateView(

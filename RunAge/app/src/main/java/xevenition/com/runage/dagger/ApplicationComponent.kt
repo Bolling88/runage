@@ -22,6 +22,7 @@ import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.fragment.start.StartViewModelFactory
 import xevenition.com.runage.fragment.summary.SummaryFragment
 import xevenition.com.runage.fragment.summary.SummaryViewModelFactory
+import xevenition.com.runage.fragment.xp.XpViewModelFactory
 import xevenition.com.runage.service.EventService
 import javax.inject.Singleton
 
@@ -38,6 +39,7 @@ interface ApplicationComponent {
     fun inject(component: SummaryFragment)
     fun inject(component: SettingsFragment)
     fun inject(component: PermissionFragment)
+    fun inject(component: XpViewModelFactory)
     fun inject(component: MapViewModelFactory)
     fun inject(component: PathViewModelFactory)
     fun inject(component: MainViewModelFactory)

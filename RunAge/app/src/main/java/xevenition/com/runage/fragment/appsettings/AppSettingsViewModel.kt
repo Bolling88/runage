@@ -15,22 +15,6 @@ class AppSettingsViewModel(
     private val _liveButtonEnabled = MutableLiveData<Boolean>()
     val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
 
-    init {
-    }
-
-    fun onMetricClicked() {
-        saveUtil.saveBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
-    }
-
-    fun onImperialClicked() {
-        saveUtil.saveBoolean(SaveUtil.KEY_IS_USING_METRIC, false)
-    }
-
-    fun onContinueClicked() {
-        saveUtil.saveBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED, true)
-        observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToMainFragment())
-    }
-
     @SuppressLint("CheckResult")
     @Suppress("UNUSED_PARAMETER")
     fun onWeightTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {

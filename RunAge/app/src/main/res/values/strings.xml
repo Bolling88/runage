@@ -63,4 +63,8 @@
     <string name="runage_completed_runs">Completed Runs</string>
     <string name="runage_home">Home</string>
     <string name="runage_sign_in">Sign in</string>
+    <string name="runage_no_completed_runs">No completed runs</string>
+    <string name="runage_claim_experience">Claim experience points</string>
+    <string name="runage_running_percentage">Running %</string>
+    <string name="runage_walking_percentage">Walking %</string>
 </resources>

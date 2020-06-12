@@ -3,7 +3,9 @@ package xevenition.com.runage.util
 import android.location.Location
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,6 +27,7 @@ class FireStoreHandler @Inject constructor() {
     private val gson = Gson()
 
     fun storeQuest(quest: Quest): Single<Task<DocumentReference>> {
+        val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
             .map { FirestoreLocation(it.latitude, it.longitude) }
             .filter {
@@ -41,6 +44,7 @@ class FireStoreHandler @Inject constructor() {
             .toList()
             .map {
                 hashMapOf(
+                    "userId" to firebaseAuth.currentUser?.uid,
                     "totalDistance" to quest.totalDistance,
                     "calories" to quest.calories,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
@@ -71,7 +75,8 @@ class FireStoreHandler @Inject constructor() {
     }
 
     fun getAllQuests(): Task<QuerySnapshot> {
-        val docRef = db.collection("quest").orderBy("startTimeEpochSeconds")
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef = db.collection("quest").orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING).whereEqualTo("userId", userId)
         return docRef.get()
     }
 }

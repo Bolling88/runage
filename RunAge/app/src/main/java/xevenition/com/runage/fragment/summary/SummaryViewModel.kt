@@ -108,7 +108,7 @@ class SummaryViewModel(
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
         }else{
-            _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))
+            _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_claim_experience))
             _observablePlayAnimation.postValue(Unit)
         }
 
@@ -133,14 +133,14 @@ class SummaryViewModel(
                 Timber.d("End time: ${quest.locations.lastOrNull()?.timeStampEpochSeconds
                     ?: quest.startTimeEpochSeconds + 1}")
 
-                val task = fitnessHelper.storeSession(
-                    quest.id,
-                    "${quest.totalDistance} meters",
-                    quest.startTimeEpochSeconds,
-                    quest.locations.lastOrNull()?.timeStampEpochSeconds
-                        ?: quest.startTimeEpochSeconds + 1
-                )
-                task.addOnCompleteListener {}
+//                val task = fitnessHelper.storeSession(
+//                    quest.id,
+//                    "${quest.totalDistance} meters",
+//                    quest.startTimeEpochSeconds,
+//                    quest.locations.lastOrNull()?.timeStampEpochSeconds
+//                        ?: quest.startTimeEpochSeconds + 1
+//                )
+//                task.addOnCompleteListener {}
                 storeQuestInFirestore(quest)
             }
         }

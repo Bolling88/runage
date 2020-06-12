@@ -1,9 +1,12 @@
 package xevenition.com.runage.fragment.summary
 
+import android.animation.ObjectAnimator
+import android.graphics.Interpolator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -61,7 +64,12 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
             viewModel.onMapCreated()
             googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
+
         setUpObservables()
+
+        ObjectAnimator.ofInt(binding.progressRunning, "progress", 85)
+            .setDuration(1000)
+            .start()
     }
 
     @Override
