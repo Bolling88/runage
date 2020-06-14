@@ -11,7 +11,6 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.main.MainFragmentDirections
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.service.FitnessHelper
@@ -243,7 +242,7 @@ class SummaryViewModel(
     }
 
     private fun storeQuestInFirestore(quest: Quest): Disposable {
-        return fireStoreHandler.storeQuest(quest)
+        return fireStoreHandler.storeQuest(quest, percentageMap)
             .subscribe({
                 it.addOnSuccessListener {
                     Timber.d("Quest have been stored")

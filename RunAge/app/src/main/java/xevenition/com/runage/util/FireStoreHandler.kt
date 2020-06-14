@@ -1,7 +1,7 @@
 package xevenition.com.runage.util
 
 import android.location.Location
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -12,9 +12,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.Single
-import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
-import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -26,7 +24,10 @@ class FireStoreHandler @Inject constructor() {
     private val db = Firebase.firestore
     private val gson = Gson()
 
-    fun storeQuest(quest: Quest): Single<Task<DocumentReference>> {
+    fun storeQuest(
+        quest: Quest,
+        percentageMap: Map<Int, Double>
+    ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
             .map { FirestoreLocation(it.latitude, it.longitude) }
@@ -49,6 +50,11 @@ class FireStoreHandler @Inject constructor() {
                     "calories" to quest.calories,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
+                    "runningPercentage" to percentageMap.getOrDefault(DetectedActivity.RUNNING, 0.0),
+                    "walkingPercentage" to percentageMap.getOrDefault(DetectedActivity.WALKING, 0.0),
+                    "bicyclingPercentage" to percentageMap.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0),
+                    "stillPercentage" to percentageMap.getOrDefault(DetectedActivity.STILL, 0.0),
+                    "drivingPercentage" to percentageMap.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0),
                     "locations" to gson.toJson(it)
                 )
             }
