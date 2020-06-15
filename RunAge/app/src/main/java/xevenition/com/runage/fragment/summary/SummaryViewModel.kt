@@ -30,7 +30,7 @@ class SummaryViewModel(
 ) : BaseViewModel() {
     private var mapCreated: Boolean = false
     private var quest: Quest? = null
-    private var percentageMap: Map<Int, Double>? = null
+    private var percentageMap: Map<Int, Double> = mutableMapOf()
     private val questId = arguments.keyQuestId
 
     private val _liveTotalDistance = MutableLiveData<String>()
@@ -167,7 +167,7 @@ class SummaryViewModel(
 
     @SuppressLint("CheckResult")
     private fun setUpActivityTypeInfo(quest: Quest) {
-        RunningUtil.calculateActivityPercentage(quest.locations)
+        RunningUtil.calculateActivityDurationPercentage(quest.locations)
             .doFinally {
                 _liveButtonEnabled.postValue(true)
             }

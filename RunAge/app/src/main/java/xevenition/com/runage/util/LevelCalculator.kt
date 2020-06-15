@@ -14,4 +14,11 @@ object LevelCalculator {
     fun getXpForLevel(level: Int): Int {
         return (level.toDouble().div(LEVEL_CONSTANT)).pow(2).toInt()
     }
+
+    fun getXpCalculation(durationInSeconds: Double, distanceInMeters: Double): Int {
+        val km = distanceInMeters/1000
+        val secondsPerKm = durationInSeconds / km
+        val paceModifiers = 1000 - secondsPerKm
+        return paceModifiers.times(km).div(12).toInt()
+    }
 }

@@ -1,6 +1,7 @@
 package xevenition.com.runage.util
 
 import android.annotation.SuppressLint
+import android.location.Location
 import com.google.android.gms.location.DetectedActivity
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -61,7 +62,7 @@ object RunningUtil {
     }
 
     @SuppressLint("CheckResult")
-    fun calculateActivityPercentage(location: List<PositionPoint>): Single<Map<Int, Double>> {
+    fun calculateActivityDurationPercentage(location: List<PositionPoint>): Single<Map<Int, Double>> {
         val activityMap: MutableMap<Int, Int> = mutableMapOf()
         return Observable.fromIterable(location)
             .subscribeOn(Schedulers.computation())
@@ -86,4 +87,37 @@ object RunningUtil {
                 activityPercentage
             }
     }
+
+    @SuppressLint("CheckResult")
+    fun calculateExperience(locations: List<PositionPoint>): Single<Int> {
+        var distance = 0.0
+        var duration = 0.0
+        return Observable.just(locations)
+            .subscribeOn(Schedulers.computation())
+            .map {
+                val iterator = it.listIterator()
+                for (lastPoint in iterator) {
+                    if(iterator.hasNext()){
+                        val nextPoint = iterator.next()
+                        if(nextPoint.activityType == DetectedActivity.RUNNING){
+                            val resultArray = FloatArray(4)
+                            Location.distanceBetween(
+                                lastPoint.latitude,
+                                lastPoint.longitude,
+                                nextPoint.latitude,
+                                nextPoint.longitude,
+                                resultArray
+                            )
+                            distance += resultArray.first()
+                            duration += (nextPoint.timeStampEpochSeconds - lastPoint.timeStampEpochSeconds)
+                        }
+                    }
+                }
+            }
+            .toList()
+            .map {
+                LevelCalculator.getXpCalculation(duration, distance)
+            }
+    }
+
 }

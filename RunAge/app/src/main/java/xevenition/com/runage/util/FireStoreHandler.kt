@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -76,7 +77,7 @@ class FireStoreHandler @Inject constructor() {
             previousLocation.lon,
             resultArray
         )
-        val distance = resultArray.first();
+        val distance = resultArray.first()
         return distance >= 40
     }
 
@@ -84,5 +85,12 @@ class FireStoreHandler @Inject constructor() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef = db.collection("quest").orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING).whereEqualTo("userId", userId)
         return docRef.get()
+    }
+
+    fun storeUserIfNotExists() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        db.collection("users").document(userId).set(hashMapOf(
+            "userId" to userId
+        ), SetOptions.merge())
     }
 }

@@ -75,4 +75,34 @@ class LevelCalculatorTest{
     fun testXpCalculation6(){
         assertEquals(3600, LevelCalculator.getXpForLevel(6));
     }
+
+    @Test
+    fun testXpFromRunCalculation1(){
+        assertEquals(58, LevelCalculator.getXpCalculation(300.0, 1000.0))
+    }
+
+    @Test
+    fun testXpFromRunCalculation2(){
+        assertEquals(583, LevelCalculator.getXpCalculation(3000.0, 10000.0))
+    }
+
+    @Test
+    fun testXpFromRunCalculation3(){
+        assertEquals(53, LevelCalculator.getXpCalculation(360.0, 1000.0))
+    }
+
+    @Test
+    fun testXpFromRunCalculation4(){
+        assertEquals(533, LevelCalculator.getXpCalculation(3600.0, 10000.0))
+    }
+
+    @Test
+    fun testXpFromRunCalculation5(){
+        assertEquals(33, LevelCalculator.getXpCalculation(600.0, 1000.0))
+    }
+
+    @Test
+    fun testXpFromRunCalculation6(){
+        assertEquals(333, LevelCalculator.getXpCalculation(6000.0, 10000.0))
+    }
 }
