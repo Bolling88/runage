@@ -11,13 +11,12 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.service.FitnessHelper
-import xevenition.com.runage.util.FeedbackHandler
-import xevenition.com.runage.util.FireStoreHandler
-import xevenition.com.runage.util.ResourceUtil
-import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.*
 import java.time.Instant
 
 class SummaryViewModel(
@@ -131,7 +130,7 @@ class SummaryViewModel(
         questRepository.getSingleQuest(questId)
             .subscribe({
                 quest = it
-                if(mapCreated){
+                if (mapCreated) {
                     displayPath(it)
                 }
                 setUpQuestInfo(it)
@@ -156,7 +155,7 @@ class SummaryViewModel(
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
-        }else{
+        } else {
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_completed))
             _observablePlayAnimation.postValue(Unit)
@@ -224,31 +223,63 @@ class SummaryViewModel(
             observableBackNavigation.call()
         } else {
             quest?.let { quest ->
-                Timber.d("Start time: ${quest.startTimeEpochSeconds}")
-                Timber.d("End time: ${quest.locations.lastOrNull()?.timeStampEpochSeconds
-                    ?: quest.startTimeEpochSeconds + 1}")
-
-//                val task = fitnessHelper.storeSession(
-//                    quest.id,
-//                    "${quest.totalDistance} meters",
-//                    quest.startTimeEpochSeconds,
-//                    quest.locations.lastOrNull()?.timeStampEpochSeconds
-//                        ?: quest.startTimeEpochSeconds + 1
-//                )
-//                task.addOnCompleteListener {}
-                storeQuestInFirestore(quest)
+                Timber.d("Saving quest")
+                saveExperience(quest)
             }
         }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun saveExperience(quest: Quest) {
+        fireStoreHandler.getUserInfo()
+            .addOnCompleteListener {
+                syncWithGoogleFit(quest)
+            }
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val userInfo = document.toObject(UserInfo::class.java)
+                    Timber.d("Got user info")
+                    RunningUtil.calculateExperience(quest.locations)
+                        .subscribe({
+                            Timber.d("Calculated user experience")
+                            fireStoreHandler.storeUserXp(userInfo?.xp ?: 0 + it)
+                                .addOnSuccessListener { Timber.d("User xp have been stored") }
+                                .addOnFailureListener { Timber.e("Failed storing user xp") }
+                        }, {
+                            Timber.e(it)
+                        })
+                } else {
+                    Timber.d("No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.e("get failed with $exception")
+            }
+    }
+
+    private fun syncWithGoogleFit(quest: Quest) {
+        val task = fitnessHelper.storeSession(
+            quest.id,
+            "${quest.totalDistance} meters",
+            quest.startTimeEpochSeconds,
+            quest.locations.lastOrNull()?.timeStampEpochSeconds
+                ?: quest.startTimeEpochSeconds + 1
+        )
+        task.addOnSuccessListener { Timber.d("Synced with google fit") }
+        task.addOnFailureListener { Timber.e("Sync with google fit failed") }
+        task.addOnCompleteListener { storeQuestInFirestore(quest) }
     }
 
     private fun storeQuestInFirestore(quest: Quest): Disposable {
         return fireStoreHandler.storeQuest(quest, percentageMap)
             .subscribe({
-                it.addOnSuccessListener {
-                    Timber.d("Quest have been stored")
+                it.addOnCompleteListener {
                     observableBackNavigation.call()
                 }
-                    .addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
+                it.addOnSuccessListener {
+                    Timber.d("Quest have been stored")
+                }
+                it.addOnFailureListener { error -> Timber.e("Quest storing failed $error") }
             }, { error ->
                 Timber.e("Quest storing failed $error")
             })
@@ -262,8 +293,12 @@ class SummaryViewModel(
         }
     }
 
-    fun onMapClicked(){
-        observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToPathFragment(questId))
+    fun onMapClicked() {
+        observableNavigateTo.postValue(
+            SummaryFragmentDirections.actionSummaryFragmentToPathFragment(
+                questId
+            )
+        )
     }
 
     @SuppressLint("CheckResult")

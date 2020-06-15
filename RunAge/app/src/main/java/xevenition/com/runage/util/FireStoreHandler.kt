@@ -4,15 +4,13 @@ import android.location.Location
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.Single
+import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
@@ -51,11 +49,23 @@ class FireStoreHandler @Inject constructor() {
                     "calories" to quest.calories,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
-                    "runningPercentage" to percentageMap.getOrDefault(DetectedActivity.RUNNING, 0.0),
-                    "walkingPercentage" to percentageMap.getOrDefault(DetectedActivity.WALKING, 0.0),
-                    "bicyclingPercentage" to percentageMap.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0),
+                    "runningPercentage" to percentageMap.getOrDefault(
+                        DetectedActivity.RUNNING,
+                        0.0
+                    ),
+                    "walkingPercentage" to percentageMap.getOrDefault(
+                        DetectedActivity.WALKING,
+                        0.0
+                    ),
+                    "bicyclingPercentage" to percentageMap.getOrDefault(
+                        DetectedActivity.ON_BICYCLE,
+                        0.0
+                    ),
                     "stillPercentage" to percentageMap.getOrDefault(DetectedActivity.STILL, 0.0),
-                    "drivingPercentage" to percentageMap.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0),
+                    "drivingPercentage" to percentageMap.getOrDefault(
+                        DetectedActivity.IN_VEHICLE,
+                        0.0
+                    ),
                     "locations" to gson.toJson(it)
                 )
             }
@@ -83,14 +93,39 @@ class FireStoreHandler @Inject constructor() {
 
     fun getAllQuests(): Task<QuerySnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        val docRef = db.collection("quest").orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING).whereEqualTo("userId", userId)
+        val docRef =
+            db.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .whereEqualTo("userId", userId)
         return docRef.get()
     }
 
+    fun getUserInfo(): Task<DocumentSnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            db.collection("users")
+                .document(userId)
+        return docRef.get()
+    }
+
+
     fun storeUserIfNotExists() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        db.collection("users").document(userId).set(hashMapOf(
-            "userId" to userId
-        ), SetOptions.merge())
+        db.collection("users").document(userId).set(
+            hashMapOf(
+                "userId" to userId
+            ), SetOptions.merge()
+        )
+    }
+
+    fun storeUserXp(xp: Int): Task<Void> {
+        Timber.d("Storing xp: $xp")
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        return db.collection("users").document(userId).set(
+            hashMapOf(
+                "userId" to userId,
+                "xp" to xp
+            ), SetOptions.merge()
+        )
     }
 }
