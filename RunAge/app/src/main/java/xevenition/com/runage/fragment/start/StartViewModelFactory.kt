@@ -6,6 +6,7 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.util.AccountUtil
 import xevenition.com.runage.util.FeedbackHandler
+import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
 
@@ -24,9 +25,11 @@ class StartViewModelFactory @Inject constructor(app: MainApplication) :
 
     @Inject
     lateinit var feedbackHandler: FeedbackHandler
+    @Inject
+    lateinit var fireStoreHandler: FireStoreHandler
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StartViewModel(accountUtil, resourceUtil, feedbackHandler) as T
+        return StartViewModel(fireStoreHandler, accountUtil, resourceUtil, feedbackHandler) as T
     }
 }

@@ -70,4 +70,5 @@
     <string name="runage_driving_percentage">Driving %</string>
     <string name="runage_bicycling_percentage">Bicycling</string>
     <string name="runage_still_percentage">Still %</string>
+    <string name="runage_level">Level</string>
 </resources>
