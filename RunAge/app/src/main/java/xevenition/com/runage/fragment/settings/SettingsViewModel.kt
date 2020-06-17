@@ -14,9 +14,6 @@ class SettingsViewModel(
     private val _liveButtonEnabled = MutableLiveData<Boolean>()
     val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
 
-    init {
-    }
-
     fun onMetricClicked() {
         saveUtil.saveBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
     }

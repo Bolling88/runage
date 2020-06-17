@@ -1,5 +1,6 @@
 package xevenition.com.runage.util
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.location.Location
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -15,6 +16,7 @@ class LocationUtil @Inject constructor(private val app: Application) {
     private var fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(app)
 
+    @SuppressLint("MissingPermission")
     fun requestLocationUpdates(
         locationRequest: LocationRequest?,
         locationCallback: LocationCallback
@@ -28,9 +30,5 @@ class LocationUtil @Inject constructor(private val app: Application) {
 
     fun removeLocationUpdates(locationCallback: LocationCallback) {
         fusedLocationClient.removeLocationUpdates(locationCallback)
-    }
-
-    fun getLastLocation(): Task<Location> {
-        return fusedLocationClient.lastLocation
     }
 }

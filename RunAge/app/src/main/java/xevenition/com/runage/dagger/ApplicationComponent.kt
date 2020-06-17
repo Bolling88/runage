@@ -1,7 +1,6 @@
 package xevenition.com.runage.dagger
 
 import dagger.Component
-import xevenition.com.runage.dagger.AppModule
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory

@@ -8,7 +8,7 @@ import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
-class LoginViewModelFactory @Inject constructor(private val app: MainApplication) :
+class LoginViewModelFactory @Inject constructor(app: MainApplication) :
     BaseViewModelFactory(app) {
 
     init {

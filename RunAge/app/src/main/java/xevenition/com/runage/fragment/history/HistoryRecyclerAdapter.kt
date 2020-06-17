@@ -57,11 +57,11 @@ class HistoryRecyclerAdapter(private val resourceUtil: ResourceUtil): ListAdapte
 
 class DiffCallback : DiffUtil.ItemCallback<SavedQuest>() {
     override fun areItemsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return false;
+        return false
     }
 
     override fun areContentsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return false;
+        return false
     }
 
 }
