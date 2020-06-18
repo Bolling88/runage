@@ -24,6 +24,7 @@ android {
             storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
