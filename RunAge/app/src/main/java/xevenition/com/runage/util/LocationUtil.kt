@@ -9,6 +9,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
+import xevenition.com.runage.model.PositionPoint
 import javax.inject.Inject
 
 
@@ -30,5 +31,17 @@ class LocationUtil @Inject constructor(private val app: Application) {
 
     fun removeLocationUpdates(locationCallback: LocationCallback) {
         fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    fun getDistanceBetweenPositionPoints(lastPoint: PositionPoint, nextPoint: PositionPoint): Float {
+        val resultArray = FloatArray(4)
+        Location.distanceBetween(
+            lastPoint.latitude,
+            lastPoint.longitude,
+            nextPoint.latitude,
+            nextPoint.longitude,
+            resultArray
+        )
+        return resultArray.first()
     }
 }

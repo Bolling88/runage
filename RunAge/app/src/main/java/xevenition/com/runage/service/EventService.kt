@@ -152,13 +152,13 @@ class EventService : Service() {
                 Timber.d("Current accuracy: ${it.accuracy}")
                 it.accuracy < MIN_ACCURACY
             }
-            .filter{
-                if (previousLocation == null) {
-                    true
-                } else {
-                    activityType != DetectedActivity.STILL || BuildConfig.DEBUG
-                }
-            }
+//            .filter{
+//                if (previousLocation == null) {
+//                    true
+//                } else {
+//                    activityType != DetectedActivity.STILL || BuildConfig.DEBUG
+//                }
+//            }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
                 val newPoint = PositionPoint(

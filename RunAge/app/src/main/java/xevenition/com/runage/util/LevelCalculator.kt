@@ -18,7 +18,9 @@ object LevelCalculator {
     fun getXpCalculation(durationInSeconds: Double, distanceInMeters: Double): Int {
         val km = distanceInMeters/1000
         val secondsPerKm = durationInSeconds / km
-        val paceModifiers = 1000 - secondsPerKm
+        var paceModifiers = 1000 - secondsPerKm
+        if(paceModifiers < 0)
+            paceModifiers = 0.0
         return paceModifiers.times(km).div(12).toInt()
     }
 }

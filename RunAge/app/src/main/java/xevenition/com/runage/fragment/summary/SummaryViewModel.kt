@@ -21,6 +21,7 @@ import java.time.Instant
 
 class SummaryViewModel(
     private val fitnessHelper: FitnessHelper,
+    private val locationUtil: LocationUtil,
     private val feedbackHandler: FeedbackHandler,
     private val questRepository: QuestRepository,
     private val resourceUtil: ResourceUtil,
@@ -239,10 +240,12 @@ class SummaryViewModel(
                 if (document != null) {
                     val userInfo = document.toObject(UserInfo::class.java)
                     Timber.d("Got user info")
-                    RunningUtil.calculateExperience(quest.locations)
+                    RunningUtil.calculateExperience(quest.locations, locationUtil)
                         .subscribe({
-                            Timber.d("Calculated user experience")
-                            fireStoreHandler.storeUserXp(userInfo?.xp ?: 0 + it)
+                            Timber.d("Calculated user experience: $it")
+                            val newXp = (userInfo?.xp ?: 0) + it
+                            Timber.d("New xp: $newXp")
+                            fireStoreHandler.storeUserXp(newXp)
                                 .addOnSuccessListener { Timber.d("User xp have been stored") }
                                 .addOnFailureListener { Timber.e("Failed storing user xp") }
                         }, {
