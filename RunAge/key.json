@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "api-project-164374027797",
+  "private_key_id": "8669e7892de95a3f5e3fdf875549235f609f6e72",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDgKHPSrFH6y8CW\n3e0tkrxVg1q/OjycRjWzn5QgD/zRJvHuyug4pbfkseFB4EOoeUMtNOhbhR0l02X5\nCYG+rr0gWnBCtPen5XowU26GnbtCfO/Vqk2IavuHPPP1wiLbNMZ7tyVEvHVzdwUk\nb9vuFd7qYvsVoFxxi7MmFc3EgqTicaU9BTxuqCSF8eHMILsuL8lZPShAeZMLyEr+\nvt/905IQbfD+KTQGgm/meC4leI1x4lejoUAFjP+o24ZN3VYhJdZhrr99RZ4+qNOn\nI5yA9RjEGx+rBDz7QEihsHGxyABlHK72S6vKsoAUJgAuuDuwOFgUI8s5+EbLXBiP\npT1d+oOfAgMBAAECggEASlLfZIEihYe9ich39d5rd+cf1bwXkLFu6OoGkUL7ztWc\n7lJ1ASNhgADC8bbMeDYM4hZi3MWcTohzjUlrra/+oZWbF2MtooviIdfoE9aE2pzW\nYQAgyRS/5a1+LoR6TjiHf0nQn6PlRa23FMfKIn059nlvS1JqlHN/qScdnQS8ayAo\nZ3ZSdWzn72dUuZQXLnfJ5tdjuL5VgISMBwJG26d5PcUDa7JuA6OBsnsLHMJpdSWf\nRjIUBt7TUprnvFGtkweB9cPSbUKLPspNJDZkQkl2LIkbsNqTRv4OLWrZ7qRyDGn4\n0h203xff+l1aSQOUhRy5SvTgqksooN/IKR7sFTdmYQKBgQD6h00L9lXuC5kgFkvT\nPtEIBs9ErIaBDmTVtzybHjwE5scdRdQrYxBzvhIVoKW4pkmhe0DI4HIE/htMc5YU\nrDdT7gagtWzku+CvhyPIuxP1sKKPI0h2ABsuozhnX4kOiRiXSSC6oWT7TIgJVPMO\nQypgKSafmmt0OYNTZV7e6tzeiQKBgQDlDbbxBVKxCxKQdIgz/HuRJ2/onlz6ZPFF\nUALZDhNh117a397r3lsLJLDcyrCv/y8ySLAUFF3MZeyEscJAAtsVOjcjgPwJuTEK\nG0rdx138b0DEcADoBRiNhjJmJd/XP3hzPKdKQ1R08X6SeQDLZn1dQuuA4UQrnBdi\nsHh+liKG5wKBgE7KLIX9k+rIhQDdYj1ufQj8M0VSyP5fi4DXHt1d9dxIxAhFxMNc\nZXkxJrjcjCH1UiTSAX7rb5B4Zhd2JpYbz067BiSWykdpevFZG/zuMQnM4mMH4qsR\nv3q8ZGnGVvFWVoCFxCBNz9dkq0fcCpDKuNIDPx1k0DR+PfoFYH/U91+ZAoGAHtuL\nIstByaIhPR7F3qMMDpEOjXsQMZd5vYm66Hzx9YNrPvdb89C/2S93ODeCOCObux15\nwyq/PDMa+wFrlu4Lj7+JABp3WeP+DEuC+X/LVJ+0TQJ9zMQq+53xmjtN/ZSKaJPq\nQaHyddK254qvpbdH+lFyoqk2Yt2jdOMrSHp3ak8CgYACUfGbVpGFuITus5kJtcJU\n9+qozIUjLRY9SLbU+JG4Dto/MisNCSYyPoBZ6RZ9rSuSraOEHLsRD2CajbeO720c\nQwlWriFrGT+7pf6xo9WChu2A/qIt0DImulVw/+YD0qZZiHjWV68hxEgT++jsvW8v\nF/6+ZSkeQCoTFiYRo24A4w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "bitrise-deploy@api-project-164374027797.iam.gserviceaccount.com",
+  "client_id": "117748389539944500564",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bitrise-deploy%40api-project-164374027797.iam.gserviceaccount.com"
+}
