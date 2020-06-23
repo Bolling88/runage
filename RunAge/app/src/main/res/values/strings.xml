@@ -50,4 +50,6 @@
     <string name="runage_bicycling_percentage">Bicycling</string>
     <string name="runage_still_percentage">Still %</string>
     <string name="runage_level">Level</string>
+    <string name="runage_leaderboard">Leaderboard</string>
+    <string name="runage_achievements">Achievements</string>
 </resources>

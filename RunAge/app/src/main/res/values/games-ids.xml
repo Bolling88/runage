@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
 <resources>
     <!-- app_id -->
     <string name="app_id" translatable="false">864182662755</string>
     <!-- package_name -->
     <string name="package_name" translatable="false">xevenition.com.runage</string>
-    <!-- leaderboard Runner of the week -->
-    <string name="leaderboard_runner_of_the_week" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
-    <string name="web_client_id" translatable="false">
-        864182662755-m4p3och8jfgcu0kb82fj92329a92apnl.apps.googleusercontent.com
-    </string>
+    <!-- achievement Run 10 kilometers in total (6.2 miles) -->
+    <string name="achievement_run_10_kilometers_in_total_6.2_miles" translatable="false">CgkI4-yzqpMZEAIQBQ</string>
+    <!-- achievement Run 100 kilometers in total (62 miles) -->
+    <string name="achievement_run_100_kilometers_in_total_62_miles" translatable="false">CgkI4-yzqpMZEAIQBg</string>
+    <!-- achievement Run 1000 kilometers in total (620 miles) -->
+    <string name="achievement_run_1000_kilometers_in_total_620_miles" translatable="false">CgkI4-yzqpMZEAIQBw</string>
+    <!-- achievement Run 10 km in one run (6.2 miles) -->
+    <string name="achievement_run_10_km_in_one_run_6.2_miles" translatable="false">CgkI4-yzqpMZEAIQCA</string>
+    <!-- achievement Reach level 5 -->
+    <string name="achievement_reach_level_5" translatable="false">CgkI4-yzqpMZEAIQCQ</string>
+    <!-- leaderboard Total Running Distance -->
+    <string name="leaderboard_total_running_distance" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
+    <!-- leaderboard Most Experience -->
+    <string name="leaderboard_most_experience" translatable="false">CgkI4-yzqpMZEAIQBA</string>
 </resources>

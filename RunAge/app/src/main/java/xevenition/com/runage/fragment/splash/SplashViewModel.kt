@@ -29,7 +29,7 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
             .subscribe({
                 if (!permissionsGranted) {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToPermissionFragment())
-                }else if(!accountUtil.isAccountActive()){
+                }else if(!accountUtil.isAccountActive() || accountUtil.getGamesAccount() == null){
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                 } else if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToSettingsFragment())

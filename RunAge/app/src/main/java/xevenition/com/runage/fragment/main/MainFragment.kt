@@ -138,6 +138,12 @@ class MainFragment : BaseFragment<MainViewModel>() {
         (activity as? MainActivity)?.unlockDrawer()
     }
 
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume")
+        viewModel.onResume()
+    }
+
     @Override
     override fun setUpObservables() {
         super.setUpObservables()

@@ -1,24 +1,19 @@
 package xevenition.com.runage.activity
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.games.Games
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.databinding.ActivityMainBinding
-import xevenition.com.runage.databinding.FragmentMainBinding
-import xevenition.com.runage.fragment.main.MainFragmentDirections
-import xevenition.com.runage.fragment.splash.SplashFragmentDirections
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +29,33 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.navigation.setupWithNavController(navController)
+        binding.navigation.setNavigationItemSelectedListener {
+            when(it.itemId){
+                R.id.leaderboard ->{
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+                        .getLeaderboardIntent(getString(R.string.leaderboard_most_experience))
+                        .addOnSuccessListener { intent ->
+                            startActivityForResult(
+                                intent,
+                                RC_LEADERBOARD_UI
+                            )
+                        }
+                }
+                R.id.achievements ->{
+                    binding.drawerLayout.closeDrawer(GravityCompat.START)
+                    Games.getAchievementsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
+                        .achievementsIntent
+                        .addOnSuccessListener { intent ->
+                            startActivityForResult(
+                                intent,
+                                RC_ACHIEVEMENT_UI
+                            )
+                        }
+                }
+            }
+            false
+        }
         //NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
     }
 
@@ -55,5 +77,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    companion object{
+        private const val RC_LEADERBOARD_UI = 9004
+        private const val RC_ACHIEVEMENT_UI = 9003
     }
 }

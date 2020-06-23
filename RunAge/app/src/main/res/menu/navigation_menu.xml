@@ -20,6 +20,27 @@
     </group>
 
     <group
+        android:id="@+id/grp_4"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/leaderboard"
+            android:icon="@drawable/ic_trophy"
+            android:title="@string/runage_leaderboard" />
+    </group>
+
+    <group
+        android:id="@+id/grp_5"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/achievements"
+            android:icon="@drawable/ic_star"
+            android:title="@string/runage_achievements" />
+    </group>
+
+
+    <group
         android:id="@+id/grp_3"
         android:checkableBehavior="single">
 
