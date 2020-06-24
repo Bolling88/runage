@@ -34,7 +34,7 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/achievements"
+            android:id="@+id/achievementNavigation"
             android:icon="@drawable/ic_star"
             android:title="@string/runage_achievements" />
     </group>

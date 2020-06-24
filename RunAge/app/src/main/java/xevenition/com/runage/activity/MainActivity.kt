@@ -1,6 +1,7 @@
 package xevenition.com.runage.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -29,8 +30,9 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.navigation.setupWithNavController(navController)
-        binding.navigation.setNavigationItemSelectedListener {
-            when(it.itemId){
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            Timber.d("Destination id: ${destination.id}")
+            when(destination.id){
                 R.id.leaderboard ->{
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                     Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                 }
-                R.id.achievements ->{
+                R.id.achievementNavigation ->{
                     binding.drawerLayout.closeDrawer(GravityCompat.START)
                     Games.getAchievementsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                         .achievementsIntent
@@ -54,9 +56,7 @@ class MainActivity : AppCompatActivity() {
                         }
                 }
             }
-            false
         }
-        //NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
     }
 
     fun openMenu() {

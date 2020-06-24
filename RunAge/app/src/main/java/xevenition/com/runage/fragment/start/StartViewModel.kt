@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.games.Games
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed

@@ -12,14 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/game_service"
             app:layout_constraintBottom_toTopOf="@+id/button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_play"
+            app:lottie_scale="1"
+            app:lottie_speed="1" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"

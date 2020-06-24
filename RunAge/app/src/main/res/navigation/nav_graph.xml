@@ -98,6 +98,13 @@
             android:name="xevenition.com.runage.fragment.history.HistoryFragment"
             android:label="HistoryFragment" />
     </navigation>
+    <navigation android:id="@+id/achievementNavigation"
+        app:startDestination="@id/historyFragment">
+        <fragment
+            android:id="@+id/historyFragment"
+            android:name="xevenition.com.runage.fragment.history.HistoryFragment"
+            android:label="HistoryFragment" />
+    </navigation>
 
     <navigation android:id="@+id/appSettingsNavigation"
         app:startDestination="@id/appSettingsFragment">
