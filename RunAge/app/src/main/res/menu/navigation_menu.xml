@@ -21,7 +21,7 @@
 
     <group
         android:id="@+id/grp_4"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/leaderboard"
@@ -31,7 +31,7 @@
 
     <group
         android:id="@+id/grp_5"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
 
         <item
             android:id="@+id/achievementNavigation"

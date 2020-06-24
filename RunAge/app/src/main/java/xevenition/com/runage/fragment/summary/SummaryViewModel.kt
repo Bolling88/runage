@@ -244,6 +244,8 @@ class SummaryViewModel(
                         .subscribe({
                             Timber.d("Calculated user experience: $it")
                             val newXp = (userInfo?.xp ?: 0) + it
+                            val newCalories = (userInfo?.calories ?: 0) + quest.calories
+                            val newDistance = (userInfo?.distance ?: 0) + quest.totalDistance
                             Timber.d("New xp: $newXp")
                             fireStoreHandler.storeUserXp(newXp)
                                 .addOnSuccessListener { Timber.d("User xp have been stored") }

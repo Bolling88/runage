@@ -13,4 +13,11 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
                 .submitScore(leaderboardId, score)
         }
     }
+
+    fun unlockAchievement(achievementId: String){
+        val gameAccount = accountUtil.getGamesAccount()
+        gameAccount?.let {
+            Games.getAchievementsClient(app, it).unlock(achievementId)
+        }
+    }
 }

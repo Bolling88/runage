@@ -8,6 +8,9 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.games.Games
@@ -30,11 +33,10 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.navigation.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            Timber.d("Destination id: ${destination.id}")
-            when(destination.id){
+        binding.navigation.setNavigationItemSelectedListener {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+            when(it.itemId){
                 R.id.leaderboard ->{
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                     Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                         .getLeaderboardIntent(getString(R.string.leaderboard_most_experience))
                         .addOnSuccessListener { intent ->
@@ -45,7 +47,6 @@ class MainActivity : AppCompatActivity() {
                         }
                 }
                 R.id.achievementNavigation ->{
-                    binding.drawerLayout.closeDrawer(GravityCompat.START)
                     Games.getAchievementsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
                         .achievementsIntent
                         .addOnSuccessListener { intent ->
@@ -55,7 +56,17 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                 }
+                R.id.mainNavigation ->{
+                    this.findNavController(R.id.nav_host_fragment).navigate(R.id.mainNavigation)
+                }
+                R.id.historyNavigation ->{
+                    this.findNavController(R.id.nav_host_fragment).navigate(R.id.historyNavigation)
+                }
+                R.id.appSettingsNavigation ->{
+                    this.findNavController(R.id.nav_host_fragment).navigate(R.id.appSettingsNavigation)
+                }
             }
+            true
         }
     }
 

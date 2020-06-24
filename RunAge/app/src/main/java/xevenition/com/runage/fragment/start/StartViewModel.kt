@@ -17,6 +17,7 @@ import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.*
 
 class StartViewModel(
+    gameServicesUtil: GameServicesUtil,
     fireStoreHandler: FireStoreHandler,
     accountUtil: AccountUtil,
     resourceUtil: ResourceUtil,
@@ -65,14 +66,12 @@ class StartViewModel(
                     _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
                     _liveLevelProgress.postValue(progress.toFloat())
                     _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
+
+                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
                 } else {
                     Timber.d("No such document")
                 }
             }
             .addOnFailureListener {  }
-    }
-
-    fun onMenuClicked(){
-        observableOpenMenu.call()
     }
 }
