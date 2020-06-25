@@ -11,7 +11,6 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
@@ -239,16 +238,19 @@ class SummaryViewModel(
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val userInfo = document.toObject(UserInfo::class.java)
+                    val userId = userInfo?.userId ?: ""
                     Timber.d("Got user info")
-                    RunningUtil.calculateExperience(quest.locations, locationUtil)
+                    RunningUtil.calculateRunningExperienceDistanceAndDuration(quest.locations, locationUtil)
                         .subscribe({
                             Timber.d("Calculated user experience: $it")
-                            val newXp = (userInfo?.xp ?: 0) + it
-                            val newCalories = (userInfo?.calories ?: 0) + quest.calories
-                            val newDistance = (userInfo?.distance ?: 0) + quest.totalDistance
+                            val newXp = (userInfo?.xp ?: 0) + it.first
+                            val totalCalories = quest.calories
+                            val totalRunningDistance = it.second
+                            val totalRunningDuration = it.third
                             Timber.d("New xp: $newXp")
-                            fireStoreHandler.storeUserXp(newXp)
-                                .addOnSuccessListener { Timber.d("User xp have been stored") }
+                            val newUserInfo = UserInfo(userId = userId, xp = newXp, calories = totalCalories, distance = totalRunningDistance.toInt(), duration = totalRunningDuration.toInt())
+                            fireStoreHandler.storeUserInfo(newUserInfo)
+                                .addOnSuccessListener { Timber.d("User info have been stored") }
                                 .addOnFailureListener { Timber.e("Failed storing user xp") }
                         }, {
                             Timber.e(it)

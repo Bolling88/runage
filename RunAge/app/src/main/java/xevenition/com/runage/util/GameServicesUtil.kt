@@ -20,4 +20,8 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             Games.getAchievementsClient(app, it).unlock(achievementId)
         }
     }
+
+    fun incrementAchievements(){
+
+    }
 }

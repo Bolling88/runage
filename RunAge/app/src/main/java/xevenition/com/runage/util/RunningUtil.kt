@@ -98,10 +98,10 @@ object RunningUtil {
     }
 
     @SuppressLint("CheckResult")
-    fun calculateExperience(
+    fun calculateRunningExperienceDistanceAndDuration(
         locations: List<PositionPoint>,
         locationUtil: LocationUtil
-    ): Single<Int> {
+    ): Single<Triple<Int, Double, Double>> {
         var distance = 0.0
         var duration = 0.0
         return Observable.fromIterable(locations)
@@ -115,7 +115,8 @@ object RunningUtil {
             }
             .toList()
             .map {
-                LevelCalculator.getXpCalculation(duration, distance)
+                val xp = LevelCalculator.getXpCalculation(duration, distance)
+                Triple(xp, distance, duration)
             }
     }
 

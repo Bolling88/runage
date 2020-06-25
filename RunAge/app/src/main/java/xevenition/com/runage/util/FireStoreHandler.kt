@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
+import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -118,13 +119,15 @@ class FireStoreHandler @Inject constructor() {
         )
     }
 
-    fun storeUserXp(xp: Int): Task<Void> {
-        Timber.d("Storing xp: $xp")
+    fun storeUserInfo(userInfo: UserInfo): Task<Void> {
+        Timber.d("Storing user info: $userInfo")
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         return db.collection("users").document(userId).set(
             hashMapOf(
-                "userId" to userId,
-                "xp" to xp
+                "xp" to userInfo.xp,
+                "calories" to userInfo.calories,
+                "distance" to userInfo.distance,
+                "duration" to userInfo.duration
             ), SetOptions.merge()
         )
     }

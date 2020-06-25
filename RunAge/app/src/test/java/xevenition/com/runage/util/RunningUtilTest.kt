@@ -1,8 +1,6 @@
 package xevenition.com.runage.util
 
-import android.location.Location
 import com.google.android.gms.location.DetectedActivity
-import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -40,7 +38,7 @@ class RunningUtilTest{
         val positionPoint9 = PositionPoint(59.214888, 17.880396, 0f,     0f, 0.0, 0f, 80, DetectedActivity.RUNNING)
         val positionPoint10 = PositionPoint(59.213301, 17.880289, 0f,     0f, 0.0, 0f, 90, DetectedActivity.RUNNING)
         val list = listOf(positionPoint1, positionPoint2, positionPoint3, positionPoint4, positionPoint5, positionPoint6, positionPoint7, positionPoint8, positionPoint9, positionPoint10)
-        val observer = RunningUtil.calculateExperience(list, location).test()
+        val observer = RunningUtil.calculateRunningExperienceDistanceAndDuration(list, location).test()
         observer.assertComplete()
         observer.assertNoErrors()
         observer.assertValue {
