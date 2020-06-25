@@ -82,7 +82,7 @@ class RunningTimerTest{
         val positionPoint9 = PositionPoint(0.0, 0.0, 0f,     0f, 0.0, 0f, 0, DetectedActivity.IN_VEHICLE)
         val positionPoint10 = PositionPoint(0.0, 0.0, 0f,     0f, 0.0, 0f, 0, DetectedActivity.IN_VEHICLE)
         val list = listOf(positionPoint1, positionPoint2, positionPoint3, positionPoint4, positionPoint5, positionPoint6, positionPoint7, positionPoint8, positionPoint9, positionPoint10)
-        val observer = RunningUtil.calculateActivityDurationPercentage(list).test()
+        val observer = RunningUtil.processRunningStats(list).test()
         observer.assertComplete()
         observer.assertNoErrors()
         observer.assertValue {

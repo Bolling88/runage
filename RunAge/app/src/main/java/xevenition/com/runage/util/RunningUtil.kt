@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import xevenition.com.runage.model.PositionPoint
+import xevenition.com.runage.model.RunStats
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 
@@ -66,16 +67,36 @@ object RunningUtil {
     }
 
     @SuppressLint("CheckResult")
-    fun calculateActivityDurationPercentage(location: List<PositionPoint>): Single<Map<Int, Double>> {
+    fun processRunningStats(locations: List<PositionPoint>, locationUtil: LocationUtil): Single<RunStats> {
         val activityMap: MutableMap<Int, Int> = mutableMapOf()
-        return Observable.fromIterable(location)
+        var distance = 0.0
+        var duration = 0.0
+        var lowest = locations.firstOrNull()?.altitude ?: 0.0
+        var highest = locations.firstOrNull()?.altitude ?: 0.0
+        return Observable.fromIterable(locations)
             .subscribeOn(Schedulers.computation())
+            .map {
+                if(it.altitude < lowest){
+                    lowest = it.altitude
+                }
+                if(it.altitude > highest){
+                    highest = it.altitude
+                }
+                it
+            }
+            .scan { t1: PositionPoint, t2: PositionPoint ->
+                if (t2.activityType == DetectedActivity.RUNNING) {
+                    distance += locationUtil.getDistanceBetweenPositionPoints(t2, t1)
+                    duration += (t2.timeStampEpochSeconds - t1.timeStampEpochSeconds)
+                }
+                t2
+            }
             .map {
                 activityMap[it.activityType] = activityMap[it.activityType]?.plus(1) ?: 1
             }
             .toList()
             .map {
-                val totalPoints = location.size
+                val totalPoints = locations.size
                 val activityPercentage = mutableMapOf<Int, Double>()
                 activityPercentage[DetectedActivity.IN_VEHICLE] = activityMap.getOrDefault(
                     DetectedActivity.IN_VEHICLE, 0
@@ -93,31 +114,9 @@ object RunningUtil {
                     DetectedActivity.RUNNING, 0
                 ).toDouble() / totalPoints.toDouble()
 
-                activityPercentage
-            }
-    }
-
-    @SuppressLint("CheckResult")
-    fun calculateRunningExperienceDistanceAndDuration(
-        locations: List<PositionPoint>,
-        locationUtil: LocationUtil
-    ): Single<Triple<Int, Double, Double>> {
-        var distance = 0.0
-        var duration = 0.0
-        return Observable.fromIterable(locations)
-            .subscribeOn(Schedulers.computation())
-            .scan { t1: PositionPoint, t2: PositionPoint ->
-                if (t2.activityType == DetectedActivity.RUNNING) {
-                    distance += locationUtil.getDistanceBetweenPositionPoints(t2, t1)
-                    duration += (t2.timeStampEpochSeconds - t1.timeStampEpochSeconds)
-                }
-                t2
-            }
-            .toList()
-            .map {
                 val xp = LevelCalculator.getXpCalculation(duration, distance)
-                Triple(xp, distance, duration)
+                val altitude = highest - lowest
+                RunStats(xp, distance.toInt(), duration.toInt(), altitude.toInt(), activityPercentage)
             }
     }
-
 }

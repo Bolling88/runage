@@ -11,6 +11,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
@@ -19,6 +20,7 @@ import xevenition.com.runage.util.*
 import java.time.Instant
 
 class SummaryViewModel(
+    private val gameServicesUtil: GameServicesUtil,
     private val fitnessHelper: FitnessHelper,
     private val locationUtil: LocationUtil,
     private val feedbackHandler: FeedbackHandler,
@@ -27,6 +29,7 @@ class SummaryViewModel(
     private val fireStoreHandler: FireStoreHandler,
     arguments: SummaryFragmentArgs
 ) : BaseViewModel() {
+    private var runStats: RunStats? = null
     private var mapCreated: Boolean = false
     private var quest: Quest? = null
     private var percentageMap: Map<Int, Double> = mutableMapOf()
@@ -166,17 +169,17 @@ class SummaryViewModel(
 
     @SuppressLint("CheckResult")
     private fun setUpActivityTypeInfo(quest: Quest) {
-        RunningUtil.calculateActivityDurationPercentage(quest.locations)
+        RunningUtil.processRunningStats(quest.locations, locationUtil)
             .doFinally {
                 _liveButtonEnabled.postValue(true)
             }
             .subscribe({
-                percentageMap = it
-                val runningPercentage = getActivityPercentage(it, DetectedActivity.RUNNING)
-                val walkingPercentage = getActivityPercentage(it, DetectedActivity.WALKING)
-                val bicyclingPercentage = getActivityPercentage(it, DetectedActivity.ON_BICYCLE)
-                val stillPercentage = getActivityPercentage(it, DetectedActivity.STILL)
-                val drivingPercentage = getActivityPercentage(it, DetectedActivity.IN_VEHICLE)
+                runStats = it
+                val runningPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.RUNNING)
+                val walkingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.WALKING)
+                val bicyclingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.ON_BICYCLE)
+                val stillPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.STILL)
+                val drivingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.IN_VEHICLE)
                 if (runningPercentage > 0) {
                     _liveRunningProgress.postValue(runningPercentage)
                     _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
@@ -224,37 +227,39 @@ class SummaryViewModel(
         } else {
             quest?.let { quest ->
                 Timber.d("Saving quest")
-                saveExperience(quest)
+                saveStats(quest, runStats!!)
             }
         }
     }
 
     @SuppressLint("CheckResult")
-    private fun saveExperience(quest: Quest) {
+    private fun saveStats(quest: Quest, runStats: RunStats) {
         fireStoreHandler.getUserInfo()
             .addOnCompleteListener {
-                syncWithGoogleFit(quest)
+                syncWithGoogleFit(quest, runStats)
             }
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val userInfo = document.toObject(UserInfo::class.java)
                     val userId = userInfo?.userId ?: ""
+                    val newXp = (userInfo?.xp ?: 0) + runStats.xp
+                    val totalCalories = (userInfo?.calories ?: 0) + quest.calories
+                    val totalRunningDistance =
+                        (userInfo?.distance ?: 0) + runStats.runningDistance
+                    val totalRunningDuration =
+                        (userInfo?.duration ?: 0) + runStats.runningDuration
+                    Timber.d("New xp: $newXp")
+                    val newUserInfo = UserInfo(
+                        userId = userId,
+                        xp = newXp,
+                        calories = totalCalories,
+                        distance = totalRunningDistance,
+                        duration = totalRunningDuration
+                    )
+                    fireStoreHandler.storeUserInfo(newUserInfo)
+                        .addOnSuccessListener { Timber.d("User info have been stored") }
+                        .addOnFailureListener { Timber.e("Failed storing user xp") }
                     Timber.d("Got user info")
-                    RunningUtil.calculateRunningExperienceDistanceAndDuration(quest.locations, locationUtil)
-                        .subscribe({
-                            Timber.d("Calculated user experience: $it")
-                            val newXp = (userInfo?.xp ?: 0) + it.first
-                            val totalCalories = quest.calories
-                            val totalRunningDistance = it.second
-                            val totalRunningDuration = it.third
-                            Timber.d("New xp: $newXp")
-                            val newUserInfo = UserInfo(userId = userId, xp = newXp, calories = totalCalories, distance = totalRunningDistance.toInt(), duration = totalRunningDuration.toInt())
-                            fireStoreHandler.storeUserInfo(newUserInfo)
-                                .addOnSuccessListener { Timber.d("User info have been stored") }
-                                .addOnFailureListener { Timber.e("Failed storing user xp") }
-                        }, {
-                            Timber.e(it)
-                        })
                 } else {
                     Timber.d("No such document")
                 }
@@ -264,7 +269,7 @@ class SummaryViewModel(
             }
     }
 
-    private fun syncWithGoogleFit(quest: Quest) {
+    private fun syncWithGoogleFit(quest: Quest, runStats: RunStats) {
         val task = fitnessHelper.storeSession(
             quest.id,
             "${quest.totalDistance} meters",
@@ -274,11 +279,11 @@ class SummaryViewModel(
         )
         task.addOnSuccessListener { Timber.d("Synced with google fit") }
         task.addOnFailureListener { Timber.e("Sync with google fit failed") }
-        task.addOnCompleteListener { storeQuestInFirestore(quest) }
+        task.addOnCompleteListener { storeQuestInFirestore(quest, runStats) }
     }
 
-    private fun storeQuestInFirestore(quest: Quest): Disposable {
-        return fireStoreHandler.storeQuest(quest, percentageMap)
+    private fun storeQuestInFirestore(quest: Quest, runStats: RunStats): Disposable {
+        return fireStoreHandler.storeQuest(quest, runStats)
             .subscribe({
                 it.addOnCompleteListener {
                     observableBackNavigation.call()
@@ -290,6 +295,10 @@ class SummaryViewModel(
             }, { error ->
                 Timber.e("Quest storing failed $error")
             })
+    }
+
+    private fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats){
+        gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats)
     }
 
     fun onMapCreated() {

@@ -38,6 +38,12 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="achievement_fast_runner_ii" translatable="false">CgkI4-yzqpMZEAIQEA</string>
     <!-- achievement Fast Runner III -->
     <string name="achievement_fast_runner_iii" translatable="false">CgkI4-yzqpMZEAIQEQ</string>
+    <!-- achievement Never Stop I -->
+    <string name="achievement_never_stop_i" translatable="false">CgkI4-yzqpMZEAIQFw</string>
+    <!-- achievement Never Stop II -->
+    <string name="achievement_never_stop_ii" translatable="false">CgkI4-yzqpMZEAIQGA</string>
+    <!-- achievement Never Stop III -->
+    <string name="achievement_never_stop_iii" translatable="false">CgkI4-yzqpMZEAIQGQ</string>
     <!-- leaderboard Total Running Distance -->
     <string name="leaderboard_total_running_distance" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
     <!-- leaderboard Most Experience -->

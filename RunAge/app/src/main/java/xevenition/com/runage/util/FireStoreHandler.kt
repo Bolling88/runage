@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
+import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class FireStoreHandler @Inject constructor() {
 
     fun storeQuest(
         quest: Quest,
-        percentageMap: Map<Int, Double>
+        runStats: RunStats
     ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
@@ -50,23 +51,27 @@ class FireStoreHandler @Inject constructor() {
                     "calories" to quest.calories,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
-                    "runningPercentage" to percentageMap.getOrDefault(
+                    "runningPercentage" to runStats.activityPercentage.getOrDefault(
                         DetectedActivity.RUNNING,
                         0.0
                     ),
-                    "walkingPercentage" to percentageMap.getOrDefault(
+                    "walkingPercentage" to runStats.activityPercentage.getOrDefault(
                         DetectedActivity.WALKING,
                         0.0
                     ),
-                    "bicyclingPercentage" to percentageMap.getOrDefault(
+                    "bicyclingPercentage" to runStats.activityPercentage.getOrDefault(
                         DetectedActivity.ON_BICYCLE,
                         0.0
                     ),
-                    "stillPercentage" to percentageMap.getOrDefault(DetectedActivity.STILL, 0.0),
-                    "drivingPercentage" to percentageMap.getOrDefault(
+                    "stillPercentage" to runStats.activityPercentage.getOrDefault(
+                        DetectedActivity.STILL,
+                        0.0
+                    ),
+                    "drivingPercentage" to runStats.activityPercentage.getOrDefault(
                         DetectedActivity.IN_VEHICLE,
                         0.0
                     ),
+                    "altitude" to runStats.altitudeChange,
                     "locations" to gson.toJson(it)
                 )
             }
