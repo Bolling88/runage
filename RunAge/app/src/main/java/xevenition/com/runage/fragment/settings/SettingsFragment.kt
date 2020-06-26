@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
@@ -20,7 +21,7 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
+           activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
         }
         val factory = SettingsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
