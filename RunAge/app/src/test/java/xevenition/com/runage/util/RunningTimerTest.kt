@@ -7,12 +7,18 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 import xevenition.com.runage.model.PositionPoint
 
 class RunningTimerTest{
 
+    @Mock
+    lateinit var locationUtil: LocationUtil
+
     @Before
     fun setUp(){
+        MockitoAnnotations.initMocks(this)
         RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
         RxJavaPlugins.setComputationSchedulerHandler { Schedulers.trampoline() }
         RxJavaPlugins.setNewThreadSchedulerHandler { Schedulers.trampoline() }
@@ -82,13 +88,13 @@ class RunningTimerTest{
         val positionPoint9 = PositionPoint(0.0, 0.0, 0f,     0f, 0.0, 0f, 0, DetectedActivity.IN_VEHICLE)
         val positionPoint10 = PositionPoint(0.0, 0.0, 0f,     0f, 0.0, 0f, 0, DetectedActivity.IN_VEHICLE)
         val list = listOf(positionPoint1, positionPoint2, positionPoint3, positionPoint4, positionPoint5, positionPoint6, positionPoint7, positionPoint8, positionPoint9, positionPoint10)
-        val observer = RunningUtil.processRunningStats(list).test()
+        val observer = RunningUtil.processRunningStats(list, locationUtil).test()
         observer.assertComplete()
         observer.assertNoErrors()
         observer.assertValue {
-            assertEquals(0.3, it[DetectedActivity.RUNNING])
-            assertEquals(0.5, it[DetectedActivity.IN_VEHICLE])
-            assertEquals(0.2, it[DetectedActivity.WALKING])
+            assertEquals(0.3, it.activityPercentage[DetectedActivity.RUNNING])
+            assertEquals(0.5, it.activityPercentage[DetectedActivity.IN_VEHICLE])
+            assertEquals(0.2, it.activityPercentage[DetectedActivity.WALKING])
             true
         }
     }
