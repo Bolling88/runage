@@ -4,6 +4,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 29
@@ -12,8 +13,8 @@ android {
         applicationId "xevenition.com.runage"
         minSdkVersion 28
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -67,6 +68,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.3'
+    implementation 'com.google.firebase:firebase-analytics:17.4.3'
+    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'
@@ -75,7 +78,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation 'org.mockito:mockito-core:2.25.0'
+    testImplementation 'org.mockito:mockito-core:3.2.4'
     testImplementation 'org.mockito:mockito-inline:2.13.0'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3'
 
@@ -87,7 +90,7 @@ dependencies {
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
-    def nav_version = "2.2.2"
+    def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation 'com.google.android.gms:play-services-auth:18.0.0'

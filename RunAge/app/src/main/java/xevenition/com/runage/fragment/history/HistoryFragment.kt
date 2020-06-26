@@ -8,7 +8,9 @@ import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
@@ -29,7 +31,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
+            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
         }
         val factory = HistoryViewModelFactory(getApplication())
         historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil)
