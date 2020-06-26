@@ -52,4 +52,6 @@
     <string name="runage_level">Level</string>
     <string name="runage_leaderboard">Leaderboard</string>
     <string name="runage_achievements">Achievements</string>
+    <string name="runage_sign_out">Sign out</string>
+    <string name="runage_your_weight">Your weight</string>
 </resources>
