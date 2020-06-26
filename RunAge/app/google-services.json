@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "455333475416",
+    "firebase_url": "https://theta-eon-262521.firebaseio.com",
+    "project_id": "theta-eon-262521",
+    "storage_bucket": "theta-eon-262521.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:455333475416:android:8e5cae1ab062627d64062d",
+        "android_client_info": {
+          "package_name": "xevenition.com.runage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "455333475416-51pba4r45lhv8slsuj7u835vrdlfes7i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "xevenition.com.runage",
+            "certificate_hash": "c237ddf0f37fe58f544afad6a04c549992c8430d"
+          }
+        },
+        {
+          "client_id": "455333475416-nom9bcvegksg2tgk1716f367rbif5u23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoDumd1joWIqaZuTX8eJFDxCDnFamRrbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "455333475416-nom9bcvegksg2tgk1716f367rbif5u23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

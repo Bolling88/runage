@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_basic"
+    android:layout_marginRight="@dimen/margin_basic"
+    android:layout_marginBottom="10dip"
+    android:layout_marginTop="10dip"
+    app:cardCornerRadius="10dip"
+    app:cardElevation="4dip">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageRunning"
+            android:layout_width="45dip"
+            android:layout_height="45dip"
+            android:layout_margin="@dimen/margin_basic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_run_blue" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:fontFamily="@font/light"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/textSizeSmall"
+            app:layout_constraintStart_toEndOf="@+id/imageRunning"
+            app:layout_constraintTop_toTopOf="@+id/imageRunning"
+            tools:text="Running Sunday 2020" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:fontFamily="@font/bold"
+            android:textColor="@color/grey2"
+            android:textSize="@dimen/textSizeBig"
+            app:layout_constraintStart_toEndOf="@+id/imageRunning"
+            app:layout_constraintBottom_toBottomOf="@+id/imageRunning"
+            tools:text="Duration: 00:00:00" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textDistanceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/runage_distance"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:fontFamily="@font/bold"
+            app:layout_constraintEnd_toStartOf="@+id/textCaloriesTitle"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.liveTotalDistance}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/margin_basic"
+            android:fontFamily="@font/light"
+            app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
+            tools:text="1000 m" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textCaloriesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/runage_calories"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:textSize="14sp"
+            android:fontFamily="@font/bold"
+            app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.liveCalories}"
+            android:fontFamily="@font/light"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textCaloriesTitle"
+            tools:text="100" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPaceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bold"
+            android:textAllCaps="true"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:text="@string/runage_avg_pace"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textCaloriesTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textDuration" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textPace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.livePace}"
+            android:fontFamily="@font/light"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+            app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
+            tools:text="5:34 min/km" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

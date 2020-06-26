@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.summary.SummaryViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/lottie_victory"
+                app:lottie_scale="1.5" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation2"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                app:layout_constraintBottom_toTopOf="@+id/mapView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_fireworks" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textQuest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/azonix"
+                android:gravity="center"
+                android:text="@{viewModel.liveTextTitle}"
+                android:textColor="@{viewModel.liveTimerColor}"
+                android:textSize="40sp"
+                tools:text="@string/runage_quest_completed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/animation" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCounter"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:fontFamily="@font/bold"
+                android:gravity="center"
+                android:text="@{viewModel.liveTextTimer}"
+                android:textColor="@{viewModel.liveTimerColor}"
+                android:textSize="80sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textQuest"
+                tools:text="00:00:00" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDistanceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_distance"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/textCaloriesTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textCounter" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/light"
+                android:text="@{viewModel.liveTotalDistance}"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+                app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
+                tools:text="1000 m" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCaloriesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_calories"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textCounter" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/light"
+                android:text="@{viewModel.liveCalories}"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
+                app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textCaloriesTitle"
+                tools:text="100" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textPaceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_avg_pace"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textCaloriesTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textCounter" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textPace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/light"
+                android:text="@{viewModel.livePace}"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+                app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
+                tools:text="5:34 min/km" />
+
+            <View
+                android:id="@+id/spaceView"
+                android:layout_width="match_parent"
+                android:layout_height="40dip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textPace" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textRunning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/azonix"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:visibility="@{viewModel.liveRunningVisibility}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spaceView"
+                android:text="@{viewModel.liveTextRunningPercentage}"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textSizeNormal"/>
+
+            <ProgressBar
+                android:id="@+id/progressRunning"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:min="0"
+                android:visibility="@{viewModel.liveRunningVisibility}"
+                android:progress="@{viewModel.liveRunningProgress}"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/colorPrimaryDark"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginEnd="@dimen/margin_basic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textRunning" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textWalking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:fontFamily="@font/azonix"
+                android:text="@{viewModel.liveTextWalkingPercentage}"
+                android:textColor="@color/colorWalkingBlue"
+                android:visibility="@{viewModel.liveWalkingVisibility}"
+                android:textSize="@dimen/textSizeNormal"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressRunning" />
+
+            <ProgressBar
+                android:id="@+id/progressWalking"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="@{viewModel.liveWalkingProgress}"
+                android:max="100"
+                android:min="0"
+                android:visibility="@{viewModel.liveWalkingVisibility}"
+                android:progressTint="@color/colorWalkingBlue"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginEnd="@dimen/margin_basic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textWalking" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textBicycling"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/azonix"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:visibility="@{viewModel.liveBicycleVisibility}"
+                app:layout_constraintTop_toBottomOf="@+id/progressWalking"
+                android:text="@{viewModel.liveTextBicyclingPercentage}"
+                android:textColor="@color/colorBicycleBlue"
+                android:textSize="@dimen/textSizeNormal"/>
+
+            <ProgressBar
+                android:id="@+id/progressBicycling"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="@{viewModel.liveBicyclingProgress}"
+                android:max="100"
+                android:min="0"
+                android:visibility="@{viewModel.liveBicycleVisibility}"
+                android:progressTint="@color/colorBicycleBlue"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginEnd="@dimen/margin_basic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textBicycling" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textStill"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/azonix"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:visibility="@{viewModel.liveStillVisibility}"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBicycling"
+                android:text="@{viewModel.liveTextStillPercentage}"
+                android:textColor="@color/grey2"
+                android:textSize="@dimen/textSizeNormal"/>
+
+            <ProgressBar
+                android:id="@+id/progressStill"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="@{viewModel.liveStillProgress}"
+                android:max="100"
+                android:min="0"
+                android:progressTint="@color/grey2"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginEnd="@dimen/margin_basic"
+                android:visibility="@{viewModel.liveStillVisibility}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textStill" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textDriving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/azonix"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:visibility="@{viewModel.liveDrivingVisibility}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressStill"
+                android:text="@{viewModel.liveTextDrivingPercentage}"
+                android:textColor="@color/red"
+                android:textSize="@dimen/textSizeNormal"/>
+
+            <ProgressBar
+                android:id="@+id/progressDriving"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="@{viewModel.liveDrivingProgress}"
+                android:max="100"
+                android:visibility="@{viewModel.liveDrivingVisibility}"
+                android:min="0"
+                android:progressTint="@color/red"
+                android:layout_marginStart="@dimen/margin_basic"
+                android:layout_marginEnd="@dimen/margin_basic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textDriving" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip"
+                app:layout_constraintBottom_toTopOf="@+id/button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressDriving" />
+
+            <View
+                android:layout_width="0dip"
+                android:layout_height="0dip"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{()->viewModel.onMapClicked()}"
+                app:layout_constraintBottom_toBottomOf="@+id/mapView"
+                app:layout_constraintEnd_toEndOf="@+id/mapView"
+                app:layout_constraintStart_toStartOf="@id/mapView"
+                app:layout_constraintTop_toTopOf="@+id/mapView" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:clickable="@{viewModel.liveButtonEnabled}"
+                android:enabled="@{viewModel.liveButtonEnabled}"
+                android:onClick="@{()-> viewModel.onSaveProgressClicked()}"
+                android:text="@{viewModel.liveButtonText}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</layout>

@@ -1,0 +1,54 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/grp_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/mainNavigation"
+            android:icon="@drawable/ic_run_blue"
+            android:title="@string/runage_home" />
+    </group>
+
+    <group
+        android:id="@+id/grp_2"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/historyNavigation"
+            android:icon="@drawable/ic_history"
+            android:title="@string/runage_completed_runs" />
+    </group>
+
+    <group
+        android:id="@+id/grp_4"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/leaderboard"
+            android:icon="@drawable/ic_trophy"
+            android:title="@string/runage_leaderboard" />
+    </group>
+
+    <group
+        android:id="@+id/grp_5"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/achievementNavigation"
+            android:icon="@drawable/ic_star"
+            android:title="@string/runage_achievements" />
+    </group>
+
+
+    <group
+        android:id="@+id/grp_3"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/appSettingsNavigation"
+            android:icon="@drawable/ic_user_location"
+            android:title="@string/runage_settings" />
+    </group>
+
+
+</menu>

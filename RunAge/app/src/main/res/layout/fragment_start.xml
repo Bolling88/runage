@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.start.StartViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.start.StartFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/runage_home"
+            app:titleTextColor="@color/white"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:navigationIcon="@drawable/ic_menu" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+            app:layout_constraintEnd_toEndOf="@+id/card_profile"
+            app:layout_constraintStart_toStartOf="@+id/card_profile"
+            app:layout_constraintTop_toTopOf="@+id/card_profile"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/ripple"
+            app:lottie_scale="0.3"
+            app:lottie_speed="0.4" />
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/circularProgressBar"
+            android:layout_width="184dip"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="66dip"
+            app:layout_constraintEnd_toEndOf="@+id/card_profile"
+            app:layout_constraintStart_toStartOf="@+id/card_profile"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:cpb_background_progressbar_color="@color/grey1"
+            app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress_direction="to_right"
+            app:cpb_progressbar_color="@color/colorPrimary"
+            app:cpb_progressbar_width="10dp"
+            app:cpb_progress="@{viewModel.liveLevelProgress}"
+            app:cpb_progress_max="@{viewModel.liveLevelNext}"
+            app:cpb_round_border="true" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_profile"
+            android:layout_width="155dp"
+            android:layout_height="155dp"
+            android:layout_marginTop="@dimen/margin_huge"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="250dp"
+            app:cardElevation="10dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="250dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_profile"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/azonix"
+            android:singleLine="true"
+            android:text="@{viewModel.liveTextName}"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_profile"
+            tools:text="Ludwig Bolling" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/azonix"
+            android:singleLine="true"
+            android:text="@{viewModel.liveLevelText}"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textName"
+            tools:text="Level 14" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

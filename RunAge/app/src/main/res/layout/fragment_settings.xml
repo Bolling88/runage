@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.settings.SettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_big"
+            android:fontFamily="@font/azonix"
+            android:gravity="center"
+            android:text="@string/runage_settings"
+            android:textColor="@color/colorAccent"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dip"
+            android:layout_marginTop="@dimen/margin_big"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textTitle"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_earth"
+            app:lottie_scale="0.3" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textUnitTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bold"
+            android:text="@string/unit_type"
+            android:textSize="@dimen/textSizeBig"
+            app:layout_constraintBottom_toBottomOf="@+id/lottieLocation"
+            app:layout_constraintStart_toEndOf="@+id/lottieLocation"
+            app:layout_constraintTop_toTopOf="@+id/lottieLocation" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dip"
+            android:layout_marginTop="20dip"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textUnitTitle">
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_metric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="@{()-> viewModel.onMetricClicked()}"
+                android:text="@string/metric" />
+
+            <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/radio_imperial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onImperialClicked()}"
+                android:text="@string/imperial" />
+        </RadioGroup>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_big"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_weight"
+            app:lottie_scale="0.075" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textWeightTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/bold"
+            android:text="@string/runage_weight"
+            android:textSize="@dimen/textSizeBig"
+            android:layout_marginStart="90dip"
+            app:layout_constraintBottom_toBottomOf="@+id/lottieWeight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lottieWeight" />
+
+        <!--suppress AndroidUnknownAttribute -->
+        <androidx.appcompat.widget.AppCompatEditText
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:hint="@string/runage_your_weight_here"
+            android:inputType="numberDecimal"
+            android:imeOptions="actionDone"
+            android:onTextChanged="@{viewModel::onWeightTextChanged}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textWeightTitle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
+            android:enabled="@{viewModel.liveButtonEnabled}"
+            android:onClick="@{()-> viewModel.onContinueClicked()}"
+            android:text="@string/runage_continue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

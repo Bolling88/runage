@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+Save this file as res/values/games-ids.xml in your project.
+-->
+<resources>
+    <!-- app_id -->
+    <string name="app_id" translatable="false">864182662755</string>
+    <!-- package_name -->
+    <string name="package_name" translatable="false">xevenition.com.runage</string>
+    <!-- achievement 10 K -->
+    <string name="achievement_10_k" translatable="false">CgkI4-yzqpMZEAIQBQ</string>
+    <!-- achievement 100 K -->
+    <string name="achievement_100_k" translatable="false">CgkI4-yzqpMZEAIQBg</string>
+    <!-- achievement 1000 K -->
+    <string name="achievement_1000_k" translatable="false">CgkI4-yzqpMZEAIQBw</string>
+    <!-- achievement 10 000 K -->
+    <string name="achievement_10_000_k" translatable="false">CgkI4-yzqpMZEAIQCg</string>
+    <!-- achievement Long Runner I -->
+    <string name="achievement_long_runner_i" translatable="false">CgkI4-yzqpMZEAIQCA</string>
+    <!-- achievement Long Runner II -->
+    <string name="achievement_long_runner_ii" translatable="false">CgkI4-yzqpMZEAIQGw</string>
+    <!-- achievement Long Runner III -->
+    <string name="achievement_long_runner_iii" translatable="false">CgkI4-yzqpMZEAIQFA</string>
+    <!-- achievement Calorie King I -->
+    <string name="achievement_calorie_king_i" translatable="false">CgkI4-yzqpMZEAIQDA</string>
+    <!-- achievement Calorie King II -->
+    <string name="achievement_calorie_king_ii" translatable="false">CgkI4-yzqpMZEAIQCw</string>
+    <!-- achievement Calorie King III -->
+    <string name="achievement_calorie_king_iii" translatable="false">CgkI4-yzqpMZEAIQGg</string>
+    <!-- achievement Elevationist I -->
+    <string name="achievement_elevationist_i" translatable="false">CgkI4-yzqpMZEAIQDQ</string>
+    <!-- achievement Elevationist II -->
+    <string name="achievement_elevationist_ii" translatable="false">CgkI4-yzqpMZEAIQDg</string>
+    <!-- achievement Elevationist III -->
+    <string name="achievement_elevationist_iii" translatable="false">CgkI4-yzqpMZEAIQFQ</string>
+    <!-- achievement Fast Runner I -->
+    <string name="achievement_fast_runner_i" translatable="false">CgkI4-yzqpMZEAIQDw</string>
+    <!-- achievement Fast Runner II -->
+    <string name="achievement_fast_runner_ii" translatable="false">CgkI4-yzqpMZEAIQEA</string>
+    <!-- achievement Fast Runner III -->
+    <string name="achievement_fast_runner_iii" translatable="false">CgkI4-yzqpMZEAIQEQ</string>
+    <!-- achievement Never Stop I -->
+    <string name="achievement_never_stop_i" translatable="false">CgkI4-yzqpMZEAIQFw</string>
+    <!-- achievement Never Stop II -->
+    <string name="achievement_never_stop_ii" translatable="false">CgkI4-yzqpMZEAIQGA</string>
+    <!-- achievement Never Stop III -->
+    <string name="achievement_never_stop_iii" translatable="false">CgkI4-yzqpMZEAIQGQ</string>
+    <!-- achievement Getting started I -->
+    <string name="achievement_getting_started_i" translatable="false">CgkI4-yzqpMZEAIQCQ</string>
+    <!-- leaderboard Total Running Distance -->
+    <string name="leaderboard_total_running_distance" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
+    <!-- leaderboard Most Experience -->
+    <string name="leaderboard_most_experience" translatable="false">CgkI4-yzqpMZEAIQBA</string>
+    <!-- leaderboard Fastest Runner (min/km) -->
+    <string name="leaderboard_fastest_runner_minkm" translatable="false">CgkI4-yzqpMZEAIQEg</string>
+    <!-- leaderboard Total Running Duration -->
+    <string name="leaderboard_total_running_duration" translatable="false">CgkI4-yzqpMZEAIQEw</string>
+    <!-- leaderboard Longest Run (meters) -->
+    <string name="leaderboard_longest_run_meters" translatable="false">CgkI4-yzqpMZEAIQFg</string>
+</resources>
