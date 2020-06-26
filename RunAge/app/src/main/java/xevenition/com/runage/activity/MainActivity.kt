@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.leaderboard ->{
                     Games.getLeaderboardsClient(this, GoogleSignIn.getLastSignedInAccount(this)!!)
-                        .getLeaderboardIntent(getString(R.string.leaderboard_most_experience))
+                        .allLeaderboardsIntent
                         .addOnSuccessListener { intent ->
                             startActivityForResult(
                                 intent,

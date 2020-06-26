@@ -175,11 +175,16 @@ class SummaryViewModel(
             }
             .subscribe({
                 runStats = it
-                val runningPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.RUNNING)
-                val walkingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.WALKING)
-                val bicyclingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.ON_BICYCLE)
-                val stillPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.STILL)
-                val drivingPercentage = getActivityPercentage(it.activityPercentage, DetectedActivity.IN_VEHICLE)
+                val runningPercentage =
+                    getActivityPercentage(it.activityPercentage, DetectedActivity.RUNNING)
+                val walkingPercentage =
+                    getActivityPercentage(it.activityPercentage, DetectedActivity.WALKING)
+                val bicyclingPercentage =
+                    getActivityPercentage(it.activityPercentage, DetectedActivity.ON_BICYCLE)
+                val stillPercentage =
+                    getActivityPercentage(it.activityPercentage, DetectedActivity.STILL)
+                val drivingPercentage =
+                    getActivityPercentage(it.activityPercentage, DetectedActivity.IN_VEHICLE)
                 if (runningPercentage > 0) {
                     _liveRunningProgress.postValue(runningPercentage)
                     _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
@@ -235,9 +240,6 @@ class SummaryViewModel(
     @SuppressLint("CheckResult")
     private fun saveStats(quest: Quest, runStats: RunStats) {
         fireStoreHandler.getUserInfo()
-            .addOnCompleteListener {
-                syncWithGoogleFit(quest, runStats)
-            }
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val userInfo = document.toObject(UserInfo::class.java)
@@ -257,6 +259,7 @@ class SummaryViewModel(
                         duration = totalRunningDuration
                     )
                     fireStoreHandler.storeUserInfo(newUserInfo)
+                        .addOnCompleteListener { syncWithGoogleFit(quest, runStats, newUserInfo) }
                         .addOnSuccessListener { Timber.d("User info have been stored") }
                         .addOnFailureListener { Timber.e("Failed storing user xp") }
                     Timber.d("Got user info")
@@ -266,10 +269,11 @@ class SummaryViewModel(
             }
             .addOnFailureListener { exception ->
                 Timber.e("get failed with $exception")
+                //TODO sync later!
             }
     }
 
-    private fun syncWithGoogleFit(quest: Quest, runStats: RunStats) {
+    private fun syncWithGoogleFit(quest: Quest, runStats: RunStats, userInfo: UserInfo) {
         val task = fitnessHelper.storeSession(
             quest.id,
             "${quest.totalDistance} meters",
@@ -279,14 +283,19 @@ class SummaryViewModel(
         )
         task.addOnSuccessListener { Timber.d("Synced with google fit") }
         task.addOnFailureListener { Timber.e("Sync with google fit failed") }
-        task.addOnCompleteListener { storeQuestInFirestore(quest, runStats) }
+        task.addOnCompleteListener { storeQuestInFirestore(quest, runStats, userInfo) }
     }
 
-    private fun storeQuestInFirestore(quest: Quest, runStats: RunStats): Disposable {
+    private fun storeQuestInFirestore(
+        quest: Quest,
+        runStats: RunStats,
+        userInfo: UserInfo
+    ): Disposable {
         return fireStoreHandler.storeQuest(quest, runStats)
             .subscribe({
                 it.addOnCompleteListener {
                     observableBackNavigation.call()
+                    storeAchievementsAndLeaderboards(quest, runStats, userInfo)
                 }
                 it.addOnSuccessListener {
                     Timber.d("Quest have been stored")
@@ -297,8 +306,15 @@ class SummaryViewModel(
             })
     }
 
-    private fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats){
-        gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats)
+    private fun storeAchievementsAndLeaderboards(
+        quest: Quest,
+        runStats: RunStats,
+        userInfo: UserInfo
+    ) {
+        Timber.d("Saving achievements and leaderboards")
+        gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats, userInfo)
+        Timber.d("All done!")
+        observableBackNavigation.call()
     }
 
     fun onMapCreated() {

@@ -5,6 +5,7 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.location.DetectedActivity
 import xevenition.com.runage.R
 import xevenition.com.runage.model.RunStats
+import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 
@@ -32,16 +33,22 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         }
     }
 
-    fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats) {
-        incrementAchievements(app.getString(R.string.achievement_10_k), runStats.runningDistance)
-        incrementAchievements(app.getString(R.string.achievement_100_k), runStats.runningDistance)
-        incrementAchievements(app.getString(R.string.achievement_1000_k), runStats.runningDistance)
-        incrementAchievements(app.getString(R.string.achievement_10_000_k), runStats.runningDistance)
+    fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats, userInfo: UserInfo) {
+        incrementAchievements(app.getString(R.string.achievement_10_k), (runStats.runningDistance.toDouble()/1000).toInt())
+        incrementAchievements(app.getString(R.string.achievement_100_k), (runStats.runningDistance.toDouble()/1000).toInt())
+        incrementAchievements(app.getString(R.string.achievement_1000_k), (runStats.runningDistance.toDouble()/1000).toInt())
+        incrementAchievements(app.getString(R.string.achievement_10_000_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_calorie_king_i), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_ii), quest.calories)
+        incrementAchievements(app.getString(R.string.achievement_calorie_king_iii), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_never_stop_i), runStats.runningDuration)
         incrementAchievements(app.getString(R.string.achievement_never_stop_ii), runStats.runningDuration)
         incrementAchievements(app.getString(R.string.achievement_never_stop_iii), runStats.runningDuration)
+
+        saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance), userInfo.distance.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong())
 
         when {
             runStats.runningDistance >= 30000 -> {
@@ -82,6 +89,9 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
                 val end = quest.locations.last().timeStampEpochSeconds
                 val totalDuration = end - start
                 val secondsPerKm = totalDuration / (quest.totalDistance / 1000)
+
+                saveLeaderBoard(app.getString(R.string.leaderboard_fastest_runner_minkm), secondsPerKm.toLong())
+
                 when{
                     secondsPerKm < (60 * 4) ->{
                         unlockAchievement(app.getString(R.string.achievement_fast_runner_iii))

@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.RunStats
@@ -22,7 +23,7 @@ import javax.inject.Singleton
 class FireStoreHandler @Inject constructor() {
 
     private var previousLocation: FirestoreLocation? = null
-    private val db = Firebase.firestore
+    private val firestore = Firebase.firestore
     private val gson = Gson()
 
     fun storeQuest(
@@ -31,6 +32,7 @@ class FireStoreHandler @Inject constructor() {
     ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
+            .subscribeOn(Schedulers.io())
             .map { FirestoreLocation(it.latitude, it.longitude) }
             .filter {
                 if (previousLocation == null) {
@@ -76,7 +78,7 @@ class FireStoreHandler @Inject constructor() {
                 )
             }
             .map {
-                db.collection("quest")
+                firestore.collection("quest")
                     .add(it)
             }
     }
@@ -100,7 +102,7 @@ class FireStoreHandler @Inject constructor() {
     fun getAllQuests(): Task<QuerySnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
-            db.collection("quest")
+            firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
                 .whereEqualTo("userId", userId)
         return docRef.get()
@@ -109,7 +111,7 @@ class FireStoreHandler @Inject constructor() {
     fun getUserInfo(): Task<DocumentSnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
-            db.collection("users")
+            firestore.collection("users")
                 .document(userId)
         return docRef.get()
     }
@@ -117,7 +119,7 @@ class FireStoreHandler @Inject constructor() {
 
     fun storeUserIfNotExists() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        db.collection("users").document(userId).set(
+        firestore.collection("users").document(userId).set(
             hashMapOf(
                 "userId" to userId
             ), SetOptions.merge()
@@ -127,7 +129,7 @@ class FireStoreHandler @Inject constructor() {
     fun storeUserInfo(userInfo: UserInfo): Task<Void> {
         Timber.d("Storing user info: $userInfo")
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        return db.collection("users").document(userId).set(
+        return firestore.collection("users").document(userId).set(
             hashMapOf(
                 "xp" to userInfo.xp,
                 "calories" to userInfo.calories,
