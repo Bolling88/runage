@@ -8,7 +8,7 @@ import xevenition.com.runage.util.AccountUtil
 import javax.inject.Inject
 
 class MainViewModelFactory @Inject constructor(app: MainApplication) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

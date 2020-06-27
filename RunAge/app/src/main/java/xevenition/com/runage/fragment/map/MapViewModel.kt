@@ -24,7 +24,6 @@ import java.time.Instant
 
 
 class MapViewModel(
-    private val resourceUtil: ResourceUtil,
     private val questRepository: QuestRepository,
     private val locationUtil: LocationUtil
 ) : BaseViewModel() {

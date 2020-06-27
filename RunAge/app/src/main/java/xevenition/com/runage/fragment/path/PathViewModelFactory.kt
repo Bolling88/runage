@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PathViewModelFactory @Inject constructor(
     app: MainApplication,
     private val arguments: PathFragmentArgs
-) : BaseViewModelFactory(app) {
+) : BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

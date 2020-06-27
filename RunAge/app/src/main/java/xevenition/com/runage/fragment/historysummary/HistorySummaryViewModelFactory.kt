@@ -1,12 +1,14 @@
-package xevenition.com.runage.fragment.xp
+package xevenition.com.runage.fragment.historysummary
 
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.util.FireStoreHandler
 import javax.inject.Inject
 
-class XpViewModelFactory @Inject constructor(
-    app: MainApplication
+class HistorySummaryViewModelFactory @Inject constructor(
+    app: MainApplication,
+    private val args: HistorySummaryFragmentArgs
 ) :
     BaseViewModelFactory() {
 
@@ -14,8 +16,11 @@ class XpViewModelFactory @Inject constructor(
         app.appComponent.inject(this)
     }
 
+    @Inject
+    lateinit var fireStoreHandler: FireStoreHandler
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return XpViewModel() as T
+        return HistorySummaryViewModel(args) as T
     }
 }

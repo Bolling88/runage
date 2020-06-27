@@ -14,7 +14,7 @@ class SummaryViewModelFactory @Inject constructor(
     app: MainApplication,
     private val arguments: SummaryFragmentArgs
 ) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     @Inject
     lateinit var questRepository: QuestRepository

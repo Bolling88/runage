@@ -18,8 +18,12 @@ class AppSettingsViewModel(
     private val _observableWeight = MutableLiveData<Float>()
     val observableWeight: LiveData<Float> = _observableWeight
 
+    private val _observableUnitType = MutableLiveData<Boolean>()
+    val observableUnitType: LiveData<Boolean> = _observableUnitType
+
     init {
         _observableWeight.postValue(saveUtil.getFloat(SaveUtil.KEY_WEIGHT, 0f))
+        _observableUnitType.postValue(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true))
     }
 
     @SuppressLint("CheckResult")

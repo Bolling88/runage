@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class HistoryViewModelFactory @Inject constructor(
     app: MainApplication) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     @Inject
     lateinit var firestoreHandler: FireStoreHandler

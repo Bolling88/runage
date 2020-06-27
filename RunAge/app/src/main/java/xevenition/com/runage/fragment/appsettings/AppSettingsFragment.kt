@@ -73,5 +73,17 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
                 binding.textWeightField.setText(it.toString())
             }
         })
+
+        viewModel.observableUnitType.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if(it) {
+                    binding.radioMetric.isChecked = true
+                    binding.radioImperial.isChecked = false
+                }else{
+                    binding.radioMetric.isChecked = false
+                    binding.radioImperial.isChecked = true
+                }
+            }
+        })
     }
 }

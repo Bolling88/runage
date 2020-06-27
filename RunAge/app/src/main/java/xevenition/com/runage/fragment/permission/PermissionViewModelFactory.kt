@@ -11,7 +11,7 @@ import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
 class PermissionViewModelFactory @Inject constructor(app: MainApplication) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

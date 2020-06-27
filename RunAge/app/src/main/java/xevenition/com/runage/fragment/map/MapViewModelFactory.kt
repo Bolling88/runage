@@ -9,14 +9,12 @@ import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
 import javax.inject.Inject
 
-class MapViewModelFactory @Inject constructor(app: MainApplication) : BaseViewModelFactory(app) {
+class MapViewModelFactory @Inject constructor(app: MainApplication) : BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)
     }
 
-    @Inject
-    lateinit var resourceUtil: ResourceUtil
     @Inject
     lateinit var questRepository: QuestRepository
     @Inject
@@ -24,6 +22,6 @@ class MapViewModelFactory @Inject constructor(app: MainApplication) : BaseViewMo
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MapViewModel(resourceUtil, questRepository, locationUtil) as T
+        return MapViewModel(questRepository, locationUtil) as T
     }
 }

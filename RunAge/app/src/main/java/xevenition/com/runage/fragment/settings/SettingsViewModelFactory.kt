@@ -9,7 +9,7 @@ import javax.inject.Inject
 class SettingsViewModelFactory @Inject constructor(
     app: MainApplication
 ) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

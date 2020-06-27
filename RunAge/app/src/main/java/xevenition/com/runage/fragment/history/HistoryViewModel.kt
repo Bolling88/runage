@@ -16,7 +16,7 @@ import xevenition.com.runage.util.ResourceUtil
 class HistoryViewModel(
     resourceUtil: ResourceUtil,
     firestoreHandler: FireStoreHandler
-) : BaseViewModel(){
+) : BaseViewModel() {
 
     private val _observableQuests = MutableLiveData<List<SavedQuest>>()
     val observableQuest: LiveData<List<SavedQuest>> = _observableQuests
@@ -30,22 +30,22 @@ class HistoryViewModel(
     init {
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
-            firestoreHandler.getAllQuests()
-                .addOnSuccessListener { collection ->
-                    if (collection != null) {
-                        Timber.d("DocumentSnapshot data: ${collection.documents}")
-                        processQuests(collection)
-                    } else {
-                        Timber.d("No such document")
-                    }
+        firestoreHandler.getAllQuests()
+            .addOnSuccessListener { collection ->
+                if (collection != null) {
+                    Timber.d("DocumentSnapshot data: ${collection.documents}")
+                    processQuests(collection)
+                } else {
+                    Timber.d("No such document")
                 }
-                .addOnFailureListener { exception ->
-                    Timber.e("get failed with $exception")
-                }
+            }
+            .addOnFailureListener { exception ->
+                Timber.e("get failed with $exception")
+            }
     }
 
     @SuppressLint("CheckResult")
-    private fun processQuests(collection: QuerySnapshot){
+    private fun processQuests(collection: QuerySnapshot) {
         Observable.just(collection)
             .subscribeOn(Schedulers.computation())
             .map {
@@ -56,11 +56,17 @@ class HistoryViewModel(
                 _observableQuests.postValue(it)
                 _liveProgressVisibility.postValue(View.GONE)
 
-                if(it.isEmpty()){
+                if (it.isEmpty()) {
                     _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                 }
-            },{
+            }, {
                 Timber.e(it)
             })
+    }
+
+    fun onQuestClicked(quest: SavedQuest) {
+        observableNavigateTo.postValue(
+            HistoryFragmentDirections.actionHistoryFragmentToHistorySummaryFragment(quest)
+        )
     }
 }
