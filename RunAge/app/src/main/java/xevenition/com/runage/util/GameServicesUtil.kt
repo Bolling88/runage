@@ -19,7 +19,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         }
     }
 
-    fun unlockAchievement(achievementId: String){
+    private fun unlockAchievement(achievementId: String){
         val gameAccount = accountUtil.getGamesAccount()
         gameAccount?.let {
             Games.getAchievementsClient(app, it).unlock(achievementId)
@@ -41,9 +41,15 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         incrementAchievements(app.getString(R.string.achievement_calorie_king_i), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_ii), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_iii), quest.calories)
-        incrementAchievements(app.getString(R.string.achievement_never_stop_i), runStats.runningDuration)
-        incrementAchievements(app.getString(R.string.achievement_never_stop_ii), runStats.runningDuration)
-        incrementAchievements(app.getString(R.string.achievement_never_stop_iii), runStats.runningDuration)
+        incrementAchievements(app.getString(R.string.achievement_never_stop_i),
+            (runStats.runningDuration.toDouble()/60).toInt()
+        )
+        incrementAchievements(app.getString(R.string.achievement_never_stop_ii),
+            (runStats.runningDuration.toDouble()/60).toInt()
+        )
+        incrementAchievements(app.getString(R.string.achievement_never_stop_iii),
+            (runStats.runningDuration.toDouble()/60).toInt()
+        )
 
         saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
