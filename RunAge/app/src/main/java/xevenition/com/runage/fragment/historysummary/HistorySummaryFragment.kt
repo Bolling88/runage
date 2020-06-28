@@ -8,12 +8,16 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentHistorySummaryBinding
@@ -46,10 +50,16 @@ class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_history_summary, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_history_summary, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mapView.onCreate(arguments)
+
+        val navController = (activity as MainActivity).findNavController(R.id.nav_host_fragment)
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar
+            .setupWithNavController(navController, appBarConfiguration)
 
         return binding.root
     }

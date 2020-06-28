@@ -34,13 +34,18 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
     }
 
     fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats, userInfo: UserInfo) {
+        //Total running distance
         incrementAchievements(app.getString(R.string.achievement_10_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_100_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_1000_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_10_000_k), (runStats.runningDistance.toDouble()/1000).toInt())
+
+        //Total calories
         incrementAchievements(app.getString(R.string.achievement_calorie_king_i), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_ii), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_iii), quest.calories)
+
+        //Never stop, running duration in minutes
         incrementAchievements(app.getString(R.string.achievement_never_stop_i),
             (runStats.runningDuration.toDouble()/60).toInt()
         )
@@ -56,6 +61,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance), userInfo.distance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong())
 
+        //Long runner
         when {
             runStats.runningDistance >= 30000 -> {
                 unlockAchievement(app.getString(R.string.achievement_long_runner_i))
@@ -71,6 +77,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             }
         }
 
+        //Altitude
         when {
             runStats.altitudeChange >= 300 -> {
                 unlockAchievement(app.getString(R.string.achievement_elevationist_iii))
@@ -86,9 +93,10 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             }
         }
 
+        //If distance was longer then 1000 meters
         if(quest.totalDistance > 1000){
-            if(runStats.activityPercentage.containsKey(DetectedActivity.IN_VEHICLE) ||
-                    runStats.activityPercentage.containsKey(DetectedActivity.ON_BICYCLE)){
+            if(runStats.activityPercentage.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0) > 0.0 ||
+                    runStats.activityPercentage.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0) > 0.0){
                 //Not eligible
             }else{
                 val start = quest.startTimeEpochSeconds

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
 
 class HistorySummaryViewModelFactory @Inject constructor(
@@ -17,10 +18,10 @@ class HistorySummaryViewModelFactory @Inject constructor(
     }
 
     @Inject
-    lateinit var fireStoreHandler: FireStoreHandler
+    lateinit var resourceUtil: ResourceUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HistorySummaryViewModel(args) as T
+        return HistorySummaryViewModel(args, resourceUtil) as T
     }
 }

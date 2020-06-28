@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.historysummary
 
 import android.annotation.SuppressLint
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
@@ -9,13 +10,17 @@ import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.util.ResourceUtil
+import kotlin.math.roundToInt
 
 class HistorySummaryViewModel(
-    args: HistorySummaryFragmentArgs
+    args: HistorySummaryFragmentArgs,
+    private val resourceUtil: ResourceUtil
 ) : BaseViewModel() {
 
 
@@ -88,6 +93,10 @@ class HistorySummaryViewModel(
     private val _observableEndMarker = MutableLiveData<LatLng>()
     val observableEndMarker: LiveData<LatLng> = _observableEndMarker
 
+    init {
+        displayRunningPercentage(savedQuest)
+    }
+
     fun onMapClicked() {
         observableNavigateTo.postValue(
             HistorySummaryFragmentDirections.actionHistorySummaryFragmentToHistorySummaryPathFragment(savedQuest)
@@ -131,6 +140,44 @@ class HistorySummaryViewModel(
             }, {
                 Timber.e(it)
             })
+    }
+
+    private fun displayRunningPercentage(quest: SavedQuest){
+        if (quest.runningPercentage > 0) {
+            val runningPercentage = (quest.runningPercentage*100).roundToInt()
+            _liveRunningProgress.postValue(runningPercentage)
+            _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
+        } else {
+            _liveRunningVisibility.postValue(View.GONE)
+        }
+        if (quest.walkingPercentage > 0) {
+            val walkingPercentage = (quest.walkingPercentage*100).roundToInt()
+            _liveWalkingProgress.postValue(walkingPercentage)
+            _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking_percentage)} - $walkingPercentage")
+        } else {
+            _liveWalkingVisibility.postValue(View.GONE)
+        }
+        if (quest.bicyclingPercentage > 0) {
+            val bicyclingPercentage = (quest.bicyclingPercentage*100).roundToInt()
+            _liveBicyclingProgress.postValue(bicyclingPercentage)
+            _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling_percentage)} - $bicyclingPercentage")
+        } else {
+            _liveBicycleVisibility.postValue(View.GONE)
+        }
+        if (quest.stillPercentage > 0) {
+            val stillPercentage = (quest.stillPercentage*100).roundToInt()
+            _liveStillProgress.postValue((quest.stillPercentage*100).roundToInt())
+            _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still_percentage)} - $stillPercentage")
+        } else {
+            _liveStillVisibility.postValue(View.GONE)
+        }
+        if (quest.drivingPercentage > 0) {
+            val drivingPercentage = (quest.drivingPercentage*100).roundToInt()
+            _liveDrivingProgress.postValue(drivingPercentage)
+            _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving_percentage)} - $drivingPercentage")
+        } else {
+            _liveDrivingVisibility.postValue(View.GONE)
+        }
     }
 
     fun onCloseClicked() {

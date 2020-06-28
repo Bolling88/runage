@@ -91,12 +91,14 @@
                 android:defaultValue="0" />
         </fragment>
     </navigation>
-    <navigation android:id="@+id/historyNavigation"
+    <navigation
+        android:id="@+id/historyNavigation"
+        android:label="@string/runage_summary"
         app:startDestination="@id/historyFragment">
         <fragment
             android:id="@+id/historyFragment"
             android:name="xevenition.com.runage.fragment.history.HistoryFragment"
-            android:label="HistoryFragment" >
+            android:label="HistoryFragment">
             <action
                 android:id="@+id/action_historyFragment_to_historySummaryFragment"
                 app:destination="@id/historySummaryFragment" />
@@ -104,7 +106,7 @@
         <fragment
             android:id="@+id/historySummaryFragment"
             android:name="xevenition.com.runage.fragment.historysummary.HistorySummaryFragment"
-            android:label="HistorySummaryFragment" >
+            android:label="Summary">
             <argument
                 android:name="key_saved_quest"
                 app:argType="xevenition.com.runage.model.SavedQuest" />
@@ -115,7 +117,7 @@
         <fragment
             android:id="@+id/historySummaryPathFragment"
             android:name="xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment"
-            android:label="HistorySummaryPathFragment" >
+            android:label="HistorySummaryPathFragment">
             <argument
                 android:name="key_saved_quest"
                 app:argType="xevenition.com.runage.model.SavedQuest" />
