@@ -1,17 +1,13 @@
-package xevenition.com.runage.fragment.summary
+package xevenition.com.runage.fragment.historysummarypath
 
-import android.animation.ObjectAnimator
-import android.graphics.Interpolator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
@@ -20,15 +16,22 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
-import xevenition.com.runage.databinding.FragmentSummaryBinding
+import xevenition.com.runage.databinding.FragmentPathBinding
+import xevenition.com.runage.databinding.FragmentSummaryHistoryPathBinding
+import xevenition.com.runage.fragment.path.PathFragment
+import xevenition.com.runage.fragment.path.PathFragmentArgs
+import xevenition.com.runage.fragment.path.PathViewModel
+import xevenition.com.runage.fragment.path.PathViewModelFactory
 import xevenition.com.runage.util.BitmapUtil
 import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject
 
-class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
-    private lateinit var binding: FragmentSummaryBinding
+class HistorySummaryPathFragment : BaseFragment<HistorySummaryPathViewModel>() {
+
+    private var polyLine: Polyline? = null
     private var googleMap: GoogleMap? = null
+    private lateinit var binding: FragmentSummaryHistoryPathBinding
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
@@ -38,10 +41,12 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("onCreate")
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
-        val args = SummaryFragmentArgs.fromBundle(requireArguments())
-        val factory = SummaryViewModelFactory(getApplication(), args)
-        viewModel = ViewModelProvider(this, factory).get(SummaryViewModel::class.java)
+        val args = HistorySummaryPathFragmentArgs.fromBundle(requireArguments())
+        val factory = HistorySummaryPathViewModelFactory(getApplication(), args)
+        viewModel = ViewModelProvider(this, factory).get(HistorySummaryPathViewModel::class.java)
+        Timber.d("Viewmodel created!")
     }
 
     override fun onCreateView(
@@ -49,8 +54,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         savedInstanceState: Bundle?
     ): View? {
         Timber.d("onCreateView")
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary_history_path, container, false)
         binding.mapView.onCreate(arguments)
         return binding.root
     }
@@ -63,19 +67,13 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         binding.mapView.getMapAsync {
             googleMap = it
             viewModel.onMapCreated()
-            googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
-
         setUpObservables()
-
-//        ObjectAnimator.ofInt(binding.progressRunning, "progress", 85)
-//            .setDuration(1000)
-//            .start()
     }
 
-    @Override
     override fun setUpObservables() {
         super.setUpObservables()
+
         viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
             it?.let {
                 setUpPolyline(it)
@@ -93,10 +91,20 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 drawEndMarker(it)
             }
         })
+    }
 
-        viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
-            binding.animation.playAnimation()
-        })
+    private fun drawStartMarker(it: LatLng) {
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot_red)))
+        googleMap?.addMarker(options)
+    }
+
+    private fun drawEndMarker(it: LatLng) {
+        val options = MarkerOptions().position(it)
+            .anchor(0.5f, 0.5f)
+            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot)))
+        googleMap?.addMarker(options)
     }
 
     override fun onStart() {
@@ -129,30 +137,20 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         binding.mapView.onDestroy()
     }
 
-    private fun drawStartMarker(it: LatLng) {
-        val options = MarkerOptions().position(it)
-            .anchor(0.5f, 0.5f)
-            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot_red)))
-        googleMap?.addMarker(options)
-    }
-
-    private fun drawEndMarker(it: LatLng) {
-        val options = MarkerOptions().position(it)
-            .anchor(0.5f, 0.5f)
-            .icon(BitmapDescriptorFactory.fromBitmap(bitmapUtil.getBitmapFromVectorDrawable(R.drawable.ic_dot)))
-        googleMap?.addMarker(options)
-    }
 
     private fun setUpPolyline(positions: List<LatLng>) {
         if (positions.isEmpty() || googleMap == null) return
 
         moveCamera(positions)
         val positionPointsArray = ArrayList(positions)
-        val polylineOptions = PolylineOptions().addAll(positionPointsArray)
-            .jointType(JointType.ROUND)
-            .color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            .width(typedValueUtil.dipToPixels(5f).toFloat())
-        val polyLine = googleMap?.addPolyline(polylineOptions)
+
+        if (polyLine == null) {
+            val polylineOptions = PolylineOptions().addAll(positionPointsArray)
+                .jointType(JointType.ROUND)
+                .color(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+                .width(typedValueUtil.dipToPixels(5f).toFloat())
+            polyLine = googleMap?.addPolyline(polylineOptions)
+        }
         polyLine?.points = positionPointsArray
         Timber.d("Polyline has ${polyLine?.points?.size} points")
     }
@@ -168,7 +166,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 val bounds = builder.build()
                 val padding = typedValueUtil.dipToPixels(50f)
                 val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
-                googleMap?.moveCamera(cu)
+                googleMap?.animateCamera(cu, 500, null)
             }
         } catch (e: IllegalStateException) {
             e.printStackTrace()
@@ -179,4 +177,17 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         super.onLowMemory()
         binding.mapView.onLowMemory()
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.mapView.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        fun newInstance(): PathFragment {
+            Timber.d("New instance of map fragment created")
+            return PathFragment()
+        }
+    }
+
 }

@@ -1,6 +1,8 @@
 package xevenition.com.runage.model
 
+import com.google.gson.annotations.SerializedName
+
 data class FirestoreLocation(
-    val lat: Double,
-    val lon: Double
+    @SerializedName("lat") val lat: Double,
+    @SerializedName("lon") val lon: Double
 )

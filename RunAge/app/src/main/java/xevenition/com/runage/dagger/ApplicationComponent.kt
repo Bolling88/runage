@@ -4,6 +4,10 @@ import dagger.Component
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
+import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
+import xevenition.com.runage.fragment.historysummary.HistorySummaryViewModelFactory
+import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment
+import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathViewModelFactory
 import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.main.MainViewModelFactory
@@ -44,10 +48,14 @@ interface ApplicationComponent {
     fun inject(component: MainViewModelFactory)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
+    fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
     fun inject(component: SummaryViewModelFactory)
     fun inject(component: HistoryViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
+    fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
+    fun inject(component: HistorySummaryViewModelFactory)
+    fun inject(component: HistorySummaryPathViewModelFactory)
 }

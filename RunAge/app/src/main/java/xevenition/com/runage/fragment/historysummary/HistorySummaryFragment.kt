@@ -1,34 +1,35 @@
-package xevenition.com.runage.fragment.summary
+package xevenition.com.runage.fragment.historysummary
 
-import android.animation.ObjectAnimator
-import android.graphics.Interpolator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
-import xevenition.com.runage.databinding.FragmentSummaryBinding
+import xevenition.com.runage.databinding.FragmentHistorySummaryBinding
 import xevenition.com.runage.util.BitmapUtil
 import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject
 
-class SummaryFragment : BaseFragment<SummaryViewModel>() {
+class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
 
-    private lateinit var binding: FragmentSummaryBinding
+    private lateinit var binding: FragmentHistorySummaryBinding
     private var googleMap: GoogleMap? = null
+
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
@@ -39,43 +40,44 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
-        val args = SummaryFragmentArgs.fromBundle(requireArguments())
-        val factory = SummaryViewModelFactory(getApplication(), args)
-        viewModel = ViewModelProvider(this, factory).get(SummaryViewModel::class.java)
+        val args = HistorySummaryFragmentArgs.fromBundle(requireArguments())
+        val factory = HistorySummaryViewModelFactory(getApplication(), args)
+        viewModel = ViewModelProvider(this, factory).get(HistorySummaryViewModel::class.java)
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        Timber.d("onCreateView")
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary, container, false)
+    ): View {
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_history_summary, container, false)
+        binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mapView.onCreate(arguments)
+
+        val navController = (activity as MainActivity).findNavController(R.id.nav_host_fragment)
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar
+            .setupWithNavController(navController, appBarConfiguration)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
         binding.mapView.getMapAsync {
             googleMap = it
             viewModel.onMapCreated()
             googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
-
         setUpObservables()
-
-//        ObjectAnimator.ofInt(binding.progressRunning, "progress", 85)
-//            .setDuration(1000)
-//            .start()
     }
 
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
+
         viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
             it?.let {
                 setUpPolyline(it)
@@ -92,10 +94,6 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
             it?.let {
                 drawEndMarker(it)
             }
-        })
-
-        viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
-            binding.animation.playAnimation()
         })
     }
 
@@ -173,10 +171,5 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         } catch (e: IllegalStateException) {
             e.printStackTrace()
         }
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        binding.mapView.onLowMemory()
     }
 }

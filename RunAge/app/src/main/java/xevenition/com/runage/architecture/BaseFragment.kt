@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 
-open abstract class BaseFragment<T: BaseViewModel> : Fragment() {
+abstract class BaseFragment<T: BaseViewModel> : Fragment() {
 
      lateinit var viewModel: T
 

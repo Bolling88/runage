@@ -21,8 +21,8 @@ class SettingsFragment : BaseFragment<SettingsViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        requireActivity().onBackPressedDispatcher.addCallback(this) {
-           activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
-        }
+           requireActivity().finish()
+       }
         val factory = SettingsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(SettingsViewModel::class.java)
     }

@@ -91,19 +91,37 @@
                 android:defaultValue="0" />
         </fragment>
     </navigation>
-    <navigation android:id="@+id/historyNavigation"
+    <navigation
+        android:id="@+id/historyNavigation"
+        android:label="@string/runage_summary"
         app:startDestination="@id/historyFragment">
         <fragment
             android:id="@+id/historyFragment"
             android:name="xevenition.com.runage.fragment.history.HistoryFragment"
-            android:label="HistoryFragment" />
-    </navigation>
-    <navigation android:id="@+id/achievementNavigation"
-        app:startDestination="@id/historyFragment">
+            android:label="HistoryFragment">
+            <action
+                android:id="@+id/action_historyFragment_to_historySummaryFragment"
+                app:destination="@id/historySummaryFragment" />
+        </fragment>
         <fragment
-            android:id="@+id/historyFragment"
-            android:name="xevenition.com.runage.fragment.history.HistoryFragment"
-            android:label="HistoryFragment" />
+            android:id="@+id/historySummaryFragment"
+            android:name="xevenition.com.runage.fragment.historysummary.HistorySummaryFragment"
+            android:label="Summary">
+            <argument
+                android:name="key_saved_quest"
+                app:argType="xevenition.com.runage.model.SavedQuest" />
+            <action
+                android:id="@+id/action_historySummaryFragment_to_historySummaryPathFragment"
+                app:destination="@id/historySummaryPathFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/historySummaryPathFragment"
+            android:name="xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment"
+            android:label="HistorySummaryPathFragment">
+            <argument
+                android:name="key_saved_quest"
+                app:argType="xevenition.com.runage.model.SavedQuest" />
+        </fragment>
     </navigation>
 
     <navigation android:id="@+id/appSettingsNavigation"

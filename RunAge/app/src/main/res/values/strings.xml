@@ -52,4 +52,11 @@
     <string name="runage_level">Level</string>
     <string name="runage_leaderboard">Leaderboard</string>
     <string name="runage_achievements">Achievements</string>
+    <string name="runage_sign_out">Sign out</string>
+    <string name="runage_your_weight">Your weight</string>
+    <string name="runage_summary">Summary</string>
+    <string name="runage_min_km">min/km</string>
+    <string name="runage_min_mi">min/mi</string>
+    <string name="runage_km">km</string>
+    <string name="runage_mi">mi</string>
 </resources>

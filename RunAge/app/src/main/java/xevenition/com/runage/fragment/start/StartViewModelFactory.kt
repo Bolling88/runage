@@ -8,7 +8,7 @@ import xevenition.com.runage.util.*
 import javax.inject.Inject
 
 class StartViewModelFactory @Inject constructor(app: MainApplication) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

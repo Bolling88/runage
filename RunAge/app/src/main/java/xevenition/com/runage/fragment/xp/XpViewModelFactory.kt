@@ -8,7 +8,7 @@ import javax.inject.Inject
 class XpViewModelFactory @Inject constructor(
     app: MainApplication
 ) :
-    BaseViewModelFactory(app) {
+    BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)

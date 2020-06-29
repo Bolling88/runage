@@ -1,20 +1,18 @@
 package xevenition.com.runage.activity
 
 import android.os.Bundle
-import android.util.Log
+import android.view.Gravity
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.games.Games
-import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.databinding.ActivityMainBinding
 
@@ -80,6 +78,13 @@ class MainActivity : AppCompatActivity() {
 
     fun unlockDrawer(){
         binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    fun setUpAchievementsLayout(googleSignInAccount: GoogleSignInAccount){
+        Games.getGamesClient(this, googleSignInAccount)
+            .setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
+        val gamesClient = Games.getGamesClient(this@MainActivity, googleSignInAccount)
+        gamesClient.setViewForPopups(window.decorView.findViewById(android.R.id.content))
     }
 
     override fun onBackPressed() {

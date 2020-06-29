@@ -1,12 +1,16 @@
 package xevenition.com.runage.fragment.appsettings
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
@@ -21,7 +25,7 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
+            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
         }
         val factory = AppSettingsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(AppSettingsViewModel::class.java)
@@ -40,6 +44,18 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
             (activity as? MainActivity)?.openMenu()
         }
 
+        binding.textWeightField.addTextChangedListener(object: TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+               viewModel.onWeightTextChanged(s.toString())
+            }
+        })
+
         return binding.root
     }
 
@@ -51,5 +67,23 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
+
+        viewModel.observableWeight.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.textWeightField.setText(it.toString())
+            }
+        })
+
+        viewModel.observableUnitType.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                if(it) {
+                    binding.radioMetric.isChecked = true
+                    binding.radioImperial.isChecked = false
+                }else{
+                    binding.radioMetric.isChecked = false
+                    binding.radioImperial.isChecked = true
+                }
+            }
+        })
     }
 }

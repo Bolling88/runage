@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Parcelable
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
@@ -147,6 +147,12 @@ class MainFragment : BaseFragment<MainViewModel>() {
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
+
+        viewModel.observableUserAccount.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                (activity as? MainActivity)?.setUpAchievementsLayout(it)
+            }
+        })
     }
 
     private fun setLottieSwipeState(active: Boolean) {

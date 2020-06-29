@@ -14,19 +14,23 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.R
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
 import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SaveUtil
 import java.time.Instant
 
 
 class MapViewModel(
-    private val resourceUtil: ResourceUtil,
     private val questRepository: QuestRepository,
-    private val locationUtil: LocationUtil
+    private val locationUtil: LocationUtil,
+    private val saveUtil: SaveUtil,
+    private val runningUtil: RunningUtil,
+    private val resourceUtil: ResourceUtil
 ) : BaseViewModel() {
 
     private var currentPath: MutableList<LatLng> = mutableListOf()
@@ -60,7 +64,6 @@ class MapViewModel(
     val observableClearMap = SingleLiveEvent<Unit>()
 
     init {
-        //TODO check if imperial or metric
         resetTimers()
     }
 
@@ -68,7 +71,11 @@ class MapViewModel(
         _liveTextTimer.postValue("00:00:00")
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
-        _livePace.postValue("0 min/km")
+        if(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
+            _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_km)}")
+        }else{
+            _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_mi)}")
+        }
     }
 
     fun onNewQuestCreated(id: Int) {
@@ -90,16 +97,14 @@ class MapViewModel(
                     setUpRunningTimer(quest.startTimeEpochSeconds)
                 }
 
-                //TODO check if imperial or metric
-                val distance = quest.totalDistance
-                _liveTotalDistance.postValue("${distance.toInt()} m")
+                _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))
                 _liveCalories.postValue("${quest.calories}")
 
                 val lastTimeStamp =
                     quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
                 val duration = lastTimeStamp - quest.startTimeEpochSeconds
 
-                _livePace.postValue(RunningUtil.getPaceString(duration, distance))
+                _livePace.postValue(runningUtil.getPaceString(duration, quest.totalDistance, true))
             }, {
                 Timber.e(it)
             })
@@ -109,7 +114,7 @@ class MapViewModel(
     }
 
     private fun setUpRunningTimer(startTimeEpochSeconds: Long){
-        runningTimerDisposable = RunningUtil.getRunningTimer(startTimeEpochSeconds)
+        runningTimerDisposable = runningUtil.getRunningTimer(startTimeEpochSeconds)
             .subscribe({
                 _liveTextTimer.postValue(it)
             },{

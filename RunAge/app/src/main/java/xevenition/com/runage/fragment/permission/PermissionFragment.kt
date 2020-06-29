@@ -12,18 +12,11 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentPermissionBinding
-import xevenition.com.runage.fragment.map.MapViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
-import xevenition.com.runage.fragment.settings.SettingsViewModel
-import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
-import javax.inject.Inject
 
 
 class PermissionFragment : BaseFragment<PermissionViewModel>() {

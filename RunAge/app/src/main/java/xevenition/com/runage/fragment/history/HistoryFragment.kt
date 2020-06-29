@@ -16,7 +16,10 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentHistoryBinding
+import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
 class HistoryFragment : BaseFragment<HistoryViewModel>() {
@@ -26,6 +29,8 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
+    @Inject
+    lateinit var runningUtil: RunningUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +39,13 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
             activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
         }
         val factory = HistoryViewModelFactory(getApplication())
-        historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil)
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
+
+        historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
+            override fun onClick(quest: SavedQuest) {
+                viewModel.onQuestClicked(quest)
+            }
+        })
     }
 
     override fun onCreateView(

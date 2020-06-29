@@ -1,5 +1,6 @@
 package xevenition.com.runage.fragment.history
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,19 @@ import xevenition.com.runage.R
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SaveUtil
 import java.time.Instant
 import java.time.ZoneId
 
-class HistoryRecyclerAdapter(private val resourceUtil: ResourceUtil): ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback())  {
+class HistoryRecyclerAdapter(
+    private val resourceUtil: ResourceUtil,
+    private val runningUtil: RunningUtil,
+    private val listener: OnClickListener
+) : ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback()) {
+
+    interface OnClickListener {
+        fun onClick(quest: SavedQuest)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -30,21 +40,30 @@ class HistoryRecyclerAdapter(private val resourceUtil: ResourceUtil): ListAdapte
         private val textCalories: TextView = view.findViewById(R.id.textCalories)
         private val textTitle: TextView = view.findViewById(R.id.textTitle)
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: SavedQuest) = with(itemView) {
             setOnClickListener {
-                // TODO: Handle on click
+                listener.onClick(item)
             }
 
             val dt = Instant.ofEpochSecond(item.startTimeEpochSeconds)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDateTime()
 
-            textTitle.text = "${dt.dayOfWeek}, ${dt.dayOfMonth} ${dt.month}, ${dt.year}, ${dt.hour}:${dt.minute}"
+            textTitle.text =
+                "${dt.dayOfWeek}, ${dt.dayOfMonth} ${dt.month}, ${dt.year}, ${dt.hour}:${dt.minute}"
 
-            textDistance.text = "${item.totalDistance} m"
+            textDistance.text = runningUtil.getDistanceString(item.totalDistance)
             val duration = item.endTimeEpochSeconds - item.startTimeEpochSeconds
-            textDuration.text = "${resourceUtil.getString(R.string.runage_duration)}: ${RunningUtil.convertTimeToDurationString(duration)}"
-            textPace.text = "${RunningUtil.getPaceString(duration, item.totalDistance.toDouble(), showAbbreviation = false)}"
+            textDuration.text =
+                "${resourceUtil.getString(R.string.runage_duration)}: ${runningUtil.convertTimeToDurationString(
+                    duration
+                )}"
+            textPace.text =
+                runningUtil.getPaceString(
+                    duration,
+                    item.totalDistance.toDouble(),
+                    showAbbreviation = false)
             textCalories.text = "${item.calories}"
         }
     }
