@@ -13,11 +13,13 @@ import xevenition.com.runage.R
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SaveUtil
 import java.time.Instant
 import java.time.ZoneId
 
 class HistoryRecyclerAdapter(
     private val resourceUtil: ResourceUtil,
+    private val runningUtil: RunningUtil,
     private val listener: OnClickListener
 ) : ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback()) {
 
@@ -51,18 +53,17 @@ class HistoryRecyclerAdapter(
             textTitle.text =
                 "${dt.dayOfWeek}, ${dt.dayOfMonth} ${dt.month}, ${dt.year}, ${dt.hour}:${dt.minute}"
 
-            textDistance.text = "${item.totalDistance} m"
+            textDistance.text = runningUtil.getDistanceString(item.totalDistance)
             val duration = item.endTimeEpochSeconds - item.startTimeEpochSeconds
             textDuration.text =
-                "${resourceUtil.getString(R.string.runage_duration)}: ${RunningUtil.convertTimeToDurationString(
+                "${resourceUtil.getString(R.string.runage_duration)}: ${runningUtil.convertTimeToDurationString(
                     duration
                 )}"
             textPace.text =
-                RunningUtil.getPaceString(
+                runningUtil.getPaceString(
                     duration,
                     item.totalDistance.toDouble(),
-                    showAbbreviation = false
-                )
+                    showAbbreviation = false)
             textCalories.text = "${item.calories}"
         }
     }

@@ -37,6 +37,12 @@ class SummaryViewModelFactory @Inject constructor(
     @Inject
     lateinit var gameServicesUtil: GameServicesUtil
 
+    @Inject
+    lateinit var saveUtil: SaveUtil
+
+    @Inject
+    lateinit var runningUtil: RunningUtil
+
     init {
         app.appComponent.inject(this)
     }
@@ -51,6 +57,8 @@ class SummaryViewModelFactory @Inject constructor(
             questRepository,
             resourceUtil,
             firestoreHandler,
+            saveUtil,
+            runningUtil,
             arguments
         ) as T
     }

@@ -14,13 +14,19 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SaveUtil
+import java.time.Instant
 import kotlin.math.roundToInt
 
 class HistorySummaryViewModel(
     args: HistorySummaryFragmentArgs,
-    private val resourceUtil: ResourceUtil
+    private val resourceUtil: ResourceUtil,
+    private val saveUtil: SaveUtil,
+    private val runningUtil: RunningUtil
 ) : BaseViewModel() {
 
 
@@ -95,11 +101,30 @@ class HistorySummaryViewModel(
 
     init {
         displayRunningPercentage(savedQuest)
+        setUpQuestInfo(savedQuest)
     }
 
     fun onMapClicked() {
         observableNavigateTo.postValue(
-            HistorySummaryFragmentDirections.actionHistorySummaryFragmentToHistorySummaryPathFragment(savedQuest)
+            HistorySummaryFragmentDirections.actionHistorySummaryFragmentToHistorySummaryPathFragment(
+                savedQuest
+            )
+        )
+    }
+
+    @SuppressLint("CheckResult")
+    private fun setUpQuestInfo(quest: SavedQuest) {
+        val duration = quest.endTimeEpochSeconds - quest.startTimeEpochSeconds
+        _liveTextTimer.postValue(runningUtil.convertTimeToDurationString(duration))
+        _liveTotalDistance.postValue("${quest.totalDistance} m")
+        _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance))
+        _liveCalories.postValue("${quest.calories}")
+        _livePace.postValue(
+            runningUtil.getPaceString(
+                duration,
+                quest.totalDistance.toDouble(),
+                true
+            )
         )
     }
 
@@ -142,46 +167,42 @@ class HistorySummaryViewModel(
             })
     }
 
-    private fun displayRunningPercentage(quest: SavedQuest){
+    private fun displayRunningPercentage(quest: SavedQuest) {
         if (quest.runningPercentage > 0) {
-            val runningPercentage = (quest.runningPercentage*100).roundToInt()
+            val runningPercentage = (quest.runningPercentage * 100).roundToInt()
             _liveRunningProgress.postValue(runningPercentage)
             _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
         } else {
             _liveRunningVisibility.postValue(View.GONE)
         }
         if (quest.walkingPercentage > 0) {
-            val walkingPercentage = (quest.walkingPercentage*100).roundToInt()
+            val walkingPercentage = (quest.walkingPercentage * 100).roundToInt()
             _liveWalkingProgress.postValue(walkingPercentage)
             _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking_percentage)} - $walkingPercentage")
         } else {
             _liveWalkingVisibility.postValue(View.GONE)
         }
         if (quest.bicyclingPercentage > 0) {
-            val bicyclingPercentage = (quest.bicyclingPercentage*100).roundToInt()
+            val bicyclingPercentage = (quest.bicyclingPercentage * 100).roundToInt()
             _liveBicyclingProgress.postValue(bicyclingPercentage)
             _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling_percentage)} - $bicyclingPercentage")
         } else {
             _liveBicycleVisibility.postValue(View.GONE)
         }
         if (quest.stillPercentage > 0) {
-            val stillPercentage = (quest.stillPercentage*100).roundToInt()
-            _liveStillProgress.postValue((quest.stillPercentage*100).roundToInt())
+            val stillPercentage = (quest.stillPercentage * 100).roundToInt()
+            _liveStillProgress.postValue((quest.stillPercentage * 100).roundToInt())
             _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still_percentage)} - $stillPercentage")
         } else {
             _liveStillVisibility.postValue(View.GONE)
         }
         if (quest.drivingPercentage > 0) {
-            val drivingPercentage = (quest.drivingPercentage*100).roundToInt()
+            val drivingPercentage = (quest.drivingPercentage * 100).roundToInt()
             _liveDrivingProgress.postValue(drivingPercentage)
             _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving_percentage)} - $drivingPercentage")
         } else {
             _liveDrivingVisibility.postValue(View.GONE)
         }
-    }
-
-    fun onCloseClicked() {
-        observableBackNavigation.call()
     }
 
     fun onMapCreated() {

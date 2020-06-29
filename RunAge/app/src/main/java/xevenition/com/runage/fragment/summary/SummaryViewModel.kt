@@ -27,6 +27,8 @@ class SummaryViewModel(
     private val questRepository: QuestRepository,
     private val resourceUtil: ResourceUtil,
     private val fireStoreHandler: FireStoreHandler,
+    private val saveUtil: SaveUtil,
+    private val runningUtil: RunningUtil,
     arguments: SummaryFragmentArgs
 ) : BaseViewModel() {
     private var runStats: RunStats? = null
@@ -117,12 +119,15 @@ class SummaryViewModel(
     val liveTextDrivingPercentage: LiveData<String> = _liveTextDrivingPercentage
 
     init {
-        //TODO check if imperial or metric
         _liveButtonEnabled.postValue(false)
         _liveTextTimer.postValue("00:00:00")
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
-        _livePace.postValue("0 min/km")
+        if(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
+            _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_km)}")
+        }else{
+            _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_mi)}")
+        }
         _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_progress))
         _liveTimerColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
         getQuest()
@@ -148,10 +153,10 @@ class SummaryViewModel(
             quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
         val duration = lastTimeStamp - quest.startTimeEpochSeconds
         val distance = quest.totalDistance
-        _liveTextTimer.postValue(RunningUtil.convertTimeToDurationString(duration))
-        _liveTotalDistance.postValue("${distance.toInt()} m")
+        _liveTextTimer.postValue(runningUtil.convertTimeToDurationString(duration))
+        _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))
         _liveCalories.postValue("${quest.calories}")
-        _livePace.postValue(RunningUtil.getPaceString(duration, distance))
+        _livePace.postValue(runningUtil.getPaceString(duration, distance, true))
 
         if (quest.locations.size < 2) {
             _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
@@ -169,7 +174,7 @@ class SummaryViewModel(
 
     @SuppressLint("CheckResult")
     private fun setUpActivityTypeInfo(quest: Quest) {
-        RunningUtil.processRunningStats(quest.locations, locationUtil)
+        runningUtil.processRunningStats(quest.locations, locationUtil)
             .doFinally {
                 _liveButtonEnabled.postValue(true)
             }

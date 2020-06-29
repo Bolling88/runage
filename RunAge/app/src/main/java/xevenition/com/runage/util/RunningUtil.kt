@@ -1,17 +1,21 @@
 package xevenition.com.runage.util
 
 import android.annotation.SuppressLint
-import android.location.Location
 import com.google.android.gms.location.DetectedActivity
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import xevenition.com.runage.R
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.model.RunStats
 import java.time.Instant
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-object RunningUtil {
+class RunningUtil @Inject constructor(
+    private val resourceUtil: ResourceUtil,
+    private val saveUtil: SaveUtil
+) {
 
     fun getRunningTimer(startDateEpochSeconds: Long): Observable<String> {
         return Observable.interval(0, 1, TimeUnit.SECONDS)
@@ -32,13 +36,20 @@ object RunningUtil {
         )
     }
 
-    fun convertTimeToDurationStringMinutes(seconds: Long): String {
-        val times = SeparatorUtil.separateTime(seconds)
-        return String.format(
-            "%02d:%02d",
-            times.first,
-            times.second
-        )
+    fun getDistanceString(distance: Int): String {
+        return if(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
+            if(distance < 100){
+                "$distance m"
+            }else{
+                "${"%.2f".format(distance/1000)} ${resourceUtil.getString(R.string.runage_km)}"
+            }
+        }else{
+            if(distance < 160.9344){
+                "$distance m"
+            }else{
+                "${"%.2f".format(distance/1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
+            }
+        }
     }
 
     fun getPaceString(
@@ -46,20 +57,34 @@ object RunningUtil {
         distanceInMeters: Double,
         showAbbreviation: Boolean = true
     ): String {
-        val secondsPerKm = durationInSeconds.toDouble() / (distanceInMeters / 1000)
-        val times = SeparatorUtil.separateTime(secondsPerKm.toLong())
-        var minutes = times.first * 60 + times.second
-        //TODO fix imperial
+        val isMetric = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
+        val kmEnding = resourceUtil.getString(R.string.runage_min_km)
+        val miEnding = resourceUtil.getString(R.string.runage_min_mi)
+        val secondsPer: Double = if (isMetric) {
+            durationInSeconds.toDouble() / (distanceInMeters / 1000)
+        } else {
+            durationInSeconds.toDouble() / (distanceInMeters / 1609.344)
+        }
+        val times = SeparatorUtil.separateTime(secondsPer.toLong())
+        val minutes = times.first * 60 + times.second
         return if (minutes > 999) {
             if (showAbbreviation) {
-                "999:00 min/km"
+                if (isMetric) {
+                    "999:00 $kmEnding"
+                } else {
+                    "999:00 $miEnding"
+                }
             } else {
                 "999:00"
             }
         } else {
             val seconds = times.third
             if (showAbbreviation) {
-                "$minutes:$seconds min/km"
+                if (isMetric) {
+                    "$minutes:$seconds $kmEnding"
+                } else {
+                    "$minutes:$seconds $miEnding"
+                }
             } else {
                 "$minutes:$seconds"
             }
@@ -67,7 +92,10 @@ object RunningUtil {
     }
 
     @SuppressLint("CheckResult")
-    fun processRunningStats(locations: List<PositionPoint>, locationUtil: LocationUtil): Single<RunStats> {
+    fun processRunningStats(
+        locations: List<PositionPoint>,
+        locationUtil: LocationUtil
+    ): Single<RunStats> {
         val activityMap: MutableMap<Int, Int> = mutableMapOf()
         var distance = 0.0
         var duration = 0.0
@@ -76,10 +104,10 @@ object RunningUtil {
         return Observable.fromIterable(locations)
             .subscribeOn(Schedulers.computation())
             .map {
-                if(it.altitude < lowest){
+                if (it.altitude < lowest) {
                     lowest = it.altitude
                 }
-                if(it.altitude > highest){
+                if (it.altitude > highest) {
                     highest = it.altitude
                 }
                 it
@@ -116,7 +144,13 @@ object RunningUtil {
 
                 val xp = LevelCalculator.getXpCalculation(duration, distance)
                 val altitude = highest - lowest
-                RunStats(xp, distance.toInt(), duration.toInt(), altitude.toInt(), activityPercentage)
+                RunStats(
+                    xp,
+                    distance.toInt(),
+                    duration.toInt(),
+                    altitude.toInt(),
+                    activityPercentage
+                )
             }
     }
 }
