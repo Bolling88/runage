@@ -64,4 +64,7 @@
     <string name="runage_activity_time_spent_on">Activity time spent on:</string>
     <string name="runage_experience_gained">Experience gained:</string>
     <string name="runage_xp">XP</string>
+    <string name="runage_save_quest_failed_title">Failed to save quest!</string>
+    <string name="runage_save_quest_failed_message">Check your connection and try again.</string>
+    <string name="runage_ok">OK</string>
 </resources>
