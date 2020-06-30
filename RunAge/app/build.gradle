@@ -76,6 +76,7 @@ dependencies {
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-fitness:18.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.2.0'
 
     //Test
     testImplementation 'junit:junit:4.12'

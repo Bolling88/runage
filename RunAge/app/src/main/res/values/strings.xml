@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">RunAge</string>
 
-    <string name="notification_title">Running quest active</string>
-    <string name="notification_message">Good luck!</string>
+    <string name="runage_notification_title">Running</string>
     <string name="ticker_text">Ticker</string>
     <string name="runage_continue">Continue</string>
     <string name="explanation_permission_location">In order for us to track your running we need to be able to retrieve your location.</string>
@@ -44,11 +43,11 @@
     <string name="runage_home">Home</string>
     <string name="runage_sign_in">Sign in</string>
     <string name="runage_no_completed_runs">No completed runs</string>
-    <string name="runage_running_percentage">Running %</string>
-    <string name="runage_walking_percentage">Walking %</string>
-    <string name="runage_driving_percentage">Driving %</string>
-    <string name="runage_bicycling_percentage">Bicycling</string>
-    <string name="runage_still_percentage">Still %</string>
+    <string name="runage_running">Running</string>
+    <string name="runage_walking">Walking</string>
+    <string name="runage_driving">Driving</string>
+    <string name="runage_bicycling">Bicycling</string>
+    <string name="runage_still">Still</string>
     <string name="runage_level">Level</string>
     <string name="runage_leaderboard">Leaderboard</string>
     <string name="runage_achievements">Achievements</string>
@@ -59,4 +58,17 @@
     <string name="runage_min_mi">min/mi</string>
     <string name="runage_km">km</string>
     <string name="runage_mi">mi</string>
+    <string name="runage_empty_timer">00:00:00</string>
+    <string name="runage_rules">Rules</string>
+    <string name="runage_delete_run">Delete run</string>
+    <string name="runage_activity_time_spent_on">Activity time spent on:</string>
+    <string name="runage_experience_gained">Experience gained:</string>
+    <string name="runage_xp">XP</string>
+    <string name="runage_save_quest_failed_title">Failed to save quest!</string>
+    <string name="runage_save_quest_failed_message">Check your connection and try again.</string>
+    <string name="runage_ok">OK</string>
+    <string name="runage_no">No</string>
+    <string name="runage_yes">Yes</string>
+    <string name="runage_delete_run_title">Delete Run</string>
+    <string name="runage_delete_run_message">Are you sure you want to delete this run?</string>
 </resources>

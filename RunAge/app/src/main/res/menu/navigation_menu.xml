@@ -15,7 +15,7 @@
 
         <item
             android:id="@+id/historyNavigation"
-            android:icon="@drawable/ic_history"
+            android:icon="@drawable/ic_checkmark"
             android:title="@string/runage_completed_runs" />
     </group>
 
@@ -35,10 +35,19 @@
 
         <item
             android:id="@+id/achievementNavigation"
-            android:icon="@drawable/ic_star"
+            android:icon="@drawable/ic_achievement"
             android:title="@string/runage_achievements" />
     </group>
 
+    <group
+        android:id="@+id/grp_6"
+        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/rulesNavigation"
+            android:icon="@drawable/ic_book"
+            android:title="@string/runage_rules" />
+    </group>
 
     <group
         android:id="@+id/grp_3"
@@ -46,7 +55,7 @@
 
         <item
             android:id="@+id/appSettingsNavigation"
-            android:icon="@drawable/ic_user_location"
+            android:icon="@drawable/ic_settings"
             android:title="@string/runage_settings" />
     </group>
 

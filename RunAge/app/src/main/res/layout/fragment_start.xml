@@ -44,14 +44,31 @@
             app:lottie_scale="0.3"
             app:lottie_speed="0.4" />
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textExperience"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:fontFamily="@font/azonix"
+            android:singleLine="true"
+            android:paddingBottom="10dip"
+            android:text="@{viewModel.liveTextXp}"
+            android:textColor="@color/black"
+            android:textSize="@dimen/textSizeNormal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:text="1243 / 2342" />
+
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/circularProgressBar"
             android:layout_width="184dip"
             android:layout_height="wrap_content"
-            android:layout_marginTop="66dip"
             app:layout_constraintEnd_toEndOf="@+id/card_profile"
             app:layout_constraintStart_toStartOf="@+id/card_profile"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/textExperience"
             app:cpb_background_progressbar_color="@color/grey1"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress_direction="to_right"
@@ -65,13 +82,13 @@
             android:id="@+id/card_profile"
             android:layout_width="155dp"
             android:layout_height="155dp"
-            android:layout_marginTop="@dimen/margin_huge"
+             android:layout_marginTop="14dip"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="250dp"
             app:cardElevation="10dip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/textExperience">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="150dp"
@@ -94,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
-            android:layout_marginTop="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_basic"
             android:fontFamily="@font/azonix"
             android:singleLine="true"
@@ -107,6 +124,7 @@
             tools:text="Ludwig Bolling" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
@@ -121,5 +139,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textName"
             tools:text="Level 14" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

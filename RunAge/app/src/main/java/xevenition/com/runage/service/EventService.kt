@@ -14,20 +14,25 @@ import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.android.gms.location.*
+import com.google.android.gms.location.DetectedActivity
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.*
+import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
-import xevenition.com.runage.service.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.service.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.util.*
 import java.time.Instant
 import java.util.concurrent.TimeUnit
@@ -49,6 +54,7 @@ class EventService : Service() {
     private lateinit var locationCallback: LocationCallback
     private val binder = LocalBinder()
     private var callback: EventCallback? = null
+    private var runningTimerDisposable: Disposable? = null
     private var isMetric: Boolean = false
 
     interface EventCallback {
@@ -69,6 +75,9 @@ class EventService : Service() {
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
+
+    @Inject
+    lateinit var runningUtil: RunningUtil
 
     private val currentActivityReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -118,15 +127,34 @@ class EventService : Service() {
         compositeDisposable.add(disposable)
     }
 
-    private fun startNewQuest(){
+    private fun startNewQuest() {
         val disposable = questRepository.startNewQuest()
             .subscribe({
                 callback?.onQuestCreated(it.id)
                 currentQuest = it
+                setUpRunningTimer(currentQuest.startTimeEpochSeconds)
             }, {
                 Timber.e(it)
             })
         compositeDisposable.add(disposable)
+    }
+
+    private fun setUpRunningTimer(startTimeEpochSeconds: Long){
+        runningTimerDisposable = runningUtil.getRunningTimer(startTimeEpochSeconds)
+            .subscribe({
+                Timber.d("New notification message: $it")
+                if(  this::currentQuest.isInitialized) {
+                    val duration = Instant.now().epochSecond - startTimeEpochSeconds
+
+                    val distance = "${resourceUtil.getString(R.string.runage_distance)}: ${runningUtil.getDistanceString(currentQuest.totalDistance.toInt())}"
+                    val calories = "${resourceUtil.getString(R.string.runage_calories).capitalize()}: ${currentQuest.calories}"
+                    val pace = "${resourceUtil.getString(R.string.runage_avg_pace)}: ${runningUtil.getPaceString(duration, currentQuest.totalDistance, true)}"
+                    updateNotification(it, "$distance \n$calories \n$pace")
+                }
+            },{
+                Timber.e(it)
+            })
+        runningTimerDisposable?.let { compositeDisposable.add(it) }
     }
 
     override fun onDestroy() {
@@ -134,6 +162,7 @@ class EventService : Service() {
         Timber.e("Service destroyed")
         serviceIsRunning = false
         textToSpeech?.shutdown()
+        runningTimerDisposable?.dispose()
         eventHandler.endActivityTracking()
         locationUtil.removeLocationUpdates(locationCallback)
         LocalBroadcastManager.getInstance(this).unregisterReceiver(currentActivityReceiver)
@@ -243,49 +272,54 @@ class EventService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         serviceIsRunning = true
+        val notification: Notification = buildNotification(resourceUtil.getString(R.string.runage_empty_timer), "")
+
+        startForeground(NOTIFICATION_ID, notification)
+
+        if((runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) && ::currentQuest.isInitialized){
+            setUpRunningTimer(currentQuest.startTimeEpochSeconds)
+        }
+
+        return START_STICKY
+    }
+
+    private fun buildNotification(title: String, content: String): Notification {
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
             }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notification: Notification = Notification.Builder(
-                    this,
-                    CHANNEL_DEFAULT_IMPORTANCE
-                )
-                .setContentTitle(getText(R.string.notification_title))
-                .setChannelId(createNotificationChannel("my_service", "My Background Service"))
-                .setContentText(getText(R.string.notification_message))
-                .setSmallIcon(R.drawable.ic_run_blue)
-                .setContentIntent(pendingIntent)
-                .setTicker(getText(R.string.ticker_text))
-                .build()
+        return NotificationCompat.Builder(
+            this,
+            CHANNEL_DEFAULT_IMPORTANCE
+        )
+            .setContentTitle(title)
+            .setChannelId(createNotificationChannel("runage_service", "Runage Running Service"))
+            .setContentText(content)
+            .setTicker(content)
+            .setOngoing(true)
+            .setStyle( NotificationCompat.BigTextStyle().setBigContentTitle(title))
+            .setStyle( NotificationCompat.BigTextStyle().bigText(content))
+            .setSmallIcon(R.drawable.ic_run_blue)
+            .setColor(resourceUtil.getColor(R.color.colorPrimary))
+            .setContentIntent(pendingIntent)
+            .build()
+    }
 
-            startForeground(NOTIFICATION_ID, notification)
-        } else {
-
-            @Suppress("DEPRECATION") val builder: NotificationCompat.Builder = NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.app_name))
-                .setContentText(getText(R.string.notification_message))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true)
-
-            val notification: Notification = builder.build()
-
-            startForeground(NOTIFICATION_ID, notification)
-        }
-
-        return START_STICKY
+    private fun updateNotification(title: String, content: String) {
+        val notification = buildNotification(title, content)
+        //NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, notification)
+        startForeground(NOTIFICATION_ID, notification)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val chan = NotificationChannel(
             channelId,
-            channelName, NotificationManager.IMPORTANCE_NONE
+            channelName, NotificationManager.IMPORTANCE_HIGH
         )
         chan.lightColor = Color.BLUE
-        chan.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+        chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
         return channelId
@@ -315,7 +349,6 @@ class EventService : Service() {
         const val TAG = "Event Service"
         const val NOTIFICATION_ID = 2345235
         const val MIN_ACCURACY = 30
-        const val LOCATION_REQUEST_CODE = 234452
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }
 }

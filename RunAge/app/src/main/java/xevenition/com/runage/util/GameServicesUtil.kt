@@ -1,13 +1,18 @@
 package xevenition.com.runage.util
 
 import android.app.Application
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.Games
 import com.google.android.gms.location.DetectedActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import xevenition.com.runage.R
 import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
+
 
 class GameServicesUtil @Inject constructor(private val app: Application, private val accountUtil: AccountUtil){
 
@@ -122,5 +127,13 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
                 }
             }
         }
+    }
+
+    fun signOut(): Task<Void> {
+        val signInClient = GoogleSignIn.getClient(
+            app,
+            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
+        )
+        return signInClient.signOut()
     }
 }

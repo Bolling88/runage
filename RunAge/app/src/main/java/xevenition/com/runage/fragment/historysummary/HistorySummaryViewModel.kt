@@ -171,35 +171,35 @@ class HistorySummaryViewModel(
         if (quest.runningPercentage > 0) {
             val runningPercentage = (quest.runningPercentage * 100).roundToInt()
             _liveRunningProgress.postValue(runningPercentage)
-            _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
+            _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running)} - $runningPercentage%")
         } else {
             _liveRunningVisibility.postValue(View.GONE)
         }
         if (quest.walkingPercentage > 0) {
             val walkingPercentage = (quest.walkingPercentage * 100).roundToInt()
             _liveWalkingProgress.postValue(walkingPercentage)
-            _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking_percentage)} - $walkingPercentage")
+            _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking)} - $walkingPercentage%")
         } else {
             _liveWalkingVisibility.postValue(View.GONE)
         }
         if (quest.bicyclingPercentage > 0) {
             val bicyclingPercentage = (quest.bicyclingPercentage * 100).roundToInt()
             _liveBicyclingProgress.postValue(bicyclingPercentage)
-            _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling_percentage)} - $bicyclingPercentage")
+            _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling)} - $bicyclingPercentage%")
         } else {
             _liveBicycleVisibility.postValue(View.GONE)
         }
         if (quest.stillPercentage > 0) {
             val stillPercentage = (quest.stillPercentage * 100).roundToInt()
             _liveStillProgress.postValue((quest.stillPercentage * 100).roundToInt())
-            _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still_percentage)} - $stillPercentage")
+            _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still)} - $stillPercentage%")
         } else {
             _liveStillVisibility.postValue(View.GONE)
         }
         if (quest.drivingPercentage > 0) {
             val drivingPercentage = (quest.drivingPercentage * 100).roundToInt()
             _liveDrivingProgress.postValue(drivingPercentage)
-            _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving_percentage)} - $drivingPercentage")
+            _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving)} - $drivingPercentage%")
         } else {
             _liveDrivingVisibility.postValue(View.GONE)
         }

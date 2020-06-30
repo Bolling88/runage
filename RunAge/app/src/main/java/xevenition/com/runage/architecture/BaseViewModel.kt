@@ -22,4 +22,5 @@ open class BaseViewModel: ViewModel(){
     val observableNavigateTo = SingleLiveEvent<NavDirections>()
     val observableBackNavigation = SingleLiveEvent<Unit>()
     val observableToast = SingleLiveEvent<String>()
+    val observableInfoDialog = SingleLiveEvent<Triple<String, String, String>>()
 }
