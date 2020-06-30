@@ -67,10 +67,6 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         }
 
         setUpObservables()
-
-//        ObjectAnimator.ofInt(binding.progressRunning, "progress", 85)
-//            .setDuration(1000)
-//            .start()
     }
 
     @Override

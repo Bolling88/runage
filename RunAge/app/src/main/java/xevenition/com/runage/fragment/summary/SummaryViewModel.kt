@@ -118,6 +118,9 @@ class SummaryViewModel(
     private val _liveTextDrivingPercentage = MutableLiveData<String>()
     val liveTextDrivingPercentage: LiveData<String> = _liveTextDrivingPercentage
 
+    private val _liveTextExperience = MutableLiveData<String>()
+    val liveTextExperience: LiveData<String> = _liveTextExperience
+
     init {
         _liveButtonEnabled.postValue(false)
         _liveTextTimer.postValue("00:00:00")
@@ -192,34 +195,36 @@ class SummaryViewModel(
                     getActivityPercentage(it.activityPercentage, DetectedActivity.IN_VEHICLE)
                 if (runningPercentage > 0) {
                     _liveRunningProgress.postValue(runningPercentage)
-                    _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running_percentage)} - $runningPercentage")
+                    _liveTextRunningPercentage.postValue("${resourceUtil.getString(R.string.runage_running)} - $runningPercentage%")
                 } else {
                     _liveRunningVisibility.postValue(View.GONE)
                 }
                 if (walkingPercentage > 0) {
                     _liveWalkingProgress.postValue(walkingPercentage)
-                    _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking_percentage)} - $walkingPercentage")
+                    _liveTextWalkingPercentage.postValue("${resourceUtil.getString(R.string.runage_walking)} - $walkingPercentage%")
                 } else {
                     _liveWalkingVisibility.postValue(View.GONE)
                 }
                 if (bicyclingPercentage > 0) {
                     _liveBicyclingProgress.postValue(bicyclingPercentage)
-                    _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling_percentage)} - $bicyclingPercentage")
+                    _liveTextBicyclingPercentage.postValue("${resourceUtil.getString(R.string.runage_bicycling)} - $bicyclingPercentage%")
                 } else {
                     _liveBicycleVisibility.postValue(View.GONE)
                 }
                 if (stillPercentage > 0) {
                     _liveStillProgress.postValue(stillPercentage)
-                    _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still_percentage)} - $stillPercentage")
+                    _liveTextStillPercentage.postValue("${resourceUtil.getString(R.string.runage_still)} - $stillPercentage%")
                 } else {
                     _liveStillVisibility.postValue(View.GONE)
                 }
                 if (drivingPercentage > 0) {
                     _liveDrivingProgress.postValue(drivingPercentage)
-                    _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving_percentage)} - $drivingPercentage")
+                    _liveTextDrivingPercentage.postValue("${resourceUtil.getString(R.string.runage_driving)} - $drivingPercentage%")
                 } else {
                     _liveDrivingVisibility.postValue(View.GONE)
                 }
+
+                _liveTextExperience.postValue("${it.xp} ${resourceUtil.getString(R.string.runage_xp)}")
 
                 _liveRunningVisibility
                 Timber.d("Percentage calculated")
@@ -367,5 +372,9 @@ class SummaryViewModel(
             }, {
                 Timber.e(it)
             })
+    }
+
+    fun onDeleteClicked(){
+        //TODO implement
     }
 }

@@ -38,7 +38,7 @@
         <item name="android:layout_margin">@dimen/margin_basic</item>
     </style>
 
-    <style name="ButtonStyleSignOut" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="ButtonStyleDestructive" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dip</item>
         <item name="android:fontFamily">@font/bold</item>

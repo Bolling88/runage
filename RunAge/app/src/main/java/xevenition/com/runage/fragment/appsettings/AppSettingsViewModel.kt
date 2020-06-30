@@ -44,7 +44,7 @@ class AppSettingsViewModel(
     }
 
     fun onSignOutClicked(){
-
+        //TODO implement
     }
 
 }

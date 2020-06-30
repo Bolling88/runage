@@ -90,7 +90,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
-            style="@style/ButtonStyleSignOut"
+            style="@style/ButtonStyleDestructive"
             android:clickable="@{viewModel.liveButtonEnabled}"
             android:enabled="@{viewModel.liveButtonEnabled}"
             android:onClick="@{()-> viewModel.onSignOutClicked()}"
