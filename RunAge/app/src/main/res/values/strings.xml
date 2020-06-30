@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">RunAge</string>
 
-    <string name="notification_title">Running quest active</string>
-    <string name="notification_message">Good luck!</string>
+    <string name="runage_notification_title">Running</string>
     <string name="ticker_text">Ticker</string>
     <string name="runage_continue">Continue</string>
     <string name="explanation_permission_location">In order for us to track your running we need to be able to retrieve your location.</string>
@@ -59,4 +58,5 @@
     <string name="runage_min_mi">min/mi</string>
     <string name="runage_km">km</string>
     <string name="runage_mi">mi</string>
+    <string name="runage_empty_timer">00:00:00</string>
 </resources>
