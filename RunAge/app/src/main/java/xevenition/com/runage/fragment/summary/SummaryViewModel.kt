@@ -126,6 +126,7 @@ class SummaryViewModel(
     val liveLoadingVisibility: LiveData<Int> = _liveLoadingVisibility
 
     val observableYesNoDialog = SingleLiveEvent<Pair<String, String>>()
+    val observableShowAd = SingleLiveEvent<Unit>()
 
     init {
         _liveButtonEnabled.postValue(false)
@@ -254,7 +255,7 @@ class SummaryViewModel(
                     .subscribeOn(Schedulers.io())
                     .subscribe({
                         saveStats(quest, runStats!!)
-                    },{
+                    }, {
                         Timber.e(it)
                         _liveLoadingVisibility.postValue(View.GONE)
                         showErrorDialog()
@@ -289,7 +290,7 @@ class SummaryViewModel(
                             storeQuestInFirestore(quest, runStats, newUserInfo)
                         }
                         .addOnSuccessListener { Timber.d("User info have been stored") }
-                        .addOnFailureListener {    showErrorDialog() }
+                        .addOnFailureListener { showErrorDialog() }
                     Timber.d("Got user info")
                 } else {
                     Timber.d("No such document")
@@ -354,10 +355,18 @@ class SummaryViewModel(
         deleteLocalQuestAfterSaveCompletion(quest)
     }
 
-    private fun deleteLocalQuestAfterSaveCompletion(quest: Quest){
-        questRepository.dbDeleteQuest(quest)
-        Timber.d("All done!")
-        observableBackNavigation.call()
+    @SuppressLint("CheckResult")
+    private fun deleteLocalQuestAfterSaveCompletion(quest: Quest) {
+        Observable.just(quest)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                questRepository.dbDeleteQuest(quest)
+                Timber.d("All done!")
+                observableShowAd.call()
+            }, {
+                Timber.e(it)
+                observableShowAd.call()
+            })
     }
 
     fun onMapCreated() {
@@ -408,19 +417,18 @@ class SummaryViewModel(
     }
 
     fun onDeleteClicked() {
-        observableYesNoDialog.postValue(Pair(resourceUtil.getString(R.string.runage_delete_run_title), resourceUtil.getString(R.string.runage_delete_run_message)))
+        observableYesNoDialog.postValue(
+            Pair(
+                resourceUtil.getString(R.string.runage_delete_run_title),
+                resourceUtil.getString(R.string.runage_delete_run_message)
+            )
+        )
     }
 
     fun onDeleteConfirmed() {
         _liveLoadingVisibility.postValue(View.VISIBLE)
-        quest?.let { quest ->
-            Observable.just(quest)
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    deleteLocalQuestAfterSaveCompletion(it)
-                },{
-                    Timber.e(it)
-                })
+        quest?.let {
+            deleteLocalQuestAfterSaveCompletion(it)
         }
     }
 }

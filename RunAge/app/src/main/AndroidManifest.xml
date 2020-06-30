@@ -47,6 +47,9 @@
             android:value="@string/maps_key" />
         <meta-data android:name="com.google.android.gms.games.APP_ID"
             android:value="@string/app_id" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5287847424239288~9077340364"/>
 
 
         <activity

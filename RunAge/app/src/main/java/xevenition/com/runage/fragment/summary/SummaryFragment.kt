@@ -1,22 +1,22 @@
 package xevenition.com.runage.fragment.summary
 
-import android.animation.ObjectAnimator
-import android.graphics.Interpolator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import timber.log.Timber
+import xevenition.com.runage.BuildConfig
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
@@ -26,10 +26,12 @@ import xevenition.com.runage.util.BitmapUtil
 import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject
 
+
 class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
     private lateinit var binding: FragmentSummaryBinding
     private var googleMap: GoogleMap? = null
+    private lateinit var mInterstitialAd: InterstitialAd
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
@@ -43,6 +45,14 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         val args = SummaryFragmentArgs.fromBundle(requireArguments())
         val factory = SummaryViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(SummaryViewModel::class.java)
+
+        mInterstitialAd = InterstitialAd(requireContext())
+        if (BuildConfig.DEBUG) {
+            mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        }else{
+            mInterstitialAd.adUnitId = "ca-app-pub-5287847424239288/7381115318"
+        }
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
 
     override fun onCreateView(
@@ -95,6 +105,10 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
             binding.animation.playAnimation()
         })
 
+        viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
+            showAdAndReturn()
+        })
+
         viewModel.observableYesNoDialog.observe(viewLifecycleOwner, Observer {
             it?.let { pair ->
                 context?.let { context ->
@@ -111,6 +125,44 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                 }
             }
         })
+    }
+
+    private fun showAdAndReturn(){
+        try {
+            if (mInterstitialAd.isLoaded) {
+                mInterstitialAd.adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        activity?.onBackPressed()
+                    }
+
+                    override fun onAdFailedToLoad(errorCode: Int) {
+                        activity?.onBackPressed()
+                    }
+
+                    override fun onAdOpened() {
+                        activity?.onBackPressed()
+                    }
+
+                    override fun onAdClicked() {
+                        activity?.onBackPressed()
+                    }
+
+                    override fun onAdLeftApplication() {
+
+                    }
+
+                    override fun onAdClosed() {
+                        activity?.onBackPressed()
+                    }
+                }
+                mInterstitialAd.show()
+            } else {
+                activity?.onBackPressed()
+            }
+        }catch (exception: Exception){
+            Timber.e(exception)
+            activity?.onBackPressed()
+        }
     }
 
     override fun onStart() {
