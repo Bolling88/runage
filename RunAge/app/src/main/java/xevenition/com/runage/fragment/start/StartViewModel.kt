@@ -49,7 +49,7 @@ class StartViewModel(
                 welcomeMessagePlayed = true
             }
             _liveTextName.postValue(it.displayName)
-            _observableProfileImage.postValue(it.iconImageUri)
+            _observableProfileImage.postValue(it.hiResImageUri)
         }
 
         fireStoreHandler.getUserInfo()

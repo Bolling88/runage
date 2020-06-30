@@ -5,6 +5,7 @@ import com.google.android.gms.location.DetectedActivity
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.model.RunStats
@@ -41,13 +42,14 @@ class RunningUtil @Inject constructor(
             if(distance < 100){
                 "$distance m"
             }else{
-                "${"%.2f".format(distance/1000)} ${resourceUtil.getString(R.string.runage_km)}"
+                Timber.d("Distance: $distance")
+                "${"%.2f".format(distance.toDouble()/1000)} ${resourceUtil.getString(R.string.runage_km)}"
             }
         }else{
             if(distance < 160.9344){
                 "$distance m"
             }else{
-                "${"%.2f".format(distance/1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
+                "${"%.2f".format(distance.toDouble()/1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
             }
         }
     }

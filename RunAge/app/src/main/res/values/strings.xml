@@ -59,4 +59,5 @@
     <string name="runage_km">km</string>
     <string name="runage_mi">mi</string>
     <string name="runage_empty_timer">00:00:00</string>
+    <string name="runage_rules">Rules</string>
 </resources>
