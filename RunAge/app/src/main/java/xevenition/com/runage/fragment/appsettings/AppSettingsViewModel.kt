@@ -3,12 +3,16 @@ package xevenition.com.runage.fragment.appsettings
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bokus.play.util.SingleLiveEvent
+import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.settings.SettingsFragmentDirections
+import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 
+
 class AppSettingsViewModel(
-    private val saveUtil: SaveUtil
+    private val saveUtil: SaveUtil,
+    private val gameServicesUtil: GameServicesUtil
 ) : BaseViewModel() {
 
 
@@ -20,6 +24,8 @@ class AppSettingsViewModel(
 
     private val _observableUnitType = MutableLiveData<Boolean>()
     val observableUnitType: LiveData<Boolean> = _observableUnitType
+
+    val observableCloseApp = SingleLiveEvent<Unit>()
 
     init {
         _observableWeight.postValue(saveUtil.getFloat(SaveUtil.KEY_WEIGHT, 0f))
@@ -44,7 +50,11 @@ class AppSettingsViewModel(
     }
 
     fun onSignOutClicked(){
-        //TODO implement
+        Timber.d("onSignOutClicked")
+        gameServicesUtil.signOut().addOnCompleteListener {
+            Timber.d("Sign out done")
+            observableCloseApp.call()
+        }
     }
 
 }

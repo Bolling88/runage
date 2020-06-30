@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.appsettings
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
@@ -17,9 +18,11 @@ class AppSettingsViewModelFactory @Inject constructor(
 
     @Inject
     lateinit var saveUtil: SaveUtil
+    @Inject
+    lateinit var gameServicesUtil: GameServicesUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AppSettingsViewModel(saveUtil) as T
+        return AppSettingsViewModel(saveUtil, gameServicesUtil) as T
     }
 }

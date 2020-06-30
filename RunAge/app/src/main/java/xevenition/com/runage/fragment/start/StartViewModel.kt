@@ -36,6 +36,9 @@ class StartViewModel(
     private val _liveLevelText = MutableLiveData<String>()
     val liveLevelText : LiveData<String> = _liveLevelText
 
+    private val _liveTextXp = MutableLiveData<String>()
+    val liveTextXp : LiveData<String> = _liveTextXp
+
     val observableOpenMenu = SingleLiveEvent<Unit>()
 
     private val _observableProfileImage = MutableLiveData<Uri>()
@@ -63,6 +66,7 @@ class StartViewModel(
                     val totalXpForNextLevel = xpNextLevel - xpPreviousLevel
                     val userXp = userInfo?.xp ?: 0
                     val progress = userXp - xpPreviousLevel
+                    _liveTextXp.postValue("$userXp / $xpNextLevel")
                     _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
                     _liveLevelProgress.postValue(progress.toFloat())
                     _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")

@@ -64,6 +64,10 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
         setUpObservables()
     }
 
+    private fun closeApp(){
+        activity?.finishAndRemoveTask()
+    }
+
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
@@ -84,6 +88,10 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
                     binding.radioImperial.isChecked = true
                 }
             }
+        })
+
+        viewModel.observableCloseApp.observe(viewLifecycleOwner, Observer {
+            closeApp()
         })
     }
 }
