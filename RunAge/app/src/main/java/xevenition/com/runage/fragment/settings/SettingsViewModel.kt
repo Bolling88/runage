@@ -14,6 +14,10 @@ class SettingsViewModel(
     private val _liveButtonEnabled = MutableLiveData<Boolean>()
     val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
 
+    init {
+        _liveButtonEnabled.postValue(false)
+    }
+
     fun onMetricClicked() {
         saveUtil.saveBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
     }
@@ -29,10 +33,13 @@ class SettingsViewModel(
 
     @SuppressLint("CheckResult")
     @Suppress("UNUSED_PARAMETER")
-    fun onWeightTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        _liveButtonEnabled.postValue(s.isNotEmpty())
-        if (s.isNotEmpty() && s.toString().toFloatOrNull() != null)
-            saveUtil.saveFloat(SaveUtil.KEY_WEIGHT, s.toString().toFloat())
+    fun onWeightTextChanged(weight: String) {
+        val newWeight = weight.toFloatOrNull()
+        if (newWeight != null && newWeight != 0f) {
+            saveUtil.saveFloat(SaveUtil.KEY_WEIGHT, weight.toFloat())
+            _liveButtonEnabled.postValue(true)
+        }else{
+            _liveButtonEnabled.postValue(false)
+        }
     }
-
 }

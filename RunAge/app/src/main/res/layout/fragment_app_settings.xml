@@ -36,9 +36,9 @@
             android:layout_marginEnd="@dimen/margin_basic"
             app:startIconDrawable="@drawable/ic_weight"
             android:hint="@string/runage_your_weight"
-            app:boxBackgroundColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <com.google.android.material.textfield.TextInputEditText
