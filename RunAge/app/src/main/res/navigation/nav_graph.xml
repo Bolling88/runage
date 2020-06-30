@@ -132,4 +132,13 @@
             android:label="SettingsFragment" >
         </fragment>
     </navigation>
+
+    <navigation android:id="@+id/appRulesNavigation"
+        app:startDestination="@id/appRulesFragment">
+        <fragment
+            android:id="@+id/appRulesFragment"
+            android:name="xevenition.com.runage.fragment.rule.RuleFragment"
+            android:label="RuleFragment" >
+        </fragment>
+    </navigation>
 </navigation>

@@ -5,7 +5,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.Games
 import com.google.android.gms.location.DetectedActivity
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import xevenition.com.runage.R
 import xevenition.com.runage.model.RunStats
@@ -24,7 +23,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         }
     }
 
-    private fun unlockAchievement(achievementId: String){
+    fun unlockAchievement(achievementId: String){
         val gameAccount = accountUtil.getGamesAccount()
         gameAccount?.let {
             Games.getAchievementsClient(app, it).unlock(achievementId)
@@ -45,6 +44,13 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         incrementAchievements(app.getString(R.string.achievement_1000_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_10_000_k), (runStats.runningDistance.toDouble()/1000).toInt())
 
+        //Number of quests
+        if(runStats.runningDistance >= 1000) {
+            incrementAchievements(app.getString(R.string.achievement_getting_started_i), 1)
+            incrementAchievements(app.getString(R.string.achievement_getting_started_ii), 1)
+            incrementAchievements(app.getString(R.string.achievement_getting_started_iii), 1)
+        }
+
         //Total calories
         incrementAchievements(app.getString(R.string.achievement_calorie_king_i), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_ii), quest.calories)
@@ -63,7 +69,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
 
         saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
-        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance), userInfo.distance.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong())
 
         //Long runner

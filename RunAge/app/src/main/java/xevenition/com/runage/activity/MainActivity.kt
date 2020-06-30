@@ -67,6 +67,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.appSettingsNavigation ->{
                     this.findNavController(R.id.nav_host_fragment).navigate(R.id.appSettingsNavigation)
                 }
+                R.id.appRulesNavigation ->{
+                    this.findNavController(R.id.nav_host_fragment).navigate(R.id.appRulesNavigation)
+                }
             }
             true
         }

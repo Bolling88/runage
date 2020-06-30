@@ -44,7 +44,7 @@
         android:checkableBehavior="none">
 
         <item
-            android:id="@+id/rulesNavigation"
+            android:id="@+id/appRulesNavigation"
             android:icon="@drawable/ic_book"
             android:title="@string/runage_rules" />
     </group>
