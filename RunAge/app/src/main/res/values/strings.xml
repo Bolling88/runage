@@ -67,4 +67,8 @@
     <string name="runage_save_quest_failed_title">Failed to save quest!</string>
     <string name="runage_save_quest_failed_message">Check your connection and try again.</string>
     <string name="runage_ok">OK</string>
+    <string name="runage_no">No</string>
+    <string name="runage_yes">Yes</string>
+    <string name="runage_delete_run_title">Delete Run</string>
+    <string name="runage_delete_run_message">Are you sure you want to delete this run?</string>
 </resources>

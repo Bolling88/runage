@@ -52,4 +52,8 @@ class QuestRepository @Inject constructor(private val db: AppDatabase) {
     fun dbUpdateQuest(quest: Quest) {
         db.questDao().update(quest)
     }
+
+    fun dbDeleteQuest(quest: Quest) {
+        db.questDao().delete(quest)
+    }
 }

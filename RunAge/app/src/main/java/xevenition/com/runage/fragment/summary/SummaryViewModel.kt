@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
@@ -35,7 +36,6 @@ class SummaryViewModel(
     private var runStats: RunStats? = null
     private var mapCreated: Boolean = false
     private var quest: Quest? = null
-    private var percentageMap: Map<Int, Double> = mutableMapOf()
     private val questId = arguments.keyQuestId
 
     private val _liveTotalDistance = MutableLiveData<String>()
@@ -124,6 +124,8 @@ class SummaryViewModel(
 
     private val _liveLoadingVisibility = MutableLiveData<Int>()
     val liveLoadingVisibility: LiveData<Int> = _liveLoadingVisibility
+
+    val observableYesNoDialog = SingleLiveEvent<Pair<String, String>>()
 
     init {
         _liveButtonEnabled.postValue(false)
@@ -349,6 +351,11 @@ class SummaryViewModel(
     ) {
         Timber.d("Saving achievements and leaderboards")
         gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats, userInfo)
+        deleteLocalQuestAfterSaveCompletion(quest)
+    }
+
+    private fun deleteLocalQuestAfterSaveCompletion(quest: Quest){
+        questRepository.dbDeleteQuest(quest)
         Timber.d("All done!")
         observableBackNavigation.call()
     }
@@ -401,6 +408,19 @@ class SummaryViewModel(
     }
 
     fun onDeleteClicked() {
-        //TODO implement
+        observableYesNoDialog.postValue(Pair(resourceUtil.getString(R.string.runage_delete_run_title), resourceUtil.getString(R.string.runage_delete_run_message)))
+    }
+
+    fun onDeleteConfirmed() {
+        _liveLoadingVisibility.postValue(View.VISIBLE)
+        quest?.let { quest ->
+            Observable.just(quest)
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    deleteLocalQuestAfterSaveCompletion(it)
+                },{
+                    Timber.e(it)
+                })
+        }
     }
 }

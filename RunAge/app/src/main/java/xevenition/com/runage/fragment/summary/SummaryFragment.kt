@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -92,6 +93,23 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
         viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
             binding.animation.playAnimation()
+        })
+
+        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, Observer {
+            it?.let { pair ->
+                context?.let { context ->
+                    val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
+                    alertDialog.setTitle(pair.first)
+                    alertDialog.setMessage(pair.second)
+                    alertDialog.setButton(
+                        AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.runage_no)
+                    ) { dialog, _ -> dialog.dismiss() }
+                    alertDialog.setButton(
+                        AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.runage_yes)
+                    ) { dialog, _ -> viewModel.onDeleteConfirmed() }
+                    alertDialog.show()
+                }
+            }
         })
     }
 
