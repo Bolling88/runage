@@ -28,6 +28,27 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
+    <style name="TextStyleRuleTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">@font/azonix</item>
+        <item name="android:textSize">@dimen/textSizeBig</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:layout_margin">@dimen/margin_basic</item>
+    </style>
+
+    <style name="TextStyleRule" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">@font/light</item>
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/grey2</item>
+        <item name="android:layout_marginStart">@dimen/margin_basic</item>
+        <item name="android:layout_marginEnd">@dimen/margin_basic</item>
+        <item name="android:layout_marginBottom">@dimen/margin_basic</item>
+    </style>
+
+
     <style name="ButtonStyle" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="android:layout_height">50dip</item>
         <item name="android:layout_width">0dip</item>

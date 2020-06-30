@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.rule.RuleViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_rules"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="0dip"
+            android:layout_height="0dip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRuleTitle"
+                    android:text="@string/runage_rule_1_title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRule"
+                    android:text="@string/runage_rule_1_message" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRuleTitle"
+                    android:text="@string/runage_rule_2_title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRule"
+                    android:text="@string/runage_rule_2_message" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRuleTitle"
+                    android:text="@string/runage_rule_3_title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextStyleRule"
+                    android:text="@string/runage_rule_3_message" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

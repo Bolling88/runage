@@ -72,6 +72,7 @@ class StartViewModel(
                     _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
 
                     gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
+                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
                 } else {
                     Timber.d("No such document")
                 }

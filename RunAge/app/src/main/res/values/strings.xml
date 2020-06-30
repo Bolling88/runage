@@ -71,4 +71,10 @@
     <string name="runage_yes">Yes</string>
     <string name="runage_delete_run_title">Delete Run</string>
     <string name="runage_delete_run_message">Are you sure you want to delete this run?</string>
+    <string name="runage_rule_1_title">Only Running Counts</string>
+    <string name="runage_rule_1_message">"You will only get experience points from Running. Walking, riding a bicycle, or even taking a ride with your car will get you nothing. Running is also the only thing that will unlock achievements and let you climb the leaderboards. With that said, it is okay to walk during a run, but don’t expect to get rewarded for it. "</string>
+    <string name="runage_rule_2_title">Run faster</string>
+    <string name="runage_rule_2_message">"The faster you run, the more experience points you will gain. But again remember, doing an activity type other than running will give you the opposite results. "</string>
+    <string name="runage_rule_3_title">Run further</string>
+    <string name="runage_rule_3_message">Only distance and pace determine your experience points gain. The further you run, and the faster you do it, the more you will gain.</string>
 </resources>

@@ -48,8 +48,14 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="achievement_never_stop_iii" translatable="false">CgkI4-yzqpMZEAIQGQ</string>
     <!-- achievement Getting started I -->
     <string name="achievement_getting_started_i" translatable="false">CgkI4-yzqpMZEAIQCQ</string>
-    <!-- leaderboard Total Running Distance -->
-    <string name="leaderboard_total_running_distance" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
+    <!-- achievement Getting Started II -->
+    <string name="achievement_getting_started_ii" translatable="false">CgkI4-yzqpMZEAIQHg</string>
+    <!-- achievement Getting Started III -->
+    <string name="achievement_getting_started_iii" translatable="false">CgkI4-yzqpMZEAIQHw</string>
+    <!-- achievement Ruler -->
+    <string name="achievement_ruler" translatable="false">CgkI4-yzqpMZEAIQIA</string>
+    <!-- leaderboard Total Running Distance (meters) -->
+    <string name="leaderboard_total_running_distance_meters" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
     <!-- leaderboard Most Experience -->
     <string name="leaderboard_most_experience" translatable="false">CgkI4-yzqpMZEAIQBA</string>
     <!-- leaderboard Fastest Runner (min/km) -->
@@ -58,4 +64,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_total_running_duration" translatable="false">CgkI4-yzqpMZEAIQEw</string>
     <!-- leaderboard Longest Run (meters) -->
     <string name="leaderboard_longest_run_meters" translatable="false">CgkI4-yzqpMZEAIQFg</string>
+    <!-- leaderboard Highest Level -->
+    <string name="leaderboard_highest_level" translatable="false">CgkI4-yzqpMZEAIQIQ</string>
 </resources>
