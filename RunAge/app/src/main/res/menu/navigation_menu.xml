@@ -41,7 +41,7 @@
 
     <group
         android:id="@+id/grp_6"
-        android:checkableBehavior="none">
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/appRulesNavigation"
