@@ -296,8 +296,10 @@ class EventService : Service() {
             .setContentTitle(title)
             .setChannelId(createNotificationChannel("runage_service", "Runage Running Service"))
             .setContentText(content)
-            .setTicker(content)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setTicker(null)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle( NotificationCompat.BigTextStyle().setBigContentTitle(title))
             .setStyle( NotificationCompat.BigTextStyle().bigText(content))
             .setSmallIcon(R.drawable.ic_run_blue)
@@ -316,9 +318,10 @@ class EventService : Service() {
     private fun createNotificationChannel(channelId: String, channelName: String): String {
         val chan = NotificationChannel(
             channelId,
-            channelName, NotificationManager.IMPORTANCE_HIGH
+            channelName, NotificationManager.IMPORTANCE_LOW
         )
         chan.lightColor = Color.BLUE
+        chan.setSound(null,null)
         chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
