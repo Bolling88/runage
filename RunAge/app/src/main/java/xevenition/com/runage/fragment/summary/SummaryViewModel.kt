@@ -135,7 +135,7 @@ class SummaryViewModel(
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
         _liveLoadingVisibility.postValue(View.GONE)
-        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_progress))
+        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_run))
         _liveTimerColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
 
         if (saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
@@ -232,7 +232,7 @@ class SummaryViewModel(
                     _liveDrivingVisibility.postValue(View.GONE)
                 }
 
-                _liveTextExperience.postValue("${it.xp} ${resourceUtil.getString(R.string.runage_xp)}")
+                _liveTextExperience.postValue("${it.xp} ${resourceUtil.getString(R.string.runage_xp)}+")
 
                 _liveRunningVisibility
                 Timber.d("Percentage calculated")
@@ -304,7 +304,9 @@ class SummaryViewModel(
 
     fun onSaveProgressClicked() {
         if (quest?.locations?.size ?: 0 < 2) {
-            observableBackNavigation.call()
+            quest?.let {
+                deleteLocalQuestAfterSaveCompletion(it)
+            }
         } else {
             quest?.let { quest ->
                 Timber.d("Saving quest")
@@ -351,16 +353,20 @@ class SummaryViewModel(
     }
 
     private fun syncWithGoogleFit(quest: Quest) {
-        val task = fitnessHelper.storeSession(
-            quest.id,
-            "${quest.totalDistance} meters",
-            quest.startTimeEpochSeconds,
-            quest.locations.lastOrNull()?.timeStampEpochSeconds
-                ?: quest.startTimeEpochSeconds + 1
-        )
-        task.addOnSuccessListener { Timber.d("Synced with google fit") }
-        task.addOnFailureListener { Timber.e("Sync with google fit failed") }
-        task.addOnCompleteListener {
+        if (saveUtil.getBoolean(SaveUtil.KEY_SYNC_GOOGLE_FIT, true)) {
+            val task = fitnessHelper.storeSession(
+                quest.id,
+                "${quest.totalDistance} meters",
+                quest.startTimeEpochSeconds,
+                quest.locations.lastOrNull()?.timeStampEpochSeconds
+                    ?: quest.startTimeEpochSeconds + 1
+            )
+            task.addOnSuccessListener { Timber.d("Synced with google fit") }
+            task.addOnFailureListener { Timber.e("Sync with google fit failed") }
+            task.addOnCompleteListener {
+                deleteLocalQuestAfterSaveCompletion(quest)
+            }
+        } else {
             deleteLocalQuestAfterSaveCompletion(quest)
         }
     }

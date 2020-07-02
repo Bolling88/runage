@@ -80,4 +80,6 @@
     <string name="runage_rule_3_message">Only distance and pace determine your experience points gain. The further you run, and the faster you do it, the more you will gain.</string>
     <string name="runage_edit_profile">Edit profile</string>
     <string name="runage_allow_always">Allow always</string>
+    <string name="runage_save_run">Save Run</string>
+    <string name="runage_sync_google_fit">Sync with Google Fit</string>
 </resources>

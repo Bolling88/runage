@@ -103,6 +103,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
         viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
             binding.animation.playAnimation()
+            binding.animation2.playAnimation()
         })
 
         viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
@@ -120,7 +121,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
                     ) { dialog, _ -> dialog.dismiss() }
                     alertDialog.setButton(
                         AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.runage_yes)
-                    ) { dialog, _ -> viewModel.onDeleteConfirmed() }
+                    ) { _, _ -> viewModel.onDeleteConfirmed() }
                     alertDialog.show()
                 }
             }

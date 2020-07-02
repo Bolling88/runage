@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textUnitTitle">
 
-            <androidx.appcompat.widget.AppCompatRadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_metric"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:onClick="@{()-> viewModel.onMetricClicked()}"
                 android:text="@string/metric" />
 
-            <androidx.appcompat.widget.AppCompatRadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_imperial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,14 +90,37 @@
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+             android:fontFamily="@font/medium"
             android:layout_margin="@dimen/margin_basic"
             android:onClick="@{()->viewModel.onProfileClicked()}"
             android:text="@string/runage_edit_profile"
             app:icon="@drawable/ic_edit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageGoogleFit"
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_google_fit"
+            android:layout_margin="@dimen/margin_basic"
+            app:layout_constraintTop_toBottomOf="@+id/buttonProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFit"
+            android:text="@string/runage_sync_google_fit"
+            android:layout_width="wrap_content"
+            android:checked="@{viewModel.liveSyncGoogleFit}"
+            app:layout_constraintStart_toEndOf="@+id/imageGoogleFit"
+            android:fontFamily="@font/medium"
+            android:layout_marginStart="8dip"
+            app:layout_constraintTop_toTopOf="@+id/imageGoogleFit"
+            app:layout_constraintBottom_toBottomOf="@+id/imageGoogleFit"
+            android:layout_height="wrap_content" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"

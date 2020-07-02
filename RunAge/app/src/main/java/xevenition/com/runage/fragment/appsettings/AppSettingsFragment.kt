@@ -57,6 +57,10 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
             }
         })
 
+        binding.switchFit.setOnCheckedChangeListener { buttonView, isChecked->
+            viewModel.onFitCheckChanged(isChecked)
+        }
+
         return binding.root
     }
 

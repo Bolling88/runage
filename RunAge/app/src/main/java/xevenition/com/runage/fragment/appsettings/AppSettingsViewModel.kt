@@ -22,6 +22,9 @@ class AppSettingsViewModel(
     private val _liveButtonEnabled = MutableLiveData<Boolean>()
     val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
 
+    private val _liveSyncGoogleFit = MutableLiveData<Boolean>()
+    val liveSyncGoogleFit: LiveData<Boolean> = _liveSyncGoogleFit
+
     private val _observableWeight = MutableLiveData<Float>()
     val observableWeight: LiveData<Float> = _observableWeight
 
@@ -33,6 +36,7 @@ class AppSettingsViewModel(
 
     init {
         _observableWeight.postValue(saveUtil.getFloat(SaveUtil.KEY_WEIGHT, 0f))
+        _liveSyncGoogleFit.postValue(saveUtil.getBoolean(SaveUtil.KEY_SYNC_GOOGLE_FIT, true))
         _observableUnitType.postValue(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true))
     }
 
@@ -67,6 +71,10 @@ class AppSettingsViewModel(
                 observableShowAchievements.postValue(it)
             }
         }
+    }
+
+    fun onFitCheckChanged(checked: Boolean) {
+        saveUtil.saveBoolean(SaveUtil.KEY_SYNC_GOOGLE_FIT, checked)
     }
 
 }

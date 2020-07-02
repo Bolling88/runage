@@ -66,4 +66,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_longest_run_meters" translatable="false">CgkI4-yzqpMZEAIQFg</string>
     <!-- leaderboard Highest Level -->
     <string name="leaderboard_highest_level" translatable="false">CgkI4-yzqpMZEAIQIQ</string>
+    <!-- leaderboard Most Runs (min 1 km / 0.62 mi) -->
+    <string name="leaderboard_most_runs_min_1_km__0.62_mi" translatable="false">CgkI4-yzqpMZEAIQIg</string>
 </resources>
