@@ -4,6 +4,7 @@ import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.fragment.permission.PermissionFragmentDirections
 import xevenition.com.runage.fragment.settings.SettingsFragmentDirections
+import xevenition.com.runage.fragment.splash.SplashFragmentDirections
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.SaveUtil
 
@@ -12,12 +13,16 @@ class LoginViewModel(
     private val fireStoreHandler: FireStoreHandler
 ) : BaseViewModel() {
 
+    private var permissionsGranted = false
+
     val observableLoginClicked = SingleLiveEvent<Unit>()
 
     fun onLoginSuccess() {
         fireStoreHandler.storeUserIfNotExists()
         if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {
             observableNavigateTo.postValue(LoginFragmentDirections.actionLoginFragmentToSettingsFragment())
+        } else if (!permissionsGranted) {
+            observableNavigateTo.postValue(LoginFragmentDirections.actionLoginFragmentToPermissionFragment())
         } else {
             observableNavigateTo.postValue(LoginFragmentDirections.actionLoginFragmentToMainFragment())
         }
@@ -25,5 +30,9 @@ class LoginViewModel(
 
     fun onLoginClicked() {
         observableLoginClicked.call()
+    }
+
+    fun permissionsGranted(granted: Boolean) {
+        permissionsGranted = granted
     }
 }

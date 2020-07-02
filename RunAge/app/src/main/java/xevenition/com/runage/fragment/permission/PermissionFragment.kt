@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -56,7 +57,6 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
             // Here, thisActivity is the current activity
             if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
                     != PackageManager.PERMISSION_GRANTED) {
-                binding.switchActivity.isChecked = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     requestPermissions(
                             arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
@@ -77,7 +77,6 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
                     != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                binding.switchLocation.isChecked = false
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     requestPermissions(
                             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
@@ -96,6 +95,12 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun isFullBackgroundAccessGranted(): Boolean {
+        return ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
     override fun onRequestPermissionsResult(
             requestCode: Int,
             permissions: Array<out String>,
@@ -106,7 +111,20 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
                 binding.switchActivity.isChecked = permissionGranted(grantResults)
             }
             PERMISSIONS_REQUEST_LOCATION -> {
-                binding.switchLocation.isChecked = permissionGranted(grantResults)
+                if(permissionGranted(grantResults)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if(isFullBackgroundAccessGranted()){
+                            binding.switchLocation.isChecked = true
+                        }else{
+                            binding.switchLocation.isChecked = false
+                            viewModel.onQAlwaysBackgroundDenied()
+                        }
+                    }else {
+                        binding.switchLocation.isChecked = true
+                    }
+                }else{
+                    binding.switchLocation.isChecked = false
+                }
             }
         }
     }

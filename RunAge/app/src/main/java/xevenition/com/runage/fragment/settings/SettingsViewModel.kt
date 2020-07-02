@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.splash.SplashFragmentDirections
 import xevenition.com.runage.util.SaveUtil
 
 class SettingsViewModel(
     private val saveUtil: SaveUtil
 ) : BaseViewModel() {
 
+    private var permissionsGranted = false
 
     private val _liveButtonEnabled = MutableLiveData<Boolean>()
     val liveButtonEnabled: LiveData<Boolean> = _liveButtonEnabled
@@ -27,8 +29,12 @@ class SettingsViewModel(
     }
 
     fun onContinueClicked() {
-        saveUtil.saveBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED, true)
-        observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToMainFragment())
+        if (!permissionsGranted) {
+            observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToPermissionFragment())
+        }else {
+            saveUtil.saveBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED, true)
+            observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToMainFragment())
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -41,5 +47,9 @@ class SettingsViewModel(
         }else{
             _liveButtonEnabled.postValue(false)
         }
+    }
+
+    fun permissionsGranted(granted: Boolean) {
+        permissionsGranted = granted
     }
 }

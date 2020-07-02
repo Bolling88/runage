@@ -11,7 +11,8 @@ import xevenition.com.runage.util.AccountUtil
 import xevenition.com.runage.util.SaveUtil
 import java.util.concurrent.TimeUnit
 
-class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: AccountUtil) : BaseViewModel() {
+class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: AccountUtil) :
+    BaseViewModel() {
 
     private var permissionsGranted = false
 
@@ -27,12 +28,12 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
         val disposable = Observable.timer(2000, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.computation())
             .subscribe({
-                if (!permissionsGranted) {
-                    observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToPermissionFragment())
-                }else if(!accountUtil.isAccountActive() || accountUtil.getGamesAccount() == null){
+                if (!accountUtil.isAccountActive() || accountUtil.getGamesAccount() == null) {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                 } else if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToSettingsFragment())
+                } else if (!permissionsGranted) {
+                    observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToPermissionFragment())
                 } else {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
                 }
