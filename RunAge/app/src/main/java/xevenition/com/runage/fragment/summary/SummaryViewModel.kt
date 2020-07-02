@@ -8,6 +8,7 @@ import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -23,6 +24,7 @@ import java.time.Instant
 
 class SummaryViewModel(
     private val gameServicesUtil: GameServicesUtil,
+    private val accountUtil: AccountUtil,
     private val fitnessHelper: FitnessHelper,
     private val locationUtil: LocationUtil,
     private val feedbackHandler: FeedbackHandler,
@@ -134,13 +136,15 @@ class SummaryViewModel(
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
         _liveLoadingVisibility.postValue(View.GONE)
+        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_run))
+        _liveTimerColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
+
         if (saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
             _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_km)}")
         } else {
             _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_mi)}")
         }
-        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_save_progress))
-        _liveTimerColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
+
         getQuest()
     }
 
@@ -186,9 +190,6 @@ class SummaryViewModel(
     @SuppressLint("CheckResult")
     private fun setUpActivityTypeInfo(quest: Quest) {
         runningUtil.processRunningStats(quest.locations, locationUtil)
-            .doFinally {
-                _liveButtonEnabled.postValue(true)
-            }
             .subscribe({
                 runStats = it
                 val runningPercentage =
@@ -232,40 +233,19 @@ class SummaryViewModel(
                     _liveDrivingVisibility.postValue(View.GONE)
                 }
 
-                _liveTextExperience.postValue("${it.xp} ${resourceUtil.getString(R.string.runage_xp)}")
+                _liveTextExperience.postValue("${it.xp} ${resourceUtil.getString(R.string.runage_xp)}+")
 
                 _liveRunningVisibility
                 Timber.d("Percentage calculated")
+
+                updateUserStats(quest, it)
             }, {
                 Timber.e(it)
             })
     }
 
-    private fun getActivityPercentage(it: Map<Int, Double>, activityType: Int) =
-        it[activityType]?.times(100)?.toInt() ?: 0
-
-    fun onSaveProgressClicked() {
-        if (quest?.locations?.size ?: 0 < 2) {
-            observableBackNavigation.call()
-        } else {
-            quest?.let { quest ->
-                Timber.d("Saving quest")
-                _liveLoadingVisibility.postValue(View.VISIBLE)
-                Observable.just(quest)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                        saveStats(quest, runStats!!)
-                    }, {
-                        Timber.e(it)
-                        _liveLoadingVisibility.postValue(View.GONE)
-                        showErrorDialog()
-                    })
-            }
-        }
-    }
-
     @SuppressLint("CheckResult")
-    private fun saveStats(quest: Quest, runStats: RunStats) {
+    private fun updateUserStats(quest: Quest, runStats: RunStats) {
         fireStoreHandler.getUserInfo()
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -278,6 +258,7 @@ class SummaryViewModel(
                     val totalRunningDuration =
                         (userInfo?.duration ?: 0) + runStats.runningDuration
                     Timber.d("New xp: $newXp")
+
                     val newUserInfo = UserInfo(
                         userId = userId,
                         xp = newXp,
@@ -285,12 +266,14 @@ class SummaryViewModel(
                         distance = totalRunningDistance,
                         duration = totalRunningDuration
                     )
+
                     fireStoreHandler.storeUserInfo(newUserInfo)
-                        .addOnCompleteListener {
-                            storeQuestInFirestore(quest, runStats, newUserInfo)
+                        .addOnCompleteListener { _liveButtonEnabled.postValue(true) }
+                        .addOnSuccessListener {
+                            Timber.d("User info have been stored")
+                            storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
                         }
-                        .addOnSuccessListener { Timber.d("User info have been stored") }
-                        .addOnFailureListener { showErrorDialog() }
+                        .addOnFailureListener { Timber.e("get failed with $it") }
                     Timber.d("Got user info")
                 } else {
                     Timber.d("No such document")
@@ -298,9 +281,48 @@ class SummaryViewModel(
             }
             .addOnFailureListener { exception ->
                 Timber.e("get failed with $exception")
-                _liveLoadingVisibility.postValue(View.GONE)
-                showErrorDialog()
+                _liveButtonEnabled.postValue(true)
             }
+    }
+
+    @SuppressLint("CheckResult")
+    private fun storeAchievementsAndLeaderboards(
+        quest: Quest,
+        runStats: RunStats,
+        userInfo: UserInfo
+    ) {
+        Timber.d("Saving achievements and leaderboards")
+        Single.fromCallable {
+            gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats, userInfo)
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                Timber.d("Achievements stored")
+            }, {
+                Timber.e(it)
+            })
+    }
+
+    fun onSaveProgressClicked() {
+        if (quest?.locations?.size ?: 0 < 2) {
+            quest?.let {
+                deleteLocalQuestAfterSaveCompletion(it)
+            }
+        } else {
+            quest?.let { quest ->
+                Timber.d("Saving quest")
+                _liveLoadingVisibility.postValue(View.VISIBLE)
+                Observable.just(quest)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        storeQuestInFirestore(quest, runStats!!)
+                    }, {
+                        Timber.e(it)
+                        _liveLoadingVisibility.postValue(View.GONE)
+                        showErrorDialog()
+                    })
+            }
+        }
     }
 
     private fun showErrorDialog() {
@@ -315,13 +337,12 @@ class SummaryViewModel(
 
     private fun storeQuestInFirestore(
         quest: Quest,
-        runStats: RunStats,
-        userInfo: UserInfo
+        runStats: RunStats
     ): Disposable {
         return fireStoreHandler.storeQuest(quest, runStats)
             .subscribe({
                 it.addOnCompleteListener {
-                    syncWithGoogleFit(quest, runStats, userInfo)
+                    syncWithGoogleFit(quest)
                 }
                 it.addOnSuccessListener {
                     Timber.d("Quest have been stored")
@@ -332,27 +353,23 @@ class SummaryViewModel(
             })
     }
 
-    private fun syncWithGoogleFit(quest: Quest, runStats: RunStats, userInfo: UserInfo) {
-        val task = fitnessHelper.storeSession(
-            quest.id,
-            "${quest.totalDistance} meters",
-            quest.startTimeEpochSeconds,
-            quest.locations.lastOrNull()?.timeStampEpochSeconds
-                ?: quest.startTimeEpochSeconds + 1
-        )
-        task.addOnSuccessListener { Timber.d("Synced with google fit") }
-        task.addOnFailureListener { Timber.e("Sync with google fit failed") }
-        task.addOnCompleteListener { storeAchievementsAndLeaderboards(quest, runStats, userInfo) }
-    }
-
-    private fun storeAchievementsAndLeaderboards(
-        quest: Quest,
-        runStats: RunStats,
-        userInfo: UserInfo
-    ) {
-        Timber.d("Saving achievements and leaderboards")
-        gameServicesUtil.storeAchievementsAndLeaderboards(quest, runStats, userInfo)
-        deleteLocalQuestAfterSaveCompletion(quest)
+    private fun syncWithGoogleFit(quest: Quest) {
+        if (saveUtil.getBoolean(SaveUtil.KEY_SYNC_GOOGLE_FIT, true)) {
+            val task = fitnessHelper.storeSession(
+                quest.id,
+                "${quest.totalDistance} meters",
+                quest.startTimeEpochSeconds,
+                quest.locations.lastOrNull()?.timeStampEpochSeconds
+                    ?: quest.startTimeEpochSeconds + 1
+            )
+            task.addOnSuccessListener { Timber.d("Synced with google fit") }
+            task.addOnFailureListener { Timber.e("Sync with google fit failed") }
+            task.addOnCompleteListener {
+                deleteLocalQuestAfterSaveCompletion(quest)
+            }
+        } else {
+            deleteLocalQuestAfterSaveCompletion(quest)
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -431,4 +448,7 @@ class SummaryViewModel(
             deleteLocalQuestAfterSaveCompletion(it)
         }
     }
+
+    private fun getActivityPercentage(it: Map<Int, Double>, activityType: Int) =
+        it[activityType]?.times(100)?.toInt() ?: 0
 }

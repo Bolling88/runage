@@ -1,11 +1,14 @@
 package xevenition.com.runage.fragment.start
 
+import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.games.Games
+import io.reactivex.Single
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed
@@ -17,9 +20,9 @@ import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.*
 
 class StartViewModel(
-    gameServicesUtil: GameServicesUtil,
+    private val gameServicesUtil: GameServicesUtil,
     fireStoreHandler: FireStoreHandler,
-    accountUtil: AccountUtil,
+    private val accountUtil: AccountUtil,
     resourceUtil: ResourceUtil,
     feedbackHandler: FeedbackHandler
 ) : BaseViewModel() {
@@ -43,6 +46,8 @@ class StartViewModel(
 
     private val _observableProfileImage = MutableLiveData<Uri>()
     val observableProfileImage: LiveData<Uri> = _observableProfileImage
+
+    val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
         val task = accountUtil.getGamesPlayerInfo()
@@ -78,5 +83,13 @@ class StartViewModel(
                 }
             }
             .addOnFailureListener {  }
+    }
+
+    fun onProfileClicked(){
+        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
+            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
+                observableShowAchievements.postValue(it)
+            }
+        }
     }
 }

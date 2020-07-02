@@ -104,6 +104,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         private const val RC_LEADERBOARD_UI = 9004
-        private const val RC_ACHIEVEMENT_UI = 9003
+        const val RC_ACHIEVEMENT_UI = 9003
     }
 }

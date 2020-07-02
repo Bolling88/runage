@@ -4,8 +4,9 @@
     <string name="runage_notification_title">Running</string>
     <string name="ticker_text">Ticker</string>
     <string name="runage_continue">Continue</string>
-    <string name="explanation_permission_location">In order for us to track your running we need to be able to retrieve your location.</string>
-    <string name="explanation_permission_activity">We also need to make sure that cheaters that try to score running points by using a electric scooter or driving a car etc are getting no points. Hence we need your permission to track your physical activity during a run.</string>
+    <string name="explanation_permission_location">In order for us to be able to track your Run, we need to be able to access your location.</string>
+    <string name="runage_location_android_q">On Android version 10, you have to select "allow always", else the tracking will stop working while the screen is off. We guarantee that we will only access your location during a Run.</string>
+    <string name="explanation_permission_activity">Detecting your physical activity is important for knowing when you are running, walking etc. You will ony get experience points from Running.</string>
     <string name="permission_location">Location tracking</string>
     <string name="permission_activity">Physical activity</string>
     <string name="get_started">Get started</string>
@@ -77,4 +78,8 @@
     <string name="runage_rule_2_message">"The faster you run, the more experience points you will gain. But again remember, doing an activity type other than running will give you the opposite results. "</string>
     <string name="runage_rule_3_title">Run further</string>
     <string name="runage_rule_3_message">Only distance and pace determine your experience points gain. The further you run, and the faster you do it, the more you will gain.</string>
+    <string name="runage_edit_profile">Edit profile</string>
+    <string name="runage_allow_always">Allow always</string>
+    <string name="runage_save_run">Save Run</string>
+    <string name="runage_sync_google_fit">Sync with Google Fit</string>
 </resources>

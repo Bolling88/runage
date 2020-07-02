@@ -41,7 +41,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment() {
                     alertDialog.setTitle(triple.first)
                     alertDialog.setMessage(triple.second)
                     alertDialog.setButton(
-                        AlertDialog.BUTTON_NEUTRAL, triple.third
+                        AlertDialog.BUTTON_POSITIVE, triple.third
                     ) { dialog, _ -> dialog.dismiss() }
                     alertDialog.show()
                 }

@@ -1,5 +1,7 @@
 package xevenition.com.runage.fragment.start
 
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.images.ImageManager
+import com.google.android.gms.games.Games
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentStartBinding
-import xevenition.com.runage.fragment.main.MainFragment
+
 
 class StartFragment : BaseFragment<StartViewModel>() {
 
@@ -59,10 +62,15 @@ class StartFragment : BaseFragment<StartViewModel>() {
         viewModel.observableOpenMenu.observe(viewLifecycleOwner, Observer {
             (activity as? MainActivity)?.openMenu()
         })
+
+        viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
+                startActivityForResult(it, PROFILE_REQUEST_CODE)
+        })
     }
 
     companion object {
         fun newInstance() = StartFragment()
+        const val PROFILE_REQUEST_CODE = 23423
     }
 
 }

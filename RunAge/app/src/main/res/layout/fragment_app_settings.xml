@@ -29,25 +29,25 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textWeight"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_basic"
             android:layout_marginEnd="@dimen/margin_basic"
-            app:startIconDrawable="@drawable/ic_weight"
             android:hint="@string/runage_your_weight"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:startIconDrawable="@drawable/ic_weight">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textWeightField"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:layout_height="wrap_content" />
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,9 +55,9 @@
             android:id="@+id/textUnitTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/bold"
-            android:layout_marginTop="@dimen/margin_basic"
             android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:fontFamily="@font/bold"
             android:text="@string/unit_type"
             android:textSize="@dimen/textSizeBig"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textUnitTitle">
 
-            <androidx.appcompat.widget.AppCompatRadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_metric"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,13 +81,46 @@
                 android:onClick="@{()-> viewModel.onMetricClicked()}"
                 android:text="@string/metric" />
 
-            <androidx.appcompat.widget.AppCompatRadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radio_imperial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{()-> viewModel.onImperialClicked()}"
                 android:text="@string/imperial" />
         </RadioGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:fontFamily="@font/medium"
+            android:layout_margin="@dimen/margin_basic"
+            android:onClick="@{()->viewModel.onProfileClicked()}"
+            android:text="@string/runage_edit_profile"
+            app:icon="@drawable/ic_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageGoogleFit"
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_google_fit"
+            android:layout_margin="@dimen/margin_basic"
+            app:layout_constraintTop_toBottomOf="@+id/buttonProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchFit"
+            android:text="@string/runage_sync_google_fit"
+            android:layout_width="wrap_content"
+            android:checked="@{viewModel.liveSyncGoogleFit}"
+            app:layout_constraintStart_toEndOf="@+id/imageGoogleFit"
+            android:fontFamily="@font/medium"
+            android:layout_marginStart="8dip"
+            app:layout_constraintTop_toTopOf="@+id/imageGoogleFit"
+            app:layout_constraintBottom_toBottomOf="@+id/imageGoogleFit"
+            android:layout_height="wrap_content" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"

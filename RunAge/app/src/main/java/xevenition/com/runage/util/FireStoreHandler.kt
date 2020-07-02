@@ -51,6 +51,9 @@ class FireStoreHandler @Inject constructor() {
                     "userId" to firebaseAuth.currentUser?.uid,
                     "totalDistance" to quest.totalDistance,
                     "calories" to quest.calories,
+                    "runDistance" to runStats.runningDistance,
+                    "runDuration" to runStats.runningDuration,
+                    "xp" to runStats.xp,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
                     "runningPercentage" to runStats.activityPercentage.getOrDefault(

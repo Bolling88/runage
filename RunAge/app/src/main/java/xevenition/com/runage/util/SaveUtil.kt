@@ -42,6 +42,7 @@ class SaveUtil @Inject constructor(app: Application) {
         const val KEY_INITIAL_SETTINGS_COMPLETED = "key_initial_settings_completed"
         const val KEY_IS_USING_METRIC = "key_is_using_metric"
         const val KEY_WEIGHT = "key_weight"
+        const val KEY_SYNC_GOOGLE_FIT = "key_sync_google_fit"
 
         private const val KEY = "xevenition.com.runage.SAVE_KEY"
     }
