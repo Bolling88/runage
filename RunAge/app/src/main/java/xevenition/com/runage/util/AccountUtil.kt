@@ -1,8 +1,10 @@
 package xevenition.com.runage.util
 
 import android.app.Application
+import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.games.AnnotatedData
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.Player
 import com.google.android.gms.tasks.Task
@@ -26,6 +28,13 @@ class AccountUtil @Inject constructor(private val app: Application) {
         return if (account != null) {
             Games.getPlayersClient(app, account).currentPlayer
         } else null
+    }
+
+    fun getPlayerProfileIntent(player: Player): Task<Intent>? {
+        val account = getGamesAccount()
+        return if (account != null) {
+            Games.getPlayersClient(app, account).getCompareProfileIntent(player)
+        }else null
     }
 
     fun openProfileSettings(){

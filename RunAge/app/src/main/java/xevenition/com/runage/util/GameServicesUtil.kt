@@ -7,6 +7,7 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.room.entity.Quest

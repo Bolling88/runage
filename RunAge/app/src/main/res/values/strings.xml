@@ -77,4 +77,5 @@
     <string name="runage_rule_2_message">"The faster you run, the more experience points you will gain. But again remember, doing an activity type other than running will give you the opposite results. "</string>
     <string name="runage_rule_3_title">Run further</string>
     <string name="runage_rule_3_message">Only distance and pace determine your experience points gain. The further you run, and the faster you do it, the more you will gain.</string>
+    <string name="runage_edit_profile">Edit profile</string>
 </resources>

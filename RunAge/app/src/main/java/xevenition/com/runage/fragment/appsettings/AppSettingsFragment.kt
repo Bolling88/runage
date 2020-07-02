@@ -17,6 +17,7 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentAppSettingsBinding
 import xevenition.com.runage.databinding.FragmentSettingsBinding
+import xevenition.com.runage.fragment.start.StartFragment
 
 class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
 
@@ -92,6 +93,10 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
 
         viewModel.observableCloseApp.observe(viewLifecycleOwner, Observer {
             closeApp()
+        })
+
+        viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
+            startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
         })
     }
 }
