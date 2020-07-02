@@ -24,6 +24,7 @@ import java.time.Instant
 
 class SummaryViewModel(
     private val gameServicesUtil: GameServicesUtil,
+    private val accountUtil: AccountUtil,
     private val fitnessHelper: FitnessHelper,
     private val locationUtil: LocationUtil,
     private val feedbackHandler: FeedbackHandler,

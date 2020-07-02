@@ -43,6 +43,9 @@ class SummaryViewModelFactory @Inject constructor(
     @Inject
     lateinit var runningUtil: RunningUtil
 
+    @Inject
+    lateinit var accountUtil: AccountUtil
+
     init {
         app.appComponent.inject(this)
     }
@@ -51,6 +54,7 @@ class SummaryViewModelFactory @Inject constructor(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SummaryViewModel(
             gameServicesUtil,
+            accountUtil,
             fitnessHelper,
             locationUtil,
             feedbackHandler,
