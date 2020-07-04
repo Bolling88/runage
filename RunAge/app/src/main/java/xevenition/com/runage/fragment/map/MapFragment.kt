@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -199,7 +200,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        binding.mapView.onSaveInstanceState(outState)
+        try {
+            binding.mapView.onSaveInstanceState(outState)
+        }catch (exception: Exception){
+            Timber.d(exception)
+        }
     }
 
     fun onNewQuestCreated(id: Int) {
