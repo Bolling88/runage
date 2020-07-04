@@ -20,6 +20,7 @@ import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
+import xevenition.com.runage.fragment.share.ShareViewModelFactory
 import xevenition.com.runage.fragment.splash.SplashFragment
 import xevenition.com.runage.fragment.splash.SplashViewModelFactory
 import xevenition.com.runage.fragment.start.StartFragment
@@ -50,6 +51,7 @@ interface ApplicationComponent {
     fun inject(component: MainViewModelFactory)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
+    fun inject(component: ShareViewModelFactory)
     fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
     fun inject(component: SummaryViewModelFactory)

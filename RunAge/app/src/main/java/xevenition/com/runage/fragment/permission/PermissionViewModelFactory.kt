@@ -18,15 +18,8 @@ class PermissionViewModelFactory @Inject constructor(app: MainApplication) :
         app.appComponent.inject(this)
     }
 
-    @Inject
-    lateinit var accountUtil: AccountUtil
-    @Inject
-    lateinit var saveUtil: SaveUtil
-    @Inject
-    lateinit var resourceUtil: ResourceUtil
-
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PermissionViewModel(resourceUtil, accountUtil, saveUtil) as T
+        return PermissionViewModel() as T
     }
 }
