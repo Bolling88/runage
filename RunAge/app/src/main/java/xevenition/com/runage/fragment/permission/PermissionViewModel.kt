@@ -13,11 +13,7 @@ import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
-class PermissionViewModel @Inject constructor(
-    private val resourceUtil: ResourceUtil,
-    private val accountUtil: AccountUtil,
-    private val saveUtil: SaveUtil
-) : BaseViewModel() {
+class PermissionViewModel @Inject constructor() : BaseViewModel() {
 
     private var locationOn: Boolean = false
     private var activityOn: Boolean = false
@@ -56,15 +52,5 @@ class PermissionViewModel @Inject constructor(
 
             _liveButtonEnabled.postValue(locationOn && activityOn)
         }
-    }
-
-    fun onQAlwaysBackgroundDenied() {
-        observableInfoDialog.postValue(
-            Triple(
-                resourceUtil.getString(R.string.runage_allow_always),
-                resourceUtil.getString(R.string.runage_location_android_q),
-                resourceUtil.getString(R.string.runage_ok)
-            )
-        )
     }
 }

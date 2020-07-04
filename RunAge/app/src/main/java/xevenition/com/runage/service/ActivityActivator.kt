@@ -65,8 +65,8 @@ class ActivityActivator @Inject constructor(private val context: Context){
         }
 
         task.addOnFailureListener { e: Exception ->
-            Timber.d("Failed registering event receiver")
-            Timber.d(e)
+            Timber.e("Failed registering event receiver")
+            Timber.e(e)
         }
     }
 
