@@ -58,14 +58,12 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_total_running_distance_meters" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
     <!-- leaderboard Most Experience -->
     <string name="leaderboard_most_experience" translatable="false">CgkI4-yzqpMZEAIQBA</string>
-    <!-- leaderboard Fastest Runner (min/km) -->
-    <string name="leaderboard_fastest_runner_minkm" translatable="false">CgkI4-yzqpMZEAIQEg</string>
-    <!-- leaderboard Total Running Duration -->
-    <string name="leaderboard_total_running_duration" translatable="false">CgkI4-yzqpMZEAIQEw</string>
     <!-- leaderboard Longest Run (meters) -->
     <string name="leaderboard_longest_run_meters" translatable="false">CgkI4-yzqpMZEAIQFg</string>
     <!-- leaderboard Highest Level -->
     <string name="leaderboard_highest_level" translatable="false">CgkI4-yzqpMZEAIQIQ</string>
-    <!-- leaderboard Most Runs (min 1 km / 0.62 mi) -->
-    <string name="leaderboard_most_runs_min_1_km__0.62_mi" translatable="false">CgkI4-yzqpMZEAIQIg</string>
+    <!-- leaderboard Total Running Duration -->
+    <string name="leaderboard_total_running_duration" translatable="false">CgkI4-yzqpMZEAIQIw</string>
+    <!-- leaderboard Fastest Runner (min/km) -->
+    <string name="leaderboard_fastest_runner_minkm" translatable="false">CgkI4-yzqpMZEAIQJA</string>
 </resources>

@@ -55,7 +55,6 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${enableCrashReporting}" />
 
-
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
