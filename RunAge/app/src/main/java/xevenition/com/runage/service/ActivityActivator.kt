@@ -81,7 +81,7 @@ class ActivityActivator @Inject constructor(private val context: Context){
         }
 
         task.addOnFailureListener { e: Exception ->
-            Log.e(TAG, e.message)
+            Timber.e(TAG, e.message)
         }
     }
 

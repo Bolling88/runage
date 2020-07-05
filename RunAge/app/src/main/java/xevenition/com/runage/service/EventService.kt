@@ -14,7 +14,6 @@ import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.location.LocationCallback
@@ -106,7 +105,7 @@ class EventService : Service() {
     }
 
     private fun startInitialCountdown() {
-        var count = 10
+        val count = 10
         val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.computation())
             .take(12)
@@ -139,19 +138,28 @@ class EventService : Service() {
         compositeDisposable.add(disposable)
     }
 
-    private fun setUpRunningTimer(startTimeEpochSeconds: Long){
+    private fun setUpRunningTimer(startTimeEpochSeconds: Long) {
         runningTimerDisposable = runningUtil.getRunningTimer(startTimeEpochSeconds)
             .subscribe({
                 Timber.d("New notification message: $it")
-                if(  this::currentQuest.isInitialized) {
+                if (this::currentQuest.isInitialized) {
                     val duration = Instant.now().epochSecond - startTimeEpochSeconds
 
-                    val distance = "${resourceUtil.getString(R.string.runage_distance)}: ${runningUtil.getDistanceString(currentQuest.totalDistance.toInt())}"
-                    val calories = "${resourceUtil.getString(R.string.runage_calories).capitalize()}: ${currentQuest.calories}"
-                    val pace = "${resourceUtil.getString(R.string.runage_avg_pace)}: ${runningUtil.getPaceString(duration, currentQuest.totalDistance, true)}"
+                    val distance =
+                        "${resourceUtil.getString(R.string.runage_distance)}: ${runningUtil.getDistanceString(
+                            currentQuest.totalDistance.toInt()
+                        )}"
+                    val calories = "${resourceUtil.getString(R.string.runage_calories)
+                        .capitalize()}: ${currentQuest.calories}"
+                    val pace =
+                        "${resourceUtil.getString(R.string.runage_avg_pace)}: ${runningUtil.getPaceString(
+                            duration,
+                            currentQuest.totalDistance,
+                            true
+                        )}"
                     updateNotification(it, "$distance \n$calories \n$pace")
                 }
-            },{
+            }, {
                 Timber.e(it)
             })
         runningTimerDisposable?.let { compositeDisposable.add(it) }
@@ -177,19 +185,34 @@ class EventService : Service() {
                 this::currentQuest.isInitialized
             }
             .filter {
+                //https://medium.com/@mizutori/make-it-even-better-than-nike-how-to-filter-locations-tracking-highly-accurate-location-in-1c9d53d31d93
+                //If location recording is not more than 10 seconds old, we should filter it
+                val age = locationUtil.getLocationAge(it)
+                (age < 10000)
+            }
+            .filter {
                 //Filter away crazy values
                 Timber.d("Current accuracy: ${it.accuracy}")
-                it.accuracy < MIN_ACCURACY
+                it.hasAccuracy() && it.accuracy < MIN_ACCURACY && it.accuracy > 0
             }
-//            .filter{
-//                if (previousLocation == null) {
-//                    true
-//                } else {
-//                    activityType != DetectedActivity.STILL || BuildConfig.DEBUG
-//                }
-//            }
+            .filter {
+                locationUtil.kalmarFilter(location, currentQuest.startTimeEpochSeconds * 1000)
+            }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
+
+                val newActivity = if (activityType == DetectedActivity.STILL) {
+                    if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 6.5 && it.speed > 2.0) {
+                        DetectedActivity.RUNNING
+                    }else if(it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 2.0 && it.speed > 0.5){
+                        DetectedActivity.WALKING
+                    } else {
+                        DetectedActivity.STILL
+                    }
+                } else {
+                    activityType
+                }
+
                 val newPoint = PositionPoint(
                     it.latitude,
                     it.longitude,
@@ -198,7 +221,7 @@ class EventService : Service() {
                     it.altitude,
                     it.bearing,
                     Instant.now().epochSecond,
-                    activityType
+                    newActivity
                 )
 
                 updateTotalDistance(newPoint)
@@ -253,8 +276,8 @@ class EventService : Service() {
 
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.create()?.apply {
-            interval = 1000
-            fastestInterval = 1000
+            interval = UPDATE_INTERVAL
+            fastestInterval = UPDATE_INTERVAL
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         locationCallback = object : LocationCallback() {
@@ -272,11 +295,12 @@ class EventService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         serviceIsRunning = true
-        val notification: Notification = buildNotification(resourceUtil.getString(R.string.runage_empty_timer), "")
+        val notification: Notification =
+            buildNotification(resourceUtil.getString(R.string.runage_empty_timer), "")
 
         startForeground(NOTIFICATION_ID, notification)
 
-        if((runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) && ::currentQuest.isInitialized){
+        if ((runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) && ::currentQuest.isInitialized) {
             setUpRunningTimer(currentQuest.startTimeEpochSeconds)
         }
 
@@ -300,8 +324,8 @@ class EventService : Service() {
             .setOnlyAlertOnce(true)
             .setTicker(null)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setStyle( NotificationCompat.BigTextStyle().setBigContentTitle(title))
-            .setStyle( NotificationCompat.BigTextStyle().bigText(content))
+            .setStyle(NotificationCompat.BigTextStyle().setBigContentTitle(title))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(content))
             .setSmallIcon(R.drawable.ic_run_blue)
             .setColor(resourceUtil.getColor(R.color.colorPrimary))
             .setContentIntent(pendingIntent)
@@ -310,7 +334,6 @@ class EventService : Service() {
 
     private fun updateNotification(title: String, content: String) {
         val notification = buildNotification(title, content)
-        //NotificationManagerCompat.from(this).notify(NOTIFICATION_ID, notification)
         startForeground(NOTIFICATION_ID, notification)
     }
 
@@ -321,7 +344,7 @@ class EventService : Service() {
             channelName, NotificationManager.IMPORTANCE_LOW
         )
         chan.lightColor = Color.BLUE
-        chan.setSound(null,null)
+        chan.setSound(null, null)
         chan.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         val service = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         service.createNotificationChannel(chan)
@@ -349,9 +372,9 @@ class EventService : Service() {
     }
 
     companion object {
-        const val TAG = "Event Service"
         const val NOTIFICATION_ID = 2345235
         const val MIN_ACCURACY = 30
+        const val UPDATE_INTERVAL = 5000L
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }
 }

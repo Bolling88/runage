@@ -71,7 +71,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
-        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong().times(1000))
 
         //Long runner
         when {
@@ -116,7 +116,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
                 val totalDuration = end - start
                 val secondsPerKm = totalDuration / (quest.totalDistance / 1000)
 
-                saveLeaderBoard(app.getString(R.string.leaderboard_fastest_runner_minkm), secondsPerKm.toLong())
+                saveLeaderBoard(app.getString(R.string.leaderboard_fastest_runner_minkm), secondsPerKm.toLong().times(1000))
 
                 when{
                     secondsPerKm < (60 * 4) ->{

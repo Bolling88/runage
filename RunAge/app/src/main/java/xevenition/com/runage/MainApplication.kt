@@ -9,7 +9,7 @@ import xevenition.com.runage.dagger.AppModule
 import xevenition.com.runage.dagger.ApplicationComponent
 import xevenition.com.runage.dagger.DaggerApplicationComponent
 
-class MainApplication: Application() {
+class MainApplication : Application() {
     // Reference to the application graph that is used across the whole app
     lateinit var appComponent: ApplicationComponent
 
@@ -17,18 +17,18 @@ class MainApplication: Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
-        }else{
+        } else {
             Timber.plant(CrashReportingTree())
         }
         FirebaseApp.initializeApp(this)
-        appComponent =  DaggerApplicationComponent.builder().appModule(
+        appComponent = DaggerApplicationComponent.builder().appModule(
             AppModule(
                 this
             )
         ).build()
     }
 
-    companion object{
+    companion object {
         var serviceIsRunning = false
         var welcomeMessagePlayed = false
     }
