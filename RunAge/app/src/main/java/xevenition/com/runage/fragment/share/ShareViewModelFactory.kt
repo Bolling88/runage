@@ -5,12 +5,15 @@ import xevenition.com.runage.fragment.rule.RuleViewModel
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject
 
 class ShareViewModelFactory @Inject constructor(
-    app: MainApplication
+    app: MainApplication,
+    private val args: ShareFragmentArgs
 ) :
     BaseViewModelFactory() {
 
@@ -19,12 +22,14 @@ class ShareViewModelFactory @Inject constructor(
     }
 
     @Inject
-    lateinit var gameServicesUtil: GameServicesUtil
+    lateinit var runningUtil: RunningUtil
     @Inject
     lateinit var resourceUtil: ResourceUtil
+    @Inject
+    lateinit var questRepository: QuestRepository
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ShareViewModel(gameServicesUtil, resourceUtil) as T
+        return ShareViewModel(runningUtil, resourceUtil, questRepository, args) as T
     }
 }

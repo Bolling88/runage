@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,9 +14,11 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/shareView"
             android:layout_width="0dip"
             android:layout_height="0dip"
-            android:background="@color/black"
+            android:padding="4dip"
+            android:background="@color/colorPrimary"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +33,197 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_height="0dip" />
 
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/shareBackground"
+                android:layout_width="0dip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_height="0dip" />
+
+            <View
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/gradient_white"
+                android:layout_width="match_parent"
+                android:layout_height="100dip" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCounter"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:fontFamily="@font/bold"
+                android:gravity="center"
+                android:textColor="@{viewModel.liveTimerColor}"
+                android:text="@{viewModel.liveTextTimer}"
+                android:textSize="80sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textDistanceTitle"
+                tools:text="00:00:00" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDistanceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_distance"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/textCaloriesTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/textDistance" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_basic"
+                android:fontFamily="@font/light"
+                android:text="@{viewModel.liveTotalDistance}"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+                app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="1000 m" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCaloriesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_calories"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
+                app:layout_constraintBottom_toTopOf="@+id/textCalories" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/light"
+                android:text="@{viewModel.liveCalories}"
+                android:layout_marginBottom="@dimen/margin_basic"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="@+id/textCaloriesTitle"
+                app:layout_constraintStart_toStartOf="@+id/textCaloriesTitle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="100" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textPaceTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bold"
+                android:text="@string/runage_avg_pace"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textCaloriesTitle"
+                app:layout_constraintBottom_toTopOf="@+id/textPace" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textPace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/light"
+                android:layout_marginBottom="@dimen/margin_basic"
+                android:text="@{viewModel.livePace}"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+                app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
+                tools:text="5:34 min/km" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textAppName"
+                android:layout_width="wrap_content"
+                android:text="@string/app_name"
+                android:layout_marginEnd="@dimen/margin_basic"
+                android:layout_marginTop="@dimen/margin_basic"
+                 android:fontFamily="@font/azonix"
+                android:textSize="24sp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="wrap_content" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="30dip"
+                app:srcCompat="@drawable/ic_run_blue"
+                android:layout_marginEnd="@dimen/margin_small"
+                 app:layout_constraintTop_toTopOf="@+id/textAppName"
+                app:layout_constraintBottom_toBottomOf="@+id/textAppName"
+                 app:layout_constraintEnd_toStartOf="@+id/textAppName"
+                android:layout_height="40dip" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shareView">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                 android:layout_marginEnd="@dimen/margin_small"
+                android:onClick="@{()-> viewModel.onMapNormalClicked()}"
+                android:text="@string/runage_normal" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_satellite"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onMapSatelliteClicked()}"
+                android:text="@string/runage_satellite" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/radio_terrain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{()-> viewModel.onMapTerrainClicked()}"
+                android:text="@string/runage_terrain" />
+
+        </RadioGroup>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
+            android:onClick="@{()-> viewModel.onShareClicked()}"
+            android:text="@string/runage_share_this_run"
+            app:layout_constraintBottom_toTopOf="@+id/buttonContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buttonContinue"
+            style="@style/ButtonStyleText"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/margin_basic"
+            android:onClick="@{()-> viewModel.onContinueClicked()}"
+            android:text="@string/runage_continue" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

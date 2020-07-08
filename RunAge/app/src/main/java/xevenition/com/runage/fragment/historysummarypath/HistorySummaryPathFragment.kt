@@ -56,12 +56,6 @@ class HistorySummaryPathFragment : BaseFragment<HistorySummaryPathViewModel>() {
         Timber.d("onCreateView")
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary_history_path, container, false)
         binding.mapView.onCreate(arguments)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Timber.d("onViewCreated")
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         binding.mapView.getMapAsync {
@@ -69,6 +63,7 @@ class HistorySummaryPathFragment : BaseFragment<HistorySummaryPathViewModel>() {
             viewModel.onMapCreated()
         }
         setUpObservables()
+        return binding.root
     }
 
     override fun setUpObservables() {

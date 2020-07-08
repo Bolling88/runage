@@ -82,4 +82,11 @@
     <string name="runage_allow_always">Allow always</string>
     <string name="runage_save_run">Save Run</string>
     <string name="runage_sync_google_fit">Sync with Google Fit</string>
+    <string name="runage_share">Share</string>
+    <string name="runage_unexpected_error">Unexpected error</string>
+    <string name="runage_normal">Normal</string>
+    <string name="runage_satellite">Satellite</string>
+    <string name="runage_terrain">Terrain</string>
+    <string name="runage_hybrid">Hybrid</string>
+    <string name="runage_share_this_run">Share this run</string>
 </resources>

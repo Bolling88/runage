@@ -46,11 +46,11 @@ class SummaryViewModel(
     private val _liveCalories = MutableLiveData<String>()
     val liveCalories: LiveData<String> = _liveCalories
 
-    private val _observablePlayAnimation = MutableLiveData<Unit>()
-    val observablePlayAnimation: LiveData<Unit> = _observablePlayAnimation
-
     private val _livePace = MutableLiveData<String>()
     val livePace: LiveData<String> = _livePace
+
+    private val _observablePlayAnimation = MutableLiveData<Unit>()
+    val observablePlayAnimation: LiveData<Unit> = _observablePlayAnimation
 
     private val _liveTextTimer = MutableLiveData<String>()
     val liveTextTimer: LiveData<String> = _liveTextTimer
@@ -306,7 +306,7 @@ class SummaryViewModel(
     fun onSaveProgressClicked() {
         if (quest?.locations?.size ?: 0 < 2) {
             quest?.let {
-                deleteLocalQuestAfterSaveCompletion(it)
+                deleteAndExit(it)
             }
         } else {
             quest?.let { quest ->
@@ -365,15 +365,17 @@ class SummaryViewModel(
             task.addOnSuccessListener { Timber.d("Synced with google fit") }
             task.addOnFailureListener { Timber.e("Sync with google fit failed") }
             task.addOnCompleteListener {
-                deleteLocalQuestAfterSaveCompletion(quest)
+                //deleteLocalQuestAfterSaveCompletion(quest)
+                observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToShareFragment(questId))
             }
         } else {
-            deleteLocalQuestAfterSaveCompletion(quest)
+            //deleteLocalQuestAfterSaveCompletion(quest)
+            observableNavigateTo.postValue(SummaryFragmentDirections.actionSummaryFragmentToShareFragment(questId))
         }
     }
 
     @SuppressLint("CheckResult")
-    private fun deleteLocalQuestAfterSaveCompletion(quest: Quest) {
+    private fun deleteAndExit(quest: Quest) {
         Observable.just(quest)
             .subscribeOn(Schedulers.io())
             .subscribe({
@@ -445,7 +447,7 @@ class SummaryViewModel(
     fun onDeleteConfirmed() {
         _liveLoadingVisibility.postValue(View.VISIBLE)
         quest?.let {
-            deleteLocalQuestAfterSaveCompletion(it)
+            deleteAndExit(it)
         }
     }
 

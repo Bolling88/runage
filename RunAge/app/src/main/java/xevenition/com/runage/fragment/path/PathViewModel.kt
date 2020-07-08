@@ -48,21 +48,18 @@ class PathViewModel(
         setUpObservableQuest(questId)
     }
 
+    @SuppressLint("CheckResult")
     private fun setUpObservableQuest(id: Int) {
         Timber.d("Register quest flowable with id: $id")
-        questDisposable?.dispose()
-        questDisposable = questRepository.getSingleQuest(id)
+        questRepository.getSingleQuest(id)
             .subscribe({ quest ->
                 currentQuest = quest
-                if(mapIsReady) {
+                if (mapIsReady) {
                     displayPath(quest)
                 }
             }, {
                 Timber.e(it)
             })
-        questDisposable?.let {
-            addDisposable(it)
-        }
     }
 
     @SuppressLint("CheckResult")
