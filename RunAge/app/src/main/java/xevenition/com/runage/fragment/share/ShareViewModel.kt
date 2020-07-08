@@ -123,26 +123,8 @@ class ShareViewModel(
             })
     }
 
-    fun onCloseClicked() {
-        observableBackNavigation.call()
-    }
-
     fun onShareClicked(){
         observableShare.call()
-    }
-
-    @SuppressLint("CheckResult")
-    private fun deleteLocalQuestAfterSaveCompletion(quest: Quest) {
-        Observable.just(quest)
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                questRepository.dbDeleteQuest(quest)
-                Timber.d("All done!")
-                observableShowAd.call()
-            }, {
-                Timber.e(it)
-                observableShowAd.call()
-            })
     }
 
     fun onMapCreated() {
@@ -168,7 +150,7 @@ class ShareViewModel(
     }
 
     fun onContinueClicked(){
-        observableBackNavigation.call()
+        observableShowAd.call()
     }
 
     @SuppressLint("CheckResult")
@@ -177,11 +159,9 @@ class ShareViewModel(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 questRepository.dbDeleteQuest(quest)
-                Timber.d("All done!")
-                observableShowAd.call()
+                Timber.d("Quest deleted!")
             }, {
                 Timber.e(it)
-                observableShowAd.call()
             })
     }
 }
