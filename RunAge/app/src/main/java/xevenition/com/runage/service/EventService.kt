@@ -201,17 +201,23 @@ class EventService : Service() {
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
 
-                val newActivity = if (activityType == DetectedActivity.STILL) {
-                    if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 6.5 && it.speed > 2.0) {
-                        DetectedActivity.RUNNING
-                    }else if(it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 2.0 && it.speed > 0.5){
-                        DetectedActivity.WALKING
+                val newActivity =
+                    //Anti cheat code
+                    if ((activityType == DetectedActivity.RUNNING || activityType == DetectedActivity.WALKING) && it.hasSpeed() && it.hasSpeedAccuracy() && it.speed >= 10) {
+                        DetectedActivity.IN_VEHICLE
+                    } else if (activityType == DetectedActivity.STILL) {
+                        if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed >= 6.5) {
+                            DetectedActivity.IN_VEHICLE
+                        } else if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 6.5 && it.speed > 2.0) {
+                            DetectedActivity.RUNNING
+                        } else if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 2.0 && it.speed > 0.5) {
+                            DetectedActivity.WALKING
+                        } else {
+                            DetectedActivity.STILL
+                        }
                     } else {
-                        DetectedActivity.STILL
+                        activityType
                     }
-                } else {
-                    activityType
-                }
 
                 val newPoint = PositionPoint(
                     it.latitude,
