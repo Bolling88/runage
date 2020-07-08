@@ -13,7 +13,6 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import java.time.Instant
@@ -75,6 +74,7 @@ class ShareViewModel(
                     displayPath(quest)
                 }
                 setUpQuestInfo(quest)
+                deleteQuestInDb(quest)
             }, {
                 Timber.e(it)
             })
@@ -165,5 +165,23 @@ class ShareViewModel(
     fun onMapTerrainClicked(){
         _observableMapType.postValue(GoogleMap.MAP_TYPE_TERRAIN)
         _liveTimerColor.postValue(resourceUtil.getColor(R.color.grey2))
+    }
+
+    fun onContinueClicked(){
+        observableBackNavigation.call()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun deleteQuestInDb(quest: Quest){
+        Observable.just(quest)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                questRepository.dbDeleteQuest(quest)
+                Timber.d("All done!")
+                observableShowAd.call()
+            }, {
+                Timber.e(it)
+                observableShowAd.call()
+            })
     }
 }

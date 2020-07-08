@@ -88,4 +88,5 @@
     <string name="runage_satellite">Satellite</string>
     <string name="runage_terrain">Terrain</string>
     <string name="runage_hybrid">Hybrid</string>
+    <string name="runage_share_this_run">Share this run</string>
 </resources>
