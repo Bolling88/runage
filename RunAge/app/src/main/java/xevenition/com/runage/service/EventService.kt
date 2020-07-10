@@ -36,6 +36,7 @@ import xevenition.com.runage.util.*
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.sqrt
 
 
 class EventService : Service() {
@@ -200,17 +201,17 @@ class EventService : Service() {
             }
             .map {
                 Timber.d("${it.latitude} ${it.longitude}")
-
+                val speed = getSpeed(it)
                 val newActivity =
                     //Anti cheat code
-                    if ((activityType == DetectedActivity.RUNNING || activityType == DetectedActivity.WALKING) && it.hasSpeed() && it.hasSpeedAccuracy() && it.speed >= 10) {
+                    if ((activityType == DetectedActivity.RUNNING || activityType == DetectedActivity.WALKING) && speed >= 10) {
                         DetectedActivity.IN_VEHICLE
                     } else if (activityType == DetectedActivity.STILL) {
-                        if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed >= 6.5) {
+                        if (speed >= 6.5) {
                             DetectedActivity.IN_VEHICLE
-                        } else if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 6.5 && it.speed > 2.0) {
+                        } else if (speed < 6.5 && speed > 2.0) {
                             DetectedActivity.RUNNING
-                        } else if (it.hasSpeed() && it.hasSpeedAccuracy() && it.speed < 2.0 && it.speed > 0.5) {
+                        } else if (speed < 2.0 && speed > 0.5) {
                             DetectedActivity.WALKING
                         } else {
                             DetectedActivity.STILL
@@ -247,6 +248,20 @@ class EventService : Service() {
             }, {
                 Timber.e(it)
             })
+    }
+
+    private fun getSpeed(location: Location): Float {
+       return if (location.hasSpeed() && location.speed > 0) {
+            location.speed
+        } else {
+            previousLocation?.let { lastLocation ->
+                // Convert milliseconds to seconds
+                val elapsedTimeInSeconds = (location.time - lastLocation.time) / 1000
+                val distanceInMeters = lastLocation.distanceTo(location)
+                // Speed in m/s
+                distanceInMeters / elapsedTimeInSeconds
+            } ?: 0f
+        }
     }
 
     private fun updateTotalDistance(newPoint: PositionPoint) {
@@ -380,7 +395,7 @@ class EventService : Service() {
     companion object {
         const val NOTIFICATION_ID = 2345235
         const val MIN_ACCURACY = 30
-        const val UPDATE_INTERVAL = 5000L
+        const val UPDATE_INTERVAL = 1000L
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }
 }
