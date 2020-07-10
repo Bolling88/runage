@@ -2,6 +2,7 @@ package xevenition.com.runage.fragment.splash
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,8 +44,8 @@ class SplashFragment : BaseFragment<SplashViewModel>() {
         super.onViewCreated(view, savedInstanceState)
         setUpObservables()
 
-        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
-            != PackageManager.PERMISSION_GRANTED ||
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
+            != PackageManager.PERMISSION_GRANTED) ||
             ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
         ) {
