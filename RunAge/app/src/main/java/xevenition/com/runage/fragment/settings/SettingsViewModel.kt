@@ -29,10 +29,10 @@ class SettingsViewModel(
     }
 
     fun onContinueClicked() {
+        saveUtil.saveBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED, true)
         if (!permissionsGranted) {
             observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToPermissionFragment())
         }else {
-            saveUtil.saveBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED, true)
             observableNavigateTo.postValue(SettingsFragmentDirections.actionSettingsFragmentToMainFragment())
         }
     }
