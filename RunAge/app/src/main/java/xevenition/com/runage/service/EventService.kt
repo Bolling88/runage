@@ -395,7 +395,7 @@ class EventService : Service() {
     companion object {
         const val NOTIFICATION_ID = 2345235
         const val MIN_ACCURACY = 30
-        const val UPDATE_INTERVAL = 1000L
+        const val UPDATE_INTERVAL = 5000L
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }
 }
