@@ -65,7 +65,7 @@ class ShareFragment : BaseFragment<ShareViewModel>() {
         if (BuildConfig.DEBUG) {
             mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
         }else{
-            mInterstitialAd.adUnitId = "ca-app-pub-5287847424239288/7381115318"
+            mInterstitialAd.adUnitId = "ca-app-pub-9607319032304025/9170819068"
         }
         mInterstitialAd.loadAd(AdRequest.Builder().build())
     }
