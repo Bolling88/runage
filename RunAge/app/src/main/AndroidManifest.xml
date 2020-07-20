@@ -61,7 +61,7 @@
             android:value="@string/app_id" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5287847424239288~9077340364" />
+            android:value="ca-app-pub-9607319032304025~8488841529" />
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${enableCrashReporting}" />
