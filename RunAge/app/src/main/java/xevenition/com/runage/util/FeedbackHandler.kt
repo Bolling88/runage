@@ -1,6 +1,13 @@
 package xevenition.com.runage.util
 
+import android.app.Application
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.room.entity.Quest
 import java.time.Instant
@@ -10,6 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class FeedbackHandler @Inject constructor(
     saveUtil: SaveUtil,
+    private val app: Application,
     private val resourceUtil: ResourceUtil,
     private val textToSpeech: TextToSpeech
 ) {
@@ -100,7 +108,42 @@ class FeedbackHandler @Inject constructor(
     }
 
     fun speak(string: String) {
-        textToSpeech.speak(string, TextToSpeech.QUEUE_FLUSH, null, null)
+        Timber.d("Speaking $string")
+        val audioManager =
+            app.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .build()
+            )
+            .setAcceptsDelayedFocusGain(true)
+            .setOnAudioFocusChangeListener {
+                //Handle Focus Change
+            }.build()
+
+        audioManager.requestAudioFocus(audioFocusRequest)
+
+        textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+
+            override fun onStart(utteranceId: String?) {
+                Timber.d("STARTING SPEAKING")
+                audioManager.requestAudioFocus(audioFocusRequest)
+            }
+
+            override fun onDone(utteranceId: String?) {
+                Timber.d("DONE")
+                audioManager.abandonAudioFocusRequest(audioFocusRequest)
+            }
+
+            override fun onError(utteranceId: String?) {
+                Timber.d("ERROR")
+                audioManager.abandonAudioFocusRequest(audioFocusRequest)
+            }
+        })
+
+        textToSpeech.speak(string, TextToSpeech.QUEUE_FLUSH, null, string)
     }
 
     companion object {
