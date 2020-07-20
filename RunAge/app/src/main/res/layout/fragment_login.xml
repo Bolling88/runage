@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dip"
-            android:fontFamily="@font/azonix"
+            style="@style/MainFontStyle"
             android:text="@string/app_name"
             android:textColor="@color/colorPrimary"
             android:textSize="70sp"

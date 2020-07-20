@@ -48,7 +48,7 @@
     <string name="runage_driving">Körande</string>
     <string name="runage_bicycling">Cyklande</string>
     <string name="runage_still">Stilla</string>
-    <string name="runage_level">Nivå</string>
+    <string name="runage_level">Level</string>
     <string name="runage_leaderboard">Topplista</string>
     <string name="runage_achievements">Prestationer</string>
     <string name="runage_sign_out">Logga ut</string>

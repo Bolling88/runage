@@ -35,6 +35,7 @@
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation"
             android:layout_width="wrap_content"
+            app:itemTextAppearance="@style/MainFontStyle"
             style="@style/Widget.Custom.NavigationView"
             android:layout_height="match_parent"
             android:layout_gravity="start|left"

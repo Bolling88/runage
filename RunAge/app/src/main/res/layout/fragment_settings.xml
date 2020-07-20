@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
-            android:fontFamily="@font/azonix"
+            style="@style/MainFontStyle"
             android:gravity="center"
             android:text="@string/runage_settings"
             android:textColor="@color/colorAccent"
