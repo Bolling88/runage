@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress ALL -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress ALL -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -17,17 +16,11 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_big"
-            android:gravity="center"
-            style="@style/MainFontStyle"
+            style="@style/PageTitleStyle"
             android:text="@string/get_started"
-            android:textColor="@color/colorAccent"
-            android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
@@ -70,8 +63,8 @@
             android:layout_marginEnd="@dimen/margin_basic"
             android:text="@string/explanation_permission_location"
             android:textColor="@color/black"
-            app:fontFamily="@font/light"
             android:textSize="@dimen/textSizeNormal"
+            app:fontFamily="@font/light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lottieLocation" />
@@ -126,10 +119,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
             style="@style/ButtonStyle"
-            android:onClick="@{()-> viewModel.onContinueClicked()}"
-            android:text="@string/runage_continue"
             android:clickable="@{viewModel.liveButtonEnabled}"
             android:enabled="@{viewModel.liveButtonEnabled}"
+            android:onClick="@{()-> viewModel.onContinueClicked()}"
+            android:text="@string/runage_continue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
