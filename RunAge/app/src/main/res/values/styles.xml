@@ -29,6 +29,7 @@
 
     <style name="TextAppearance.ToolbarTitle" parent="@style/MainFontStyle">
         <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
