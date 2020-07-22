@@ -90,4 +90,7 @@
     <string name="runage_hybrid">Hybrid</string>
     <string name="runage_share_this_run">Share this quest</string>
     <string name="runage_support">Support</string>
+    <string name="runage_begin_new_run">Begin new run</string>
+    <string name="runage_feed">Feed</string>
+    <string name="runage_quests">Quests</string>
 </resources>

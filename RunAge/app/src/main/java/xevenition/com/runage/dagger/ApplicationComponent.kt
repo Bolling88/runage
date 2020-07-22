@@ -2,6 +2,8 @@ package xevenition.com.runage.dagger
 
 import dagger.Component
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
+import xevenition.com.runage.fragment.challengelist.ChallengeListFragment
+import xevenition.com.runage.fragment.challengelist.ChallengeListViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
@@ -52,6 +54,7 @@ interface ApplicationComponent {
     fun inject(component: PathViewModelFactory)
     fun inject(component: RuleViewModelFactory)
     fun inject(component: MainViewModelFactory)
+    fun inject(component: ChallengeListFragment)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
@@ -64,6 +67,7 @@ interface ApplicationComponent {
     fun inject(component: PermissionViewModelFactory)
     fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
+    fun inject(component: ChallengeListViewModelFactory)
     fun inject(component: HistorySummaryViewModelFactory)
     fun inject(component: HistorySummaryPathViewModelFactory)
 }

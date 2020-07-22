@@ -131,6 +131,24 @@ class MainFragment : BaseFragment<MainViewModel>() {
             viewModel.onQuestFinished(currentQuestId)
             currentQuestId = -1
         }
+
+        binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.page_1 -> {
+                    // Respond to navigation item 1 click
+                    true
+                }
+                R.id.page_2 -> {
+                    // Respond to navigation item 2 click
+                    true
+                }
+                R.id.page_3 -> {
+                    // Respond to navigation item 2 click
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

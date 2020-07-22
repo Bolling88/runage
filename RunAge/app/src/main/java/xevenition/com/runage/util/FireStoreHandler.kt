@@ -119,6 +119,12 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
+    fun getChallenges(): Task<DocumentSnapshot> {
+        val docRef =
+            firestore.collection("challenges")
+                .document("QuIYFZx7kYXJF7MWsy8l")
+        return docRef.get()
+    }
 
     fun storeUserIfNotExists() {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
