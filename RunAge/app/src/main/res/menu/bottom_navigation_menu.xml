@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_timer"
         android:title="@string/runage_quests"/>
     <item
-        android:id="@+id/startFragment"
+        android:id="@+id/viewPageFragment"
         android:enabled="true"
         android:icon="@drawable/ic_run_blue"
         android:title="@string/runage_home"/>

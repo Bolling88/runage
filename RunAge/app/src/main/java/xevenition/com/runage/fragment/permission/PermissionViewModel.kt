@@ -26,7 +26,7 @@ class PermissionViewModel @Inject constructor() : BaseViewModel() {
         observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToMainFragment())
     }
 
-    fun onActivityCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
+    fun onActivityCheckChanged(@Suppress("UNUSED_PARAMETER") buttonView: CompoundButton, isChecked: Boolean) {
         if (activityOn != isChecked) {
             activityOn = isChecked
             if (isChecked) {
@@ -37,6 +37,7 @@ class PermissionViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onLocationCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
         if (locationOn != isChecked) {
             locationOn = isChecked

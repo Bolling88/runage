@@ -10,6 +10,8 @@ import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
 import xevenition.com.runage.fragment.historysummary.HistorySummaryViewModelFactory
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathViewModelFactory
+import xevenition.com.runage.fragment.home.ViewPageFragment
+import xevenition.com.runage.fragment.home.ViewPageViewModelFactory
 import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.main.MainViewModelFactory
@@ -47,12 +49,14 @@ interface ApplicationComponent {
     fun inject(component: SplashFragment)
     fun inject(component: HistoryFragment)
     fun inject(component: SummaryFragment)
+    fun inject(component: ViewPageFragment)
     fun inject(component: SettingsFragment)
     fun inject(component: PermissionFragment)
     fun inject(component: XpViewModelFactory)
     fun inject(component: MapViewModelFactory)
     fun inject(component: PathViewModelFactory)
     fun inject(component: RuleViewModelFactory)
+    fun inject(component: ViewPageViewModelFactory)
     fun inject(component: MainViewModelFactory)
     fun inject(component: ChallengeListFragment)
     fun inject(component: StartViewModelFactory)

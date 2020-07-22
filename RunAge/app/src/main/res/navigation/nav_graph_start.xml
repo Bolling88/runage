@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_home"
-    app:startDestination="@id/startFragment">
+    app:startDestination="@id/viewPageFragment">
 
 
     <fragment
@@ -12,10 +12,49 @@
     </fragment>
 
     <fragment
-        android:id="@+id/startFragment"
-        android:name="xevenition.com.runage.fragment.start.StartFragment"
-        android:label="startFragment">
+        android:id="@+id/viewPageFragment"
+        android:name="xevenition.com.runage.fragment.home.ViewPageFragment"
+        android:label="viewPageFragment">
 
+        <action
+            android:id="@+id/action_viewPageFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="xevenition.com.runage.fragment.summary.SummaryFragment"
+        android:label="SummaryFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_summaryFragment_to_pathFragment"
+            app:destination="@id/pathFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_shareFragment"
+            app:popUpTo="@+id/mainFragment"
+            app:popUpToInclusive="false"
+            app:destination="@id/shareFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pathFragment"
+        android:name="xevenition.com.runage.fragment.path.PathFragment"
+        android:label="PathFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/shareFragment"
+        android:name="xevenition.com.runage.fragment.share.ShareFragment"
+        android:label="ShareFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 
 </navigation>

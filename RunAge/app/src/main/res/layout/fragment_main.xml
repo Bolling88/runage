@@ -19,22 +19,13 @@
             android:id="@+id/nav_host_start_fragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dip"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph_start" />
-
-        <xevenition.com.runage.view.NonSwipeableViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
@@ -44,81 +35,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_navigation_menu" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/majora"
-            android:textColor="@color/grey2"
-            android:textAllCaps="true"
-            android:text="@string/runage_begin_new_run"
-            app:layout_constraintBottom_toTopOf="@+id/swipeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.stfalcon.swipeablebutton.SwipeableButton
-            android:id="@+id/swipeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dip"
-            android:layout_marginEnd="20dip"
-            android:layout_marginBottom="20dip"
-            app:checkedBackground="@drawable/square_rounded_active"
-            app:checkedIcon="@drawable/ic_stop_red"
-            app:checkedToggleBackground="@drawable/circle_light_active"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:textChecked=""
-            app:textColorChecked="@color/colorPrimary"
-            app:textColorUnChecked="@color/white"
-            app:textUnchecked=""
-            app:uncheckedBackground="@drawable/square_rounded"
-            app:uncheckedIcon="@drawable/ic_run_blue"
-            app:uncheckedToggleBackground="@drawable/circle_light" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_swipe_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rotation="90"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
-            app:layout_constraintEnd_toEndOf="@+id/swipeButton"
-            app:layout_constraintStart_toStartOf="@+id/swipeButton"
-            app:layout_constraintTop_toTopOf="@+id/swipeButton"
-            app:lottie_autoPlay="false"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/swipe"
-            app:lottie_speed="0.5" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_swipe_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:rotation="270"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/swipeButton"
-            app:layout_constraintEnd_toEndOf="@+id/swipeButton"
-            app:layout_constraintStart_toStartOf="@+id/swipeButton"
-            app:layout_constraintTop_toTopOf="@+id/swipeButton"
-            app:lottie_autoPlay="false"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/swipe_blue"
-            app:lottie_speed="0.5" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottie_count_down"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="false"
-            app:lottie_loop="false"
-            app:lottie_rawRes="@raw/lottie_countdown" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
