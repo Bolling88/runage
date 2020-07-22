@@ -33,11 +33,11 @@ class ChallengeListRecyclerAdapter(
     }
 
     inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val textDistance: TextView = view.findViewById(R.id.textDistance)
-        private val textDuration: TextView = view.findViewById(R.id.textDuration)
-        private val textPace: TextView = view.findViewById(R.id.textPace)
-        private val textCalories: TextView = view.findViewById(R.id.textCalories)
-        private val textTitle: TextView = view.findViewById(R.id.textTitle)
+//        private val textDistance: TextView = view.findViewById(R.id.textDistance)
+//        private val textDuration: TextView = view.findViewById(R.id.textDuration)
+//        private val textPace: TextView = view.findViewById(R.id.textPace)
+//        private val textCalories: TextView = view.findViewById(R.id.textCalories)
+//        private val textTitle: TextView = view.findViewById(R.id.textTitle)
 
         @SuppressLint("SetTextI18n")
         fun bind(item: Challenge) = with(itemView) {

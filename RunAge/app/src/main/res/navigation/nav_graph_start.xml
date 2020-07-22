@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/startFragment">
+
+
+    <fragment
+        android:id="@+id/challengeFragment"
+        android:name="xevenition.com.runage.fragment.challengelist.ChallengeListFragment"
+        android:label="challengeFragment">
+    </fragment>
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="xevenition.com.runage.fragment.start.StartFragment"
+        android:label="startFragment">
+
+    </fragment>
+
+</navigation>

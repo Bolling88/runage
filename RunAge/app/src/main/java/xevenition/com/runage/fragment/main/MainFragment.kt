@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.ui.setupWithNavController
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
@@ -39,6 +41,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private lateinit var mService: EventService
     private var mBound: Boolean = false
     private var currentQuestId = 0
+
+    private val navController by lazy {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_start_fragment)
+    }
+
 
     /** Defines callbacks for service binding, passed to bindService()  */
     private val connection = object : ServiceConnection {
@@ -134,11 +141,11 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.page_1 -> {
+                R.id.challengeFragment -> {
                     // Respond to navigation item 1 click
                     true
                 }
-                R.id.page_2 -> {
+                R.id.mainNavigation -> {
                     // Respond to navigation item 2 click
                     true
                 }
@@ -149,6 +156,8 @@ class MainFragment : BaseFragment<MainViewModel>() {
                 else -> false
             }
         }
+
+        binding.bottomNavigation.setupWithNavController(navController)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
