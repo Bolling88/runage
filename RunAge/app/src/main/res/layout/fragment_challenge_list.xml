@@ -32,6 +32,7 @@
             android:id="@+id/recyclerView"
             android:layout_width="0dip"
             android:layout_height="0dip"
+            android:clipToPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

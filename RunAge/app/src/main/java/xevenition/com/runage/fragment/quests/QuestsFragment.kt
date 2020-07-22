@@ -1,15 +1,20 @@
 package xevenition.com.runage.fragment.quests
 
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.annotation.DimenRes
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
@@ -58,6 +63,9 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerView.adapter = challengeListRecyclerAdapter
 
+        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.margin_small)
+        binding.recyclerView.addItemDecoration(SpacesItemDecoration(0))
+
         binding.toolbar.setNavigationOnClickListener {
             (activity as? MainActivity)?.openMenu()
         }
@@ -79,4 +87,18 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
             }
         })
     }
+}
+
+class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        outRect.set(space, space, space, space)
+    }
+
+
 }
