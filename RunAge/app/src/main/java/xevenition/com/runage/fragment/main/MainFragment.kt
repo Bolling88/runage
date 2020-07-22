@@ -57,6 +57,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
         setUpObservables()
         Timber.d("onViewCreated")
 
+        binding.bottomNavigation.selectedItemId = R.id.viewPageFragment
         binding.bottomNavigation.setupWithNavController(navController)
     }
 
