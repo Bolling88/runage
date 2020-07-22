@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content">
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animation"
+                    android:id="@+id/animationSuccess"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -33,6 +33,18 @@
                     app:lottie_loop="false"
                     app:lottie_rawRes="@raw/lottie_victory"
                     app:lottie_scale="1.5" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationFail"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/lottie_fail"
+                    app:lottie_scale="1" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/animation2"
@@ -57,7 +69,7 @@
                     android:textSize="40sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/animation"
+                    app:layout_constraintTop_toBottomOf="@+id/animationFail"
                     tools:text="@string/runage_quest_completed" />
 
                 <androidx.appcompat.widget.AppCompatTextView

@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.challengelist
+package xevenition.com.runage.fragment.quests
 
 import android.annotation.SuppressLint
 import android.view.View
@@ -16,7 +16,7 @@ import xevenition.com.runage.model.ChallengeData
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 
-class ChallengeListViewModel(
+class QuestsViewModel(
     resourceUtil: ResourceUtil,
     firestoreHandler: FireStoreHandler
 ) : BaseViewModel() {

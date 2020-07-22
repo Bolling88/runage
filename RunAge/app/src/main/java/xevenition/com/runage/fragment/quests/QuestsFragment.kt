@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.challengelist
+package xevenition.com.runage.fragment.quests
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,16 +16,15 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentChallengeListBinding
 import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject
 
 
-class ChallengeListFragment : BaseFragment<ChallengeListViewModel>() {
+class QuestsFragment : BaseFragment<QuestsViewModel>() {
 
     private lateinit var binding: FragmentChallengeListBinding
-    private lateinit var challengeListRecyclerAdapter: ChallengeListRecyclerAdapter
+    private lateinit var challengeListRecyclerAdapter: QuestsRecyclerAdapter
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
@@ -38,10 +37,10 @@ class ChallengeListFragment : BaseFragment<ChallengeListViewModel>() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
         }
-        val factory = ChallengeListViewModelFactory(getApplication())
-        viewModel = ViewModelProvider(this, factory).get(ChallengeListViewModel::class.java)
+        val factory = QuestsViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(QuestsViewModel::class.java)
 
-        challengeListRecyclerAdapter = ChallengeListRecyclerAdapter(resourceUtil, runningUtil, object: ChallengeListRecyclerAdapter.OnClickListener{
+        challengeListRecyclerAdapter = QuestsRecyclerAdapter(resourceUtil, runningUtil, object: QuestsRecyclerAdapter.OnClickListener{
             override fun onClick(challenge: Challenge) {
                 viewModel.onChallengeClicked(challenge)
             }

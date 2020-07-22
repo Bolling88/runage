@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.home
+package xevenition.com.runage.fragment.viewpage
 
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication

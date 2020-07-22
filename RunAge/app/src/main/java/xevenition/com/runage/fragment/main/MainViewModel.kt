@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.home.ViewPageFragmentDirections
+import xevenition.com.runage.fragment.viewpage.ViewPageFragmentDirections
 import xevenition.com.runage.room.repository.QuestRepository
 import xevenition.com.runage.util.AccountUtil
 

@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.home
+package xevenition.com.runage.fragment.viewpage
 
 import android.content.ComponentName
 import android.content.Context
@@ -27,7 +27,6 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentViewPageBinding
-import xevenition.com.runage.fragment.main.MainViewModelFactory
 import xevenition.com.runage.fragment.map.MapFragment
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.service.EventService

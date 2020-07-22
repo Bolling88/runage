@@ -101,10 +101,15 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
             }
         })
 
-        viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
-            binding.animation.playAnimation()
+        viewModel.observablePlaySuccessAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationSuccess.playAnimation()
             binding.animation2.playAnimation()
         })
+
+        viewModel.observablePlayFailAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationFail.playAnimation()
+        })
+
 
         viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
             showAdAndReturn()

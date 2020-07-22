@@ -2,16 +2,16 @@ package xevenition.com.runage.dagger
 
 import dagger.Component
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
-import xevenition.com.runage.fragment.challengelist.ChallengeListFragment
-import xevenition.com.runage.fragment.challengelist.ChallengeListViewModelFactory
+import xevenition.com.runage.fragment.quests.QuestsFragment
+import xevenition.com.runage.fragment.quests.QuestsViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
 import xevenition.com.runage.fragment.historysummary.HistorySummaryViewModelFactory
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathViewModelFactory
-import xevenition.com.runage.fragment.home.ViewPageFragment
-import xevenition.com.runage.fragment.home.ViewPageViewModelFactory
+import xevenition.com.runage.fragment.viewpage.ViewPageFragment
+import xevenition.com.runage.fragment.viewpage.ViewPageViewModelFactory
 import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.main.MainViewModelFactory
@@ -58,7 +58,7 @@ interface ApplicationComponent {
     fun inject(component: RuleViewModelFactory)
     fun inject(component: ViewPageViewModelFactory)
     fun inject(component: MainViewModelFactory)
-    fun inject(component: ChallengeListFragment)
+    fun inject(component: QuestsFragment)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
@@ -71,7 +71,7 @@ interface ApplicationComponent {
     fun inject(component: PermissionViewModelFactory)
     fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
-    fun inject(component: ChallengeListViewModelFactory)
+    fun inject(component: QuestsViewModelFactory)
     fun inject(component: HistorySummaryViewModelFactory)
     fun inject(component: HistorySummaryPathViewModelFactory)
 }

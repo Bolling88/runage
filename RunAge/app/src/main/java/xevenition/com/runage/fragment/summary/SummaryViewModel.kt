@@ -49,8 +49,11 @@ class SummaryViewModel(
     private val _livePace = MutableLiveData<String>()
     val livePace: LiveData<String> = _livePace
 
-    private val _observablePlayAnimation = MutableLiveData<Unit>()
-    val observablePlayAnimation: LiveData<Unit> = _observablePlayAnimation
+    private val _observablePlaySuccessAnimation = MutableLiveData<Unit>()
+    val observablePlaySuccessAnimation: LiveData<Unit> = _observablePlaySuccessAnimation
+
+    private val _observablePlayFailAnimation = MutableLiveData<Unit>()
+    val observablePlayFailAnimation: LiveData<Unit> = _observablePlayFailAnimation
 
     private val _liveTextTimer = MutableLiveData<String>()
     val liveTextTimer: LiveData<String> = _liveTextTimer
@@ -178,10 +181,11 @@ class SummaryViewModel(
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+            _observablePlayFailAnimation.postValue(Unit)
         } else {
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_completed))
-            _observablePlayAnimation.postValue(Unit)
+            _observablePlaySuccessAnimation.postValue(Unit)
         }
 
         setUpActivityTypeInfo(quest)

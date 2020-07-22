@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/challengeFragment"
-        android:name="xevenition.com.runage.fragment.challengelist.ChallengeListFragment"
+        android:name="xevenition.com.runage.fragment.quests.QuestsFragment"
         android:label="challengeFragment">
     </fragment>
 
     <fragment
         android:id="@+id/viewPageFragment"
-        android:name="xevenition.com.runage.fragment.home.ViewPageFragment"
+        android:name="xevenition.com.runage.fragment.viewpage.ViewPageFragment"
         android:label="viewPageFragment">
 
         <action
@@ -34,7 +34,7 @@
             app:destination="@id/pathFragment" />
         <action
             android:id="@+id/action_summaryFragment_to_shareFragment"
-            app:popUpTo="@+id/mainFragment"
+            app:popUpTo="@+id/viewPageFragment"
             app:popUpToInclusive="false"
             app:destination="@id/shareFragment" />
     </fragment>

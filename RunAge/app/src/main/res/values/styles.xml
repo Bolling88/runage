@@ -43,6 +43,11 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="fontFamily">@font/majora</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="TextStyleRuleTitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>

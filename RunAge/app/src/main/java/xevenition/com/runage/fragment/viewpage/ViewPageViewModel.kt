@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.home
+package xevenition.com.runage.fragment.viewpage
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData

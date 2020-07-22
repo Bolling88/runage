@@ -1,26 +1,22 @@
-package xevenition.com.runage.fragment.challengelist
+package xevenition.com.runage.fragment.quests
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import xevenition.com.runage.R
 import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import java.time.Instant
-import java.time.ZoneId
 
-class ChallengeListRecyclerAdapter(
+class QuestsRecyclerAdapter(
     private val resourceUtil: ResourceUtil,
     private val runningUtil: RunningUtil,
     private val listener: OnClickListener
-) : ListAdapter<Challenge, ChallengeListRecyclerAdapter.ItemViewHolder>(DiffCallback()) {
+) : ListAdapter<Challenge, QuestsRecyclerAdapter.ItemViewHolder>(DiffCallback()) {
 
     interface OnClickListener {
         fun onClick(challenge: Challenge)
