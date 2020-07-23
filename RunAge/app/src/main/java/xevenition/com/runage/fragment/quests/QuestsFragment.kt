@@ -1,13 +1,11 @@
 package xevenition.com.runage.fragment.quests
 
-import android.content.Context
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
-import androidx.annotation.DimenRes
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -45,7 +43,7 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         val factory = QuestsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(QuestsViewModel::class.java)
 
-        challengeListRecyclerAdapter = QuestsRecyclerAdapter(resourceUtil, runningUtil, object: QuestsRecyclerAdapter.OnClickListener{
+        challengeListRecyclerAdapter = QuestsRecyclerAdapter(resourceUtil, object: QuestsRecyclerAdapter.OnClickListener{
             override fun onClick(challenge: Challenge) {
                 viewModel.onChallengeClicked(challenge)
             }
@@ -63,7 +61,6 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerView.adapter = challengeListRecyclerAdapter
 
-        val spacingInPixels = resources.getDimensionPixelSize(R.dimen.margin_small)
         binding.recyclerView.addItemDecoration(SpacesItemDecoration(0))
 
         binding.toolbar.setNavigationOnClickListener {
@@ -83,7 +80,7 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
 
         viewModel.observableChallenges.observe(viewLifecycleOwner, Observer {
             it?.let {
-                challengeListRecyclerAdapter.submitList(it)
+                challengeListRecyclerAdapter.setItems(it)
             }
         })
     }
@@ -99,6 +96,4 @@ class SpacesItemDecoration(private val space: Int) : ItemDecoration() {
     ) {
         outRect.set(space, space, space, space)
     }
-
-
 }

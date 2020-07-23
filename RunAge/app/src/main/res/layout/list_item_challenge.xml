@@ -10,14 +10,13 @@
         android:id="@+id/card"
         android:layout_width="0dip"
         android:layout_height="0dip"
-        android:layout_margin="@dimen/margin_basic"
-        android:layout_marginStart="0dip"
-        android:layout_marginLeft="@dimen/margin_basic"
-        android:layout_marginEnd="0dip"
-        android:layout_marginRight="@dimen/margin_basic"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="0dip"
+        android:layout_marginEnd="@dimen/margin_basic"
+        android:layout_marginStart="@dimen/margin_basic"
+        android:layout_marginBottom="@dimen/margin_basic"
+        android:layout_marginTop="@dimen/margin_basic"
         app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="10dip"
         app:cardElevation="4dip"
@@ -45,10 +44,11 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/star1"
-        android:layout_width="20dip"
-        android:layout_height="20dip"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
         android:elevation="4dip"
         android:layout_marginTop="10dip"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/star2"
         app:layout_constraintStart_toStartOf="@+id/card"
         app:layout_constraintTop_toTopOf="@+id/card"
@@ -59,6 +59,7 @@
         android:layout_width="25dip"
         android:layout_height="25dip"
         android:elevation="4dip"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/star3"
         app:layout_constraintStart_toEndOf="@+id/star1"
         app:layout_constraintTop_toTopOf="@+id/card"
@@ -66,9 +67,10 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/star3"
-        android:layout_width="20dip"
-        android:layout_height="20dip"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
         android:elevation="4dip"
+        android:visibility="visible"
         android:layout_marginTop="10dip"
         app:layout_constraintEnd_toEndOf="@id/card"
         app:layout_constraintStart_toEndOf="@+id/star2"
@@ -76,6 +78,7 @@
         app:srcCompat="@drawable/ic_star_border" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageLock"
         android:layout_width="40dip"
         android:layout_height="40dip"
         android:layout_gravity="center"
@@ -86,4 +89,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_locked"
         app:tint="@color/white" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/textLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/majora"
+        android:gravity="center"
+        android:elevation="4dip"
+        tools:text="1"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

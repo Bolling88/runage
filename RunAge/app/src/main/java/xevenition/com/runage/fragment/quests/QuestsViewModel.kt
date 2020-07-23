@@ -13,16 +13,18 @@ import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.ChallengeData
+import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 
 class QuestsViewModel(
     resourceUtil: ResourceUtil,
-    firestoreHandler: FireStoreHandler
+    fireStoreHandler: FireStoreHandler
 ) : BaseViewModel() {
 
-    private val _observableChallenges = MutableLiveData<List<Challenge>>()
-    val observableChallenges: LiveData<List<Challenge>> = _observableChallenges
+    private var challengeScores: Map<String, Int>? = null
+    private val _observableChallenges = MutableLiveData<Pair<List<Challenge>,Map<String, Int>?>>()
+    val observableChallenges: LiveData<Pair<List<Challenge>,Map<String, Int>?>> = _observableChallenges
 
     private val _liveProgressVisibility = MutableLiveData<Int>()
     val liveProgressVisibility: LiveData<Int> = _liveProgressVisibility
@@ -34,10 +36,21 @@ class QuestsViewModel(
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
 
-        firestoreHandler.getChallenges()
+        fireStoreHandler.getUserInfo()
             .addOnSuccessListener {document ->
                 if (document != null) {
-                    processChallenges(document)
+                    val userInfo = document.toObject(UserInfo::class.java)
+                    challengeScores = userInfo?.challengeScore
+                    Timber.d("Got user info")
+                    fireStoreHandler.getChallenges()
+                        .addOnSuccessListener {document ->
+                            if (document != null) {
+                                processChallenges(document)
+                            } else {
+                                Timber.d("No such document")
+                            }
+                        }
+                        .addOnFailureListener {  }
                 } else {
                     Timber.d("No such document")
                 }
@@ -58,7 +71,7 @@ class QuestsViewModel(
             }
             .subscribe({
                 Timber.d("Quests processed")
-                _observableChallenges.postValue(it)
+                _observableChallenges.postValue(Pair(it, challengeScores))
                 _liveProgressVisibility.postValue(View.GONE)
 
                 if (it.isEmpty()) {

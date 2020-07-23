@@ -6,5 +6,6 @@ data class Challenge (
     val time : Int,
     val experience : Int,
     val gold : Int,
+    val isBoss : Boolean,
     val requiredLevel : Int
 )

@@ -268,6 +268,7 @@ class SummaryViewModel(
                         xp = newXp,
                         calories = totalCalories,
                         distance = totalRunningDistance,
+                        challengeScore = userInfo?.challengeScore ?: mapOf(),
                         duration = totalRunningDuration
                     )
 
