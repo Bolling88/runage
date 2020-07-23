@@ -28,11 +28,14 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentViewPageBinding
 import xevenition.com.runage.fragment.map.MapFragment
+import xevenition.com.runage.fragment.requirement.RequirementFragment
 import xevenition.com.runage.fragment.start.StartFragment
+import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
 import xevenition.com.runage.service.EventService
 
 class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
 
+    private var args: ViewPageFragmentArgs? = null
     private var adapter: MainPagerAdapter? = null
     private lateinit var binding: FragmentViewPageBinding
     private lateinit var mService: EventService
@@ -64,12 +67,12 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            requireActivity().finish()
+//        }
 
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
-
+        args = ViewPageFragmentArgs.fromBundle(requireArguments())
         val factory = ViewPageViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(ViewPageViewModel::class.java)
     }
@@ -84,7 +87,7 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         adapter?.clearFragments()
-        adapter = MainPagerAdapter(childFragmentManager)
+        adapter = MainPagerAdapter(childFragmentManager, args)
         binding.viewPager.adapter = adapter
 
         return binding.root
@@ -211,11 +214,14 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
         activity?.stopService(myService)
     }
 
-    private class MainPagerAdapter(private val fm: FragmentManager) :
+    private class MainPagerAdapter(private val fm: FragmentManager, args: ViewPageFragmentArgs?) :
         FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-        private var fragments: Array<Fragment> =
+        private var fragments: Array<Fragment> = if(args?.keyIsQuest == true){
+            arrayOf(RequirementFragment.newInstance(args?.keyChallenge!!), MapFragment.newInstance())
+        }else{
             arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
+        }
 
         override fun getCount(): Int =
             NUM_PAGES

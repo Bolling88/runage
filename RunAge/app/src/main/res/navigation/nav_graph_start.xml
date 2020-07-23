@@ -18,9 +18,19 @@
         android:id="@+id/viewPageFragment"
         android:name="xevenition.com.runage.fragment.viewpage.ViewPageFragment"
         android:label="viewPageFragment">
-
+        <argument
+            android:name="key_is_quest"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
         <action
             android:id="@+id/action_viewPageFragment_to_summaryFragment"
+            app:popUpTo="@+id/viewPageFragment"
+            app:popUpToInclusive="false"
             app:destination="@id/summaryFragment" />
     </fragment>
 
@@ -38,7 +48,7 @@
         <action
             android:id="@+id/action_summaryFragment_to_shareFragment"
             app:popUpTo="@+id/viewPageFragment"
-            app:popUpToInclusive="false"
+            app:popUpToInclusive="true"
             app:destination="@id/shareFragment" />
     </fragment>
     <fragment

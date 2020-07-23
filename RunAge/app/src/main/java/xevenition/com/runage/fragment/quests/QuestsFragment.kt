@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
@@ -31,23 +32,30 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
+
     @Inject
     lateinit var runningUtil: RunningUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
+//        }
         val factory = QuestsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(QuestsViewModel::class.java)
 
-        challengeListRecyclerAdapter = QuestsRecyclerAdapter(resourceUtil, object: QuestsRecyclerAdapter.OnClickListener{
-            override fun onClick(challenge: Challenge, isLocked: Boolean) {
-                viewModel.onChallengeClicked(challenge)
-            }
-        })
+        challengeListRecyclerAdapter =
+            QuestsRecyclerAdapter(resourceUtil, object : QuestsRecyclerAdapter.OnClickListener {
+                override fun onClick(challenge: Challenge, isLocked: Boolean) {
+                    Timber.d("Click")
+                    if (!isLocked) {
+                        viewModel.onChallengeClicked(challenge)
+                    }else{
+                        Timber.d("Is locked!")
+                    }
+                }
+            })
     }
 
     override fun onCreateView(

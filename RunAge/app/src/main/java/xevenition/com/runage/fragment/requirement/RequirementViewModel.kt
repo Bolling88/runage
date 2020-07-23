@@ -9,6 +9,7 @@ import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.*
 
@@ -16,24 +17,29 @@ class RequirementViewModel(
     private val gameServicesUtil: GameServicesUtil,
     fireStoreHandler: FireStoreHandler,
     private val accountUtil: AccountUtil,
+    private val runningUtil: RunningUtil,
     resourceUtil: ResourceUtil,
-    feedbackHandler: FeedbackHandler
+    feedbackHandler: FeedbackHandler,
+    private val challenge: Challenge
 ) : BaseViewModel() {
 
-    private val _liveTextName = MutableLiveData<String>()
-    val liveTextName : LiveData<String> = _liveTextName
+    private val _liveTextDistance = MutableLiveData<String>()
+    val liveTextDistance : LiveData<String> = _liveTextDistance
 
-    private val _liveLevelProgress = MutableLiveData<Float>()
-    val liveLevelProgress : LiveData<Float> = _liveLevelProgress
+    private val _liveTextTime1 = MutableLiveData<String>()
+    val liveTextTime1 : LiveData<String> = _liveTextTime1
 
-    private val _liveLevelNext = MutableLiveData<Float>()
-    val liveLevelNext : LiveData<Float> = _liveLevelNext
+    private val _liveTextTime2 = MutableLiveData<String>()
+    val liveTextTime2 : LiveData<String> = _liveTextTime2
 
-    private val _liveLevelText = MutableLiveData<String>()
-    val liveLevelText : LiveData<String> = _liveLevelText
+    private val _liveTextTime3 = MutableLiveData<String>()
+    val liveTextTime3 : LiveData<String> = _liveTextTime3
 
     private val _liveTextXp = MutableLiveData<String>()
     val liveTextXp : LiveData<String> = _liveTextXp
+
+    private val _liveTextLevel = MutableLiveData<String>()
+    val liveTextLevel : LiveData<String> = _liveTextLevel
 
     val observableOpenMenu = SingleLiveEvent<Unit>()
 
@@ -43,39 +49,12 @@ class RequirementViewModel(
     val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
-        val task = accountUtil.getGamesPlayerInfo()
-        task?.addOnSuccessListener {
-            if (!MainApplication.serviceIsRunning && !MainApplication.welcomeMessagePlayed) {
-                feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}")
-                MainApplication.welcomeMessagePlayed = true
-            }
-            _liveTextName.postValue(it.displayName)
-            _observableProfileImage.postValue(it.hiResImageUri)
-        }
-
-        fireStoreHandler.getUserInfo()
-            .addOnSuccessListener {document ->
-                if (document != null) {
-                    val userInfo = document.toObject(UserInfo::class.java)
-                    Timber.d("Got user info")
-                    val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
-                    val xpPreviousLevel = LevelCalculator.getXpForLevel(level)
-                    val xpNextLevel = LevelCalculator.getXpForLevel(level + 1)
-                    val totalXpForNextLevel = xpNextLevel - xpPreviousLevel
-                    val userXp = userInfo?.xp ?: 0
-                    val progress = userXp - xpPreviousLevel
-                    _liveTextXp.postValue("$userXp / $xpNextLevel")
-                    _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
-                    _liveLevelProgress.postValue(progress.toFloat())
-                    _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
-
-                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
-                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
-                } else {
-                    Timber.d("No such document")
-                }
-            }
-            .addOnFailureListener {  }
+        _liveTextLevel.postValue(challenge.level.toString())
+        _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()))
+        _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-20))
+        _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-40))
+        _liveTextXp.postValue("${challenge.experience} ${resourceUtil.getString(R.string.runage_xp)}")
+        _liveTextDistance.postValue(runningUtil.getDistanceString(challenge.distance))
     }
 
     fun onProfileClicked(){

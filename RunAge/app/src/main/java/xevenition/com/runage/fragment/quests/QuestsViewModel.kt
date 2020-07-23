@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.Navigation
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -11,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.history.HistoryFragmentDirections
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.ChallengeData
 import xevenition.com.runage.model.UserInfo
@@ -83,6 +85,8 @@ class QuestsViewModel(
     }
 
     fun onChallengeClicked(challenge: Challenge) {
-
+        observableNavigateTo.postValue(
+            QuestsFragmentDirections.actionChallengeFragmentToViewPageFragment(true, challenge)
+        )
     }
 }

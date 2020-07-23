@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.util.ResourceUtil
@@ -93,7 +94,8 @@ class QuestsRecyclerAdapter(
                     }
                 }
             }
-            setOnClickListener {
+            cardView.setOnClickListener {
+                Timber.d("Click")
                 listener.onClick(item, isLocked)
             }
         }
