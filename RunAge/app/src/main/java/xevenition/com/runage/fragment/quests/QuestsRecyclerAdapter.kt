@@ -22,7 +22,7 @@ class QuestsRecyclerAdapter(
     private var challengeScores: Map<String, Int>? = null
 
     interface OnClickListener {
-        fun onClick(challenge: Challenge)
+        fun onClick(challenge: Challenge, isLocked: Boolean)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -41,10 +41,7 @@ class QuestsRecyclerAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bind(item: Challenge) = with(itemView) {
-            setOnClickListener {
-                listener.onClick(item)
-            }
-
+            var isLocked = true
             val completedQuests = challengeScores?.size ?: 0
             if (item.level == completedQuests + 1) {
                 //this is the next unlocked level
@@ -57,6 +54,7 @@ class QuestsRecyclerAdapter(
                 imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
                 textLevel.text = item.level.toString()
                 imageLock.visibility = View.GONE
+                isLocked = false
             } else {
                 val score = challengeScores?.getOrDefault(item.level.toString(), 0) ?: 0
                 if (score == 0) {
@@ -66,8 +64,10 @@ class QuestsRecyclerAdapter(
                     imageStar3.visibility = View.GONE
                     textLevel.visibility = View.GONE
                     imageLock.visibility = View.VISIBLE
+                    isLocked = true
                 } else {
                     //Quest completed
+                    isLocked = false
                     imageStar1.visibility = View.VISIBLE
                     imageStar2.visibility = View.VISIBLE
                     imageStar3.visibility = View.VISIBLE
@@ -92,6 +92,9 @@ class QuestsRecyclerAdapter(
                         }
                     }
                 }
+            }
+            setOnClickListener {
+                listener.onClick(item, isLocked)
             }
         }
     }

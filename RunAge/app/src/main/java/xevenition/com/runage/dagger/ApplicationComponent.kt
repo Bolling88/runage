@@ -21,6 +21,7 @@ import xevenition.com.runage.fragment.path.PathFragment
 import xevenition.com.runage.fragment.path.PathViewModelFactory
 import xevenition.com.runage.fragment.permission.PermissionFragment
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
+import xevenition.com.runage.fragment.requirement.RequirementViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
@@ -46,6 +47,7 @@ interface ApplicationComponent {
     fun inject(component: EventService)
     fun inject(component: ShareFragment)
     fun inject(component: StartFragment)
+    fun inject(component: QuestsFragment)
     fun inject(component: SplashFragment)
     fun inject(component: HistoryFragment)
     fun inject(component: SummaryFragment)
@@ -56,22 +58,22 @@ interface ApplicationComponent {
     fun inject(component: MapViewModelFactory)
     fun inject(component: PathViewModelFactory)
     fun inject(component: RuleViewModelFactory)
-    fun inject(component: ViewPageViewModelFactory)
     fun inject(component: MainViewModelFactory)
-    fun inject(component: QuestsFragment)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
+    fun inject(component: QuestsViewModelFactory)
     fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
     fun inject(component: SummaryViewModelFactory)
     fun inject(component: SupportViewModelFactory)
     fun inject(component: HistoryViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
+    fun inject(component: ViewPageViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
     fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
-    fun inject(component: QuestsViewModelFactory)
+    fun inject(component: RequirementViewModelFactory)
     fun inject(component: HistorySummaryViewModelFactory)
     fun inject(component: HistorySummaryPathViewModelFactory)
 }

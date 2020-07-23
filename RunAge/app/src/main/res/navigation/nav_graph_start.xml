@@ -9,6 +9,9 @@
         android:id="@+id/challengeFragment"
         android:name="xevenition.com.runage.fragment.quests.QuestsFragment"
         android:label="challengeFragment">
+        <action
+            android:id="@+id/action_challengeFragment_to_viewPageFragment"
+            app:destination="@id/viewPageFragment" />
     </fragment>
 
     <fragment
