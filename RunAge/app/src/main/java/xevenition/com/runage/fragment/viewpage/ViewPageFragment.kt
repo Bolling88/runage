@@ -35,44 +35,13 @@ import xevenition.com.runage.service.EventService
 
 class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
 
-    private var args: ViewPageFragmentArgs? = null
-    private var adapter: MainPagerAdapter? = null
     private lateinit var binding: FragmentViewPageBinding
-    private lateinit var mService: EventService
-    private var mBound: Boolean = false
-    private var currentQuestId = 0
-
-    /** Defines callbacks for service binding, passed to bindService()  */
-    private val connection = object : ServiceConnection {
-
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            Timber.d("onServiceConnected")
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            val binder = service as EventService.LocalBinder
-            mService = binder.getService()
-            mBound = true
-            mService.registerCallback(object : EventService.EventCallback {
-                override fun onQuestCreated(id: Int) {
-                    currentQuestId = id
-                    Timber.d("onQuestCreated: $id")
-                    (adapter?.getItem(1) as MapFragment).onNewQuestCreated(id)
-                }
-            })
-        }
-
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            mBound = false
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            requireActivity().finish()
-//        }
 
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
-        args = ViewPageFragmentArgs.fromBundle(requireArguments())
+       // args = ViewPageFragmentArgs.fromBundle(requireArguments())
         val factory = ViewPageViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(ViewPageViewModel::class.java)
     }
@@ -86,9 +55,6 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_page, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        adapter?.clearFragments()
-        adapter = MainPagerAdapter(childFragmentManager, args)
-        binding.viewPager.adapter = adapter
 
         return binding.root
     }
@@ -119,19 +85,14 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
                 binding.lottieCountDown.visibility = View.VISIBLE
                 binding.lottieCountDown.playAnimation()
             }
-            startEventService()
             setLottieSwipeState(true)
         }
 
         binding.swipeButton.onSwipedOffListener = {
             binding.viewPager.setCurrentItem(0, true)
-            stopEventService()
-            (adapter?.getItem(1) as MapFragment).onQuestFinished()
             setLottieSwipeState(false)
             binding.lottieCountDown.visibility = View.GONE
             binding.lottieCountDown.pauseAnimation()
-            viewModel.onQuestFinished(currentQuestId)
-            currentQuestId = -1
         }
     }
 
@@ -171,81 +132,9 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        if (serviceIsRunning) {
-            bindToService()
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         binding.lottieCountDown.visibility = View.GONE
         binding.lottieCountDown.pauseAnimation()
-    }
-
-    private fun bindToService() {
-        Intent(activity, EventService::class.java).also { intent ->
-            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unbindService()
-    }
-
-    private fun unbindService() {
-        if (mBound) {
-            activity?.unbindService(connection)
-            mBound = false
-        }
-    }
-
-    private fun startEventService() {
-        val myService = Intent(activity, EventService::class.java)
-        startForegroundService(requireContext(), myService)
-        bindToService()
-    }
-
-    private fun stopEventService() {
-        unbindService()
-        val myService = Intent(activity, EventService::class.java)
-        activity?.stopService(myService)
-    }
-
-    private class MainPagerAdapter(private val fm: FragmentManager, args: ViewPageFragmentArgs?) :
-        FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-        private var fragments: Array<Fragment> = if(args?.keyIsQuest == true){
-            arrayOf(RequirementFragment.newInstance(args?.keyChallenge!!), MapFragment.newInstance())
-        }else{
-            arrayOf(StartFragment.newInstance(), MapFragment.newInstance())
-        }
-
-        override fun getCount(): Int =
-            NUM_PAGES
-
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        //We always want to recreate the fragments if they are destroyed ourselves
-        override fun saveState(): Parcelable? {
-            return null
-        }
-
-        fun clearFragments() {
-            val fragments: List<Fragment> = fm.fragments
-            val ft: FragmentTransaction = fm.beginTransaction()
-            for (f in fragments) {
-                ft.remove(f)
-            }
-            ft.commitAllowingStateLoss()
-        }
-
-        companion object {
-            const val NUM_PAGES = 2
-        }
     }
 }

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_home"
-    app:startDestination="@id/viewPageFragment">
+    app:startDestination="@id/startFragment">
 
 
     <fragment
@@ -10,28 +10,8 @@
         android:name="xevenition.com.runage.fragment.quests.QuestsFragment"
         android:label="challengeFragment">
         <action
-            android:id="@+id/action_challengeFragment_to_viewPageFragment"
-            app:destination="@id/viewPageFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/viewPageFragment"
-        android:name="xevenition.com.runage.fragment.viewpage.ViewPageFragment"
-        android:label="viewPageFragment">
-        <argument
-            android:name="key_is_quest"
-            app:argType="boolean"
-            android:defaultValue="false" />
-        <argument
-            android:name="key_challenge"
-            android:defaultValue="@null"
-            app:nullable="true"
-            app:argType="xevenition.com.runage.model.Challenge" />
-        <action
-            android:id="@+id/action_viewPageFragment_to_summaryFragment"
-            app:popUpTo="@+id/viewPageFragment"
-            app:popUpToInclusive="false"
-            app:destination="@id/summaryFragment" />
+            android:id="@+id/action_challengeFragment_to_requirementFragment"
+            app:destination="@id/requirementFragment" />
     </fragment>
 
     <fragment
@@ -47,9 +27,9 @@
             app:destination="@id/pathFragment" />
         <action
             android:id="@+id/action_summaryFragment_to_shareFragment"
-            app:popUpTo="@+id/viewPageFragment"
-            app:popUpToInclusive="true"
-            app:destination="@id/shareFragment" />
+            app:destination="@id/shareFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/pathFragment"
@@ -68,6 +48,41 @@
             android:name="key_quest_id"
             app:argType="integer"
             android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="xevenition.com.runage.fragment.map.MapFragment"
+        android:label="MapFragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="false"/>
+    </fragment>
+    <fragment
+        android:id="@+id/requirementFragment"
+        android:name="xevenition.com.runage.fragment.requirement.RequirementFragment"
+        android:label="@string/runage_challenge" >
+        <argument
+            android:name="key_is_quest"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
+        <action
+            android:id="@+id/action_requirementFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="xevenition.com.runage.fragment.start.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
 
 </navigation>

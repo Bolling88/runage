@@ -9,6 +9,7 @@ import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.start.StartFragmentDirections
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.*
@@ -63,5 +64,9 @@ class RequirementViewModel(
                 observableShowAchievements.postValue(it)
             }
         }
+    }
+
+    fun onStartClicked(){
+        observableNavigateTo.postValue(RequirementFragmentDirections.actionRequirementFragmentToMapFragment())
     }
 }

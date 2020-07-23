@@ -3,12 +3,12 @@
         android:id="@+id/challengeFragment"
         android:enabled="true"
         android:icon="@drawable/ic_timer"
-        android:title="@string/runage_quests"/>
+        android:title="@string/runage_challenges"/>
     <item
-        android:id="@+id/viewPageFragment"
+        android:id="@+id/startFragment"
         android:enabled="true"
         android:icon="@drawable/ic_run_blue"
-        android:title="@string/runage_home"/>
+        android:title="@string/runage_start"/>
     <item
         android:id="@+id/page_3"
         android:enabled="false"

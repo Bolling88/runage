@@ -123,5 +123,28 @@
             app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
             tools:text="5:34 min/km" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
+            android:onClick="@{()-> viewModel.onStopClicked()}"
+            android:text="@string/runage_stop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/margin_basic"
+            app:layout_constraintTop_toBottomOf="@+id/viewInfoBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:lottie_scale="0.5"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/lottie_countdown" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

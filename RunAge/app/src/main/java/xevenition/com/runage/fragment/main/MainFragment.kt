@@ -24,7 +24,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
     private lateinit var binding: FragmentMainBinding
 
     private val navController by lazy {
-        Navigation.findNavController(requireActivity(), R.id.nav_host_start_fragment)
+        Navigation.findNavController(requireActivity(), R.id.nav_host_tab_fragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +57,25 @@ class MainFragment : BaseFragment<MainViewModel>() {
         setUpObservables()
         Timber.d("onViewCreated")
 
-        binding.bottomNavigation.selectedItemId = R.id.viewPageFragment
+        binding.bottomNavigation.selectedItemId = R.id.startFragment
         binding.bottomNavigation.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.mapFragment -> hideBottomNav()
+                R.id.requirementFragment -> hideBottomNav()
+                R.id.startFragment -> showBottomNav()
+                R.id.challengeFragment -> showBottomNav()
+                else -> {}
+            }
+        }
+    }
+
+    private fun hideBottomNav() {
+        binding.bottomNavigation.visibility = View.GONE
+    }
+
+    private fun showBottomNav() {
+        binding.bottomNavigation.visibility = View.VISIBLE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

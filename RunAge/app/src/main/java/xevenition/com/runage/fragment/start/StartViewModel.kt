@@ -79,6 +79,10 @@ class StartViewModel(
             .addOnFailureListener {  }
     }
 
+    fun onStartClicked(){
+        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToMapFragment())
+    }
+
     fun onProfileClicked(){
         accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
             accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {

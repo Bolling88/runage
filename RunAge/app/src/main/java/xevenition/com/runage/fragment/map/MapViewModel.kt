@@ -33,6 +33,7 @@ class MapViewModel(
     private val resourceUtil: ResourceUtil
 ) : BaseViewModel() {
 
+    private var questId: Int = -1
     private var currentPath: MutableList<LatLng> = mutableListOf()
     private var runningTimerDisposable: Disposable? = null
     private var questDisposable: Disposable? = null
@@ -62,6 +63,7 @@ class MapViewModel(
     val livePace: LiveData<String> = _livePace
 
     val observableClearMap = SingleLiveEvent<Unit>()
+    val observableStopRun = SingleLiveEvent<Unit>()
 
     init {
         resetTimers()
@@ -79,6 +81,7 @@ class MapViewModel(
     }
 
     fun onNewQuestCreated(id: Int) {
+        questId = id
         setUpObservableQuest(id)
     }
 
@@ -178,6 +181,27 @@ class MapViewModel(
         }
 
         locationUtil.requestLocationUpdates(locationRequest, locationCallback)
+    }
+
+    fun onStopClicked(){
+        observableStopRun.call()
+        if(questId == -1){
+            //quest countdown not finished
+            observableBackNavigation.call()
+        }else {
+            onQuestFinished(questId)
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun onQuestFinished(questId: Int) {
+        questRepository.getSingleQuest(questId)
+            .subscribe({
+                //Quest exists, show summary
+                observableNavigateTo.postValue(MapFragmentDirections.actionMapFragmentToSummaryFragment(questId))
+            },{
+                //Quest didn't even start, do nothing
+            })
     }
 
     override fun onCleared() {

@@ -1,12 +1,10 @@
 package xevenition.com.runage.fragment.splash
 
-import com.google.firebase.auth.FirebaseAuth
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.AccountUtil
 import xevenition.com.runage.util.SaveUtil
 import java.util.concurrent.TimeUnit
@@ -18,7 +16,7 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
 
     init {
         if (serviceIsRunning) {
-            observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
+            observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMapFragment())
         } else {
             startSplashTimer()
         }
@@ -28,7 +26,6 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
         val disposable = Observable.timer(2000, TimeUnit.MILLISECONDS)
             .subscribeOn(Schedulers.computation())
             .subscribe({
-                val initalSettings = saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)
                 if (!accountUtil.isAccountActive() || accountUtil.getGamesAccount() == null) {
                     observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                 } else if (!saveUtil.getBoolean(SaveUtil.KEY_INITIAL_SETTINGS_COMPLETED)) {

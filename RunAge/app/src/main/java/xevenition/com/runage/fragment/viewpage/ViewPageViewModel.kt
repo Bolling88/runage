@@ -15,17 +15,6 @@ class ViewPageViewModel(private  val questRepository: QuestRepository,
     private val _observableUserAccount = MutableLiveData<GoogleSignInAccount>()
     val observableUserAccount: LiveData<GoogleSignInAccount> = _observableUserAccount
 
-    @SuppressLint("CheckResult")
-    fun onQuestFinished(questId: Int) {
-        questRepository.getSingleQuest(questId)
-            .subscribe({
-                //Quest exists, show summary
-                observableNavigateTo.postValue(ViewPageFragmentDirections.actionViewPageFragmentToSummaryFragment(questId))
-            },{
-                //Quest didn't even start, do nothing
-            })
-    }
-
     fun onResume() {
         if(!accountUtil.isAccountActive() || accountUtil.getGamesAccount() == null){
             observableBackNavigation.call()

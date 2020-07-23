@@ -1,6 +1,11 @@
 package xevenition.com.runage.fragment.map
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +24,8 @@ import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
+import xevenition.com.runage.fragment.main.MainFragment
+import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.BitmapUtil
 import java.util.logging.Logger
 import javax.inject.Inject
@@ -32,11 +39,36 @@ class MapFragment : BaseFragment<MapViewModel>() {
     private var startMarker: Marker? = null
     private var googleMap: GoogleMap? = null
     private lateinit var binding: FragmentMapBinding
+    private lateinit var mService: EventService
+    private var mBound: Boolean = false
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
     @Inject
     lateinit var bitmapUtil: BitmapUtil
+
+    /** Defines callbacks for service binding, passed to bindService()  */
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            Timber.d("onServiceConnected")
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            val binder = service as EventService.LocalBinder
+            mService = binder.getService()
+            mBound = true
+            mService.registerCallback(object : EventService.EventCallback {
+                override fun onQuestCreated(id: Int) {
+                    currentQuestId = id
+                    Timber.d("onQuestCreated: $id")
+                    onNewQuestCreated(id)
+                }
+            })
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            mBound = false
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +101,14 @@ class MapFragment : BaseFragment<MapViewModel>() {
             //googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
         setUpObservables()
+        if(MainApplication.serviceIsRunning){
+            binding.lottieCountDown.visibility = View.GONE
+            binding.lottieCountDown.pauseAnimation()
+        }else{
+            binding.lottieCountDown.visibility = View.VISIBLE
+            binding.lottieCountDown.playAnimation()
+        }
+        startEventService()
     }
 
     override fun setUpObservables() {
@@ -103,6 +143,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 setUpPolyline(it)
             }
         })
+
+        viewModel.observableStopRun.observe(viewLifecycleOwner, Observer {
+            stopEventService()
+        })
     }
 
     private fun drawStartMarker(it: LatLng) {
@@ -131,12 +175,16 @@ class MapFragment : BaseFragment<MapViewModel>() {
         super.onStart()
         Timber.d("onStart")
         binding.mapView.onStart()
+        if (MainApplication.serviceIsRunning) {
+            bindToService()
+        }
     }
 
     override fun onStop() {
         super.onStop()
         Timber.d("onStop")
         binding.mapView.onStop()
+        unbindService()
     }
 
     override fun onResume() {
@@ -157,6 +205,30 @@ class MapFragment : BaseFragment<MapViewModel>() {
         binding.mapView.onDestroy()
     }
 
+    private fun bindToService() {
+        Intent(activity, EventService::class.java).also { intent ->
+            activity?.bindService(intent, connection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private fun unbindService() {
+        if (mBound) {
+            activity?.unbindService(connection)
+            mBound = false
+        }
+    }
+
+    private fun startEventService() {
+        val myService = Intent(activity, EventService::class.java)
+        ContextCompat.startForegroundService(requireContext(), myService)
+        bindToService()
+    }
+
+    private fun stopEventService() {
+        unbindService()
+        val myService = Intent(activity, EventService::class.java)
+        activity?.stopService(myService)
+    }
 
     private fun setUpPolyline(positions: List<LatLng>) {
         if (positions.isEmpty() || googleMap == null) return

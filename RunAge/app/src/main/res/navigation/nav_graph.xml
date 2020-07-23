@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/permissionFragment"
@@ -117,4 +120,8 @@
             android:label="RuleFragment" >
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="xevenition.com.runage.fragment.map.MapFragment"
+        android:label="MapFragment" />
 </navigation>

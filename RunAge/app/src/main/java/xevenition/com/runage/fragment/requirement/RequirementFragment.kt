@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.common.images.ImageManager
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
@@ -13,16 +17,21 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentRequirementBinding
 import xevenition.com.runage.fragment.start.StartFragment
+import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
 import xevenition.com.runage.model.Challenge
 
 class RequirementFragment : BaseFragment<RequirementViewModel>() {
 
     private lateinit var binding: FragmentRequirementBinding
 
+    private val navController by lazy {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_tab_fragment)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val challenge = arguments?.getParcelable<Challenge>(KEY_CHALLENGE)
-        val factory = RequirementViewModelFactory(getApplication(), challenge!!)
+        val args = RequirementFragmentArgs.fromBundle(requireArguments())
+        val factory = RequirementViewModelFactory(getApplication(), args.keyChallenge!!)
         viewModel = ViewModelProvider(this, factory).get(RequirementViewModel::class.java)
     }
 
@@ -34,6 +43,8 @@ class RequirementFragment : BaseFragment<RequirementViewModel>() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
         return binding.root
     }
 
@@ -45,17 +56,4 @@ class RequirementFragment : BaseFragment<RequirementViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
     }
-
-    companion object {
-        const val KEY_CHALLENGE = "KEY_CHALLENGE"
-
-        fun newInstance(challenge: Challenge): RequirementFragment {
-            val bundle = Bundle()
-            bundle.putParcelable(KEY_CHALLENGE, challenge)
-            val fragment = RequirementFragment()
-            fragment.arguments = bundle
-            return fragment
-        }
-    }
-
 }

@@ -14,6 +14,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_challenge"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
             android:layout_width="wrap_content"
@@ -43,7 +58,7 @@
             app:cpb_round_border="true"
             app:layout_constraintEnd_toEndOf="@+id/card_profile"
             app:layout_constraintStart_toStartOf="@+id/card_profile"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_profile"
@@ -56,7 +71,7 @@
             app:cardElevation="10dip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="100dp"
@@ -278,6 +293,15 @@
             app:layout_constraintBottom_toBottomOf="@+id/rewardTitle"
             app:layout_constraintStart_toEndOf="@+id/rewardTitle"
             app:layout_constraintTop_toTopOf="@+id/rewardTitle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
+            android:onClick="@{()-> viewModel.onStartClicked()}"
+            android:text="@string/runage_start_challenge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

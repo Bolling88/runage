@@ -86,7 +86,7 @@ class QuestsViewModel(
 
     fun onChallengeClicked(challenge: Challenge) {
         observableNavigateTo.postValue(
-            QuestsFragmentDirections.actionChallengeFragmentToViewPageFragment(true, challenge)
+            QuestsFragmentDirections.actionChallengeFragmentToRequirementFragment(true, challenge)
         )
     }
 }

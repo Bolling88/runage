@@ -17,18 +17,18 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/runage_home"
-            app:titleTextColor="@color/white"
-            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/Theme.Toolbar"
-            app:navigationIcon="@drawable/ic_menu" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_start"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
@@ -46,14 +46,14 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textExperience"
+            style="@style/MainFontStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_basic"
-            android:singleLine="true"
-            style="@style/MainFontStyle"
             android:paddingBottom="10dip"
+            android:singleLine="true"
             android:text="@{viewModel.liveTextXp}"
             android:textColor="@color/black"
             android:textSize="@dimen/textSizeHuge"
@@ -66,26 +66,26 @@
             android:id="@+id/circularProgressBar"
             android:layout_width="184dip"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="@+id/card_profile"
-            app:layout_constraintStart_toStartOf="@+id/card_profile"
-            app:layout_constraintTop_toBottomOf="@+id/textExperience"
             app:cpb_background_progressbar_color="@color/grey1"
             app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress="@{viewModel.liveLevelProgress}"
             app:cpb_progress_direction="to_right"
+            app:cpb_progress_max="@{viewModel.liveLevelNext}"
             app:cpb_progressbar_color="@color/colorPrimary"
             app:cpb_progressbar_width="10dp"
-            app:cpb_progress="@{viewModel.liveLevelProgress}"
-            app:cpb_progress_max="@{viewModel.liveLevelNext}"
-            app:cpb_round_border="true" />
+            app:cpb_round_border="true"
+            app:layout_constraintEnd_toEndOf="@+id/card_profile"
+            app:layout_constraintStart_toStartOf="@+id/card_profile"
+            app:layout_constraintTop_toBottomOf="@+id/textExperience" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_profile"
             android:layout_width="155dp"
             android:layout_height="155dp"
-             android:layout_marginTop="14dip"
+            android:layout_marginTop="14dip"
+            android:onClick="@{()->viewModel.onProfileClicked()}"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="250dp"
-            android:onClick="@{()->viewModel.onProfileClicked()}"
             app:cardElevation="10dip"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -139,6 +139,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textName"
             tools:text="Level 14" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            style="@style/ButtonStyle"
+            android:onClick="@{()-> viewModel.onStartClicked()}"
+            android:text="@string/runage_start_running"
+            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationHolder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/bottomNavigationHolder"
+            android:layout_width="match_parent"
+            android:layout_height="60dip"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

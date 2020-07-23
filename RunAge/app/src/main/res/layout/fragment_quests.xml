@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_menu"
-            app:title="@string/runage_completed_runs"
+            app:title="@string/runage_challenges"
             app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
             app:titleTextColor="@color/white" />
 

@@ -6,7 +6,7 @@
         <item
             android:id="@+id/mainNavigation"
             android:icon="@drawable/ic_run_blue"
-            android:title="@string/runage_home" />
+            android:title="@string/runage_start" />
     </group>
 
     <group
