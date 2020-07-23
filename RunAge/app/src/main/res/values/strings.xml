@@ -93,4 +93,7 @@
     <string name="runage_begin_new_run">Begin new run</string>
     <string name="runage_feed">Feed</string>
     <string name="runage_quests">Quests</string>
+    <string name="runage_target_distance">Target distance:</string>
+    <string name="runage_duration_title">Complete in:</string>
+    <string name="runage_reward">Reward:</string>
 </resources>

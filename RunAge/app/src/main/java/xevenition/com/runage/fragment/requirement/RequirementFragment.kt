@@ -42,25 +42,6 @@ class RequirementFragment : BaseFragment<RequirementViewModel>() {
 
     override fun setUpObservables() {
         super.setUpObservables()
-        viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val manager = ImageManager.create(requireContext())
-                manager.loadImage(binding.imgProfile, it)
-            }
-        })
-
-        viewModel.observableOpenMenu.observe(viewLifecycleOwner, Observer {
-            (activity as? MainActivity)?.openMenu()
-        })
-
-        viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
-            startActivityForResult(it, PROFILE_REQUEST_CODE)
-        })
-    }
-
-    companion object {
-        fun newInstance() = StartFragment()
-        const val PROFILE_REQUEST_CODE = 23423
     }
 
 }
