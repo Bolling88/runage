@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         tools:context=".fragment.map.MapFragment">
 
         <com.google.android.gms.maps.MapView
@@ -67,9 +68,9 @@
             android:layout_height="wrap_content"
             android:text="@{viewModel.liveTotalDistance}"
             android:textSize="20sp"
-             android:fontFamily="@font/light"
+            android:fontFamily="@font/light"
             app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
-             app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+            app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
             app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
             tools:text="1000 m" />
 
@@ -134,20 +135,36 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
-            android:src="@{viewModel.liveImageLock}"
+            android:layout_height="wrap_content"
+            android:elevation="6dip"
+            android:padding="10dip"
+            android:layout_marginStart="12dip"
             android:layout_marginBottom="2dip"
-            app:fabSize="normal"
-            android:elevation="8dip"
-            app:fabCustomSize="70dip"
             android:onClick="@{()->viewModel.onLockClicked()}"
-            app:tint="@{viewModel.liveLockButtonIconTint}"
-            android:backgroundTint="@{viewModel.liveLockButtonBackgroundTint}"
             app:layout_constraintStart_toStartOf="@+id/button"
             app:layout_constraintBottom_toBottomOf="@+id/button"
             app:layout_constraintTop_toTopOf="@+id/button"
-            android:layout_height="wrap_content" />
+            app:srcCompat="@drawable/ic_lock_open"
+            app:tint="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dip"
+            android:backgroundTint="@{viewModel.liveLockButtonBackgroundTint}"
+            android:elevation="8dip"
+            android:onClick="@{()->viewModel.onLockClicked()}"
+            android:src="@{viewModel.liveImageLock}"
+            android:visibility="@{viewModel.liveFabVisibility}"
+            app:fabCustomSize="70dip"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/button"
+            app:layout_constraintStart_toStartOf="@+id/button"
+            app:layout_constraintTop_toTopOf="@+id/button"
+            app:tint="@{viewModel.liveLockButtonIconTint}" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_count_down"

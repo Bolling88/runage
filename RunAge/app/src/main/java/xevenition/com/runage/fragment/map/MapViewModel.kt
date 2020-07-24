@@ -2,6 +2,7 @@ package xevenition.com.runage.fragment.map
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
@@ -73,6 +74,9 @@ class MapViewModel(
     private val _liveLockButtonBackgroundTint = MutableLiveData<Int>()
     val liveLockButtonBackgroundTint: LiveData<Int> = _liveLockButtonBackgroundTint
 
+    private val _liveFabVisibility = MutableLiveData<Int>()
+    val liveFabVisibility: LiveData<Int> = _liveFabVisibility
+
     private val _liveImageLock = MutableLiveData<Drawable>()
     val liveImageLock: LiveData<Drawable> = _liveImageLock
 
@@ -81,6 +85,7 @@ class MapViewModel(
 
     init {
         _liveButtonClickable.postValue(false)
+        _liveFabVisibility.postValue(View.VISIBLE)
         _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
         _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
         _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock))
@@ -225,12 +230,14 @@ class MapViewModel(
     fun onLockClicked(){
         if(isLocked){
             isLocked = false
+            _liveFabVisibility.postValue(View.GONE)
             _liveButtonClickable.postValue(true)
             _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
             _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.white))
             _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock_open))
         }else{
             isLocked = true
+            _liveFabVisibility.postValue(View.VISIBLE)
             _liveButtonClickable.postValue(false)
             _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
             _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
