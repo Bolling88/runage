@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -34,6 +35,7 @@ import javax.inject.Inject
 
 class MapFragment : BaseFragment<MapViewModel>() {
 
+    private var backPressCallback: OnBackPressedCallback? = null
     private var currentQuestId: Int = -1
     private var polyLine: Polyline? = null
     private var userMarker: Marker? = null
@@ -45,6 +47,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     @Inject
     lateinit var typedValueUtil: TypedValueUtil
+
     @Inject
     lateinit var bitmapUtil: BitmapUtil
 
@@ -60,6 +63,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
             mService.registerCallback(object : EventService.EventCallback {
                 override fun onQuestCreated(id: Int) {
                     currentQuestId = id
+                    backPressCallback?.isEnabled = true
                     Timber.d("onQuestCreated: $id")
                     onNewQuestCreated(id)
                 }
@@ -74,9 +78,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
+        backPressCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+                requireActivity().finish()
         }
+        backPressCallback?.isEnabled = false
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
         val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
@@ -105,10 +110,10 @@ class MapFragment : BaseFragment<MapViewModel>() {
             //googleMap?.uiSettings?.setAllGesturesEnabled(false)
         }
         setUpObservables()
-        if(MainApplication.serviceIsRunning){
+        if (MainApplication.serviceIsRunning) {
             binding.lottieCountDown.visibility = View.GONE
             binding.lottieCountDown.pauseAnimation()
-        }else{
+        } else {
             binding.lottieCountDown.visibility = View.VISIBLE
             binding.lottieCountDown.playAnimation()
         }
@@ -260,7 +265,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
                     builder.include(latLng)
                 }
                 val bounds = builder.build()
-                val padding = typedValueUtil.dipToPixels(50f) 
+                val padding = typedValueUtil.dipToPixels(50f)
                 val cu = CameraUpdateFactory.newLatLngBounds(bounds, padding)
                 googleMap?.animateCamera(cu, 500, null)
             }
@@ -278,7 +283,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
         super.onSaveInstanceState(outState)
         try {
             binding.mapView.onSaveInstanceState(outState)
-        }catch (exception: Exception){
+        } catch (exception: Exception) {
             Timber.d(exception)
         }
     }
@@ -303,7 +308,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     companion object {
         fun newInstance(): MapFragment {
             Timber.d("New instance of map fragment created")
-         return MapFragment()
+            return MapFragment()
         }
     }
 

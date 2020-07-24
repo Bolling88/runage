@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_locked"
+        app:srcCompat="@drawable/ic_lock"
         app:tint="@color/white" />
 
     <com.google.android.material.textview.MaterialTextView

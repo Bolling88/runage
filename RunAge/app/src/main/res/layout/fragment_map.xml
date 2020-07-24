@@ -126,11 +126,28 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
             style="@style/ButtonStyle"
+            android:enabled="@{viewModel.liveButtonClickable}"
+            android:clickable="@{viewModel.liveButtonClickable}"
             android:onClick="@{()-> viewModel.onStopClicked()}"
-            android:text="@string/runage_stop"
+            android:text="@string/runage_stop_run"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:src="@{viewModel.liveImageLock}"
+            android:layout_marginBottom="2dip"
+            app:fabSize="normal"
+            android:elevation="8dip"
+            app:fabCustomSize="70dip"
+            android:onClick="@{()->viewModel.onLockClicked()}"
+            app:tint="@{viewModel.liveLockButtonIconTint}"
+            android:backgroundTint="@{viewModel.liveLockButtonBackgroundTint}"
+            app:layout_constraintStart_toStartOf="@+id/button"
+            app:layout_constraintBottom_toBottomOf="@+id/button"
+            app:layout_constraintTop_toTopOf="@+id/button"
+            android:layout_height="wrap_content" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_count_down"

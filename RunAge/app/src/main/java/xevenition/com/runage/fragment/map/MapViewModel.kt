@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.map
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
@@ -37,6 +38,7 @@ class MapViewModel(
     private var currentPath: MutableList<LatLng> = mutableListOf()
     private var runningTimerDisposable: Disposable? = null
     private var questDisposable: Disposable? = null
+    private var isLocked = true
 
     private val _observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
     val observableAnimateMapPosition: LiveData<CameraUpdate> = _observableAnimateMapPosition
@@ -62,10 +64,26 @@ class MapViewModel(
     private val _livePace = MutableLiveData<String>()
     val livePace: LiveData<String> = _livePace
 
+    private val _liveButtonClickable = MutableLiveData<Boolean>()
+    val liveButtonClickable: LiveData<Boolean> = _liveButtonClickable
+
+    private val _liveLockButtonIconTint = MutableLiveData<Int>()
+    val liveLockButtonIconTint: LiveData<Int> = _liveLockButtonIconTint
+
+    private val _liveLockButtonBackgroundTint = MutableLiveData<Int>()
+    val liveLockButtonBackgroundTint: LiveData<Int> = _liveLockButtonBackgroundTint
+
+    private val _liveImageLock = MutableLiveData<Drawable>()
+    val liveImageLock: LiveData<Drawable> = _liveImageLock
+
     val observableClearMap = SingleLiveEvent<Unit>()
     val observableStopRun = SingleLiveEvent<Unit>()
 
     init {
+        _liveButtonClickable.postValue(false)
+        _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+        _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
+        _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock))
         resetTimers()
     }
 
@@ -202,6 +220,22 @@ class MapViewModel(
             },{
                 //Quest didn't even start, do nothing
             })
+    }
+
+    fun onLockClicked(){
+        if(isLocked){
+            isLocked = false
+            _liveButtonClickable.postValue(true)
+            _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+            _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.white))
+            _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock_open))
+        }else{
+            isLocked = true
+            _liveButtonClickable.postValue(false)
+            _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
+            _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+            _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock))
+        }
     }
 
     override fun onCleared() {
