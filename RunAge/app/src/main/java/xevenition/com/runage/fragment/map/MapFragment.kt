@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.*
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
+import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
@@ -118,6 +119,11 @@ class MapFragment : BaseFragment<MapViewModel>() {
             binding.lottieCountDown.playAnimation()
         }
         startEventService()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.lockDrawer()
     }
 
     override fun setUpObservables() {

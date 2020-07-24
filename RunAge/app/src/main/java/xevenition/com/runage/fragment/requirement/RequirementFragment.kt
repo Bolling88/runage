@@ -53,6 +53,11 @@ class RequirementFragment : BaseFragment<RequirementViewModel>() {
         setUpObservables()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.lockDrawer()
+    }
+
     override fun setUpObservables() {
         super.setUpObservables()
     }

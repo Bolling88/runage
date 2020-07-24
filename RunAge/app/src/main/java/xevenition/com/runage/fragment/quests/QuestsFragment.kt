@@ -83,6 +83,11 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         setUpObservables()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.unlockDrawer()
+    }
+
     override fun setUpObservables() {
         super.setUpObservables()
 

@@ -29,7 +29,7 @@
             android:id="@+id/action_summaryFragment_to_shareFragment"
             app:destination="@id/shareFragment"
             app:popUpTo="@+id/startFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/pathFragment"
