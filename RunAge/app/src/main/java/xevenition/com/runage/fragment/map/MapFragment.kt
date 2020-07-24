@@ -80,9 +80,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
         backPressCallback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-                requireActivity().finish()
+            requireActivity().finish()
         }
-        backPressCallback?.isEnabled = false
+        backPressCallback?.isEnabled = true
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
         val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
@@ -161,6 +161,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
         viewModel.observableStopRun.observe(viewLifecycleOwner, Observer {
             stopEventService()
+            backPressCallback?.isEnabled = false
         })
     }
 

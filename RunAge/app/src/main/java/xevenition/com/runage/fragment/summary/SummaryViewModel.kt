@@ -118,6 +118,9 @@ class SummaryViewModel(
     private val _liveTextBicyclingPercentage = MutableLiveData<String>()
     val liveTextBicyclingPercentage: LiveData<String> = _liveTextBicyclingPercentage
 
+    private val _liveDeleteButtonVisibility = MutableLiveData<Int>()
+    val liveDeleteButtonVisibility: LiveData<Int> = _liveDeleteButtonVisibility
+
     private val _liveTextStillPercentage = MutableLiveData<String>()
     val liveTextStillPercentage: LiveData<String> = _liveTextStillPercentage
 
@@ -181,6 +184,7 @@ class SummaryViewModel(
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+            _liveDeleteButtonVisibility.postValue(View.GONE)
             _observablePlayFailAnimation.postValue(Unit)
         } else {
             _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_completed))

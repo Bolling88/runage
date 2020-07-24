@@ -131,6 +131,7 @@
             android:clickable="@{viewModel.liveButtonClickable}"
             android:onClick="@{()-> viewModel.onStopClicked()}"
             android:text="@string/runage_stop_run"
+            android:backgroundTint="@color/button_state_color_red"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -141,6 +142,7 @@
             android:elevation="6dip"
             android:padding="10dip"
             android:layout_marginStart="12dip"
+             android:visibility="gone"
             android:layout_marginBottom="2dip"
             android:onClick="@{()->viewModel.onLockClicked()}"
             app:layout_constraintStart_toStartOf="@+id/button"

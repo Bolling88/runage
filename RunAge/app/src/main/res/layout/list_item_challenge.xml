@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         android:layout_width="0dip"
-        android:layout_height="0dip"
+        android:layout_height="100dip"
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:padding="0dip"

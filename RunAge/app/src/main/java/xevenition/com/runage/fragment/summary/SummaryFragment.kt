@@ -102,11 +102,13 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         })
 
         viewModel.observablePlaySuccessAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationSuccess.visibility = View.VISIBLE
             binding.animationSuccess.playAnimation()
             binding.animation2.playAnimation()
         })
 
         viewModel.observablePlayFailAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationFail.visibility = View.VISIBLE
             binding.animationFail.playAnimation()
         })
 

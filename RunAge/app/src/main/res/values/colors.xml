@@ -10,6 +10,6 @@
     <color name="white">#ffffff</color>
     <color name="white_transparent">#90ffffff</color>
     <color name="black">#000000</color>
-    <color name="yellow">#aa00ff</color>
+    <color name="purple">#aa00ff</color>
     <color name="red">#f44336</color>
 </resources>

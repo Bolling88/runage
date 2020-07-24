@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.list_item_challenge.view.*
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.model.Challenge
@@ -41,7 +44,7 @@ class QuestsRecyclerAdapter(
         private val textLevel: TextView = view.findViewById(R.id.textLevel)
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Challenge) = with(itemView) {
+        fun bind(item: Challenge, position: Int) = with(itemView) {
             var isLocked = true
             val completedQuests = challengeScores?.size ?: 0
             if (item.level == completedQuests + 1) {
@@ -94,6 +97,27 @@ class QuestsRecyclerAdapter(
                     }
                 }
             }
+            when{
+                item.level <= 10 ->{
+                    card.setCardBackgroundColor(resourceUtil.getColor(R.color.colorPrimary))
+                }
+                item.level <= 20 ->{
+                    card.setCardBackgroundColor(resourceUtil.getColor(R.color.purple))
+                }
+            }
+            when ((position+1) % 10) {
+                0 -> {
+                    card.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                        dimensionRatio = null
+                    }
+                }
+                else -> {
+                    card.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                        dimensionRatio = "H,1:1"
+                    }
+                }
+            }
+
             cardView.setOnClickListener {
                 Timber.d("Click")
                 listener.onClick(item, isLocked)
@@ -102,7 +126,7 @@ class QuestsRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
     fun setItems(it: Pair<List<Challenge>, Map<String, Int>?>) {
@@ -114,10 +138,10 @@ class QuestsRecyclerAdapter(
 
 class DiffCallback : DiffUtil.ItemCallback<Challenge>() {
     override fun areItemsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
-        return false
+        return true
     }
 
     override fun areContentsTheSame(oldItem: Challenge, newItem: Challenge): Boolean {
-        return false
+        return true
     }
 }

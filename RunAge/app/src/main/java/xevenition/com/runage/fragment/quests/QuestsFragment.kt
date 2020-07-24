@@ -39,9 +39,6 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
-//        requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
-//        }
         val factory = QuestsViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(QuestsViewModel::class.java)
 
@@ -53,6 +50,7 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
                         viewModel.onChallengeClicked(challenge)
                     }else{
                         Timber.d("Is locked!")
+                        viewModel.onChallengeClicked(challenge)
                     }
                 }
             })
@@ -67,6 +65,12 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        (binding.recyclerView.layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int = when ((position+1) % 10) {
+                0 -> 3
+                else -> 1
+            }
+        }
         binding.recyclerView.adapter = challengeListRecyclerAdapter
 
         binding.recyclerView.addItemDecoration(SpacesItemDecoration(0))

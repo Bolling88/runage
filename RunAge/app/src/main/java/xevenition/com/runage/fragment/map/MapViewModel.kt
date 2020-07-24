@@ -86,9 +86,9 @@ class MapViewModel(
     init {
         _liveButtonClickable.postValue(false)
         _liveFabVisibility.postValue(View.VISIBLE)
-        _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+        _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.red))
         _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
-        _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock))
+        _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
         resetTimers()
     }
 

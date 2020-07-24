@@ -50,7 +50,9 @@ class RequirementViewModel(
     val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
-        _liveTextLevel.postValue(challenge.level.toString())
+        val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${challenge.level.toString()}"
+        feedbackHandler.speak(challengeText)
+        _liveTextLevel.postValue(challengeText)
         _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()))
         _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-20))
         _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-40))
