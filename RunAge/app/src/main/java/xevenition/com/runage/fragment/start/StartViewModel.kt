@@ -44,6 +44,9 @@ class StartViewModel(
     val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
+        if(serviceIsRunning){
+            observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToMapFragment())
+        }
         val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
             if (!serviceIsRunning && !welcomeMessagePlayed) {

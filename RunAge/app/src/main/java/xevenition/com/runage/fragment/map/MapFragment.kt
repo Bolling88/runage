@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -73,6 +74,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate")
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            requireActivity().finish()
+        }
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
         val factory = MapViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)

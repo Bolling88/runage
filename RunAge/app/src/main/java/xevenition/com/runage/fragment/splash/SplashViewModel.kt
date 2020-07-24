@@ -16,7 +16,7 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
 
     init {
         if (serviceIsRunning) {
-            observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMapFragment())
+            observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
         } else {
             startSplashTimer()
         }
