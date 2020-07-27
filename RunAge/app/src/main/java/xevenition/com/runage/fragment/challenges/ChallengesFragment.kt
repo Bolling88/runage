@@ -1,15 +1,13 @@
-package xevenition.com.runage.fragment.quests
+package xevenition.com.runage.fragment.challenges
 
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -18,16 +16,16 @@ import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
-import xevenition.com.runage.databinding.FragmentQuestsBinding
+import xevenition.com.runage.databinding.FragmentChallengesBinding
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject
 
 
-class QuestsFragment : BaseFragment<QuestsViewModel>() {
+class QuestsFragment : BaseFragment<ChallengesViewModel>() {
 
-    private lateinit var binding: FragmentQuestsBinding
+    private lateinit var binding: FragmentChallengesBinding
     private lateinit var challengeListRecyclerAdapter: QuestsRecyclerAdapter
 
     @Inject
@@ -39,8 +37,8 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
-        val factory = QuestsViewModelFactory(getApplication())
-        viewModel = ViewModelProvider(this, factory).get(QuestsViewModel::class.java)
+        val factory = ChallengesViewModelFactory(getApplication())
+        viewModel = ViewModelProvider(this, factory).get(ChallengesViewModel::class.java)
 
         challengeListRecyclerAdapter =
             QuestsRecyclerAdapter(resourceUtil, object : QuestsRecyclerAdapter.OnClickListener {
@@ -50,7 +48,6 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
                         viewModel.onChallengeClicked(challenge)
                     }else{
                         Timber.d("Is locked!")
-                        viewModel.onChallengeClicked(challenge)
                     }
                 }
             })
@@ -60,7 +57,7 @@ class QuestsFragment : BaseFragment<QuestsViewModel>() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_quests, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_challenges, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

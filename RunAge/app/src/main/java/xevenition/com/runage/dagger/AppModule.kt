@@ -1,13 +1,7 @@
 package xevenition.com.runage.dagger
 
 import android.app.Application
-import android.content.Context
-import android.media.AudioAttributes
-import android.media.AudioFocusRequest
-import android.media.AudioManager
-import android.os.Build
 import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
@@ -30,7 +24,6 @@ class AppModule(private val application: Application) {
     @Singleton
     fun provideTextToSpeech(app: Application): TextToSpeech {
         var speech : TextToSpeech? = null
-        Timber.d("AAAAAAAA" + Locale.getDefault().isO3Language)
         speech = TextToSpeech(app, TextToSpeech.OnInitListener {
             Timber.d("Text to speech initiated")
             speech?.language  = if(Locale.getDefault().isO3Language == "swe"){

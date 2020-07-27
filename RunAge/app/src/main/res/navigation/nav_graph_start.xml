@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/challengeFragment"
-        android:name="xevenition.com.runage.fragment.quests.QuestsFragment"
+        android:name="xevenition.com.runage.fragment.challenges.QuestsFragment"
         android:label="challengeFragment">
         <action
             android:id="@+id/action_challengeFragment_to_requirementFragment"
@@ -64,9 +64,9 @@
         android:name="xevenition.com.runage.fragment.requirement.RequirementFragment"
         android:label="@string/runage_challenge" >
         <argument
-            android:name="key_is_quest"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:name="key_stars"
+            app:argType="integer"
+            android:defaultValue="0" />
         <argument
             android:name="key_challenge"
             android:defaultValue="@null"

@@ -31,7 +31,7 @@ class RequirementFragment : BaseFragment<RequirementViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val args = RequirementFragmentArgs.fromBundle(requireArguments())
-        val factory = RequirementViewModelFactory(getApplication(), args.keyChallenge!!)
+        val factory = RequirementViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(RequirementViewModel::class.java)
     }
 

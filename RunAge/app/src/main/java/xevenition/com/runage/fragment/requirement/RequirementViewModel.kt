@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.requirement
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +22,7 @@ class RequirementViewModel(
     private val runningUtil: RunningUtil,
     resourceUtil: ResourceUtil,
     feedbackHandler: FeedbackHandler,
-    private val challenge: Challenge
+    private val args: RequirementFragmentArgs
 ) : BaseViewModel() {
 
     private val _liveTextDistance = MutableLiveData<String>()
@@ -42,6 +43,15 @@ class RequirementViewModel(
     private val _liveTextLevel = MutableLiveData<String>()
     val liveTextLevel : LiveData<String> = _liveTextLevel
 
+    private val _liveStar1Image = MutableLiveData<Drawable>()
+    val liveStar1Image: LiveData<Drawable> = _liveStar1Image
+
+    private val _liveStar2Image = MutableLiveData<Drawable>()
+    val liveStar2Image: LiveData<Drawable> = _liveStar2Image
+
+    private val _liveStar3Image = MutableLiveData<Drawable>()
+    val liveStar3Image: LiveData<Drawable> = _liveStar3Image
+
     val observableOpenMenu = SingleLiveEvent<Unit>()
 
     private val _observableProfileImage = MutableLiveData<Uri>()
@@ -50,20 +60,38 @@ class RequirementViewModel(
     val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
-        val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${challenge.level.toString()}"
-        feedbackHandler.speak(challengeText)
-        _liveTextLevel.postValue(challengeText)
-        _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()))
-        _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-20))
-        _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(challenge.time.toLong()-40))
-        _liveTextXp.postValue("${challenge.experience} ${resourceUtil.getString(R.string.runage_xp)}")
-        _liveTextDistance.postValue(runningUtil.getDistanceString(challenge.distance))
-    }
+        val challenge = args.keyChallenge
+        challenge?.let {
+            val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${it.level}"
+            feedbackHandler.speak(challengeText)
+            _liveTextLevel.postValue(challengeText)
+            _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
+            _liveTextXp.postValue("${it.experience} ${resourceUtil.getString(R.string.runage_xp)}")
+            _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
 
-    fun onProfileClicked(){
-        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
-            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
-                observableShowAchievements.postValue(it)
+            when(args.keyStars){
+                0->{
+                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                }
+                1->{
+                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                }
+                2->{
+                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                }
+                3->{
+                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                }
             }
         }
     }

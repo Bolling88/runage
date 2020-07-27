@@ -7,7 +7,7 @@ import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.util.*
 import javax.inject.Inject
 
-class RequirementViewModelFactory @Inject constructor(app: MainApplication, private val challenge: Challenge) :
+class RequirementViewModelFactory @Inject constructor(app: MainApplication, private val args: RequirementFragmentArgs) :
     BaseViewModelFactory() {
 
     init {
@@ -29,6 +29,6 @@ class RequirementViewModelFactory @Inject constructor(app: MainApplication, priv
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RequirementViewModel(gameServicesUtil, fireStoreHandler, accountUtil, runningUtil, resourceUtil, feedbackHandler, challenge) as T
+        return RequirementViewModel(gameServicesUtil, fireStoreHandler, accountUtil, runningUtil, resourceUtil, feedbackHandler, args) as T
     }
 }

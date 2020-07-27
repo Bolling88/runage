@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.quests
+package xevenition.com.runage.fragment.challenges
 
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
@@ -7,7 +7,7 @@ import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
 
-class QuestsViewModelFactory @Inject constructor(
+class ChallengesViewModelFactory @Inject constructor(
     app: MainApplication
 ) :
     BaseViewModelFactory() {
@@ -23,6 +23,6 @@ class QuestsViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return QuestsViewModel(resourceUtil, firestoreHandler) as T
+        return ChallengesViewModel(resourceUtil, firestoreHandler) as T
     }
 }

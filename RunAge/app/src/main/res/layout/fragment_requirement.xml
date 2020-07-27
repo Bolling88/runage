@@ -59,7 +59,7 @@
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_star"
+                    app:srcCompat="@{viewModel.liveStar1Image}"
                     app:tint="@color/colorPrimary" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -72,7 +72,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/starComp3"
                     app:layout_constraintStart_toEndOf="@+id/starComp1"
                     app:layout_constraintTop_toTopOf="@+id/starComp1"
-                    app:srcCompat="@drawable/ic_star"
+                    app:srcCompat="@{viewModel.liveStar2Image}"
                     app:tint="@color/colorPrimary"
                     tools:ignore="MissingConstraints" />
 
@@ -85,7 +85,7 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/starComp2"
                     app:layout_constraintTop_toTopOf="@+id/starComp2"
-                    app:srcCompat="@drawable/ic_star"
+                    app:srcCompat="@{viewModel.liveStar3Image}"
                     app:tint="@color/colorPrimary"
                     tools:ignore="MissingConstraints" />
 

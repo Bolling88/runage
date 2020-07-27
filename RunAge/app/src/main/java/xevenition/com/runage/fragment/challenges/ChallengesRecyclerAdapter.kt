@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.quests
+package xevenition.com.runage.fragment.challenges
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

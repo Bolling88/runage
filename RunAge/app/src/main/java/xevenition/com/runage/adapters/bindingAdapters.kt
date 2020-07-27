@@ -1,6 +1,8 @@
 package xevenition.com.runage.adapters
 
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -23,4 +25,11 @@ fun setTint(view: FloatingActionButton, tint: Int) {
 @BindingAdapter("android:backgroundTint")
 fun setBackgroundTint(view: FloatingActionButton, tint: Int) {
     view.backgroundTintList = ColorStateList.valueOf(tint)
+}
+
+@BindingAdapter("app:srcCompat")
+fun setDrawable(view: AppCompatImageView, drawable: Drawable?) {
+    drawable?.let {
+        view.setImageDrawable(it)
+    }
 }

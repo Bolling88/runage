@@ -135,6 +135,7 @@ class SummaryViewModel(
 
     val observableYesNoDialog = SingleLiveEvent<Pair<String, String>>()
     val observableShowAd = SingleLiveEvent<Unit>()
+    val observableBackPressedEnabled = SingleLiveEvent<Boolean>()
 
     init {
         _liveButtonEnabled.postValue(false)
@@ -391,6 +392,7 @@ class SummaryViewModel(
                 questRepository.dbDeleteQuest(quest)
                 Timber.d("All done!")
                 observableShowAd.call()
+                observableBackPressedEnabled.postValue(false)
             }, {
                 Timber.e(it)
                 observableShowAd.call()

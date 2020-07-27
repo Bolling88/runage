@@ -1,10 +1,9 @@
-package xevenition.com.runage.fragment.quests
+package xevenition.com.runage.fragment.challenges
 
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.Navigation
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -12,14 +11,13 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.history.HistoryFragmentDirections
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.ChallengeData
 import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 
-class QuestsViewModel(
+class ChallengesViewModel(
     resourceUtil: ResourceUtil,
     fireStoreHandler: FireStoreHandler
 ) : BaseViewModel() {
@@ -86,7 +84,7 @@ class QuestsViewModel(
 
     fun onChallengeClicked(challenge: Challenge) {
         observableNavigateTo.postValue(
-            QuestsFragmentDirections.actionChallengeFragmentToRequirementFragment(true, challenge)
+            QuestsFragmentDirections.actionChallengeFragmentToRequirementFragment(challengeScores?.getOrDefault(challenge.level.toString(), 0) ?: 0, challenge)
         )
     }
 }
