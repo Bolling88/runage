@@ -47,7 +47,7 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
         super.onCreate(savedInstanceState)
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
         backPressedEnabled = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            //do nothing
+            viewModel.onDeleteClicked()
         }
         backPressedEnabled.isEnabled = true
         val args = SummaryFragmentArgs.fromBundle(requireArguments())
