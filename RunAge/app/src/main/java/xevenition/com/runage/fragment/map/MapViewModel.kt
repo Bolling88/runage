@@ -93,6 +93,12 @@ class MapViewModel(
     private val _liveTextTime3 = MutableLiveData<String>()
     val liveTextTime3 : LiveData<String> = _liveTextTime3
 
+    private val _liveCountDownVisibility = MutableLiveData<Int>()
+    val liveCountDownVisibility: LiveData<Int> = _liveCountDownVisibility
+
+    private val _liveChallengeInfoVisibility = MutableLiveData<Int>()
+    val liveChallengeInfoVisibility: LiveData<Int> = _liveChallengeInfoVisibility
+
     val observableClearMap = SingleLiveEvent<Unit>()
     val observableStopRun = SingleLiveEvent<Unit>()
 
@@ -102,12 +108,14 @@ class MapViewModel(
         _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.red))
         _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
         _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
+        _liveChallengeInfoVisibility.postValue(View.GONE)
 
         args?.keyChallenge?.let {
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
             _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
             _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
+            _liveChallengeInfoVisibility.postValue(View.VISIBLE)
         }
 
         resetTimers()
@@ -127,6 +135,7 @@ class MapViewModel(
     fun onNewQuestCreated(id: Int) {
         questId = id
         setUpObservableQuest(id)
+        _liveCountDownVisibility.postValue(View.GONE)
     }
 
     private fun setUpObservableQuest(id: Int) {

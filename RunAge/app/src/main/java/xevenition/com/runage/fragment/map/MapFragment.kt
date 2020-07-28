@@ -140,7 +140,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
             it?.let {
                 //only move camera for user position if we don't have a polyline to focus on
                 if (polyLine == null || polyLine?.points?.isEmpty() == true)
-                    googleMap?.animateCamera(it)
+                    googleMap?.animateCamera(it, 200, null)
             }
         })
 
