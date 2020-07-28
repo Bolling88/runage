@@ -66,4 +66,8 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_total_running_duration" translatable="false">CgkI4-yzqpMZEAIQIw</string>
     <!-- leaderboard Fastest Runner (min/km) -->
     <string name="leaderboard_fastest_runner_minkm" translatable="false">CgkI4-yzqpMZEAIQJQ</string>
+    <!-- leaderboard Most Stars -->
+    <string name="leaderboard_most_stars" translatable="false">CgkI4-yzqpMZEAIQJg</string>
+    <!-- leaderboard Most Experience Single Run -->
+    <string name="leaderboard_most_experience_single_run" translatable="false">CgkI4-yzqpMZEAIQJw</string>
 </resources>

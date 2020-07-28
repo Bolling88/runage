@@ -299,7 +299,7 @@
                     android:layout_marginStart="@dimen/margin_basic"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextXp}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@{viewModel.liveRewardTextColor}"
                     android:textSize="@dimen/textSizeHuge"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rewardTitle"

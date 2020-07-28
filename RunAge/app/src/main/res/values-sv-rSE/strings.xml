@@ -13,7 +13,7 @@
     <string name="unit_type">Enhetstyp</string>
     <string name="metric">Metrisk (km, kg)</string>
     <string name="imperial">Imperisk (mi, lb)</string>
-    <string name="runage_passed_info">Grattis, du har nu avklarat</string>
+    <string name="runage_passed_info">"Checkpoint passerad. "</string>
     <string name="kilometer">kilometer</string>
     <string name="miles">engelska mil</string>
     <string name="signin_other_error">Inloggning misslyckades</string>
@@ -88,4 +88,24 @@
     <string name="runage_terrain">Terräng</string>
     <string name="runage_hybrid">Hybrid</string>
     <string name="runage_share_this_run">Dela detta uppdrag</string>
+    <string name="runage_challenge_completed_info">Grattis, du har klarat utmaningen. Fortsätt springa för extra erfarenhetspoäng.</string>
+    <string name="runage_begin_new_run">Påbörja ny runda</string>
+    <string name="runage_feed">Feed</string>
+    <string name="runage_quests">Uppdrag</string>
+    <string name="runage_target_distance">Måldistans:</string>
+    <string name="runage_duration_title">Avklara innan:</string>
+    <string name="runage_reward">Belöning:</string>
+    <string name="runage_stop">Stopp</string>
+    <string name="runage_start">Start</string>
+    <string name="runage_challenges">Utmaningar</string>
+    <string name="runage_start_running">Börja springa</string>
+    <string name="runage_challenge">Utmaning</string>
+    <string name="runage_start_challenge">Påbörja utmaning</string>
+    <string name="runage_stop_run">Avsluta runda</string>
+    <string name="runage_challenge_failed_first">Utmaning misslyckades. Med ditt nuvarande tempo var du</string>
+    <string name="runage_challenge_failed_ending">sekunder bakom målet. Fortsätt springa för att bli bättre och få mer erfarenhetspoäng.</string>
+    <string name="runage_run_completed">"Runda avklarad"</string>
+    <string name="runage_challenge_completed">Utmaning avklarad</string>
+    <string name="runage_reward_claimed">Belöning erhållen.</string>
+    <string name="runage_challenge_failed">Utmaning misslyckades</string>
 </resources>

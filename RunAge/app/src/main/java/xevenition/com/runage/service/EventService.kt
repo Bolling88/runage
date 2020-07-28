@@ -24,6 +24,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.BuildConfig
+import xevenition.com.runage.BuildConfig.*
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
@@ -196,7 +198,7 @@ class EventService : Service() {
                     distance,
                     valChallenge.distance
                 )
-                val failString = resourceUtil.getString(R.string.runage_challenge_failed)
+                val failString = resourceUtil.getString(R.string.runage_challenge_failed_first)
                 val failStringEnding =
                     resourceUtil.getString(R.string.runage_challenge_failed_ending)
                 feedbackHandler.speak("$failString $secondsBehindTarget $failStringEnding")
@@ -416,13 +418,9 @@ class EventService : Service() {
         return binder
     }
 
-    fun provideChallengeInfo(challenge: Challenge?) {
-
-    }
-
     companion object {
         const val NOTIFICATION_ID = 2345235
-        const val MIN_ACCURACY = 30
+        val MIN_ACCURACY = if(DEBUG) 60 else 30
         const val UPDATE_INTERVAL = 5000L
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }

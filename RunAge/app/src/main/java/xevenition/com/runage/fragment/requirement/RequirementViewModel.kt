@@ -49,6 +49,9 @@ class RequirementViewModel(
     private val _liveStar3Image = MutableLiveData<Drawable>()
     val liveStar3Image: LiveData<Drawable> = _liveStar3Image
 
+    private val _liveRewardTextColor = MutableLiveData<Int>()
+    val liveRewardTextColor: LiveData<Int> = _liveRewardTextColor
+
     init {
         val challenge = args.keyChallenge
         challenge?.let {
@@ -58,7 +61,6 @@ class RequirementViewModel(
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
             _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
             _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
-            _liveTextXp.postValue("${it.experience} ${resourceUtil.getString(R.string.runage_xp)}")
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
 
             when(args.keyStars){
@@ -66,21 +68,29 @@ class RequirementViewModel(
                     _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
+                    _liveTextXp.postValue("${it.experience} ${resourceUtil.getString(R.string.runage_xp)}")
                 }
                 1->{
                     _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
                     _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.grey1))
+                    _liveTextXp.postValue(resourceUtil.getString(R.string.runage_reward_claimed))
                 }
                 2->{
                     _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
                     _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
                     _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.grey1))
+                    _liveTextXp.postValue(resourceUtil.getString(R.string.runage_reward_claimed))
                 }
                 3->{
                     _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
                     _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
                     _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                    _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.grey1))
+                    _liveTextXp.postValue(resourceUtil.getString(R.string.runage_reward_claimed))
                 }
             }
         }

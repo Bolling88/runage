@@ -96,7 +96,7 @@
     <string name="runage_quests">Quests</string>
     <string name="runage_target_distance">Target distance:</string>
     <string name="runage_duration_title">Complete in:</string>
-    <string name="runage_reward">Additional rewards:</string>
+    <string name="runage_reward">Reward:</string>
     <string name="runage_stop">Stop</string>
     <string name="runage_start">Start</string>
     <string name="runage_challenges">Challenges</string>
@@ -104,6 +104,10 @@
     <string name="runage_challenge">Challenge</string>
     <string name="runage_start_challenge">Start challenge</string>
     <string name="runage_stop_run">Stop run</string>
-    <string name="runage_challenge_failed">Challenge failed. With your current pace you were</string>
+    <string name="runage_challenge_failed">Challenge failed</string>
+    <string name="runage_challenge_failed_first">Challenge failed. With your current pace you were</string>
     <string name="runage_challenge_failed_ending">seconds behind the target. Keep running to gain some more experience points and then try again.</string>
+    <string name="runage_run_completed">Run completed</string>
+    <string name="runage_challenge_completed">Challenge completed</string>
+    <string name="runage_reward_claimed">Reward claimed</string>
 </resources>

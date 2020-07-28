@@ -68,8 +68,15 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             (runStats.runningDuration.toDouble()/60).toInt()
         )
 
+        var totalStars = 0
+        for ((key, value) in userInfo.challengeScore) {
+            totalStars+= value
+        }
+
         saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_experience_single_run), runStats.xp.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_stars), totalStars.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong().times(1000))
 

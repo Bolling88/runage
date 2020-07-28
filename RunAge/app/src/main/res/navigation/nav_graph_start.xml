@@ -22,6 +22,11 @@
             android:name="key_quest_id"
             app:argType="integer"
             android:defaultValue="0" />
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
         <action
             android:id="@+id/action_summaryFragment_to_pathFragment"
             app:destination="@id/pathFragment" />
