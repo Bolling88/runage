@@ -171,9 +171,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_basic"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/durationTitle"
+            app:layout_constraintTop_toBottomOf="@+id/imageTimer2"
             app:srcCompat="@drawable/ic_timer"
             app:tint="@color/colorPrimary" />
 
@@ -185,7 +184,6 @@
             android:fontFamily="@font/majora"
             android:text="@{viewModel.liveTextTime1}"
             android:textColor="@color/colorPrimary"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/imageTimer"
             app:layout_constraintStart_toEndOf="@+id/imageTimer"
             app:layout_constraintTop_toTopOf="@+id/imageTimer"
@@ -195,7 +193,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/duration1"
             app:layout_constraintStart_toEndOf="@+id/duration1"
             app:layout_constraintTop_toTopOf="@+id/duration1"
@@ -209,9 +206,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_basic"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duration1"
+            app:layout_constraintTop_toBottomOf="@+id/imageTimer3"
             app:srcCompat="@drawable/ic_timer"
             app:tint="@color/colorPrimary" />
 
@@ -223,7 +219,6 @@
             android:fontFamily="@font/majora"
             android:text="@{viewModel.liveTextTime2}"
             android:textColor="@color/colorPrimary"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/imageTimer2"
             app:layout_constraintStart_toEndOf="@+id/imageTimer2"
             app:layout_constraintTop_toTopOf="@+id/imageTimer2"
@@ -234,7 +229,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/duration2"
             app:layout_constraintStart_toEndOf="@+id/duration2"
             app:layout_constraintTop_toTopOf="@+id/duration2"
@@ -245,7 +239,6 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/star1"
             app:layout_constraintStart_toEndOf="@+id/star1"
             app:layout_constraintTop_toTopOf="@+id/star1"
@@ -259,9 +252,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_basic"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/duration2"
+            app:layout_constraintTop_toBottomOf="@+id/durationTitle"
             app:srcCompat="@drawable/ic_timer"
             app:tint="@color/colorPrimary" />
 
@@ -273,7 +265,6 @@
             android:fontFamily="@font/majora"
             android:text="@{viewModel.liveTextTime3}"
             android:textColor="@color/colorPrimary"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/imageTimer3"
             app:layout_constraintStart_toEndOf="@+id/imageTimer3"
             app:layout_constraintTop_toTopOf="@+id/imageTimer3"
@@ -284,7 +275,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/duration3"
             app:layout_constraintStart_toEndOf="@+id/duration3"
             app:layout_constraintTop_toTopOf="@+id/duration3"
@@ -296,7 +286,6 @@
             android:id="@+id/star32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/star3"
             app:layout_constraintStart_toEndOf="@+id/star3"
             app:layout_constraintTop_toTopOf="@+id/star3"
@@ -307,14 +296,12 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
             app:layout_constraintBottom_toBottomOf="@+id/star32"
             app:layout_constraintStart_toEndOf="@+id/star32"
             app:layout_constraintTop_toTopOf="@+id/star32"
             app:srcCompat="@drawable/ic_star"
             app:tint="@color/colorPrimary"
             tools:ignore="MissingConstraints" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
             style="@style/ButtonStyle"
