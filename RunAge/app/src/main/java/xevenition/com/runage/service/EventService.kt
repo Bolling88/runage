@@ -28,6 +28,8 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
+import xevenition.com.runage.fragment.map.MapFragment.Companion.KEY_CHALLENGE
+import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
@@ -36,14 +38,12 @@ import xevenition.com.runage.util.*
 import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.math.sqrt
 
 
 class EventService : Service() {
 
+    private var challenge: Challenge? = null
     private var textToSpeech: TextToSpeech? = null
-
-    // private var wakeLock: PowerManager.WakeLock? = null
     private var activityType: Int = DetectedActivity.STILL
     private lateinit var currentQuest: Quest
     private var countdownFinished = false
@@ -56,6 +56,7 @@ class EventService : Service() {
     private var callback: EventCallback? = null
     private var runningTimerDisposable: Disposable? = null
     private var isMetric: Boolean = false
+    private var reportedQuestFailed = false
 
     interface EventCallback {
         fun onQuestCreated(id: Int)
@@ -105,6 +106,21 @@ class EventService : Service() {
         )
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        serviceIsRunning = true
+        val notification: Notification =
+            buildNotification(resourceUtil.getString(R.string.runage_empty_timer), "")
+        startForeground(NOTIFICATION_ID, notification)
+
+        if ((runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) && ::currentQuest.isInitialized) {
+            setUpRunningTimer(currentQuest.startTimeEpochSeconds)
+        }
+
+        challenge = intent?.extras?.getParcelable<Challenge>(KEY_CHALLENGE)
+
+        return START_STICKY
+    }
+
     private fun startInitialCountdown() {
         val count = 10
         val disposable = Observable.interval(0, 1, TimeUnit.SECONDS)
@@ -146,24 +162,46 @@ class EventService : Service() {
                 if (this::currentQuest.isInitialized) {
                     val duration = Instant.now().epochSecond - startTimeEpochSeconds
 
-                    val distance =
+                    val distance = currentQuest.totalDistance
+                    val distanceText =
                         "${resourceUtil.getString(R.string.runage_distance)}: ${runningUtil.getDistanceString(
-                            currentQuest.totalDistance.toInt()
+                            distance.toInt()
                         )}"
                     val calories = "${resourceUtil.getString(R.string.runage_calories)
                         .capitalize()}: ${currentQuest.calories}"
                     val pace =
                         "${resourceUtil.getString(R.string.runage_avg_pace)}: ${runningUtil.getPaceString(
                             duration,
-                            currentQuest.totalDistance,
+                            distance,
                             true
                         )}"
-                    updateNotification(it, "$distance \n$calories \n$pace")
+
+                    checkIfChallengeFailed(duration, distance)
+                    updateNotification(it, "$distanceText \n$calories \n$pace")
                 }
             }, {
                 Timber.e(it)
             })
         runningTimerDisposable?.let { compositeDisposable.add(it) }
+    }
+
+    private fun checkIfChallengeFailed(duration: Long, distance: Double) {
+        val valChallenge = challenge
+        if (valChallenge != null && !reportedQuestFailed) {
+            if (duration > valChallenge.time && distance < valChallenge.distance) {
+                //this means that the challenge have failed
+                reportedQuestFailed = true
+                val secondsBehindTarget = runningUtil.getSecondsBehindCheckpoint(
+                    duration,
+                    distance,
+                    valChallenge.distance
+                )
+                val failString = resourceUtil.getString(R.string.runage_challenge_failed)
+                val failStringEnding =
+                    resourceUtil.getString(R.string.runage_challenge_failed_ending)
+                feedbackHandler.speak("$failString $secondsBehindTarget $failStringEnding")
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -234,7 +272,7 @@ class EventService : Service() {
                 updateTotalDistance(newPoint)
 
                 if (shouldReport(currentQuest.totalDistance)) {
-                    feedbackHandler.reportCheckpoint(currentQuest, nextDistanceFeedback)
+                    feedbackHandler.reportCheckpoint(currentQuest, nextDistanceFeedback, challenge)
                     nextDistanceFeedback++
                 }
 
@@ -314,20 +352,6 @@ class EventService : Service() {
         locationUtil.requestLocationUpdates(locationRequest, locationCallback)
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        serviceIsRunning = true
-        val notification: Notification =
-            buildNotification(resourceUtil.getString(R.string.runage_empty_timer), "")
-
-        startForeground(NOTIFICATION_ID, notification)
-
-        if ((runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) && ::currentQuest.isInitialized) {
-            setUpRunningTimer(currentQuest.startTimeEpochSeconds)
-        }
-
-        return START_STICKY
-    }
-
     private fun buildNotification(title: String, content: String): Notification {
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
@@ -390,6 +414,10 @@ class EventService : Service() {
 
     override fun onBind(intent: Intent): IBinder {
         return binder
+    }
+
+    fun provideChallengeInfo(challenge: Challenge?) {
+
     }
 
     companion object {

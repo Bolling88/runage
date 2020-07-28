@@ -16,9 +16,6 @@ import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.*
 
 class RequirementViewModel(
-    private val gameServicesUtil: GameServicesUtil,
-    fireStoreHandler: FireStoreHandler,
-    private val accountUtil: AccountUtil,
     private val runningUtil: RunningUtil,
     resourceUtil: ResourceUtil,
     feedbackHandler: FeedbackHandler,
@@ -51,13 +48,6 @@ class RequirementViewModel(
 
     private val _liveStar3Image = MutableLiveData<Drawable>()
     val liveStar3Image: LiveData<Drawable> = _liveStar3Image
-
-    val observableOpenMenu = SingleLiveEvent<Unit>()
-
-    private val _observableProfileImage = MutableLiveData<Uri>()
-    val observableProfileImage: LiveData<Uri> = _observableProfileImage
-
-    val observableShowAchievements = SingleLiveEvent<Intent>()
 
     init {
         val challenge = args.keyChallenge
@@ -97,6 +87,6 @@ class RequirementViewModel(
     }
 
     fun onStartClicked(){
-        observableNavigateTo.postValue(RequirementFragmentDirections.actionRequirementFragmentToMapFragment())
+        observableNavigateTo.postValue(RequirementFragmentDirections.actionRequirementFragmentToMapFragment(args.keyChallenge))
     }
 }

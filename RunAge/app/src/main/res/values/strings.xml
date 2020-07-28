@@ -14,7 +14,8 @@
     <string name="unit_type">Unit type</string>
     <string name="metric">Metric (km, kg)</string>
     <string name="imperial">Imperial (mi, lb)</string>
-    <string name="runage_passed_info">Congratulations, you have now completed</string>
+    <string name="runage_passed_info">Checkpoint completed.</string>
+    <string name="runage_challenge_completed_info">Congratulations, you have completed the challenge. Keep running for extra experience points.</string>
     <string name="kilometer">kilometer</string>
     <string name="miles">miles</string>
     <string name="signin_other_error">Failed to sign in</string>
@@ -103,4 +104,6 @@
     <string name="runage_challenge">Challenge</string>
     <string name="runage_start_challenge">Start challenge</string>
     <string name="runage_stop_run">Stop run</string>
+    <string name="runage_challenge_failed">Challenge failed. With your current pace you were</string>
+    <string name="runage_challenge_failed_ending">seconds behind the target. Keep running to gain some more experience points and then try again.</string>
 </resources>

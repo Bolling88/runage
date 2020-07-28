@@ -28,6 +28,7 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
 import xevenition.com.runage.fragment.main.MainFragment
+import xevenition.com.runage.fragment.requirement.RequirementFragmentArgs
 import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.BitmapUtil
 import java.util.logging.Logger
@@ -36,6 +37,7 @@ import javax.inject.Inject
 
 class MapFragment : BaseFragment<MapViewModel>() {
 
+    private var args: MapFragmentArgs? = null
     private var backPressCallback: OnBackPressedCallback? = null
     private var currentQuestId: Int = -1
     private var polyLine: Polyline? = null
@@ -84,7 +86,12 @@ class MapFragment : BaseFragment<MapViewModel>() {
         }
         backPressCallback?.isEnabled = true
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
-        val factory = MapViewModelFactory(getApplication())
+
+        //arguments might be null if coming from the start fragment
+        arguments?.let {
+            args = MapFragmentArgs.fromBundle(it)
+        }
+        val factory = MapViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(MapViewModel::class.java)
         Timber.d("Viewmodel created!")
     }
@@ -236,6 +243,9 @@ class MapFragment : BaseFragment<MapViewModel>() {
 
     private fun startEventService() {
         val myService = Intent(activity, EventService::class.java)
+        args?.keyChallenge?.let {
+            myService.putExtra(KEY_CHALLENGE, it)
+        }
         ContextCompat.startForegroundService(requireContext(), myService)
         bindToService()
     }
@@ -313,6 +323,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     }
 
     companion object {
+        const val KEY_CHALLENGE = "KEY_CHALLENGE"
         fun newInstance(): MapFragment {
             Timber.d("New instance of map fragment created")
             return MapFragment()

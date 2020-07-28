@@ -32,7 +32,8 @@ class MapViewModel(
     private val locationUtil: LocationUtil,
     private val saveUtil: SaveUtil,
     private val runningUtil: RunningUtil,
-    private val resourceUtil: ResourceUtil
+    private val resourceUtil: ResourceUtil,
+    private val args: MapFragmentArgs?
 ) : BaseViewModel() {
 
     private var questId: Int = -1
@@ -80,6 +81,18 @@ class MapViewModel(
     private val _liveImageLock = MutableLiveData<Drawable>()
     val liveImageLock: LiveData<Drawable> = _liveImageLock
 
+    private val _liveTextDistance = MutableLiveData<String>()
+    val liveTextDistance : LiveData<String> = _liveTextDistance
+
+    private val _liveTextTime1 = MutableLiveData<String>()
+    val liveTextTime1 : LiveData<String> = _liveTextTime1
+
+    private val _liveTextTime2 = MutableLiveData<String>()
+    val liveTextTime2 : LiveData<String> = _liveTextTime2
+
+    private val _liveTextTime3 = MutableLiveData<String>()
+    val liveTextTime3 : LiveData<String> = _liveTextTime3
+
     val observableClearMap = SingleLiveEvent<Unit>()
     val observableStopRun = SingleLiveEvent<Unit>()
 
@@ -89,6 +102,14 @@ class MapViewModel(
         _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.red))
         _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
         _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
+
+        args?.keyChallenge?.let {
+            _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
+            _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
+        }
+
         resetTimers()
     }
 

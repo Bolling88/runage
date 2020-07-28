@@ -15,20 +15,14 @@ class RequirementViewModelFactory @Inject constructor(app: MainApplication, priv
     }
 
     @Inject
-    lateinit var accountUtil: AccountUtil
-    @Inject
     lateinit var resourceUtil: ResourceUtil
     @Inject
     lateinit var runningUtil: RunningUtil
     @Inject
     lateinit var feedbackHandler: FeedbackHandler
-    @Inject
-    lateinit var fireStoreHandler: FireStoreHandler
-    @Inject
-    lateinit var gameServicesUtil: GameServicesUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RequirementViewModel(gameServicesUtil, fireStoreHandler, accountUtil, runningUtil, resourceUtil, feedbackHandler, args) as T
+        return RequirementViewModel(runningUtil, resourceUtil, feedbackHandler, args) as T
     }
 }

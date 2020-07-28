@@ -58,6 +58,12 @@
             app:destination="@id/summaryFragment"
             app:popUpTo="@+id/startFragment"
             app:popUpToInclusive="false"/>
+
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
     </fragment>
     <fragment
         android:id="@+id/requirementFragment"

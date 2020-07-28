@@ -38,20 +38,31 @@ class RunningUtil @Inject constructor(
     }
 
     fun getDistanceString(distance: Int): String {
-        return if(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
-            if(distance < 100){
+        return if (saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
+            if (distance < 100) {
                 "$distance m"
-            }else{
+            } else {
                 Timber.d("Distance: $distance")
-                "${"%.2f".format(distance.toDouble()/1000)} ${resourceUtil.getString(R.string.runage_km)}"
+                "${"%.2f".format(distance.toDouble() / 1000)} ${resourceUtil.getString(R.string.runage_km)}"
             }
-        }else{
-            if(distance < 160.9344){
+        } else {
+            if (distance < 160.9344) {
                 "$distance m"
-            }else{
-                "${"%.2f".format(distance.toDouble()/1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
+            } else {
+                "${"%.2f".format(distance.toDouble() / 1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
             }
         }
+    }
+
+    fun getSecondsBehindCheckpoint(
+        durationInSeconds: Long,
+        distanceInMeters: Double,
+        targetDistance: Int
+    ): Int {
+        val metersLeft: Double = targetDistance - distanceInMeters
+        val metersPerSecond: Double = distanceInMeters / durationInSeconds.toDouble()
+        val secondsBehind = metersLeft / metersPerSecond
+        return secondsBehind.toInt()
     }
 
     fun getPaceString(
