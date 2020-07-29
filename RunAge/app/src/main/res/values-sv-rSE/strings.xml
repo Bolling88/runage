@@ -39,7 +39,7 @@
     <string name="runage_close">Stäng</string>
     <string name="runage_quest_completed">Uppdrag slutfört</string>
     <string name="runage_quest_failed">Uppdrag misslyckades</string>
-    <string name="runage_completed_runs">Avklarade uppdrag</string>
+    <string name="runage_completed_runs">Avklarade rundor</string>
     <string name="runage_home">Hem</string>
     <string name="runage_sign_in">Logga in</string>
     <string name="runage_no_completed_runs">Inga avklarade uppdrag</string>

@@ -70,4 +70,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_most_stars" translatable="false">CgkI4-yzqpMZEAIQJg</string>
     <!-- leaderboard Most Experience Single Run -->
     <string name="leaderboard_most_experience_single_run" translatable="false">CgkI4-yzqpMZEAIQJw</string>
+    <!-- leaderboard Most Challenges Completed -->
+    <string name="leaderboard_most_challenges_completed" translatable="false">CgkI4-yzqpMZEAIQKA</string>
 </resources>

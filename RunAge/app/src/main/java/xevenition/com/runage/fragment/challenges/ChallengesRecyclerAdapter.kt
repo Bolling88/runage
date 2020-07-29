@@ -54,8 +54,8 @@ class QuestsRecyclerAdapter(
                 imageStar3.visibility = View.VISIBLE
                 textLevel.visibility = View.VISIBLE
                 imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                imageStar2.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                imageStar3.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
                 textLevel.text = item.level.toString()
                 imageLock.visibility = View.GONE
                 isLocked = false
@@ -77,8 +77,8 @@ class QuestsRecyclerAdapter(
                     imageStar3.visibility = View.VISIBLE
                     textLevel.visibility = View.VISIBLE
                     imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                    imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                    imageStar1.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    imageStar2.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                    imageStar3.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     textLevel.text = item.level.toString()
                     imageLock.visibility = View.GONE
                     when (score) {

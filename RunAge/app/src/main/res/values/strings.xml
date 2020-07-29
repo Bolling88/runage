@@ -41,7 +41,7 @@
     <string name="runage_close">Close</string>
     <string name="runage_quest_completed">Quest completed</string>
     <string name="runage_quest_failed">Quest failed</string>
-    <string name="runage_completed_runs">Completed Quests</string>
+    <string name="runage_completed_runs">Completed Runs</string>
     <string name="runage_home">Home</string>
     <string name="runage_sign_in">Sign in</string>
     <string name="runage_no_completed_runs">No completed runs</string>
@@ -111,4 +111,6 @@
     <string name="runage_challenge_completed">Challenge completed</string>
     <string name="runage_reward_claimed">Reward claimed</string>
     <string name="runage_cheating_detected">Cheating detected</string>
+    <string name="runage_runs">Runs</string>
+    <string name="runage_map">Map</string>
 </resources>

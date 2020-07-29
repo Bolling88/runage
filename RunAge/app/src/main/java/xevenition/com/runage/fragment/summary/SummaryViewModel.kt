@@ -264,6 +264,7 @@ class SummaryViewModel(
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
             }
             setUpFailUi()
+            _liveButtonEnabled.postValue(true)
             //don't update user stats in this case
         } else {
             if (challenge != null) {
@@ -279,6 +280,7 @@ class SummaryViewModel(
                     ) {
                         //Cheating detected!
                         setUpFailUi()
+                        challengeStars = 0
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                         _liveCheatingTextVisibility.postValue(View.VISIBLE)
@@ -407,6 +409,7 @@ class SummaryViewModel(
     }
 
     fun onSaveProgressClicked() {
+        Timber.d("Save clicked")
         if (quest?.locations?.size ?: 0 < 2 || (challenge != null && challengeStars == 0)) {
             quest?.let {
                 deleteAndExit(it)

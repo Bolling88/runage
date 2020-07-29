@@ -78,6 +78,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience_single_run), runStats.xp.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_stars), totalStars.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_challenges_completed), userInfo.challengeScore.size.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong().times(1000))
 
         //Long runner
