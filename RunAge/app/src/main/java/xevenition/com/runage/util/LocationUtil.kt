@@ -41,12 +41,11 @@ class LocationUtil @Inject constructor(private val app: Application) {
     fun kalmarFilter(location: Location, runStartTimeInMillis: Long): Boolean {
         /* Kalman Filter */
         /* Kalman Filter */
-        val Qvalue: Float
 
         val elapsedTimeInMillis: Long =
             (location.elapsedRealtimeNanos / 1000000) - runStartTimeInMillis
 
-        Qvalue = if (currentSpeed == 0.0f) {
+        val qValue: Float = if (currentSpeed == 0.0f) {
             3.0f //3 meters per second
         } else {
             currentSpeed // meters per second
@@ -57,7 +56,7 @@ class LocationUtil @Inject constructor(private val app: Application) {
             location.longitude,
             location.accuracy,
             elapsedTimeInMillis,
-            Qvalue
+            qValue
         )
         val predictedLat: Double = kalmanFilter.getLat()
         val predictedLng: Double = kalmanFilter.getLng()

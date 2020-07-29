@@ -4,7 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
+import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed

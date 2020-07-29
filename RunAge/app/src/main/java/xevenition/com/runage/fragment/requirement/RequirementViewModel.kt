@@ -1,18 +1,10 @@
 package xevenition.com.runage.fragment.requirement
 
-import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
-import timber.log.Timber
-import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.start.StartFragmentDirections
-import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.*
 
 class RequirementViewModel(

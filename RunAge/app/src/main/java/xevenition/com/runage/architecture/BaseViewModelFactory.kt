@@ -8,4 +8,4 @@ import xevenition.com.runage.fragment.settings.SettingsViewModel
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
-abstract class BaseViewModelFactory()  : ViewModelProvider.NewInstanceFactory()
+abstract class BaseViewModelFactory : ViewModelProvider.NewInstanceFactory()

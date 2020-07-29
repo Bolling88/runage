@@ -7,8 +7,8 @@ import xevenition.com.runage.util.ResourceUtil
 
 
 class RuleViewModel(
-    private val gameServicesUtil: GameServicesUtil,
-    private val resourceUtil: ResourceUtil
+      gameServicesUtil: GameServicesUtil,
+      resourceUtil: ResourceUtil
 ) : BaseViewModel() {
     init {
         gameServicesUtil.unlockAchievement(resourceUtil.getString(R.string.achievement_ruler))
