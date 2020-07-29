@@ -9,6 +9,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import timber.log.Timber
 import xevenition.com.runage.R
+import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.room.entity.Quest
 import java.time.Instant
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class FeedbackHandler @Inject constructor(
     private var isMetric: Boolean = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
     private var checkPointTimeStamp = 0L
 
-    fun reportCheckpoint(quest: Quest, nextDistanceFeedback: Int) {
+    fun reportCheckpoint(quest: Quest, nextDistanceFeedback: Int, challenge: Challenge?) {
 
         //if we have not passed any checkpoint, the first checkpoint was at the quest start
         if (checkPointTimeStamp == 0L) {
@@ -33,13 +34,23 @@ class FeedbackHandler @Inject constructor(
         }
 
         val currentTimeMillis = Instant.now().epochSecond
-        val initialValue = currentTimeMillis - quest.startTimeEpochSeconds
+        val duration = currentTimeMillis - quest.startTimeEpochSeconds
         val timeSinceLastCheckpoint = currentTimeMillis - checkPointTimeStamp
         checkPointTimeStamp = currentTimeMillis
 
-        val reportString = getDistanceFeedback(nextDistanceFeedback) + getDurationFeedback(
+        val reportChallengeCompleted = if (challenge != null) {
+            if (challenge.distance == nextDistanceFeedback) {
+                duration <= challenge.time
+            } else {
+                false
+            }
+        } else {
+            false
+        }
+
+        val reportString = getDistanceFeedback(nextDistanceFeedback, reportChallengeCompleted) + getDurationFeedback(
             resourceUtil.getString(R.string.runage_duration),
-            initialValue
+            duration
         ) + getCaloriesFeedback(quest) + getDurationFeedback(
             resourceUtil.getString(R.string.runage_pace),
             timeSinceLastCheckpoint
@@ -48,8 +59,14 @@ class FeedbackHandler @Inject constructor(
         speak(reportString)
     }
 
-    private fun getDistanceFeedback(nextDistanceFeedback: Int): String {
-        return "${resourceUtil.getString(R.string.runage_passed_info)} " +
+    private fun getDistanceFeedback(nextDistanceFeedback: Int, reportChallengeCompleted: Boolean): String {
+        val initialSpeak = if(reportChallengeCompleted){
+            resourceUtil.getString(R.string.runage_challenge_completed_info)
+        }else{
+            resourceUtil.getString(R.string.runage_passed_info)
+        }
+        return initialSpeak +
+                " ${resourceUtil.getString(R.string.runage_distance)} " +
                 "$nextDistanceFeedback " +
                 if (isMetric) {
                     if (nextDistanceFeedback == 1) {
@@ -111,17 +128,18 @@ class FeedbackHandler @Inject constructor(
         Timber.d("Speaking $string")
         val audioManager =
             app.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
-            .setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                    .build()
-            )
-            .setAcceptsDelayedFocusGain(true)
-            .setOnAudioFocusChangeListener {
-                //Handle Focus Change
-            }.build()
+        val audioFocusRequest =
+            AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+                .setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ASSISTANCE_NAVIGATION_GUIDANCE)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build()
+                )
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener {
+                    //Handle Focus Change
+                }.build()
 
         audioManager.requestAudioFocus(audioFocusRequest)
 

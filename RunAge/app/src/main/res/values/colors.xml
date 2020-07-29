@@ -9,6 +9,8 @@
     <color name="grey2">#616161</color>
     <color name="white">#ffffff</color>
     <color name="white_transparent">#90ffffff</color>
+    <color name="white_transparent_2">#CCffffff</color>
     <color name="black">#000000</color>
+    <color name="purple">#aa00ff</color>
     <color name="red">#f44336</color>
 </resources>

@@ -6,7 +6,7 @@
         <item
             android:id="@+id/mainNavigation"
             android:icon="@drawable/ic_run_blue"
-            android:title="@string/runage_home" />
+            android:title="@string/runage_start" />
     </group>
 
     <group
@@ -26,7 +26,7 @@
         <item
             android:id="@+id/leaderboard"
             android:icon="@drawable/ic_trophy"
-            android:title="@string/runage_leaderboard" />
+            android:title="@string/runage_leaderboards" />
     </group>
 
     <group

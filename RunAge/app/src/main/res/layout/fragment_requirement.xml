@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.requirement.RequirementViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_challenge"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="220dip"
+                    android:layout_marginTop="25dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="false"
+                    app:lottie_rawRes="@raw/lottie_challenge"
+                    app:lottie_speed="1.2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp1"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_marginTop="200dip"
+                    app:layout_constraintEnd_toStartOf="@+id/starComp2"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@{viewModel.liveStar1Image}"
+                    app:tint="@color/colorPrimary" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp2"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    app:layout_constraintBottom_toBottomOf="@+id/starComp1"
+                    app:layout_constraintEnd_toStartOf="@+id/starComp3"
+                    app:layout_constraintStart_toEndOf="@+id/starComp1"
+                    app:layout_constraintTop_toTopOf="@+id/starComp1"
+                    app:srcCompat="@{viewModel.liveStar2Image}"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp3"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    app:layout_constraintBottom_toBottomOf="@+id/starComp2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/starComp2"
+                    app:layout_constraintTop_toTopOf="@+id/starComp2"
+                    app:srcCompat="@{viewModel.liveStar3Image}"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@{viewModel.liveTextLevel}"
+                    android:textSize="40sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/starComp1"
+                    app:textAllCaps="true"
+                    tools:text="Challenge 28" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/distanceTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@string/runage_target_distance"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textLevel"
+                    app:textAllCaps="true" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textTargetDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora_bold"
+                    android:text="@{viewModel.liveTextDistance}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="25sp"
+                    app:layout_constraintEnd_toEndOf="@+id/distanceTitle"
+                    app:layout_constraintStart_toStartOf="@+id/distanceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/distanceTitle"
+                    tools:text="1 km | 0.69 mi" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/durationTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@string/runage_duration_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textTargetDistance"
+                    app:textAllCaps="true" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageTimer2"
+                    app:srcCompat="@drawable/ic_timer"
+                    app:tint="@color/colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/duration1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextTime1}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageTimer"
+                    app:layout_constraintStart_toEndOf="@+id/imageTimer"
+                    app:layout_constraintTop_toTopOf="@+id/imageTimer"
+                    tools:text="00:08:00" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration1"
+                    app:layout_constraintStart_toEndOf="@+id/duration1"
+                    app:layout_constraintTop_toTopOf="@+id/duration1"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageTimer2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageTimer3"
+                    app:srcCompat="@drawable/ic_timer"
+                    app:tint="@color/colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/duration2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextTime2}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageTimer2"
+                    app:layout_constraintStart_toEndOf="@+id/imageTimer2"
+                    app:layout_constraintTop_toTopOf="@+id/imageTimer2"
+                    tools:text="00:07:40" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration2"
+                    app:layout_constraintStart_toEndOf="@+id/duration2"
+                    app:layout_constraintTop_toTopOf="@+id/duration2"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/star1"
+                    app:layout_constraintStart_toEndOf="@+id/star1"
+                    app:layout_constraintTop_toTopOf="@+id/star1"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imageTimer3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/durationTitle"
+                    app:srcCompat="@drawable/ic_timer"
+                    app:tint="@color/colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/duration3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextTime3}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageTimer3"
+                    app:layout_constraintStart_toEndOf="@+id/imageTimer3"
+                    app:layout_constraintTop_toTopOf="@+id/imageTimer3"
+                    tools:text="00:07:20" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration3"
+                    app:layout_constraintStart_toEndOf="@+id/duration3"
+                    app:layout_constraintTop_toTopOf="@+id/duration3"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/star32"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/star3"
+                    app:layout_constraintStart_toEndOf="@+id/star3"
+                    app:layout_constraintTop_toTopOf="@+id/star3"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/star32"
+                    app:layout_constraintStart_toEndOf="@+id/star32"
+                    app:layout_constraintTop_toTopOf="@+id/star32"
+                    app:srcCompat="@drawable/ic_star"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/rewardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@string/runage_reward"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageTimer"
+                    app:textAllCaps="true" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextXp}"
+                    android:textColor="@{viewModel.liveRewardTextColor}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/rewardTitle"
+                    tools:text="100 XP" />
+
+                <View
+                    app:layout_constraintTop_toBottomOf="@+id/textReward"
+                    android:layout_width="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="200dip" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_white"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:animateLayoutChanges="true"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:onClick="@{()-> viewModel.onStartClicked()}"
+                android:text="@string/runage_start_challenge" />
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

@@ -23,9 +23,10 @@
                 android:layout_height="wrap_content">
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animation"
+                    android:id="@+id/animationSuccess"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -33,6 +34,19 @@
                     app:lottie_loop="false"
                     app:lottie_rawRes="@raw/lottie_victory"
                     app:lottie_scale="1.5" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animationFail"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/lottie_fail"
+                    app:lottie_scale="1" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/animation2"
@@ -48,17 +62,75 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textQuest"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/azonix"
                     android:gravity="center"
                     android:text="@{viewModel.liveTextTitle}"
                     android:textColor="@{viewModel.liveTimerColor}"
                     android:textSize="40sp"
+                    app:textAllCaps="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/animation"
+                    app:layout_constraintTop_toBottomOf="@+id/animationFail"
                     tools:text="@string/runage_quest_completed" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textCheating"
+                    style="@style/MainFontStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="@{viewModel.liveCheatingTextVisibility}"
+                    android:text="@string/runage_cheating_detected"
+                    android:textColor="@color/red"
+                    android:textSize="30sp"
+                    app:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textQuest"/>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp1"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:visibility="@{viewModel.liveStarVisibility}"
+                    app:layout_constraintEnd_toStartOf="@+id/starComp2"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textCheating"
+                    app:srcCompat="@{viewModel.liveStar1Image}"
+                    app:tint="@color/colorPrimary" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp2"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:visibility="@{viewModel.liveStarVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@+id/starComp1"
+                    app:layout_constraintEnd_toStartOf="@+id/starComp3"
+                    app:layout_constraintStart_toEndOf="@+id/starComp1"
+                    app:layout_constraintTop_toTopOf="@+id/starComp1"
+                    app:srcCompat="@{viewModel.liveStar2Image}"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/starComp3"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:visibility="@{viewModel.liveStarVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@+id/starComp2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/starComp2"
+                    app:layout_constraintTop_toTopOf="@+id/starComp2"
+                    app:srcCompat="@{viewModel.liveStar3Image}"
+                    app:tint="@color/colorPrimary"
+                    tools:ignore="MissingConstraints" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textCounter"
@@ -72,7 +144,7 @@
                     android:textSize="80sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textQuest"
+                    app:layout_constraintTop_toBottomOf="@+id/starComp1"
                     tools:text="00:00:00" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -152,11 +224,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textExperienceTitle"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="40dip"
-                    android:fontFamily="@font/azonix"
                     android:text="@string/runage_experience_gained"
                     android:textColor="@color/grey2"
                     android:textSize="@dimen/textSizeNormal"
@@ -166,11 +238,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textExperience"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextExperience}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/textSizeHuge"
@@ -181,11 +253,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textActivityTitle"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_basic"
-                    android:fontFamily="@font/azonix"
                     android:text="@string/runage_activity_time_spent_on"
                     android:textColor="@color/grey2"
                     android:textSize="@dimen/textSizeNormal"
@@ -195,11 +267,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textRunning"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_basic"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextRunningPercentage}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/textSizeNormal"
@@ -227,11 +299,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textWalking"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextWalkingPercentage}"
                     android:textColor="@color/colorWalkingBlue"
                     android:textSize="@dimen/textSizeNormal"
@@ -259,11 +331,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textBicycling"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextBicyclingPercentage}"
                     android:textColor="@color/colorBicycleBlue"
                     android:textSize="@dimen/textSizeNormal"
@@ -290,11 +362,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textStill"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextStillPercentage}"
                     android:textColor="@color/grey2"
                     android:textSize="@dimen/textSizeNormal"
@@ -321,11 +393,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textDriving"
+                    style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:fontFamily="@font/azonix"
                     android:text="@{viewModel.liveTextDrivingPercentage}"
                     android:textColor="@color/red"
                     android:textSize="@dimen/textSizeNormal"
@@ -377,10 +449,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:background="@drawable/gradient_white"
             android:orientation="vertical"
-            android:paddingStart="@dimen/margin_basic"
-            android:paddingEnd="@dimen/margin_basic"
+            android:paddingBottom="@dimen/margin_basic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -393,8 +465,7 @@
                 android:id="@+id/buttonSave"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_margin="0dip"
-                android:layout_marginBottom="0dip"
+                android:backgroundTint="@{viewModel.liveSaveButtonBackgroundColor}"
                 android:clickable="@{viewModel.liveButtonEnabled}"
                 android:enabled="@{viewModel.liveButtonEnabled}"
                 android:onClick="@{()-> viewModel.onSaveProgressClicked()}"
@@ -404,35 +475,35 @@
                 android:id="@+id/buttonDelete"
                 style="@style/ButtonStyleDestructive"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/margin_basic"
                 android:clickable="@{viewModel.liveButtonEnabled}"
                 android:enabled="@{viewModel.liveButtonEnabled}"
                 android:onClick="@{()-> viewModel.onDeleteClicked()}"
-                android:text="@string/runage_delete_run" />
+                android:text="@string/runage_delete_run"
+                android:visibility="@{viewModel.liveDeleteButtonVisibility}" />
         </LinearLayout>
 
         <View
             android:layout_width="0dip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="0dip"
             android:background="@color/white_transparent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:clickable="true"
             android:focusable="true"
             android:visibility="@{viewModel.liveLoadingVisibility}"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="0dip" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/progress"
             style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.liveLoadingVisibility}"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="@{viewModel.liveLoadingVisibility}"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

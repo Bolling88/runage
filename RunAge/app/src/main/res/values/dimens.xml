@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_small">10dip</dimen>
+    <dimen name="margin_little">15dip</dimen>
     <dimen name="margin_basic">20dip</dimen>
     <dimen name="textSizeBig">18sp</dimen>
     <dimen name="textSizeHuge">24sp</dimen>

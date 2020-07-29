@@ -177,4 +177,10 @@ class RunningTimerTest{
             true
         }
     }
+
+    @Test
+    fun testSecondsBehind1(){
+        val secondsBehind = runningUtil.getSecondsBehindCheckpoint(480, 1500.0, 2000)
+        assertEquals(160, secondsBehind)
+    }
 }

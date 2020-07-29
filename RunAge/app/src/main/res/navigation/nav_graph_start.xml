@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/startFragment">
+
+
+    <fragment
+        android:id="@+id/challengeFragment"
+        android:name="xevenition.com.runage.fragment.challenges.QuestsFragment"
+        android:label="challengeFragment">
+        <action
+            android:id="@+id/action_challengeFragment_to_requirementFragment"
+            app:destination="@id/requirementFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/summaryFragment"
+        android:name="xevenition.com.runage.fragment.summary.SummaryFragment"
+        android:label="SummaryFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
+        <action
+            android:id="@+id/action_summaryFragment_to_pathFragment"
+            app:destination="@id/pathFragment" />
+        <action
+            android:id="@+id/action_summaryFragment_to_shareFragment"
+            app:destination="@id/shareFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/pathFragment"
+        android:name="xevenition.com.runage.fragment.path.PathFragment"
+        android:label="PathFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/shareFragment"
+        android:name="xevenition.com.runage.fragment.share.ShareFragment"
+        android:label="ShareFragment" >
+        <argument
+            android:name="key_quest_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="xevenition.com.runage.fragment.map.MapFragment"
+        android:label="MapFragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_summaryFragment"
+            app:destination="@id/summaryFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="false"/>
+
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
+    </fragment>
+    <fragment
+        android:id="@+id/requirementFragment"
+        android:name="xevenition.com.runage.fragment.requirement.RequirementFragment"
+        android:label="@string/runage_challenge" >
+        <argument
+            android:name="key_stars"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="key_challenge"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="xevenition.com.runage.model.Challenge" />
+        <action
+            android:id="@+id/action_requirementFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="xevenition.com.runage.fragment.start.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+
+</navigation>

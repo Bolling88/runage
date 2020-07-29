@@ -1,16 +1,10 @@
 package xevenition.com.runage.fragment.permission
 
-import android.os.Build
-import android.view.View
 import android.widget.CompoundButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
-import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.AccountUtil
-import xevenition.com.runage.util.ResourceUtil
-import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
 class PermissionViewModel @Inject constructor() : BaseViewModel() {
@@ -32,7 +26,7 @@ class PermissionViewModel @Inject constructor() : BaseViewModel() {
         observableNavigateTo.postValue(PermissionFragmentDirections.actionPermissionFragmentToMainFragment())
     }
 
-    fun onActivityCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
+    fun onActivityCheckChanged(@Suppress("UNUSED_PARAMETER") buttonView: CompoundButton, isChecked: Boolean) {
         if (activityOn != isChecked) {
             activityOn = isChecked
             if (isChecked) {
@@ -43,6 +37,7 @@ class PermissionViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onLocationCheckChanged(buttonView: CompoundButton, isChecked: Boolean) {
         if (locationOn != isChecked) {
             locationOn = isChecked

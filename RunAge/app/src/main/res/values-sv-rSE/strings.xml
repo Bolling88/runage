@@ -13,7 +13,7 @@
     <string name="unit_type">Enhetstyp</string>
     <string name="metric">Metrisk (km, kg)</string>
     <string name="imperial">Imperisk (mi, lb)</string>
-    <string name="runage_passed_info">Grattis, du har nu avklarat</string>
+    <string name="runage_passed_info">"Checkpoint passerad. "</string>
     <string name="kilometer">kilometer</string>
     <string name="miles">engelska mil</string>
     <string name="signin_other_error">Inloggning misslyckades</string>
@@ -39,7 +39,7 @@
     <string name="runage_close">Stäng</string>
     <string name="runage_quest_completed">Uppdrag slutfört</string>
     <string name="runage_quest_failed">Uppdrag misslyckades</string>
-    <string name="runage_completed_runs">Avklarade uppdrag</string>
+    <string name="runage_completed_runs">Avklarade rundor</string>
     <string name="runage_home">Hem</string>
     <string name="runage_sign_in">Logga in</string>
     <string name="runage_no_completed_runs">Inga avklarade uppdrag</string>
@@ -48,8 +48,8 @@
     <string name="runage_driving">Körande</string>
     <string name="runage_bicycling">Cyklande</string>
     <string name="runage_still">Stilla</string>
-    <string name="runage_level">Nivå</string>
-    <string name="runage_leaderboard">Topplista</string>
+    <string name="runage_level">Level</string>
+    <string name="runage_leaderboards">Topplistor</string>
     <string name="runage_achievements">Prestationer</string>
     <string name="runage_sign_out">Logga ut</string>
     <string name="runage_your_weight">Din vikt</string>
@@ -88,4 +88,24 @@
     <string name="runage_terrain">Terräng</string>
     <string name="runage_hybrid">Hybrid</string>
     <string name="runage_share_this_run">Dela detta uppdrag</string>
+    <string name="runage_challenge_completed_info">Grattis, du har klarat utmaningen. Fortsätt springa för extra erfarenhetspoäng.</string>
+    <string name="runage_begin_new_run">Påbörja ny runda</string>
+    <string name="runage_feed">Feed</string>
+    <string name="runage_quests">Uppdrag</string>
+    <string name="runage_target_distance">Måldistans:</string>
+    <string name="runage_duration_title">Avklara innan:</string>
+    <string name="runage_reward">Belöning:</string>
+    <string name="runage_stop">Stopp</string>
+    <string name="runage_start">Start</string>
+    <string name="runage_challenges">Utmaningar</string>
+    <string name="runage_start_running">Börja springa</string>
+    <string name="runage_challenge">Utmaning</string>
+    <string name="runage_start_challenge">Påbörja utmaning</string>
+    <string name="runage_stop_run">Avsluta runda</string>
+    <string name="runage_challenge_failed_first">Utmaning misslyckades. Med ditt nuvarande tempo var du</string>
+    <string name="runage_challenge_failed_ending">sekunder bakom målet. Fortsätt springa för att bli bättre och få mer erfarenhetspoäng.</string>
+    <string name="runage_run_completed">"Runda avklarad"</string>
+    <string name="runage_challenge_completed">Utmaning avklarad</string>
+    <string name="runage_reward_claimed">Belöning erhållen.</string>
+    <string name="runage_challenge_failed">Utmaning misslyckades</string>
 </resources>

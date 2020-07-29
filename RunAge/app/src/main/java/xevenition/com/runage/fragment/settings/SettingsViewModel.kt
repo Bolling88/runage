@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.splash.SplashFragmentDirections
 import xevenition.com.runage.util.SaveUtil
 
 class SettingsViewModel(

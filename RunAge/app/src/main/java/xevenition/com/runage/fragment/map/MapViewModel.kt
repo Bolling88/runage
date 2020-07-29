@@ -1,6 +1,8 @@
 package xevenition.com.runage.fragment.map
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bokus.play.util.SingleLiveEvent
@@ -30,16 +32,19 @@ class MapViewModel(
     private val locationUtil: LocationUtil,
     private val saveUtil: SaveUtil,
     private val runningUtil: RunningUtil,
-    private val resourceUtil: ResourceUtil
+    private val resourceUtil: ResourceUtil,
+    private val args: MapFragmentArgs?
 ) : BaseViewModel() {
 
+    private var questId: Int = -1
     private var currentPath: MutableList<LatLng> = mutableListOf()
     private var runningTimerDisposable: Disposable? = null
     private var questDisposable: Disposable? = null
+    private var isLocked = true
 
     private val _observableAnimateMapPosition = MutableLiveData<CameraUpdate>()
     val observableAnimateMapPosition: LiveData<CameraUpdate> = _observableAnimateMapPosition
-    
+
     private val _observableUserMarkerPosition = MutableLiveData<LatLng>()
     val observableUserMarkerPosition: LiveData<LatLng> = _observableUserMarkerPosition
 
@@ -61,9 +66,58 @@ class MapViewModel(
     private val _livePace = MutableLiveData<String>()
     val livePace: LiveData<String> = _livePace
 
+    private val _liveButtonClickable = MutableLiveData<Boolean>()
+    val liveButtonClickable: LiveData<Boolean> = _liveButtonClickable
+
+    private val _liveLockButtonIconTint = MutableLiveData<Int>()
+    val liveLockButtonIconTint: LiveData<Int> = _liveLockButtonIconTint
+
+    private val _liveLockButtonBackgroundTint = MutableLiveData<Int>()
+    val liveLockButtonBackgroundTint: LiveData<Int> = _liveLockButtonBackgroundTint
+
+    private val _liveFabVisibility = MutableLiveData<Int>()
+    val liveFabVisibility: LiveData<Int> = _liveFabVisibility
+
+    private val _liveImageLock = MutableLiveData<Drawable>()
+    val liveImageLock: LiveData<Drawable> = _liveImageLock
+
+    private val _liveTextDistance = MutableLiveData<String>()
+    val liveTextDistance: LiveData<String> = _liveTextDistance
+
+    private val _liveTextTime1 = MutableLiveData<String>()
+    val liveTextTime1: LiveData<String> = _liveTextTime1
+
+    private val _liveTextTime2 = MutableLiveData<String>()
+    val liveTextTime2: LiveData<String> = _liveTextTime2
+
+    private val _liveTextTime3 = MutableLiveData<String>()
+    val liveTextTime3: LiveData<String> = _liveTextTime3
+
+    private val _liveCountDownVisibility = MutableLiveData<Int>()
+    val liveCountDownVisibility: LiveData<Int> = _liveCountDownVisibility
+
+    private val _liveChallengeInfoVisibility = MutableLiveData<Int>()
+    val liveChallengeInfoVisibility: LiveData<Int> = _liveChallengeInfoVisibility
+
     val observableClearMap = SingleLiveEvent<Unit>()
+    val observableStopRun = SingleLiveEvent<Unit>()
 
     init {
+        _liveButtonClickable.postValue(false)
+        _liveFabVisibility.postValue(View.VISIBLE)
+        _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.red))
+        _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
+        _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
+        _liveChallengeInfoVisibility.postValue(View.GONE)
+
+        args?.keyChallenge?.let {
+            _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 20))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 40))
+            _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
+            _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+        }
+
         resetTimers()
     }
 
@@ -71,15 +125,17 @@ class MapViewModel(
         _liveTextTimer.postValue("00:00:00")
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
-        if(saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
+        if (saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)) {
             _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_km)}")
-        }else{
+        } else {
             _livePace.postValue("0 ${resourceUtil.getString(R.string.runage_min_mi)}")
         }
     }
 
     fun onNewQuestCreated(id: Int) {
+        questId = id
         setUpObservableQuest(id)
+        _liveCountDownVisibility.postValue(View.GONE)
     }
 
     private fun setUpObservableQuest(id: Int) {
@@ -93,7 +149,7 @@ class MapViewModel(
                 }
                 displayRunningRoute(quest.locations)
 
-                if(runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true){
+                if (runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) {
                     setUpRunningTimer(quest.startTimeEpochSeconds)
                 }
 
@@ -113,11 +169,11 @@ class MapViewModel(
         }
     }
 
-    private fun setUpRunningTimer(startTimeEpochSeconds: Long){
+    private fun setUpRunningTimer(startTimeEpochSeconds: Long) {
         runningTimerDisposable = runningUtil.getRunningTimer(startTimeEpochSeconds)
             .subscribe({
                 _liveTextTimer.postValue(it)
-            },{
+            }, {
                 Timber.e(it)
             })
         runningTimerDisposable?.let { addDisposable(it) }
@@ -178,6 +234,59 @@ class MapViewModel(
         }
 
         locationUtil.requestLocationUpdates(locationRequest, locationCallback)
+    }
+
+    fun onStopClicked() {
+        observableStopRun.call()
+        if (questId == -1) {
+            //quest countdown not finished
+            observableBackNavigation.call()
+        } else {
+            onQuestFinished(questId)
+        }
+    }
+
+    @SuppressLint("CheckResult")
+    fun onQuestFinished(questId: Int) {
+        questRepository.getSingleQuest(questId)
+            .subscribe({
+                //Quest exists, show summary
+                val challenge = args?.keyChallenge
+                if (challenge != null) {
+                    observableNavigateTo.postValue(
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
+                            questId,
+                            challenge
+                        )
+                    )
+                } else {
+                    observableNavigateTo.postValue(
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
+                            questId
+                        )
+                    )
+                }
+            }, {
+                //Quest didn't even start, do nothing
+            })
+    }
+
+    fun onLockClicked() {
+        if (isLocked) {
+            isLocked = false
+            _liveFabVisibility.postValue(View.GONE)
+            _liveButtonClickable.postValue(true)
+            _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+            _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.white))
+            _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock_open))
+        } else {
+            isLocked = true
+            _liveFabVisibility.postValue(View.VISIBLE)
+            _liveButtonClickable.postValue(false)
+            _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
+            _liveLockButtonBackgroundTint.postValue(resourceUtil.getColor(R.color.colorPrimary))
+            _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_lock))
+        }
     }
 
     override fun onCleared() {

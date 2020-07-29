@@ -11,7 +11,7 @@ import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
-class MapViewModelFactory @Inject constructor(app: MainApplication) : BaseViewModelFactory() {
+class MapViewModelFactory @Inject constructor(app: MainApplication, private val args: MapFragmentArgs?) : BaseViewModelFactory() {
 
     init {
         app.appComponent.inject(this)
@@ -30,6 +30,6 @@ class MapViewModelFactory @Inject constructor(app: MainApplication) : BaseViewMo
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MapViewModel(questRepository, locationUtil, saveUtil, runningUtil, resourceUtil) as T
+        return MapViewModel(questRepository, locationUtil, saveUtil, runningUtil, resourceUtil, args) as T
     }
 }

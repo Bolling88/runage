@@ -68,9 +68,17 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             (runStats.runningDuration.toDouble()/60).toInt()
         )
 
+        var totalStars = 0
+        for ((key, value) in userInfo.challengeScore) {
+            totalStars+= value
+        }
+
         saveLeaderBoard(app.getString(R.string.leaderboard_longest_run_meters), runStats.runningDistance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_experience), userInfo.xp.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_experience_single_run), runStats.xp.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_stars), totalStars.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_challenges_completed), userInfo.challengeScore.size.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong().times(1000))
 
         //Long runner
@@ -107,8 +115,8 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
 
         //If distance was longer then 1000 meters
         if(quest.totalDistance > 1000){
-            if(runStats.activityPercentage.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0) > 0.0 ||
-                    runStats.activityPercentage.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0) > 0.0){
+            if(runStats.activityPercentage.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0) > 0.01 ||
+                    runStats.activityPercentage.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0) > 0.01){
                 //Not eligible
             }else{
                 val start = quest.startTimeEpochSeconds

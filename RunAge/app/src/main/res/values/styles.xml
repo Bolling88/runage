@@ -12,9 +12,24 @@
         <item name="drawableNavigationItemBackground">@drawable/menu_background_color_state</item>
     </style>
 
-    <style name="TextAppearance.ToolbarTitle" parent="android:TextAppearance">
-        <item name="android:fontFamily">@font/azonix</item>
+    <style name="MainFontStyle" parent="android:TextAppearance">
+        <item name="android:fontFamily">@font/majora</item>
+    </style>
+
+    <style name="PageTitleStyle" parent="@style/MainFontStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">40dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+
+    <style name="TextAppearance.ToolbarTitle" parent="@style/MainFontStyle">
         <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
@@ -28,10 +43,15 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="fontFamily">@font/majora</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="TextStyleRuleTitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:fontFamily">@font/azonix</item>
+        <item name="android:fontFamily">@font/majora</item>
         <item name="android:textSize">@dimen/textSizeBig</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_margin">@dimen/margin_basic</item>
@@ -48,11 +68,10 @@
         <item name="android:layout_marginBottom">@dimen/margin_basic</item>
     </style>
 
-
     <style name="ButtonStyle" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
         <item name="android:layout_height">50dip</item>
         <item name="android:layout_width">0dip</item>
-        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:fontFamily">@font/majora_bold</item>
         <item name="cornerRadius">25dip</item>
         <item name="backgroundTint">@color/button_state_color</item>
         <item name="android:textColor">@color/white</item>
@@ -62,7 +81,7 @@
     <style name="ButtonStyleDestructive" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dip</item>
-        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:fontFamily">@font/majora_bold</item>
         <item name="android:textColor">@color/red</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
     </style>
@@ -70,7 +89,7 @@
     <style name="ButtonStyleText" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dip</item>
-        <item name="android:fontFamily">@font/bold</item>
+        <item name="android:fontFamily">@font/majora_bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
     </style>

@@ -50,6 +50,11 @@ class StartFragment : BaseFragment<StartViewModel>() {
         setUpObservables()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        (activity as? MainActivity)?.unlockDrawer()
+    }
+
     override fun setUpObservables() {
         super.setUpObservables()
         viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {

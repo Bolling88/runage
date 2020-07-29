@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
@@ -29,6 +32,7 @@ import javax.inject.Inject
 
 class SummaryFragment : BaseFragment<SummaryViewModel>() {
 
+    private lateinit var backPressedEnabled: OnBackPressedCallback
     private lateinit var binding: FragmentSummaryBinding
     private var googleMap: GoogleMap? = null
     private lateinit var mInterstitialAd: InterstitialAd
@@ -42,6 +46,10 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().applicationContext as MainApplication).appComponent.inject(this)
+        backPressedEnabled = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            viewModel.onDeleteClicked()
+        }
+        backPressedEnabled.isEnabled = true
         val args = SummaryFragmentArgs.fromBundle(requireArguments())
         val factory = SummaryViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(SummaryViewModel::class.java)
@@ -101,10 +109,23 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
             }
         })
 
-        viewModel.observablePlayAnimation.observe(viewLifecycleOwner, Observer {
-            binding.animation.playAnimation()
+        viewModel.observableBackPressedEnabled.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                backPressedEnabled.isEnabled = it
+            }
+        })
+
+        viewModel.observablePlaySuccessAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationSuccess.visibility = View.VISIBLE
+            binding.animationSuccess.playAnimation()
             binding.animation2.playAnimation()
         })
+
+        viewModel.observablePlayFailAnimation.observe(viewLifecycleOwner, Observer {
+            binding.animationFail.visibility = View.VISIBLE
+            binding.animationFail.playAnimation()
+        })
+
 
         viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
             showAdAndReturn()

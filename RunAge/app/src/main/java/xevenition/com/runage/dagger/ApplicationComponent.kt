@@ -2,12 +2,16 @@ package xevenition.com.runage.dagger
 
 import dagger.Component
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
+import xevenition.com.runage.fragment.challenges.QuestsFragment
+import xevenition.com.runage.fragment.challenges.ChallengesViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
 import xevenition.com.runage.fragment.historysummary.HistorySummaryViewModelFactory
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathFragment
 import xevenition.com.runage.fragment.historysummarypath.HistorySummaryPathViewModelFactory
+import xevenition.com.runage.fragment.viewpage.ViewPageFragment
+import xevenition.com.runage.fragment.viewpage.ViewPageViewModelFactory
 import xevenition.com.runage.fragment.login.LoginViewModelFactory
 import xevenition.com.runage.fragment.main.MainFragment
 import xevenition.com.runage.fragment.main.MainViewModelFactory
@@ -17,6 +21,7 @@ import xevenition.com.runage.fragment.path.PathFragment
 import xevenition.com.runage.fragment.path.PathViewModelFactory
 import xevenition.com.runage.fragment.permission.PermissionFragment
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
+import xevenition.com.runage.fragment.requirement.RequirementViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
@@ -42,9 +47,11 @@ interface ApplicationComponent {
     fun inject(component: EventService)
     fun inject(component: ShareFragment)
     fun inject(component: StartFragment)
+    fun inject(component: QuestsFragment)
     fun inject(component: SplashFragment)
     fun inject(component: HistoryFragment)
     fun inject(component: SummaryFragment)
+    fun inject(component: ViewPageFragment)
     fun inject(component: SettingsFragment)
     fun inject(component: PermissionFragment)
     fun inject(component: XpViewModelFactory)
@@ -55,15 +62,18 @@ interface ApplicationComponent {
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
+    fun inject(component: ChallengesViewModelFactory)
     fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
     fun inject(component: SummaryViewModelFactory)
     fun inject(component: SupportViewModelFactory)
     fun inject(component: HistoryViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
+    fun inject(component: ViewPageViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
     fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
+    fun inject(component: RequirementViewModelFactory)
     fun inject(component: HistorySummaryViewModelFactory)
     fun inject(component: HistorySummaryPathViewModelFactory)
 }

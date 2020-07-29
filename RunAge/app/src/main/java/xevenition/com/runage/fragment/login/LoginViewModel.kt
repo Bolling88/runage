@@ -2,9 +2,6 @@ package xevenition.com.runage.fragment.login
 
 import com.bokus.play.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.permission.PermissionFragmentDirections
-import xevenition.com.runage.fragment.settings.SettingsFragmentDirections
-import xevenition.com.runage.fragment.splash.SplashFragmentDirections
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.SaveUtil
 

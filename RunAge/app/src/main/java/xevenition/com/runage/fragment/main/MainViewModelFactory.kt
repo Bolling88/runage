@@ -15,12 +15,10 @@ class MainViewModelFactory @Inject constructor(app: MainApplication) :
     }
 
     @Inject
-    lateinit var questRepository: QuestRepository
-    @Inject
     lateinit var accountUtil: AccountUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(questRepository, accountUtil) as T
+        return MainViewModel(accountUtil) as T
     }
 }
