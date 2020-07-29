@@ -33,6 +33,10 @@ class NonSwipeableViewPager : ViewPager {
         return false
     }
 
+    override fun performClick(): Boolean {
+        return false
+    }
+
     //down one is added for smooth scrolling
     private fun setMyScroller() {
         try {

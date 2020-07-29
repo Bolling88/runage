@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
+import xevenition.com.runage.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable

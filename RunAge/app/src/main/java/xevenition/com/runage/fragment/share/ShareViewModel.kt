@@ -3,7 +3,7 @@ package xevenition.com.runage.fragment.share
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
+import xevenition.com.runage.util.SingleLiveEvent
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable

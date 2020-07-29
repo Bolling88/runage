@@ -1,9 +1,8 @@
 package xevenition.com.runage.architecture
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
-import com.bokus.play.util.SingleLiveEvent
+import xevenition.com.runage.util.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 

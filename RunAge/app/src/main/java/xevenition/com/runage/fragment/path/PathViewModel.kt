@@ -3,26 +3,13 @@ package xevenition.com.runage.fragment.path
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdate
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
-import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.util.LocationUtil
-import xevenition.com.runage.util.RunningUtil
-import java.time.Instant
 
 
 class PathViewModel(

@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">RunAge</string>
 
-    <string name="runage_notification_title">Running</string>
-    <string name="ticker_text">Ticker</string>
     <string name="runage_continue">Continue</string>
     <string name="explanation_permission_location">In order for us to be able to track your Run, we need to be able to access your location.</string>
-    <string name="runage_location_android_q" translatable="false">On Android version 10, you have to select "allow always", else the tracking will stop working while the screen is off. We guarantee that we will only access your location during a Run.</string>
     <string name="explanation_permission_activity">Detecting your physical activity is important for knowing when you are running, walking etc. You will ony get experience points from Running.</string>
     <string name="permission_location">Location tracking</string>
     <string name="permission_activity">Physical activity</string>
@@ -19,10 +16,8 @@
     <string name="kilometer">kilometer</string>
     <string name="miles">miles</string>
     <string name="signin_other_error">Failed to sign in</string>
-    <string name="runage_your_weight_here">Your weight here…</string>
     <string name="runage_calories">calories</string>
     <string name="runage_distance">Distance</string>
-    <string name="runage_weight">Weight</string>
     <string name="runage_welcome_back">Welcome back</string>
     <string name="runage_go_go_go">Quest started!</string>
     <string name="runage_calories_burned">Calories burned</string>
@@ -37,13 +32,10 @@
     <string name="mile">mile</string>
     <string name="runage_pace">Pace</string>
     <string name="runage_avg_pace">Avg. Pace</string>
-    <string name="runage_save_progress">Save progress</string>
     <string name="runage_close">Close</string>
     <string name="runage_quest_completed">Quest completed</string>
     <string name="runage_quest_failed">Quest failed</string>
     <string name="runage_completed_runs">Completed Runs</string>
-    <string name="runage_home">Home</string>
-    <string name="runage_sign_in">Sign in</string>
     <string name="runage_no_completed_runs">No completed runs</string>
     <string name="runage_running">Running</string>
     <string name="runage_walking">Walking</string>
@@ -80,24 +72,19 @@
     <string name="runage_rule_3_title">Run further</string>
     <string name="runage_rule_3_message">Only distance and pace determine your experience points gain. The further you run, and the faster you do it, the more you will gain.</string>
     <string name="runage_edit_profile">Edit profile</string>
-    <string name="runage_allow_always">Allow always</string>
     <string name="runage_save_run">Save Quest</string>
     <string name="runage_sync_google_fit">Sync with Google Fit</string>
-    <string name="runage_share">Share</string>
     <string name="runage_unexpected_error">Unexpected error</string>
     <string name="runage_normal">Normal</string>
     <string name="runage_satellite">Satellite</string>
     <string name="runage_terrain">Terrain</string>
-    <string name="runage_hybrid">Hybrid</string>
     <string name="runage_share_this_run">Share this quest</string>
     <string name="runage_support">Support</string>
     <string name="runage_begin_new_run">Begin new run</string>
     <string name="runage_feed">Feed</string>
-    <string name="runage_quests">Quests</string>
     <string name="runage_target_distance">Target distance:</string>
     <string name="runage_duration_title">Complete in:</string>
     <string name="runage_reward">Reward:</string>
-    <string name="runage_stop">Stop</string>
     <string name="runage_start">Start</string>
     <string name="runage_challenges">Challenges</string>
     <string name="runage_start_running">Start Running</string>
@@ -111,6 +98,4 @@
     <string name="runage_challenge_completed">Challenge completed</string>
     <string name="runage_reward_claimed">Reward claimed</string>
     <string name="runage_cheating_detected">Cheating detected</string>
-    <string name="runage_runs">Runs</string>
-    <string name="runage_map">Map</string>
 </resources>

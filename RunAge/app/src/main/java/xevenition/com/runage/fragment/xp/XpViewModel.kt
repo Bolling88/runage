@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.util.SaveUtil
 
-class XpViewModel(
-) : BaseViewModel() {
+class XpViewModel : BaseViewModel() {
 
 
     private val _liveButtonEnabled = MutableLiveData<Boolean>()

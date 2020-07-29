@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bokus.play.util.SingleLiveEvent
+import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.util.AccountUtil

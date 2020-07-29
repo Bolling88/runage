@@ -157,6 +157,7 @@ class EventService : Service() {
         compositeDisposable.add(disposable)
     }
 
+    @SuppressLint("DefaultLocale")
     private fun setUpRunningTimer(startTimeEpochSeconds: Long) {
         runningTimerDisposable = runningUtil.getRunningTimer(startTimeEpochSeconds)
             .subscribe({
