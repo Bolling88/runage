@@ -75,6 +75,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/animationFail"
                     tools:text="@string/runage_quest_completed" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textCheating"
+                    style="@style/MainFontStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="@{viewModel.liveCheatingTextVisibility}"
+                    android:text="@string/runage_cheating_detected"
+                    android:textColor="@color/red"
+                    android:textSize="30sp"
+                    app:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textQuest"/>
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/starComp1"
                     android:layout_width="40dip"
@@ -84,7 +99,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/starComp2"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textQuest"
+                    app:layout_constraintTop_toBottomOf="@+id/textCheating"
                     app:srcCompat="@{viewModel.liveStar1Image}"
                     app:tint="@color/colorPrimary" />
 

@@ -149,6 +149,9 @@ class SummaryViewModel(
     private val _liveStarVisibility = MutableLiveData<Int>()
     val liveStarVisibility: LiveData<Int> = _liveStarVisibility
 
+    private val _liveCheatingTextVisibility = MutableLiveData<Int>()
+    val liveCheatingTextVisibility: LiveData<Int> = _liveCheatingTextVisibility
+
     private val _liveSaveButtonBackgroundColor = MutableLiveData<Int>()
     val liveSaveButtonBackgroundColor: LiveData<Int> = _liveSaveButtonBackgroundColor
 
@@ -160,6 +163,7 @@ class SummaryViewModel(
         _liveButtonEnabled.postValue(false)
         _liveTextTimer.postValue("00:00:00")
         _liveStarVisibility.postValue(View.GONE)
+        _liveCheatingTextVisibility.postValue(View.GONE)
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
         _liveLoadingVisibility.postValue(View.GONE)
@@ -184,92 +188,11 @@ class SummaryViewModel(
                 if (mapCreated) {
                     displayPath(it)
                 }
-                setUpQuestInfo(it)
+                setUpActivityTypeInfo(it)
+                setUpActivityTypeInfo(it)
             }, {
                 Timber.e(it)
             })
-    }
-
-    @SuppressLint("CheckResult")
-    private fun setUpQuestInfo(quest: Quest) {
-        val duration = getQuestDuration(quest)
-        val distance = quest.totalDistance
-        _liveTextTimer.postValue(runningUtil.convertTimeToDurationString(duration))
-        _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))
-        _liveCalories.postValue("${quest.calories}")
-        _livePace.postValue(runningUtil.getPaceString(duration, distance, true))
-
-        if (quest.locations.size < 2) {
-            if (challenge != null) {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
-            } else {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
-            }
-            setUpFailUi()
-        } else {
-            if (challenge != null) {
-                challengeStars = getChallengeStars(challenge, duration, distance)
-                if (challengeStars > 0) {
-                    _liveStarVisibility.postValue(View.VISIBLE)
-                    _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_completed))
-                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed))
-                    _observablePlaySuccessAnimation.postValue(Unit)
-                    when (challengeStars) {
-                        3 -> {
-                            _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                        }
-                        2 -> {
-                            _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                        }
-                        else -> {
-                            _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                            _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                        }
-                    }
-                } else {
-                    _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
-                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
-                    setUpFailUi()
-                }
-            } else {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_completed))
-                _observablePlaySuccessAnimation.postValue(Unit)
-            }
-        }
-        setUpActivityTypeInfo(quest)
-    }
-
-    private fun setUpFailUi() {
-        _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
-        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
-        _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
-        _liveDeleteButtonVisibility.postValue(View.GONE)
-        _observablePlayFailAnimation.postValue(Unit)
-    }
-
-    private fun getQuestDuration(quest: Quest): Long {
-        val lastTimeStamp =
-            quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
-        return lastTimeStamp - quest.startTimeEpochSeconds
-    }
-
-    private fun getChallengeStars(challenge: Challenge, duration: Long, distance: Double): Int {
-        if(distance < challenge.distance)
-            return 0
-        return when {
-            duration <= challenge.time - 40 -> 3
-            duration <= challenge.time - 20 -> 2
-            duration <= challenge.time -> 1
-            else -> 0
-        }
     }
 
     @SuppressLint("CheckResult")
@@ -317,11 +240,83 @@ class SummaryViewModel(
                 } else {
                     _liveDrivingVisibility.postValue(View.GONE)
                 }
-
-                updateUserStats(quest, it)
+                setUpQuestInfo(quest, it)
             }, {
                 Timber.e(it)
             })
+    }
+
+    @SuppressLint("CheckResult")
+    private fun setUpQuestInfo(quest: Quest, runStats: RunStats) {
+        val duration = getQuestDuration(quest)
+        val distance = quest.totalDistance
+        _liveTextTimer.postValue(runningUtil.convertTimeToDurationString(duration))
+        _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))
+        _liveCalories.postValue("${quest.calories}")
+        _livePace.postValue(runningUtil.getPaceString(duration, distance, true))
+
+        if (quest.locations.size < 2) {
+            if (challenge != null) {
+                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+            } else {
+                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
+            }
+            setUpFailUi()
+            //don't update user stats in this case
+        } else {
+            if (challenge != null) {
+                challengeStars = getChallengeStars(challenge, duration, distance)
+                if (challengeStars > 0) {
+                    if (runStats.activityPercentage.getOrDefault(
+                            DetectedActivity.ON_BICYCLE,
+                            0.0
+                        ) > 0.05 || runStats.activityPercentage.getOrDefault(
+                            DetectedActivity.IN_VEHICLE,
+                            0.0
+                        ) > 0.05
+                    ) {
+                        //Cheating detected!
+                        setUpFailUi()
+                        _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
+                        feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                        _liveCheatingTextVisibility.postValue(View.VISIBLE)
+                    } else {
+                        _liveStarVisibility.postValue(View.VISIBLE)
+                        _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_completed))
+                        feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed))
+                        _observablePlaySuccessAnimation.postValue(Unit)
+                        when (challengeStars) {
+                            3 -> {
+                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                            }
+                            2 -> {
+                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                            }
+                            else -> {
+                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                            }
+                        }
+                    }
+                } else {
+                    _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                    setUpFailUi()
+                }
+            } else {
+                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_completed))
+                _observablePlaySuccessAnimation.postValue(Unit)
+            }
+            updateUserStats(quest, runStats)
+        }
     }
 
     @SuppressLint("CheckResult")
@@ -351,11 +346,12 @@ class SummaryViewModel(
                         oldUserScoreMap
                     }
 
-                    val newXp = if (challenge != null && challengeStars > 0 && challengeCompletedFirstTime) {
-                        runStats.xp + challenge.experience
-                    } else {
-                        runStats.xp
-                    }
+                    val newXp =
+                        if (challenge != null && challengeStars > 0 && challengeCompletedFirstTime) {
+                            runStats.xp + challenge.experience
+                        } else {
+                            runStats.xp
+                        }
                     _liveTextExperience.postValue("$newXp ${resourceUtil.getString(R.string.runage_xp)}")
                     val totalXp = newXp + (userInfo?.xp ?: 0)
 
@@ -440,6 +436,31 @@ class SummaryViewModel(
                 resourceUtil.getString(R.string.runage_ok)
             )
         )
+    }
+
+    private fun setUpFailUi() {
+        _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+        _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
+        _liveDeleteButtonVisibility.postValue(View.GONE)
+        _observablePlayFailAnimation.postValue(Unit)
+    }
+
+    private fun getQuestDuration(quest: Quest): Long {
+        val lastTimeStamp =
+            quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
+        return lastTimeStamp - quest.startTimeEpochSeconds
+    }
+
+    private fun getChallengeStars(challenge: Challenge, duration: Long, distance: Double): Int {
+        if (distance < challenge.distance)
+            return 0
+        return when {
+            duration <= challenge.time - 40 -> 3
+            duration <= challenge.time - 20 -> 2
+            duration <= challenge.time -> 1
+            else -> 0
+        }
     }
 
     private fun storeQuestInFirestore(

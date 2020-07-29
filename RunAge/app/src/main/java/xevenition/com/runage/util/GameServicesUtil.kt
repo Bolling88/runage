@@ -114,8 +114,8 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
 
         //If distance was longer then 1000 meters
         if(quest.totalDistance > 1000){
-            if(runStats.activityPercentage.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0) > 0.0 ||
-                    runStats.activityPercentage.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0) > 0.0){
+            if(runStats.activityPercentage.getOrDefault(DetectedActivity.IN_VEHICLE, 0.0) > 0.01 ||
+                    runStats.activityPercentage.getOrDefault(DetectedActivity.ON_BICYCLE, 0.0) > 0.01){
                 //Not eligible
             }else{
                 val start = quest.startTimeEpochSeconds
