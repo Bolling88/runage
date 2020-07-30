@@ -51,9 +51,12 @@ class RequirementViewModel(
             val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${it.level}"
             feedbackHandler.speak(challengeText, TextToSpeech.QUEUE_FLUSH)
             _liveTextLevel.postValue(challengeText)
+            var timeMultiplier = it.level % 10
+            if(timeMultiplier == 0)
+                timeMultiplier = 10
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
-            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
-            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-timeMultiplier * 10))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-timeMultiplier * 20))
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
 
             when(args.keyStars){

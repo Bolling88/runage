@@ -97,15 +97,24 @@ class QuestsRecyclerAdapter(
                     }
                 }
             }
-            when{
-                item.level <= 10 ->{
+            when {
+                item.level <= 10 -> {
                     card.setCardBackgroundColor(resourceUtil.getColor(R.color.colorPrimary))
                 }
-                item.level <= 20 ->{
+                item.level <= 20 -> {
                     card.setCardBackgroundColor(resourceUtil.getColor(R.color.purple))
                 }
+                item.level <= 30 -> {
+                    card.setCardBackgroundColor(resourceUtil.getColor(R.color.orange))
+                }
+                item.level <= 40 -> {
+                    card.setCardBackgroundColor(resourceUtil.getColor(R.color.teal))
+                }
+                item.level <= 50 -> {
+                    card.setCardBackgroundColor(resourceUtil.getColor(R.color.yellow))
+                }
             }
-            when ((position+1) % 10) {
+            when ((position + 1) % 10) {
                 0 -> {
                     card.updateLayoutParams<ConstraintLayout.LayoutParams> {
                         dimensionRatio = null

@@ -128,7 +128,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/distanceTitle"
                     app:layout_constraintStart_toStartOf="@+id/distanceTitle"
                     app:layout_constraintTop_toBottomOf="@+id/distanceTitle"
-                    tools:text="1 km | 0.69 mi" />
+                    tools:text="1 km" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/durationTitle"
@@ -137,7 +137,7 @@
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_basic"
                     android:fontFamily="@font/majora"
-                    android:text="@string/runage_duration_title"
+                    android:text="@string/runage_time_limit"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textTargetDistance"
                     app:textAllCaps="true" />

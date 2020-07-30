@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.ChallengeData
@@ -42,15 +43,8 @@ class ChallengesViewModel(
                     val userInfo = document.toObject(UserInfo::class.java)
                     challengeScores = userInfo?.challengeScore
                     Timber.d("Got user info")
-                    fireStoreHandler.getChallenges()
-                        .addOnSuccessListener {document ->
-                            if (document != null) {
-                                processChallenges(document)
-                            } else {
-                                Timber.d("No such document")
-                            }
-                        }
-                        .addOnFailureListener {  }
+                    val challengeJson = resourceUtil.getString(R.string.runage_quests_json)
+                    processChallenges(challengeJson)
                 } else {
                     Timber.d("No such document")
                 }
@@ -59,15 +53,12 @@ class ChallengesViewModel(
     }
 
     @SuppressLint("CheckResult")
-    private fun processChallenges(document: DocumentSnapshot) {
-        Observable.just(document)
+    private fun processChallenges(json: String) {
+        Observable.just(json)
             .subscribeOn(Schedulers.computation())
             .map {
-                document.toObject(ChallengeData::class.java)
-            }
-            .map {
                 val itemType = object : TypeToken<List<Challenge>>() {}.type
-                Gson().fromJson<List<Challenge>>(it.data, itemType)
+                Gson().fromJson<List<Challenge>>(it, itemType)
             }
             .subscribe({
                 Timber.d("Quests processed")

@@ -117,9 +117,12 @@ class MapViewModel(
 
     private fun setUpInitialChallengeInfo() {
         args?.keyChallenge?.let {
+            var timeMultiplier = it.level % 10
+            if(timeMultiplier == 0)
+                timeMultiplier = 10
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
-            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 20))
-            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 40))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 10 * timeMultiplier))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 20 * timeMultiplier))
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
             _liveChallengeInfoVisibility.postValue(View.VISIBLE)
         }
@@ -158,9 +161,12 @@ class MapViewModel(
                 }
 
                 if(quest.level > 0){
+                    var timeMultiplier = quest.level % 10
+                    if(timeMultiplier == 0)
+                        timeMultiplier = 10
                     _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong()))
-                    _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - 20))
-                    _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - 40))
+                    _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - timeMultiplier * 10))
+                    _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - timeMultiplier * 20))
                     _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
                     _liveChallengeInfoVisibility.postValue(View.VISIBLE)
                 }

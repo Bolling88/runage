@@ -17,7 +17,8 @@ data class Quest(
     @ColumnInfo(name = "level") var level: Int,
     @ColumnInfo(name = "levelDistance") var levelDistance: Int,
     @ColumnInfo(name = "levelTime") var levelTime: Int,
-    @ColumnInfo(name = "levelExperience") var levelExperience: Int
+    @ColumnInfo(name = "levelExperience") var levelExperience: Int,
+    @ColumnInfo(name = "levelStars") var levelStars: Int
 ) {
 
     @Ignore
@@ -30,7 +31,8 @@ data class Quest(
         level = -1,
         levelDistance = 0,
         levelTime = 0,
-        levelExperience = 0
+        levelExperience = 0,
+        levelStars = 0
     )
 
     @Ignore
@@ -43,6 +45,7 @@ data class Quest(
         level = challenge.level,
         levelDistance = challenge.distance,
         levelTime = challenge.time,
-        levelExperience = challenge.experience
+        levelExperience = challenge.experience,
+        levelStars = 0
     )
 }

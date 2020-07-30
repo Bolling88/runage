@@ -290,7 +290,7 @@ class EventService : Service() {
         startTimeEpochSeconds: Long,
         distance: Double
     ) {
-        if(challengeFailedOrCompletedReported)
+        if(challengeFailedOrCompletedReported || currentQuest.levelStars > 0)
             return
         val duration = Instant.now().epochSecond - startTimeEpochSeconds
         if (duration > challenge.time && distance < challenge.distance) {
@@ -303,14 +303,28 @@ class EventService : Service() {
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
                 TextToSpeech.QUEUE_ADD
             )
+            currentQuest.levelStars = getChallengeStars(duration)
         } else if (duration > challenge.time && distance > challenge.distance) {
             //We can consider this challenge completed also. It should already have been reported in this case though
             challengeFailedOrCompletedReported = true
             feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
                 TextToSpeech.QUEUE_ADD
             )
+            currentQuest.levelStars = getChallengeStars(duration)
         } else {
             //Challenge not yet failed or completed
+        }
+    }
+
+    private fun getChallengeStars(duration: Long): Int {
+        var timeMultiplier = currentQuest.level % 10
+        if(timeMultiplier == 0)
+            timeMultiplier = 10
+        return when {
+            duration <= currentQuest.levelTime - timeMultiplier * 20 -> 3
+            duration <= currentQuest.levelTime - timeMultiplier * 10 -> 2
+            duration <= currentQuest.levelTime -> 1
+            else -> 0
         }
     }
 
