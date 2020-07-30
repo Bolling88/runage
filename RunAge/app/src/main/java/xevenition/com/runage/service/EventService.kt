@@ -140,7 +140,7 @@ class EventService : Service() {
             }
             .subscribe({
                 if (it < 0L) {
-                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_go_go_go))
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_started))
                     startNewQuest()
                 } else {
                     feedbackHandler.speak(it.toString())

@@ -259,8 +259,8 @@ class SummaryViewModel(
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
             } else {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
+                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_failed))
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_failed))
             }
 
             //Quest is so short there is no reason for saving it

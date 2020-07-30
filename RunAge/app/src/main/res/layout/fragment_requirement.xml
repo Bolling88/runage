@@ -161,18 +161,33 @@
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime1}"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/textSizeHuge"
+                    android:layout_marginBottom="4dip"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer"
                     tools:text="00:08:00" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pace1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextPace1}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration1"
+                    app:layout_constraintStart_toEndOf="@+id/duration1"
+                    app:layout_constraintTop_toTopOf="@+id/duration1"
+                    tools:text="(6:00 min/km)" />
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    app:layout_constraintBottom_toBottomOf="@+id/duration1"
-                    app:layout_constraintStart_toEndOf="@+id/duration1"
-                    app:layout_constraintTop_toTopOf="@+id/duration1"
+                    app:layout_constraintBottom_toBottomOf="@+id/pace1"
+                    app:layout_constraintStart_toEndOf="@+id/pace1"
+                    app:layout_constraintTop_toTopOf="@+id/pace1"
                     app:srcCompat="@drawable/ic_star"
                     app:tint="@color/colorPrimary"
                     tools:ignore="MissingConstraints" />
@@ -195,20 +210,35 @@
                     android:layout_marginStart="5dip"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime2}"
+                    android:textSize="@dimen/textSizeHuge"
                     android:textColor="@color/colorPrimary"
+                    android:layout_marginBottom="4dip"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer2"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer2"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer2"
                     tools:text="00:07:40" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pace2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextPace2}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration2"
+                    app:layout_constraintStart_toEndOf="@+id/duration2"
+                    app:layout_constraintTop_toTopOf="@+id/duration2"
+                    tools:text="(6:00 min/km)" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/star1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    app:layout_constraintBottom_toBottomOf="@+id/duration2"
-                    app:layout_constraintStart_toEndOf="@+id/duration2"
-                    app:layout_constraintTop_toTopOf="@+id/duration2"
+                    app:layout_constraintBottom_toBottomOf="@+id/pace2"
+                    app:layout_constraintStart_toEndOf="@+id/pace2"
+                    app:layout_constraintTop_toTopOf="@+id/pace2"
                     app:srcCompat="@drawable/ic_star"
                     app:tint="@color/colorPrimary"
                     tools:ignore="MissingConstraints" />
@@ -241,20 +271,35 @@
                     android:layout_marginStart="5dip"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime3}"
+                    android:layout_marginBottom="4dip"
+                    android:textSize="@dimen/textSizeHuge"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer3"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer3"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer3"
                     tools:text="00:07:20" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pace3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dip"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextPace3}"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/duration3"
+                    app:layout_constraintStart_toEndOf="@+id/duration3"
+                    app:layout_constraintTop_toTopOf="@+id/duration3"
+                    tools:text="(6:00 min/km)" />
+
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/star3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    app:layout_constraintBottom_toBottomOf="@+id/duration3"
-                    app:layout_constraintStart_toEndOf="@+id/duration3"
-                    app:layout_constraintTop_toTopOf="@+id/duration3"
+                    app:layout_constraintBottom_toBottomOf="@+id/pace3"
+                    app:layout_constraintStart_toEndOf="@+id/pace3"
+                    app:layout_constraintTop_toTopOf="@+id/pace3"
                     app:srcCompat="@drawable/ic_star"
                     app:tint="@color/colorPrimary"
                     tools:ignore="MissingConstraints" />
