@@ -91,7 +91,7 @@ class RunningTimerTest{
 
     @Test
     fun testPaceString1(){
-        assertEquals("0:0 min/mi", runningUtil.getPaceString(0, 0.0))
+        assertEquals("0:00 min/mi", runningUtil.getPaceString(0, 0.0))
     }
 
     @Test
