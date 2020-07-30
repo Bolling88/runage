@@ -31,7 +31,7 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
-            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+            style="@style/Widget.MaterialComponents.BottomNavigationView"
             app:itemTextAppearanceActive="@style/BottomNavigationStyle"
             app:itemTextAppearanceInactive="@style/BottomNavigationStyle"
             android:layout_width="0dip"

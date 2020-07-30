@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_menu"
-            app:title="@string/runage_completed_runs"
+            app:title="@string/runage_activity"
             app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
             app:titleTextColor="@color/white" />
 
@@ -32,6 +32,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="0dip"
             android:layout_height="0dip"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

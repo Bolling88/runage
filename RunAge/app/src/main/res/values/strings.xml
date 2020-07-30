@@ -98,4 +98,5 @@
     <string name="runage_challenge_completed">Challenge completed</string>
     <string name="runage_reward_claimed">Reward claimed</string>
     <string name="runage_cheating_detected">Cheating detected</string>
+    <string name="runage_activity">Activity</string>
 </resources>

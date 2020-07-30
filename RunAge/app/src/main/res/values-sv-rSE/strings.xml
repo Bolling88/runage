@@ -97,4 +97,5 @@
     <string name="runage_reward_claimed">Belöning erhållen.</string>
     <string name="runage_challenge_failed">Utmaning misslyckades</string>
     <string name="runage_cheating_detected">Fusk upptäckt</string>
+    <string name="runage_activity">Aktivitet</string>
 </resources>
