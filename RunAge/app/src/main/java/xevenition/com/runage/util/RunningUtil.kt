@@ -13,6 +13,7 @@ import java.time.Instant
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 class RunningUtil @Inject constructor(
     private val resourceUtil: ResourceUtil,
     private val saveUtil: SaveUtil
@@ -94,11 +95,12 @@ class RunningUtil @Inject constructor(
             val seconds = times.third
             if (showAbbreviation) {
                 if (isMetric) {
-                    "$minutes:$seconds $kmEnding"
+                    String.format("%d:%02d", minutes, seconds) + " " + kmEnding
                 } else {
-                    "$minutes:$seconds $miEnding"
+                    String.format("%d:%02d", minutes, seconds) + " " + miEnding
                 }
             } else {
+                String.format("%d:%02d", minutes, seconds)
                 "$minutes:$seconds"
             }
         }

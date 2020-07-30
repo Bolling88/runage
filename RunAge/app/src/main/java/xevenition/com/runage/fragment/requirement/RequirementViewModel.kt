@@ -27,6 +27,15 @@ class RequirementViewModel(
     private val _liveTextTime3 = MutableLiveData<String>()
     val liveTextTime3 : LiveData<String> = _liveTextTime3
 
+    private val _liveTextPace1 = MutableLiveData<String>()
+    val liveTextPace1 : LiveData<String> = _liveTextPace1
+
+    private val _liveTextPace2 = MutableLiveData<String>()
+    val liveTextPace2 : LiveData<String> = _liveTextPace2
+
+    private val _liveTextPace3 = MutableLiveData<String>()
+    val liveTextPace3 : LiveData<String> = _liveTextPace3
+
     private val _liveTextXp = MutableLiveData<String>()
     val liveTextXp : LiveData<String> = _liveTextXp
 
@@ -51,9 +60,22 @@ class RequirementViewModel(
             val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${it.level}"
             feedbackHandler.speak(challengeText, TextToSpeech.QUEUE_FLUSH)
             _liveTextLevel.postValue(challengeText)
-            _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
-            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))
-            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-40))
+            var timeMultiplier = it.level % 10
+            if(timeMultiplier == 0)
+                timeMultiplier = 10
+
+            val limit1 = it.time.toLong()
+            val limit2 = it.time.toLong()-timeMultiplier * 10
+            val limit3 = it.time.toLong()-timeMultiplier * 20
+
+            _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(limit1))
+            _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(limit2))
+            _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(limit3))
+
+            _liveTextPace1.postValue("(${runningUtil.getPaceString(limit1, it.distance.toDouble(), true)})")
+            _liveTextPace2.postValue("(${runningUtil.getPaceString(limit2, it.distance.toDouble(), true)})")
+            _liveTextPace3.postValue("(${runningUtil.getPaceString(limit3, it.distance.toDouble(), true)})")
+
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
 
             when(args.keyStars){

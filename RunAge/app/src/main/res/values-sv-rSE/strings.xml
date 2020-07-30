@@ -18,7 +18,6 @@
     <string name="runage_calories">kalorier</string>
     <string name="runage_distance">Distans</string>
     <string name="runage_welcome_back">Välkommen tillbaka</string>
-    <string name="runage_go_go_go">Uppdraget påbörjat!</string>
     <string name="runage_calories_burned">Kalorier brända</string>
     <string name="runage_duration">Varaktighet</string>
     <string name="runage_hour">timme</string>
@@ -32,8 +31,8 @@
     <string name="runage_pace">Tempo</string>
     <string name="runage_avg_pace">Snitt tempo</string>
     <string name="runage_close">Stäng</string>
-    <string name="runage_quest_completed">Uppdrag slutfört</string>
-    <string name="runage_quest_failed">Uppdrag misslyckades</string>
+    <string name="runage_quest_completed">Runda slutförd</string>
+    <string name="runage_quest_failed">Runda misslyckades</string>
     <string name="runage_completed_runs">Avklarade rundor</string>
     <string name="runage_no_completed_runs">Inga avklarade uppdrag</string>
     <string name="runage_running">Löpning</string>
@@ -52,17 +51,17 @@
     <string name="runage_km">km</string>
     <string name="runage_mi">mi</string>
     <string name="runage_rules">Regler</string>
-    <string name="runage_delete_run">Radera uppdrag</string>
+    <string name="runage_delete_run">Radera runda</string>
     <string name="runage_activity_time_spent_on">Aktivitetstid spenderad på:</string>
     <string name="runage_experience_gained">Erfarenhetspoäng intjänade:</string>
     <string name="runage_xp">XP</string>
-    <string name="runage_save_quest_failed_title">Misslyckades att spara uppdrag.</string>
+    <string name="runage_save_quest_failed_title">Misslyckades att spara runda!</string>
     <string name="runage_save_quest_failed_message">"Kolla din uppkoppling och försök igen. "</string>
     <string name="runage_ok">OK</string>
     <string name="runage_no">Nej</string>
     <string name="runage_yes">Ja</string>
-    <string name="runage_delete_run_title">Radera Uppdrag</string>
-    <string name="runage_delete_run_message">Är du säker på att du vill radera detta uppdrag?</string>
+    <string name="runage_delete_run_title">Radera Runda</string>
+    <string name="runage_delete_run_message">Är du säker på att du vill radera denna runda?</string>
     <string name="runage_rule_1_title">Endast löpning räknas</string>
     <string name="runage_support">"Du får bara erfarenhetspoäng av löpning. Gå, cyckla eller att ta en tur med bilen ger dig inget. Löpning är också det enda som gör att du låser upp prestationer och klättrar på topplistorna. "</string>
     <string name="runage_rule_1_message">"Du får bara erfarenhetspoäng av att springa. Gå, cyckla eller ta en tur med bilen ger dig inget. Att springa är också det enda som låser upp prestationer och låter dig klättra på topplistorna. Med det sagt, det är okej att gå under en runda, men förvänta dig inte att bli belönad av det. "</string>
@@ -71,7 +70,7 @@
     <string name="runage_rule_3_title">Spring längre</string>
     <string name="runage_rule_3_message">"Endast avstånd och tempo avgör hur mycket erfarenhetspoäng du får. Ju längre du springer, och ju snabbare du gör det, desto mer erfarenhetspoäng kommer du få. "</string>
     <string name="runage_edit_profile">Editera profil</string>
-    <string name="runage_save_run">Spara Uppdrag</string>
+    <string name="runage_save_run">Spara Runda</string>
     <string name="runage_sync_google_fit">Synka med Google Fit</string>
     <string name="runage_unexpected_error">Oväntat fel</string>
     <string name="runage_normal">Normal</string>
@@ -98,4 +97,7 @@
     <string name="runage_challenge_failed">Utmaning misslyckades</string>
     <string name="runage_cheating_detected">Fusk upptäckt</string>
     <string name="runage_activity">Aktivitet</string>
+    <string name="runage_time_limit">Tidsgräns:</string>
+    <string name="runage_run_failed">Runda misslyckades</string>
+    <string name="runage_run_started">Runda påbörjad</string>
 </resources>

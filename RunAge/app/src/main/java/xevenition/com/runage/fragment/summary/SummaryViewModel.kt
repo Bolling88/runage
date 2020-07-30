@@ -259,8 +259,8 @@ class SummaryViewModel(
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
             } else {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
+                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_failed))
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_failed))
             }
 
             //Quest is so short there is no reason for saving it
@@ -273,7 +273,7 @@ class SummaryViewModel(
             //don't update user stats in this case
         } else {
             if (quest.level > 0) {
-                challengeStars = getChallengeStars(quest, duration, distance)
+                challengeStars = quest.levelStars
                 if (challengeStars > 0) {
                     if (runStats.activityPercentage.getOrDefault(
                             DetectedActivity.ON_BICYCLE,
@@ -450,17 +450,6 @@ class SummaryViewModel(
         val lastTimeStamp =
             quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
         return lastTimeStamp - quest.startTimeEpochSeconds
-    }
-
-    private fun getChallengeStars(quest: Quest, duration: Long, distance: Double): Int {
-        if (distance < quest.levelDistance)
-            return 0
-        return when {
-            duration <= quest.levelTime - 40 -> 3
-            duration <= quest.levelTime - 20 -> 2
-            duration <= quest.levelTime -> 1
-            else -> 0
-        }
     }
 
     private fun storeQuestInFirestore(
