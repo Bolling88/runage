@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.PositionPoint
 
 @Entity(tableName = "quest")
@@ -12,7 +13,11 @@ data class Quest(
     @ColumnInfo(name = "start_time_epoch_seconds") val startTimeEpochSeconds: Long,
     @ColumnInfo(name = "locations") var locations: MutableList<PositionPoint>,
     @ColumnInfo(name = "total_distance") var totalDistance: Double,
-    @ColumnInfo(name = "calories") var calories: Int
+    @ColumnInfo(name = "calories") var calories: Int,
+    @ColumnInfo(name = "level") var level: Int,
+    @ColumnInfo(name = "levelDistance") var levelDistance: Int,
+    @ColumnInfo(name = "levelTime") var levelTime: Int,
+    @ColumnInfo(name = "levelExperience") var levelExperience: Int
 ) {
 
     @Ignore
@@ -21,6 +26,23 @@ data class Quest(
         startTimeEpochSeconds = startTimeEpochSeconds,
         locations = mutableListOf<PositionPoint>(),
         totalDistance = 0.0,
-        calories = 0
+        calories = 0,
+        level = -1,
+        levelDistance = 0,
+        levelTime = 0,
+        levelExperience = 0
+    )
+
+    @Ignore
+    constructor(startTimeEpochSeconds: Long, challenge: Challenge) : this(
+        id = 0,
+        startTimeEpochSeconds = startTimeEpochSeconds,
+        locations = mutableListOf<PositionPoint>(),
+        totalDistance = 0.0,
+        calories = 0,
+        level = challenge.level,
+        levelDistance = challenge.distance,
+        levelTime = challenge.time,
+        levelExperience = challenge.experience
     )
 }

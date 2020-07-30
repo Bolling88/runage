@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import xevenition.com.runage.room.dao.QuestDao
 import xevenition.com.runage.room.entity.Quest
 
-@Database(entities = [Quest::class], version = 10)
+@Database(entities = [Quest::class], version = 11)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun questDao(): QuestDao

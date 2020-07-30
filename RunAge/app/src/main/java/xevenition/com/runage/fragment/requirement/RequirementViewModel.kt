@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.requirement
 
 import android.graphics.drawable.Drawable
+import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.R
@@ -48,7 +49,7 @@ class RequirementViewModel(
         val challenge = args.keyChallenge
         challenge?.let {
             val challengeText = "${resourceUtil.getString(R.string.runage_challenge)} ${it.level}"
-            feedbackHandler.speak(challengeText)
+            feedbackHandler.speak(challengeText, TextToSpeech.QUEUE_FLUSH)
             _liveTextLevel.postValue(challengeText)
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
             _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()-20))

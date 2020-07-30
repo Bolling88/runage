@@ -110,6 +110,12 @@ class MapViewModel(
         _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
         _liveChallengeInfoVisibility.postValue(View.GONE)
 
+        setUpInitialChallengeInfo()
+
+        resetTimers()
+    }
+
+    private fun setUpInitialChallengeInfo() {
         args?.keyChallenge?.let {
             _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(it.time.toLong()))
             _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 20))
@@ -117,8 +123,6 @@ class MapViewModel(
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
             _liveChallengeInfoVisibility.postValue(View.VISIBLE)
         }
-
-        resetTimers()
     }
 
     private fun resetTimers() {
@@ -151,6 +155,14 @@ class MapViewModel(
 
                 if (runningTimerDisposable == null || runningTimerDisposable?.isDisposed == true) {
                     setUpRunningTimer(quest.startTimeEpochSeconds)
+                }
+
+                if(quest.level > 0){
+                    _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong()))
+                    _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - 20))
+                    _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - 40))
+                    _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
+                    _liveChallengeInfoVisibility.postValue(View.VISIBLE)
                 }
 
                 _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))
@@ -254,16 +266,11 @@ class MapViewModel(
                 val challenge = args?.keyChallenge
                 if (challenge != null) {
                     observableNavigateTo.postValue(
-                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
-                            questId,
-                            challenge
-                        )
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(questId)
                     )
                 } else {
                     observableNavigateTo.postValue(
-                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
-                            questId
-                        )
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(questId)
                     )
                 }
             }, {

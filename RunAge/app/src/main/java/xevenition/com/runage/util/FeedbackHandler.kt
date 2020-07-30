@@ -38,33 +38,20 @@ class FeedbackHandler @Inject constructor(
         val timeSinceLastCheckpoint = currentTimeMillis - checkPointTimeStamp
         checkPointTimeStamp = currentTimeMillis
 
-        val reportChallengeCompleted = if (challenge != null) {
-            if (challenge.distance == nextDistanceFeedback) {
-                duration <= challenge.time
-            } else {
-                false
-            }
-        } else {
-            false
-        }
-
-        val reportString = getDistanceFeedback(nextDistanceFeedback, reportChallengeCompleted) + getDurationFeedback(
-            resourceUtil.getString(R.string.runage_duration),
-            duration
-        ) + getCaloriesFeedback(quest) + getDurationFeedback(
+        val reportString = getDistanceFeedback(nextDistanceFeedback) +
+                getDurationFeedback(
+                    resourceUtil.getString(R.string.runage_duration),
+                    duration
+                ) + getCaloriesFeedback(quest) + getDurationFeedback(
             resourceUtil.getString(R.string.runage_pace),
             timeSinceLastCheckpoint
         )
 
-        speak(reportString)
+        speak(reportString, TextToSpeech.QUEUE_ADD)
     }
 
-    private fun getDistanceFeedback(nextDistanceFeedback: Int, reportChallengeCompleted: Boolean): String {
-        val initialSpeak = if(reportChallengeCompleted){
-            resourceUtil.getString(R.string.runage_challenge_completed_info)
-        }else{
-            resourceUtil.getString(R.string.runage_passed_info)
-        }
+    private fun getDistanceFeedback(nextDistanceFeedback: Int): String {
+        val initialSpeak = resourceUtil.getString(R.string.runage_passed_info)
         return initialSpeak +
                 " ${resourceUtil.getString(R.string.runage_distance)} " +
                 "$nextDistanceFeedback " +
@@ -124,7 +111,7 @@ class FeedbackHandler @Inject constructor(
                 }
     }
 
-    fun speak(string: String) {
+    fun speak(string: String, queueType: Int = TextToSpeech.QUEUE_FLUSH) {
         Timber.d("Speaking $string")
         val audioManager =
             app.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -161,7 +148,7 @@ class FeedbackHandler @Inject constructor(
             }
         })
 
-        textToSpeech.speak(string, TextToSpeech.QUEUE_FLUSH, null, string)
+        textToSpeech.speak(string, queueType, null, string)
     }
 
     companion object {

@@ -58,7 +58,7 @@ class EventService : Service() {
     private var callback: EventCallback? = null
     private var runningTimerDisposable: Disposable? = null
     private var isMetric: Boolean = false
-    private var reportedQuestFailed = false
+    private var challengeFailedOrCompletedReported = false
 
     interface EventCallback {
         fun onQuestCreated(id: Int)
@@ -118,7 +118,13 @@ class EventService : Service() {
             setUpRunningTimer(currentQuest.startTimeEpochSeconds)
         }
 
-        challenge = intent?.extras?.getParcelable<Challenge>(KEY_CHALLENGE)
+        if(challenge == null) {
+            Timber.d("Challenge is null, checking if we have a new challenge with intent")
+            //Have null check so we don't replace a non null challenge with a null coming from a new intent
+            challenge = intent?.extras?.getParcelable(KEY_CHALLENGE)
+        }else{
+            Timber.d("We already have a challenge, ignoring new intent data")
+        }
 
         return START_STICKY
     }
@@ -146,7 +152,7 @@ class EventService : Service() {
     }
 
     private fun startNewQuest() {
-        val disposable = questRepository.startNewQuest()
+        val disposable = questRepository.startNewQuest(challenge)
             .subscribe({
                 callback?.onQuestCreated(it.id)
                 currentQuest = it
@@ -179,32 +185,12 @@ class EventService : Service() {
                             true
                         )}"
 
-                    checkIfChallengeFailed(duration, distance)
                     updateNotification(it, "$distanceText \n$calories \n$pace")
                 }
             }, {
                 Timber.e(it)
             })
         runningTimerDisposable?.let { compositeDisposable.add(it) }
-    }
-
-    private fun checkIfChallengeFailed(duration: Long, distance: Double) {
-        val valChallenge = challenge
-        if (valChallenge != null && !reportedQuestFailed) {
-            if (duration > valChallenge.time && distance < valChallenge.distance) {
-                //this means that the challenge have failed
-                reportedQuestFailed = true
-                val secondsBehindTarget = runningUtil.getSecondsBehindCheckpoint(
-                    duration,
-                    distance,
-                    valChallenge.distance
-                )
-                val failString = resourceUtil.getString(R.string.runage_challenge_failed_first)
-                val failStringEnding =
-                    resourceUtil.getString(R.string.runage_challenge_failed_ending)
-                feedbackHandler.speak("$failString $secondsBehindTarget $failStringEnding")
-            }
-        }
     }
 
     override fun onDestroy() {
@@ -274,6 +260,14 @@ class EventService : Service() {
 
                 updateTotalDistance(newPoint)
 
+                challenge?.let { challenge ->
+                    reportChallengeCompletedOrFailed(
+                        challenge,
+                        currentQuest.startTimeEpochSeconds,
+                        currentQuest.totalDistance
+                    )
+                }
+
                 if (shouldReport(currentQuest.totalDistance)) {
                     feedbackHandler.reportCheckpoint(currentQuest, nextDistanceFeedback, challenge)
                     nextDistanceFeedback++
@@ -291,8 +285,55 @@ class EventService : Service() {
             })
     }
 
+    private fun reportChallengeCompletedOrFailed(
+        challenge: Challenge,
+        startTimeEpochSeconds: Long,
+        distance: Double
+    ) {
+        if(challengeFailedOrCompletedReported)
+            return
+        val duration = Instant.now().epochSecond - startTimeEpochSeconds
+        if (duration > challenge.time && distance < challenge.distance) {
+            //challenge completed
+            challengeFailedOrCompletedReported = true
+            reportChallengeFailed(duration, distance, challenge)
+        } else if (duration < challenge.time && distance > challenge.distance) {
+            //challenge completed
+            challengeFailedOrCompletedReported = true
+            feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
+                TextToSpeech.QUEUE_ADD
+            )
+        } else if (duration > challenge.time && distance > challenge.distance) {
+            //We can consider this challenge completed also. It should already have been reported in this case though
+            challengeFailedOrCompletedReported = true
+            feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
+                TextToSpeech.QUEUE_ADD
+            )
+        } else {
+            //Challenge not yet failed or completed
+        }
+    }
+
+    private fun reportChallengeFailed(
+        duration: Long,
+        distance: Double,
+        challenge: Challenge
+    ) {
+        val secondsBehindTarget = runningUtil.getSecondsBehindCheckpoint(
+            duration,
+            distance,
+            challenge.distance
+        )
+        val failString = resourceUtil.getString(R.string.runage_challenge_failed_first)
+        val failStringEnding = resourceUtil.getString(R.string.runage_challenge_failed_ending)
+        feedbackHandler.speak(
+            "$failString $secondsBehindTarget $failStringEnding",
+            TextToSpeech.QUEUE_ADD
+        )
+    }
+
     private fun getSpeed(location: Location): Float {
-       return if (location.hasSpeed() && location.speed > 0) {
+        return if (location.hasSpeed() && location.speed > 0) {
             location.speed
         } else {
             previousLocation?.let { lastLocation ->
@@ -421,7 +462,7 @@ class EventService : Service() {
 
     companion object {
         const val NOTIFICATION_ID = 2345235
-        val MIN_ACCURACY = if(DEBUG) 60 else 30
+        val MIN_ACCURACY = if (DEBUG) 60 else 30
         const val UPDATE_INTERVAL = 5000L
         const val CHANNEL_DEFAULT_IMPORTANCE = "CHANNEL_DEFAULT_IMPORTANCE"
     }

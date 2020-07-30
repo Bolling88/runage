@@ -67,7 +67,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
                 override fun onQuestCreated(id: Int) {
                     currentQuestId = id
                     backPressCallback?.isEnabled = true
-                    Timber.d("onQuestCreated: $id")
+                    Timber.d("Got quest from service: $id")
                     onNewQuestCreated(id)
                 }
             })
@@ -312,14 +312,6 @@ class MapFragment : BaseFragment<MapViewModel>() {
             //viewModel not initialised
             currentQuestId = id
         }
-    }
-
-    fun onQuestFinished() {
-        viewModel.onQuestFinished()
-        googleMap?.clear()
-        userMarker = null
-        polyLine = null
-        currentQuestId = -1
     }
 
     companion object {
