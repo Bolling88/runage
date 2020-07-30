@@ -2,6 +2,7 @@ package xevenition.com.runage.fragment.start
 
 import android.content.Intent
 import android.net.Uri
+import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.util.SingleLiveEvent
@@ -50,7 +51,7 @@ class StartViewModel(
         val task = accountUtil.getGamesPlayerInfo()
         task?.addOnSuccessListener {
             if (!serviceIsRunning && !welcomeMessagePlayed) {
-                feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}")
+                feedbackHandler.speak("${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}", TextToSpeech.QUEUE_FLUSH)
                 welcomeMessagePlayed = true
             }
             _liveTextName.postValue(it.displayName)

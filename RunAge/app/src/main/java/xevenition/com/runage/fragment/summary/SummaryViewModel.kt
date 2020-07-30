@@ -41,7 +41,6 @@ class SummaryViewModel(
     private var mapCreated: Boolean = false
     private var quest: Quest? = null
     private val questId = args.keyQuestId
-    private val challenge = args.keyChallenge
     private var challengeStars = 0
 
     private val _liveTotalDistance = MutableLiveData<String>()
@@ -256,19 +255,25 @@ class SummaryViewModel(
         _livePace.postValue(runningUtil.getPaceString(duration, distance, true))
 
         if (quest.locations.size < 2) {
-            if (challenge != null) {
+            if (quest.level > 0) {
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
             } else {
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_quest_failed))
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_quest_failed))
             }
-            setUpFailUi()
+
+            //Quest is so short there is no reason for saving it
+            _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+            _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+            _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
+            _liveDeleteButtonVisibility.postValue(View.GONE)
+            _observablePlayFailAnimation.postValue(Unit)
             _liveButtonEnabled.postValue(true)
             //don't update user stats in this case
         } else {
-            if (challenge != null) {
-                challengeStars = getChallengeStars(challenge, duration, distance)
+            if (quest.level > 0) {
+                challengeStars = getChallengeStars(quest, duration, distance)
                 if (challengeStars > 0) {
                     if (runStats.activityPercentage.getOrDefault(
                             DetectedActivity.ON_BICYCLE,
@@ -279,10 +284,10 @@ class SummaryViewModel(
                         ) > 0.05
                     ) {
                         //Cheating detected!
-                        setUpFailUi()
                         challengeStars = 0
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                        _observablePlayFailAnimation.postValue(Unit)
                         _liveCheatingTextVisibility.postValue(View.VISIBLE)
                     } else {
                         _liveStarVisibility.postValue(View.VISIBLE)
@@ -310,7 +315,7 @@ class SummaryViewModel(
                 } else {
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
-                    setUpFailUi()
+                    _observablePlayFailAnimation.postValue(Unit)
                 }
             } else {
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
@@ -331,15 +336,15 @@ class SummaryViewModel(
 
                     val oldUserScoreMap = userInfo?.challengeScore ?: mapOf()
                     var challengeCompletedFirstTime = false
-                    val scoreMap = if (challenge != null) {
-                        val stars = oldUserScoreMap.getOrDefault(challenge.level.toString(), 0)
+                    val scoreMap = if (quest.level > 0) {
+                        val stars = oldUserScoreMap.getOrDefault(quest.level.toString(), 0)
                         if (stars < challengeStars) {
                             if (stars == 0) {
                                 //Previous score was 0, and we have gotten at least one star, which means first time completion
                                 challengeCompletedFirstTime = true
                             }
                             val newScoreMap = oldUserScoreMap.toMutableMap()
-                            newScoreMap[challenge.level.toString()] = challengeStars
+                            newScoreMap[quest.level.toString()] = challengeStars
                             newScoreMap.toMap()
                         } else {
                             oldUserScoreMap
@@ -349,8 +354,8 @@ class SummaryViewModel(
                     }
 
                     val newXp =
-                        if (challenge != null && challengeStars > 0 && challengeCompletedFirstTime) {
-                            runStats.xp + challenge.experience
+                        if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime) {
+                            runStats.xp + quest.levelExperience
                         } else {
                             runStats.xp
                         }
@@ -410,7 +415,7 @@ class SummaryViewModel(
 
     fun onSaveProgressClicked() {
         Timber.d("Save clicked")
-        if (quest?.locations?.size ?: 0 < 2 || (challenge != null && challengeStars == 0)) {
+        if (quest?.locations?.size ?: 0 < 2) {
             quest?.let {
                 deleteAndExit(it)
             }
@@ -441,27 +446,19 @@ class SummaryViewModel(
         )
     }
 
-    private fun setUpFailUi() {
-        _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
-        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
-        _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
-        _liveDeleteButtonVisibility.postValue(View.GONE)
-        _observablePlayFailAnimation.postValue(Unit)
-    }
-
     private fun getQuestDuration(quest: Quest): Long {
         val lastTimeStamp =
             quest.locations.lastOrNull()?.timeStampEpochSeconds ?: Instant.now().epochSecond
         return lastTimeStamp - quest.startTimeEpochSeconds
     }
 
-    private fun getChallengeStars(challenge: Challenge, duration: Long, distance: Double): Int {
-        if (distance < challenge.distance)
+    private fun getChallengeStars(quest: Quest, duration: Long, distance: Double): Int {
+        if (distance < quest.levelDistance)
             return 0
         return when {
-            duration <= challenge.time - 40 -> 3
-            duration <= challenge.time - 20 -> 2
-            duration <= challenge.time -> 1
+            duration <= quest.levelTime - 40 -> 3
+            duration <= quest.levelTime - 20 -> 2
+            duration <= quest.levelTime -> 1
             else -> 0
         }
     }

@@ -254,16 +254,11 @@ class MapViewModel(
                 val challenge = args?.keyChallenge
                 if (challenge != null) {
                     observableNavigateTo.postValue(
-                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
-                            questId,
-                            challenge
-                        )
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(questId)
                     )
                 } else {
                     observableNavigateTo.postValue(
-                        MapFragmentDirections.actionMapFragmentToSummaryFragment(
-                            questId
-                        )
+                        MapFragmentDirections.actionMapFragmentToSummaryFragment(questId)
                     )
                 }
             }, {
