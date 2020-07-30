@@ -35,9 +35,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.mainNavigation)
-        }
         val factory = HistoryViewModelFactory(getApplication())
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
 

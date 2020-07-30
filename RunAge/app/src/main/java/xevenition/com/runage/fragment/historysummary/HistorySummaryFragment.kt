@@ -56,7 +56,7 @@ class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mapView.onCreate(arguments)
 
-        val navController = (activity as MainActivity).findNavController(R.id.nav_host_fragment)
+        val navController = (activity as MainActivity).findNavController(R.id.nav_host_tab_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar
             .setupWithNavController(navController, appBarConfiguration)

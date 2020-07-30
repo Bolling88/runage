@@ -10,8 +10,8 @@
         android:icon="@drawable/ic_run_blue"
         android:title="@string/runage_start"/>
     <item
-        android:id="@+id/page_3"
-        android:enabled="false"
-        android:icon="@drawable/ic_lock"
-        android:title="@string/runage_feed"/>
+        android:id="@+id/historyFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_activity"
+        android:title="@string/runage_activity"/>
 </menu>
