@@ -38,8 +38,7 @@ class QuestsFragment : BaseFragment<ChallengesViewModel>() {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
         val factory = ChallengesViewModelFactory(getApplication())
-        //Activity is owner, since we don't want to reload everything on tab flip
-        viewModel = ViewModelProvider(requireActivity(), factory).get(ChallengesViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(ChallengesViewModel::class.java)
 
         challengeListRecyclerAdapter =
             QuestsRecyclerAdapter(resourceUtil, object : QuestsRecyclerAdapter.OnClickListener {

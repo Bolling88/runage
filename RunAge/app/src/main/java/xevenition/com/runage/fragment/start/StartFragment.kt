@@ -38,8 +38,7 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         super.onCreate(savedInstanceState)
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
         val factory = StartViewModelFactory(getApplication())
-        //Activity is owner, since we don't want to reload everything on tab flip
-        viewModel = ViewModelProvider(requireActivity(), factory).get(StartViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(StartViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -2,9 +2,11 @@ package xevenition.com.runage.fragment.summary
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.games.Player
 import xevenition.com.runage.util.SingleLiveEvent
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.maps.model.LatLng
@@ -13,6 +15,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.Challenge
@@ -423,17 +426,27 @@ class SummaryViewModel(
             quest?.let { quest ->
                 Timber.d("Saving quest")
                 _liveLoadingVisibility.postValue(View.VISIBLE)
-                Observable.just(quest)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                        storeQuestInFirestore(quest, runStats!!)
-                    }, {
-                        Timber.e(it)
-                        _liveLoadingVisibility.postValue(View.GONE)
-                        showErrorDialog()
-                    })
+                val task = accountUtil.getGamesPlayerInfo()
+                task?.addOnSuccessListener {
+                    commenceSavingQuest(quest, it)
+                }
+                task?.addOnFailureListener {
+                    commenceSavingQuest(quest, null)
+                }
             }
         }
+    }
+
+    private fun commenceSavingQuest(quest: Quest, player: Player?): Disposable? {
+        return Observable.just(quest)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                storeQuestInFirestore(quest, runStats!!, player)
+            }, {
+                Timber.e(it)
+                _liveLoadingVisibility.postValue(View.GONE)
+                showErrorDialog()
+            })
     }
 
     private fun showErrorDialog() {
@@ -454,9 +467,10 @@ class SummaryViewModel(
 
     private fun storeQuestInFirestore(
         quest: Quest,
-        runStats: RunStats
+        runStats: RunStats,
+        player: Player?
     ): Disposable {
-        return fireStoreHandler.storeQuest(quest, runStats)
+        return fireStoreHandler.storeQuest(quest, runStats, player)
             .subscribe({
                 it.addOnCompleteListener {
                     syncWithGoogleFit(quest)

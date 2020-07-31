@@ -36,8 +36,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
         val factory = HistoryViewModelFactory(getApplication())
-        //Activity is owner, since we don't want to reload everything on tab flip
-        viewModel = ViewModelProvider(requireActivity(), factory).get(HistoryViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
 
         historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
             override fun onClick(quest: SavedQuest) {

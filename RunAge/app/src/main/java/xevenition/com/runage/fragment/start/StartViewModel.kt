@@ -58,6 +58,7 @@ class StartViewModel(
                 welcomeMessagePlayed = true
             }
             _liveTextName.postValue(it.displayName)
+            val string = it.hiResImageUri.toString()
             _observableProfileImage.postValue(it.hiResImageUri)
         }
 

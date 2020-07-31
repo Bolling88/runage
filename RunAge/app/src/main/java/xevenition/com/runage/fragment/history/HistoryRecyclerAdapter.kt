@@ -1,13 +1,16 @@
 package xevenition.com.runage.fragment.history
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.google.android.gms.common.images.ImageManager
 import xevenition.com.runage.R
 
 import xevenition.com.runage.model.SavedQuest
@@ -33,12 +36,13 @@ class HistoryRecyclerAdapter(
         return ItemViewHolder(view)
     }
 
-    inner class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
         private val textDistance: TextView = view.findViewById(R.id.textDistance)
         private val textDuration: TextView = view.findViewById(R.id.textDuration)
         private val textPace: TextView = view.findViewById(R.id.textPace)
         private val textCalories: TextView = view.findViewById(R.id.textCalories)
         private val textTitle: TextView = view.findViewById(R.id.textTitle)
+        private val imageRunning: ImageView = view.findViewById(R.id.imageRunning)
 
         @SuppressLint("SetTextI18n")
         fun bind(item: SavedQuest) = with(itemView) {
@@ -65,6 +69,14 @@ class HistoryRecyclerAdapter(
                     item.totalDistance.toDouble(),
                     showAbbreviation = false)
             textCalories.text = "${item.calories}"
+
+            if(item.playerImageUri.isEmpty()){
+                imageRunning.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_profile))
+            }else{
+                val uri = Uri.parse(item.playerImageUri)
+                val manager = ImageManager.create(view.context)
+                manager.loadImage(imageRunning, uri)
+            }
         }
     }
 
@@ -76,11 +88,11 @@ class HistoryRecyclerAdapter(
 
 class DiffCallback : DiffUtil.ItemCallback<SavedQuest>() {
     override fun areItemsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return false
+        return true
     }
 
     override fun areContentsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return false
+        return true
     }
 
 }
