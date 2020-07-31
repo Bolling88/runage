@@ -101,4 +101,18 @@
     <string name="runage_time_limit">Time limit:</string>
     <string name="runage_run_failed">Run failed</string>
     <string name="runage_run_started">Run started</string>
+    <string name="runage_email_us">Email us</string>
+    <string name="runage_contact_us_info">If you have any problems, questions, or feature requests, please, feel free to reach out to us! Send an email by clicking the button below.</string>
+    <string name="runage_send_email">Send email...</string>
+    <string name="runage_background_info">Also, some users experience that the app is killed while in the background. This can be prevented. Click on the button below to understand how.</string>
+    <string name="runage_open_help_pages">Get info</string>
+    <string name="runage_are_you_happy">Is RunAge living up to your expectations?</string>
+    <string name="runage_hi_there">Hi there!</string>
+    <string name="runage_happy_to_hear_it">Happy to hear it!</string>
+    <string name="runage_rate_us">We would love if you could rate us in Google Play?</string>
+    <string name="runage_sure">Sure!</string>
+    <string name="runage_later">Later</string>
+    <string name="runage_sorry_to_hear_that">Sorry to hear that!</string>
+    <string name="runage_would_you_like_feedback">Would you like to give us some feedback to help us improve?</string>
+    <string name="runage_challenge_started">Challenge started</string>
 </resources>

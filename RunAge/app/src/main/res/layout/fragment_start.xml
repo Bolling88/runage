@@ -143,6 +143,9 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"
             style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            app:icon="@drawable/ic_run_blue"
+            app:iconTint="@color/white"
             android:onClick="@{()-> viewModel.onStartClicked()}"
             android:text="@string/runage_start_running"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationHolder"

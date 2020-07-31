@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
             type="xevenition.com.runage.fragment.support.SupportViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -24,6 +25,75 @@
             app:title="@string/runage_support"
             app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
             app:titleTextColor="@color/white" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textContactUs"
+            android:layout_width="0dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/majora"
+            android:layout_margin="@dimen/margin_basic"
+            android:text="@string/runage_contact_us_info"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieMail"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:onClick="@{()->viewModel.onEmailClicked()}"
+            android:layout_marginStart="@dimen/margin_basic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textContactUs"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_email" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onEmailClicked()}"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:text="@string/runage_email_us"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toEndOf="@+id/lottieMail"
+            app:layout_constraintTop_toBottomOf="@+id/textContactUs" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textBackground"
+            android:layout_width="0dip"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:fontFamily="@font/majora"
+            android:layout_margin="@dimen/margin_basic"
+            android:text="@string/runage_background_info"
+            app:layout_constraintTop_toBottomOf="@+id/lottieMail"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieWarning"
+            android:layout_width="60dip"
+            android:layout_height="60dip"
+            android:onClick="@{()->viewModel.onSupportClicked()}"
+            android:layout_marginStart="@dimen/margin_basic"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="15dip"
+            app:layout_constraintTop_toBottomOf="@+id/textBackground"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_warning" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/ButtonStyleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.onSupportClicked()}"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:text="@string/runage_open_help_pages"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toEndOf="@+id/lottieWarning"
+            app:layout_constraintTop_toBottomOf="@+id/textBackground" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

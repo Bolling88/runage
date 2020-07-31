@@ -1,6 +1,7 @@
 package xevenition.com.runage.util
 
 import android.location.Location
+import com.google.android.gms.games.Player
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +29,8 @@ class FireStoreHandler @Inject constructor() {
 
     fun storeQuest(
         quest: Quest,
-        runStats: RunStats
+        runStats: RunStats,
+        player: Player?
     ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
@@ -54,6 +56,9 @@ class FireStoreHandler @Inject constructor() {
                     "runDistance" to runStats.runningDistance,
                     "runDuration" to runStats.runningDuration,
                     "xp" to runStats.xp,
+                    "playerName" to player?.displayName,
+                    "playerImageUri" to player?.hiResImageUri.toString(),
+                    "playerId" to player?.playerId,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
                     "runningPercentage" to runStats.activityPercentage.getOrDefault(

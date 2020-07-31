@@ -17,14 +17,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imageRunning"
-            android:layout_width="45dip"
-            android:layout_height="45dip"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imageHolder"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
             android:layout_margin="@dimen/margin_basic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_run_blue" />
+            android:layout_gravity="center"
+            app:cardCornerRadius="150dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageRunning"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textTitle"
@@ -34,8 +43,8 @@
             android:fontFamily="@font/light"
             android:textColor="@color/grey2"
             android:textSize="@dimen/textSizeSmall"
-            app:layout_constraintStart_toEndOf="@+id/imageRunning"
-            app:layout_constraintTop_toTopOf="@+id/imageRunning"
+            app:layout_constraintStart_toEndOf="@+id/imageHolder"
+            app:layout_constraintTop_toTopOf="@+id/imageHolder"
             tools:text="Running Sunday 2020" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -46,8 +55,8 @@
             android:fontFamily="@font/bold"
             android:textColor="@color/grey2"
             android:textSize="@dimen/textSizeBig"
-            app:layout_constraintStart_toEndOf="@+id/imageRunning"
-            app:layout_constraintBottom_toBottomOf="@+id/imageRunning"
+            app:layout_constraintStart_toEndOf="@+id/imageHolder"
+            app:layout_constraintBottom_toBottomOf="@+id/imageHolder"
             tools:text="Duration: 00:00:00" />
 
         <androidx.appcompat.widget.AppCompatTextView

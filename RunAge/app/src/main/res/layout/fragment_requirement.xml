@@ -377,8 +377,10 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button"
                 style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
+                app:icon="@drawable/ic_run_blue"
+                app:iconTint="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:onClick="@{()-> viewModel.onStartClicked()}"
                 android:text="@string/runage_start_challenge" />
         </LinearLayout>

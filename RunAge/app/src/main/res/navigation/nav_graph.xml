@@ -84,4 +84,13 @@
             android:label="RuleFragment" >
         </fragment>
     </navigation>
+
+    <navigation android:id="@+id/appSupportNavigation"
+        app:startDestination="@id/appSupportNavigation">
+        <fragment
+            android:id="@+id/appSupportNavigation"
+            android:name="xevenition.com.runage.fragment.support.SupportFragment"
+            android:label="@string/runage_support" >
+        </fragment>
+    </navigation>
 </navigation>

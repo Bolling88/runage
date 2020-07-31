@@ -33,6 +33,7 @@ import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.fragment.start.StartViewModelFactory
 import xevenition.com.runage.fragment.summary.SummaryFragment
 import xevenition.com.runage.fragment.summary.SummaryViewModelFactory
+import xevenition.com.runage.fragment.support.SupportFragment
 import xevenition.com.runage.fragment.support.SupportViewModelFactory
 import xevenition.com.runage.fragment.xp.XpViewModelFactory
 import xevenition.com.runage.service.EventService
@@ -49,6 +50,7 @@ interface ApplicationComponent {
     fun inject(component: StartFragment)
     fun inject(component: QuestsFragment)
     fun inject(component: SplashFragment)
+    fun inject(component: SupportFragment)
     fun inject(component: HistoryFragment)
     fun inject(component: SummaryFragment)
     fun inject(component: ViewPageFragment)
