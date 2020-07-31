@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.start
 import android.content.Intent
 import android.net.Uri
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.util.SingleLiveEvent
