@@ -19,7 +19,8 @@ class StartViewModel(
     fireStoreHandler: FireStoreHandler,
     private val accountUtil: AccountUtil,
     resourceUtil: ResourceUtil,
-    feedbackHandler: FeedbackHandler
+    feedbackHandler: FeedbackHandler,
+    private val saveUtil: SaveUtil
 ) : BaseViewModel() {
 
     private val _liveTextName = MutableLiveData<String>()
@@ -43,6 +44,7 @@ class StartViewModel(
     val observableProfileImage: LiveData<Uri> = _observableProfileImage
 
     val observableShowAchievements = SingleLiveEvent<Intent>()
+    val observableShowRateDialog = SingleLiveEvent<Unit>()
 
     init {
         if(serviceIsRunning){
@@ -56,6 +58,14 @@ class StartViewModel(
             }
             _liveTextName.postValue(it.displayName)
             _observableProfileImage.postValue(it.hiResImageUri)
+        }
+
+        val openedApp = saveUtil.getInt(SaveUtil.KEY_APP_OPENINGS, 0)
+        val rated = saveUtil.getBoolean(SaveUtil.KEY_RATED, false)
+        if(openedApp >= 5 && !rated){
+            observableShowRateDialog.call()
+        }else{
+            saveUtil.saveInt(SaveUtil.KEY_APP_OPENINGS, openedApp+1)
         }
 
         fireStoreHandler.getUserInfo()
@@ -93,5 +103,18 @@ class StartViewModel(
                 observableShowAchievements.postValue(it)
             }
         }
+    }
+
+    fun onRateLaterClicked() {
+        saveUtil.saveInt(SaveUtil.KEY_APP_OPENINGS, 0)
+        saveUtil.saveBoolean(SaveUtil.KEY_RATED, false)
+    }
+
+    fun onRateClicked() {
+        saveUtil.saveBoolean(SaveUtil.KEY_RATED, true)
+    }
+
+    fun onDislikeClicked() {
+        saveUtil.saveBoolean(SaveUtil.KEY_RATED, true)
     }
 }

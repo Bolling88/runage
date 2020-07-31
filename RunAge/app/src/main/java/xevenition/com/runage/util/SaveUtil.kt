@@ -23,11 +23,22 @@ class SaveUtil @Inject constructor(app: Application) {
         }
     }
 
+    fun saveInt(key: String, value: Int){
+        with (sharedPref.edit()) {
+            putInt(key, value)
+            apply()
+        }
+    }
+
     fun saveFloat(key: String, value: Float){
         with (sharedPref.edit()) {
             putFloat(key, value)
             apply()
         }
+    }
+
+    fun getInt(key: String, default: Int = 0): Int {
+        return sharedPref.getInt(key, 0)
     }
 
     fun getBoolean(key: String, default: Boolean = false): Boolean {
@@ -43,6 +54,8 @@ class SaveUtil @Inject constructor(app: Application) {
         const val KEY_IS_USING_METRIC = "key_is_using_metric"
         const val KEY_WEIGHT = "key_weight"
         const val KEY_SYNC_GOOGLE_FIT = "key_sync_google_fit"
+        const val KEY_APP_OPENINGS = "key_app_openings"
+        const val KEY_RATED = "key_rated"
 
         private const val KEY = "xevenition.com.runage.SAVE_KEY"
     }

@@ -24,9 +24,11 @@ class StartViewModelFactory @Inject constructor(app: MainApplication) :
     lateinit var fireStoreHandler: FireStoreHandler
     @Inject
     lateinit var gameServicesUtil: GameServicesUtil
+    @Inject
+    lateinit var saveUtil: SaveUtil
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StartViewModel(gameServicesUtil, fireStoreHandler, accountUtil, resourceUtil, feedbackHandler) as T
+        return StartViewModel(gameServicesUtil, fireStoreHandler, accountUtil, resourceUtil, feedbackHandler, saveUtil) as T
     }
 }

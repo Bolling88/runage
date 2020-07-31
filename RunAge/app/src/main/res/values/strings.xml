@@ -106,4 +106,12 @@
     <string name="runage_send_email">Send email...</string>
     <string name="runage_background_info">Also, some users experience that the app is killed while in the background. This can be prevented. Click on the button below to understand how.</string>
     <string name="runage_open_help_pages">Get info</string>
+    <string name="runage_are_you_happy">Is RunAge living up to your expectations?</string>
+    <string name="runage_hi_there">Hi there!</string>
+    <string name="runage_happy_to_hear_it">Happy to hear it!</string>
+    <string name="runage_rate_us">We would love if you could rate us in Google Play?</string>
+    <string name="runage_sure">Sure!</string>
+    <string name="runage_later">Later</string>
+    <string name="runage_sorry_to_hear_that">Sorry to hear that!</string>
+    <string name="runage_would_you_like_feedback">Would you like to give us some feedback to help us improve?</string>
 </resources>
