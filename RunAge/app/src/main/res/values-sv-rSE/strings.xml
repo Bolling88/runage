@@ -63,7 +63,7 @@
     <string name="runage_delete_run_title">Radera Runda</string>
     <string name="runage_delete_run_message">Är du säker på att du vill radera denna runda?</string>
     <string name="runage_rule_1_title">Endast löpning räknas</string>
-    <string name="runage_support">"Du får bara erfarenhetspoäng av löpning. Gå, cyckla eller att ta en tur med bilen ger dig inget. Löpning är också det enda som gör att du låser upp prestationer och klättrar på topplistorna. "</string>
+    <string name="runage_support">"Support"</string>
     <string name="runage_rule_1_message">"Du får bara erfarenhetspoäng av att springa. Gå, cyckla eller ta en tur med bilen ger dig inget. Att springa är också det enda som låser upp prestationer och låter dig klättra på topplistorna. Med det sagt, det är okej att gå under en runda, men förvänta dig inte att bli belönad av det. "</string>
     <string name="runage_rule_2_title">Spring snabbare</string>
     <string name="runage_rule_2_message">"Ju snabbare du springer, desto mer erfarenhetspoäng kommer du få. Men kom ihåg, att göra något annat än att springa kommer ge dig motsatta resultatet. "</string>

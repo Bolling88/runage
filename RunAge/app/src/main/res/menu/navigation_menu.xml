@@ -30,6 +30,16 @@
     </group>
 
     <group
+        android:id="@+id/grp_7"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/appSupportNavigation"
+            android:icon="@drawable/ic_support"
+            android:title="@string/runage_support" />
+    </group>
+
+    <group
         android:id="@+id/grp_6"
         android:checkableBehavior="single">
 
