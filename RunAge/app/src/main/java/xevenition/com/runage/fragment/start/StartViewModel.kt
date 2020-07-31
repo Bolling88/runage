@@ -63,7 +63,7 @@ class StartViewModel(
 
         val openedApp = saveUtil.getInt(SaveUtil.KEY_APP_OPENINGS, 0)
         val rated = saveUtil.getBoolean(SaveUtil.KEY_RATED, false)
-        if(openedApp >= 5 && !rated){
+        if(openedApp >= NUMBER_OF_APP_OPENINGS && !rated){
             observableShowRateDialog.call()
         }else{
             saveUtil.saveInt(SaveUtil.KEY_APP_OPENINGS, openedApp+1)
@@ -117,5 +117,9 @@ class StartViewModel(
 
     fun onDislikeClicked() {
         saveUtil.saveBoolean(SaveUtil.KEY_RATED, true)
+    }
+
+    companion object{
+        const val NUMBER_OF_APP_OPENINGS = 30
     }
 }

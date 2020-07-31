@@ -100,4 +100,18 @@
     <string name="runage_time_limit">Tidsgräns:</string>
     <string name="runage_run_failed">Runda misslyckades</string>
     <string name="runage_run_started">Runda påbörjad</string>
+    <string name="runage_email_us">Mejla oss</string>
+    <string name="runage_contact_us_info">Om du har problem med appen, frågor, feature requests eller liknande, hör gärna av dig till oss! Skicka ett mejl genom att trycka på knappen nedan.</string>
+    <string name="runage_send_email">Skicka mejl...</string>
+    <string name="runage_background_info">Vissa användare upplever att appen stängs av sig själv när den är i bakgrunden efter en stund. Detta går att undvika. Tryck på knappen nedan för att lära dig hur.</string>
+    <string name="runage_open_help_pages">Få info</string>
+    <string name="runage_are_you_happy">Lever RunAge upp till dina förväntningar?</string>
+    <string name="runage_hi_there">Hej där!</string>
+    <string name="runage_happy_to_hear_it">Glad att höra det!</string>
+    <string name="runage_rate_us">Vi skulle älska om du ville betygsätta oss i Google Play?</string>
+    <string name="runage_sure">Visst!</string>
+    <string name="runage_later">Senare</string>
+    <string name="runage_sorry_to_hear_that">Ledsen att höra det!</string>
+    <string name="runage_would_you_like_feedback">Skulle du vilja ge oss någon feedback för att hjälp oss bli bättre?</string>
+    <string name="runage_challenge_started">Utmaning påbörjad</string>
 </resources>
