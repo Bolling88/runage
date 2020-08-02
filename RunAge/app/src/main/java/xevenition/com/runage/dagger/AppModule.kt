@@ -35,8 +35,8 @@ class AppModule(private val application: Application) {
             }else{
                 Locale.US
             }
-            speech?.setPitch(0.1f)
-            speech?.setSpeechRate(0.9f)
+            speech?.setPitch(1f)
+            speech?.setSpeechRate(0.8f)
         }, "com.google.android.tts")
 
         return speech
