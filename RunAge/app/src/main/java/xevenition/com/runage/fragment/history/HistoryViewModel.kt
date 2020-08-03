@@ -37,7 +37,7 @@ class HistoryViewModel(
         _liveNoRunsTextVisibility.postValue(View.GONE)
         firestoreHandler.loadQuests()
             .addOnSuccessListener { collection ->
-                if (collection != null) {
+                if (collection != null && !collection.isEmpty) {
                     lastSnapshot = collection.documents.last()
                     Timber.d("DocumentSnapshot data: ${collection.documents}")
                     processQuests(collection)
@@ -84,7 +84,7 @@ class HistoryViewModel(
         lastSnapshot?.let {
             firestoreHandler.loadMoreQuests(it)
                 .addOnSuccessListener { collection ->
-                    if (collection != null) {
+                    if (collection != null && !collection.isEmpty) {
                         lastSnapshot = collection.documents.last()
                         Timber.d("DocumentSnapshot data: ${collection.documents}")
                         processQuests(collection)
