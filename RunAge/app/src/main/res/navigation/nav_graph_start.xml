@@ -90,6 +90,13 @@
             android:id="@+id/action_startFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="xevenition.com.runage.fragment.feed.FeedFragment"
+        android:label="FeedFragment">
+
+    </fragment>
     <fragment
         android:id="@+id/historyFragment"
         android:name="xevenition.com.runage.fragment.history.HistoryFragment"

@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_run_blue"
         android:title="@string/runage_start"/>
     <item
-        android:id="@+id/historyFragment"
+        android:id="@+id/feedFragment"
         android:enabled="true"
         android:icon="@drawable/ic_activity"
         android:title="@string/runage_activity"/>

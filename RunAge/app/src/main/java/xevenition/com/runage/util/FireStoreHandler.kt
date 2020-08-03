@@ -107,7 +107,7 @@ class FireStoreHandler @Inject constructor() {
         return distance >= 40
     }
 
-    fun loadQuests(): Task<QuerySnapshot> {
+    fun loadQuestsAll(): Task<QuerySnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
             firestore.collection("quest")
@@ -117,7 +117,51 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadMoreQuests(startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+    fun loadQuestsAllMore(startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .startAfter(startAfter)
+                .whereEqualTo("userId", userId)
+        return docRef.get()
+    }
+
+    fun loadQuestsFollowing(ids: List<String>): Task<QuerySnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereIn("id", ids)
+                .whereEqualTo("userId", userId)
+        return docRef.get()
+    }
+
+    fun loadQuestsFollowingMore(ids: List<String>, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereIn("id", ids)
+                .startAfter(startAfter)
+                .whereEqualTo("userId", userId)
+        return docRef.get()
+    }
+
+    fun loadQuestsMine(): Task<QuerySnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereEqualTo("userId", userId)
+        return docRef.get()
+    }
+
+    fun loadQuestsMineMore(startAfter: DocumentSnapshot): Task<QuerySnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
             firestore.collection("quest")

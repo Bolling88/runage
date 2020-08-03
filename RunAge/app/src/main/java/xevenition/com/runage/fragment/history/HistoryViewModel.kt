@@ -5,7 +5,6 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -35,7 +34,7 @@ class HistoryViewModel(
     init {
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
-        firestoreHandler.loadQuests()
+        firestoreHandler.loadQuestsMine()
             .addOnSuccessListener { collection ->
                 if (collection != null && !collection.isEmpty) {
                     lastSnapshot = collection.documents.last()
@@ -82,7 +81,7 @@ class HistoryViewModel(
     fun loadMoreData() {
         Timber.d("Load more data")
         lastSnapshot?.let {
-            firestoreHandler.loadMoreQuests(it)
+            firestoreHandler.loadQuestsMineMore(it)
                 .addOnSuccessListener { collection ->
                     if (collection != null && !collection.isEmpty) {
                         lastSnapshot = collection.documents.last()

@@ -59,10 +59,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = historyRecyclerAdapter
 
-        binding.toolbar.setNavigationOnClickListener {
-            (activity as? MainActivity)?.openMenu()
-        }
-
         return binding.root
     }
 
@@ -80,5 +76,11 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
                 historyRecyclerAdapter.submitList(it)
             }
         })
+    }
+
+    companion object{
+        fun getInstance(position: Int): HistoryFragment{
+            return HistoryFragment()
+        }
     }
 }

@@ -117,4 +117,8 @@
     <string name="runage_challenge_started">Challenge started</string>
     <string name="runage_running_percentage">Running %</string>
     <string name="runage_time">Time</string>
+    <string name="runage_all">All</string>
+    <string name="runage_my">My</string>
+    <string name="runage_following">Following</string>
+    <string name="runage_mine">Mine</string>
 </resources>
