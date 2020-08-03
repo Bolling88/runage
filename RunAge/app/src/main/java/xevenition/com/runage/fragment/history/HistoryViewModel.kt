@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -15,8 +17,11 @@ import xevenition.com.runage.util.ResourceUtil
 
 class HistoryViewModel(
     resourceUtil: ResourceUtil,
-    firestoreHandler: FireStoreHandler
+    private val firestoreHandler: FireStoreHandler
 ) : BaseViewModel() {
+
+    private var lastSnapshot: DocumentSnapshot? = null
+    private var allQuests = mutableListOf<SavedQuest>()
 
     private val _observableQuests = MutableLiveData<List<SavedQuest>>()
     val observableQuest: LiveData<List<SavedQuest>> = _observableQuests
@@ -30,9 +35,10 @@ class HistoryViewModel(
     init {
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
-        firestoreHandler.getAllQuests()
+        firestoreHandler.loadQuests()
             .addOnSuccessListener { collection ->
                 if (collection != null) {
+                    lastSnapshot = collection.documents.last()
                     Timber.d("DocumentSnapshot data: ${collection.documents}")
                     processQuests(collection)
                 } else {
@@ -53,10 +59,13 @@ class HistoryViewModel(
             }
             .subscribe({
                 Timber.d("Quests processed")
-                _observableQuests.postValue(it)
+                val newList = allQuests.toMutableList()
+                newList.addAll(it)
+                _observableQuests.postValue(newList)
+                allQuests = newList
                 _liveProgressVisibility.postValue(View.GONE)
 
-                if (it.isEmpty()) {
+                if (allQuests.isEmpty()) {
                     _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                 }
             }, {
@@ -68,5 +77,32 @@ class HistoryViewModel(
         observableNavigateTo.postValue(
             HistoryFragmentDirections.actionHistoryFragmentToHistorySummaryFragment(quest)
         )
+    }
+
+    fun loadMoreData() {
+        Timber.d("Load more data")
+        lastSnapshot?.let {
+            firestoreHandler.loadMoreQuests(it)
+                .addOnSuccessListener { collection ->
+                    if (collection != null) {
+                        lastSnapshot = collection.documents.last()
+                        Timber.d("DocumentSnapshot data: ${collection.documents}")
+                        processQuests(collection)
+                    } else {
+                        Timber.d("No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Timber.e("get failed with $exception")
+                }
+        }
+    }
+
+    fun onReachedItem(position: Int) {
+        Timber.d("Reached position $position")
+        Timber.d("Items size ${allQuests.size}")
+        if(position == allQuests.size-1){
+            loadMoreData()
+        }
     }
 }

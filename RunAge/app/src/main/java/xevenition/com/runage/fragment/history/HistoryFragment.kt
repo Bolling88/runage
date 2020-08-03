@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import timber.log.Timber
+import androidx.recyclerview.widget.RecyclerView
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
@@ -19,13 +17,14 @@ import xevenition.com.runage.databinding.FragmentHistoryBinding
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
+
 
 class HistoryFragment : BaseFragment<HistoryViewModel>() {
 
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyRecyclerAdapter: HistoryRecyclerAdapter
+    private var loadMore = false
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
@@ -41,6 +40,10 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
             override fun onClick(quest: SavedQuest) {
                 viewModel.onQuestClicked(quest)
+            }
+
+            override fun onReachedItem(position: Int) {
+                viewModel.onReachedItem(position)
             }
         })
     }
@@ -73,6 +76,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
 
         viewModel.observableQuest.observe(viewLifecycleOwner, Observer {
             it?.let {
+                loadMore = false
                 historyRecyclerAdapter.submitList(it)
             }
         })

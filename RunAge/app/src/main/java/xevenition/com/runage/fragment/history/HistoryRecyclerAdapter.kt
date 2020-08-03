@@ -28,6 +28,7 @@ class HistoryRecyclerAdapter(
 
     interface OnClickListener {
         fun onClick(quest: SavedQuest)
+        fun onReachedItem(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -37,8 +38,11 @@ class HistoryRecyclerAdapter(
     }
 
     inner class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+        private val textName: TextView = view.findViewById(R.id.textName)
         private val textDistance: TextView = view.findViewById(R.id.textDistance)
-        private val textDuration: TextView = view.findViewById(R.id.textDuration)
+        private val textTime: TextView = view.findViewById(R.id.textTime)
+        private val textXp: TextView = view.findViewById(R.id.textXp)
+        private val textPercentage: TextView = view.findViewById(R.id.textPercentage)
         private val textPace: TextView = view.findViewById(R.id.textPace)
         private val textCalories: TextView = view.findViewById(R.id.textCalories)
         private val textTitle: TextView = view.findViewById(R.id.textTitle)
@@ -59,20 +63,21 @@ class HistoryRecyclerAdapter(
 
             textDistance.text = runningUtil.getDistanceString(item.totalDistance)
             val duration = item.endTimeEpochSeconds - item.startTimeEpochSeconds
-            textDuration.text =
-                "${resourceUtil.getString(R.string.runage_duration)}: ${runningUtil.convertTimeToDurationString(
-                    duration
-                )}"
+            textTime.text = runningUtil.convertTimeToDurationString(duration)
+            textXp.text = item.xp.toString()
+            textPercentage.text = (item.runningPercentage*100).toInt().toString()
+            textName.text = item.playerName
             textPace.text =
                 runningUtil.getPaceString(
                     duration,
                     item.totalDistance.toDouble(),
-                    showAbbreviation = false)
+                    showAbbreviation = false
+                )
             textCalories.text = "${item.calories}"
 
-            if(item.playerImageUri.isEmpty()){
+            if (item.playerImageUri.isEmpty()) {
                 imageRunning.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_profile))
-            }else{
+            } else {
                 val uri = Uri.parse(item.playerImageUri)
                 val manager = ImageManager.create(view.context)
                 manager.loadImage(imageRunning, uri)
@@ -81,6 +86,7 @@ class HistoryRecyclerAdapter(
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
+        listener.onReachedItem(position)
         holder.bind(getItem(position))
     }
 }
@@ -88,11 +94,11 @@ class HistoryRecyclerAdapter(
 
 class DiffCallback : DiffUtil.ItemCallback<SavedQuest>() {
     override fun areItemsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return true
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return true
+        return oldItem == newItem
     }
 
 }

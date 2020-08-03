@@ -34,7 +34,7 @@
     <string name="runage_quest_completed">Runda slutförd</string>
     <string name="runage_quest_failed">Runda misslyckades</string>
     <string name="runage_completed_runs">Avklarade rundor</string>
-    <string name="runage_no_completed_runs">Inga avklarade uppdrag</string>
+    <string name="runage_no_completed_runs">Inga avklarade rundor</string>
     <string name="runage_running">Löpning</string>
     <string name="runage_walking">Gående</string>
     <string name="runage_driving">Körande</string>

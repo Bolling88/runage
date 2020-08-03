@@ -107,11 +107,23 @@ class FireStoreHandler @Inject constructor() {
         return distance >= 40
     }
 
-    fun getAllQuests(): Task<QuerySnapshot> {
+    fun loadQuests(): Task<QuerySnapshot> {
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereEqualTo("userId", userId)
+        return docRef.get()
+    }
+
+    fun loadMoreQuests(startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .startAfter(startAfter)
+                .limit(10)
                 .whereEqualTo("userId", userId)
         return docRef.get()
     }
@@ -121,13 +133,6 @@ class FireStoreHandler @Inject constructor() {
         val docRef =
             firestore.collection("users")
                 .document(userId)
-        return docRef.get()
-    }
-
-    fun getChallenges(): Task<DocumentSnapshot> {
-        val docRef =
-            firestore.collection("challenges")
-                .document("QuIYFZx7kYXJF7MWsy8l")
         return docRef.get()
     }
 

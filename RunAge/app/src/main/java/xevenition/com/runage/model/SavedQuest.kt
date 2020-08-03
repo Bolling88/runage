@@ -5,12 +5,14 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class SavedQuest(
+    val questId: String = "",
     val userId: String = "",
     val totalDistance: Int = 0,
     val calories: Int = 0,
     val playerName: String = "",
     val playerImageUri: String = "",
     val playerId: String = "",
+    val xp: Int = 0,
     val startTimeEpochSeconds: Long = 0,
     val endTimeEpochSeconds: Long = 0,
     val runningPercentage: Double = 0.0,
