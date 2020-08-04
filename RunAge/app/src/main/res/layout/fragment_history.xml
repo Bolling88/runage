@@ -7,7 +7,6 @@
             name="viewModel"
             type="xevenition.com.runage.fragment.history.HistoryViewModel" />
     </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"

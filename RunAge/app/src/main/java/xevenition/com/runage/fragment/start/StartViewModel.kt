@@ -4,11 +4,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.speech.tts.TextToSpeech
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
@@ -16,20 +14,22 @@ import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.*
 import java.io.ByteArrayOutputStream
 
 class StartViewModel(
     private val gameServicesUtil: GameServicesUtil,
-    fireStoreHandler: FireStoreHandler,
     private val accountUtil: AccountUtil,
     resourceUtil: ResourceUtil,
     feedbackHandler: FeedbackHandler,
-    private val saveUtil: SaveUtil
+    private val saveUtil: SaveUtil,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
-    private var userInfo: UserInfo? = null
+    private var userInfo: RunageUser? = null
+    private var profileImageUploaded = false
     var storageRef = Firebase.storage.reference
 
     private val _liveTextName = MutableLiveData<String>()
@@ -64,36 +64,34 @@ class StartViewModel(
         val rated = saveUtil.getBoolean(SaveUtil.KEY_RATED, false)
         if(openedApp >= NUMBER_OF_APP_OPENINGS && !rated){
             observableShowRateDialog.call()
-        }else{
-            saveUtil.saveInt(SaveUtil.KEY_APP_OPENINGS, openedApp+1)
         }
 
-        fireStoreHandler.getUserInfo()
-            .addOnSuccessListener {document ->
-                if (document != null) {
-                    userInfo = document.toObject(UserInfo::class.java)
-                    Timber.d("Got user info")
-                    val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
-                    val xpPreviousLevel = LevelCalculator.getXpForLevel(level)
-                    val xpNextLevel = LevelCalculator.getXpForLevel(level + 1)
-                    val totalXpForNextLevel = xpNextLevel - xpPreviousLevel
-                    val userXp = userInfo?.xp ?: 0
-                    val progress = userXp - xpPreviousLevel
-                    _liveTextXp.postValue("$progress / $totalXpForNextLevel")
-                    _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
-                    _liveLevelProgress.postValue(progress.toFloat())
-                    _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
+        userRepository.refreshUserInfo()
+            .subscribe()
 
-                    getGameServicesInfo(feedbackHandler, resourceUtil)
+        val disposable = userRepository.getObservableUser()
+            .subscribe({
+                Timber.d("Got user info")
+                userInfo = it
+                val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
+                val xpPreviousLevel = LevelCalculator.getXpForLevel(level)
+                val xpNextLevel = LevelCalculator.getXpForLevel(level + 1)
+                val totalXpForNextLevel = xpNextLevel - xpPreviousLevel
+                val userXp = userInfo?.xp ?: 0
+                val progress = userXp - xpPreviousLevel
+                _liveTextXp.postValue("$progress / $totalXpForNextLevel")
+                _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
+                _liveLevelProgress.postValue(progress.toFloat())
+                _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
 
-                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
-                    gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
+                getGameServicesInfo(feedbackHandler, resourceUtil)
 
-                } else {
-                    Timber.d("No such document")
-                }
-            }
-            .addOnFailureListener {  }
+                gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
+                gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
+            },{
+                Timber.e("Failed to get the user")
+            })
+        addDisposable(disposable)
     }
 
     private fun getGameServicesInfo(
@@ -142,8 +140,8 @@ class StartViewModel(
 
     fun onProfileImageRetrieved(bitmap: Bitmap?) {
         //We need to update it every time, because we don't know when it could have changed
-        if(bitmap != null){
-            Timber.e("Got profile image bitmap")
+        if(bitmap != null && !profileImageUploaded){
+            Timber.d("Got profile image bitmap")
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
             val data = baos.toByteArray()
@@ -153,10 +151,11 @@ class StartViewModel(
             uploadTask.addOnFailureListener {
                 Timber.e("Profile image upload failed")
             }.addOnSuccessListener {
-                Timber.e("Profile image uploaded")
+                Timber.d("Profile image uploaded")
+                profileImageUploaded = true
             }
         }else{
-            Timber.e("Failed to get profile image bitmap")
+            Timber.e("Profile image already uploaded")
         }
     }
 

@@ -10,25 +10,25 @@ import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.KEY_PAGE
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_ALL
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_FOLLOWING
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_MINE
 import xevenition.com.runage.model.SavedQuest
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.FireStoreHandler
-import xevenition.com.runage.util.LevelCalculator
 import xevenition.com.runage.util.ResourceUtil
 
 class HistoryViewModel(
     resourceUtil: ResourceUtil,
     private val firestoreHandler: FireStoreHandler,
+    private val userRepository: UserRepository,
     args: Bundle
 ) : BaseViewModel() {
 
-    private var userInfo: UserInfo? = null
+    private var userInfo: RunageUser? = null
     private var lastSnapshot: DocumentSnapshot? = null
     private var allQuests = mutableListOf<SavedQuest>()
 
@@ -47,36 +47,32 @@ class HistoryViewModel(
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
 
-        //TODO replace with ROOM
-        firestoreHandler.getUserInfo()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    userInfo = document.toObject(UserInfo::class.java)
-                    val userInfo = userInfo
-                    if (userInfo != null) {
-                        when (page) {
-                            PAGE_MINE -> firestoreHandler.loadQuestsMine(userInfo)
-                            PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowing(userInfo)
-                            PAGE_ALL -> firestoreHandler.loadQuestsAll()
-                            else -> null
-                        }?.addOnSuccessListener { collection ->
-                            if (collection != null && !collection.isEmpty) {
-                                lastSnapshot = collection.documents.last()
-                                Timber.d("DocumentSnapshot data: ${collection.documents}")
-                                processQuests(collection)
-                            } else {
-                                Timber.d("No such document")
-                            }
+        val disposable = userRepository.getSingleUser()
+            .subscribe({
+                userInfo = it
+                userInfo?.let {
+                    when (page) {
+                        PAGE_MINE -> firestoreHandler.loadQuestsMine(it)
+                        PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowing(it)
+                        PAGE_ALL -> firestoreHandler.loadQuestsAll()
+                        else -> null
+                    }?.addOnSuccessListener { collection ->
+                        if (collection != null && !collection.isEmpty) {
+                            lastSnapshot = collection.documents.last()
+                            Timber.d("DocumentSnapshot data: ${collection.documents}")
+                            processQuests(collection)
+                        } else {
+                            Timber.d("No such document")
                         }
-                            ?.addOnFailureListener { exception ->
-                                Timber.e("get failed with $exception")
-                            }
                     }
-                } else {
-                    Timber.d("No such document")
+                        ?.addOnFailureListener { exception ->
+                            Timber.e("get failed with $exception")
+                        }
                 }
-            }
-            .addOnFailureListener { }
+            },{
+                Timber.e(it)
+            })
+        addDisposable(disposable)
     }
 
     @SuppressLint("CheckResult")

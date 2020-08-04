@@ -2,7 +2,6 @@ package xevenition.com.runage.fragment.summary
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,14 +14,13 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.RunStats
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.service.FitnessHelper
 import xevenition.com.runage.util.*
 import java.time.Instant
@@ -35,9 +33,10 @@ class SummaryViewModel(
     private val feedbackHandler: FeedbackHandler,
     private val questRepository: QuestRepository,
     private val resourceUtil: ResourceUtil,
-    private val fireStoreHandler: FireStoreHandler,
     private val saveUtil: SaveUtil,
     private val runningUtil: RunningUtil,
+    private val userRepository: UserRepository,
+    private val fireStoreHandler: FireStoreHandler,
     args: SummaryFragmentArgs
 ) : BaseViewModel() {
     private var runStats: RunStats? = null
@@ -334,7 +333,7 @@ class SummaryViewModel(
         fireStoreHandler.getUserInfo()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    val userInfo = document.toObject(UserInfo::class.java)
+                    val userInfo = document.toObject(RunageUser::class.java)
                     val userId = userInfo?.userId ?: ""
 
                     val oldUserScoreMap = userInfo?.challengeScore ?: mapOf()
@@ -371,23 +370,27 @@ class SummaryViewModel(
                     val totalRunningDuration =
                         (userInfo?.duration ?: 0) + runStats.runningDuration
 
-                    val newUserInfo = UserInfo(
+                    val newUserInfo = RunageUser(
                         userId = userId,
                         xp = totalXp,
                         calories = totalCalories,
                         distance = totalRunningDistance,
                         challengeScore = scoreMap,
+                        following = userInfo?.following ?: listOf(),
                         duration = totalRunningDuration
                     )
 
-                    fireStoreHandler.storeUserInfo(newUserInfo)
-                        .addOnCompleteListener { _liveButtonEnabled.postValue(true) }
-                        .addOnSuccessListener {
-                            Timber.d("User info have been stored")
-                            storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
-                        }
-                        .addOnFailureListener { Timber.e("get failed with $it") }
-                    Timber.d("Got user info")
+                    userRepository.saveUserInfo(newUserInfo)
+                        .subscribe({
+                            it.addOnCompleteListener { _liveButtonEnabled.postValue(true) }
+                                .addOnSuccessListener {
+                                    Timber.d("User info have been stored")
+                                    storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
+                                }
+                                .addOnFailureListener { Timber.e("get failed with $it") }
+                        }, {
+                            Timber.e(it)
+                        })
                 } else {
                     Timber.d("No such document")
                 }
@@ -402,7 +405,7 @@ class SummaryViewModel(
     private fun storeAchievementsAndLeaderboards(
         quest: Quest,
         runStats: RunStats,
-        userInfo: UserInfo
+        userInfo: RunageUser
     ) {
         Timber.d("Saving achievements and leaderboards")
         Single.fromCallable {

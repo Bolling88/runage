@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.RunStats
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -124,7 +124,7 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsFollowing(userInfo: UserInfo): Task<QuerySnapshot> {
+    fun loadQuestsFollowing(userInfo: RunageUser): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -133,7 +133,7 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsFollowingMore(userInfo: UserInfo, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+    fun loadQuestsFollowingMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -143,7 +143,7 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsMine(userInfo: UserInfo): Task<QuerySnapshot> {
+    fun loadQuestsMine(userInfo: RunageUser): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -152,7 +152,7 @@ class FireStoreHandler @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsMineMore(userInfo: UserInfo,startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+    fun loadQuestsMineMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -179,7 +179,7 @@ class FireStoreHandler @Inject constructor() {
         )
     }
 
-    fun storeUserInfo(userInfo: UserInfo): Task<Void> {
+    fun storeUserInfo(userInfo: RunageUser): Task<Void> {
         Timber.d("Storing user info: $userInfo")
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         return firestore.collection("users").document(userId).set(

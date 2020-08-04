@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
@@ -13,14 +12,14 @@ import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.model.ChallengeData
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 
 class ChallengesViewModel(
     resourceUtil: ResourceUtil,
-    fireStoreHandler: FireStoreHandler
+    userRepository: UserRepository
 ) : BaseViewModel() {
 
     private var challengeScores: Map<String, Int>? = null
@@ -37,19 +36,16 @@ class ChallengesViewModel(
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
 
-        fireStoreHandler.getUserInfo()
-            .addOnSuccessListener {document ->
-                if (document != null) {
-                    val userInfo = document.toObject(UserInfo::class.java)
-                    challengeScores = userInfo?.challengeScore
-                    Timber.d("Got user info")
-                    val challengeJson = resourceUtil.getString(R.string.runage_quests_json)
-                    processChallenges(challengeJson)
-                } else {
-                    Timber.d("No such document")
-                }
-            }
-            .addOnFailureListener {  }
+        val disposable = userRepository.getObservableUser()
+            .subscribe({
+                challengeScores = it?.challengeScore
+                Timber.d("Got user info")
+                val challengeJson = resourceUtil.getString(R.string.runage_quests_json)
+                processChallenges(challengeJson)
+            },{
+                Timber.e(it)
+            })
+        addDisposable(disposable)
     }
 
     @SuppressLint("CheckResult")

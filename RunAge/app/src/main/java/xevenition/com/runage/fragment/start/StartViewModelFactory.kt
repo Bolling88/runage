@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.*
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class StartViewModelFactory @Inject constructor(app: MainApplication) :
     @Inject
     lateinit var feedbackHandler: FeedbackHandler
     @Inject
-    lateinit var fireStoreHandler: FireStoreHandler
+    lateinit var userRepository: UserRepository
     @Inject
     lateinit var gameServicesUtil: GameServicesUtil
     @Inject
@@ -29,6 +30,6 @@ class StartViewModelFactory @Inject constructor(app: MainApplication) :
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return StartViewModel(gameServicesUtil, fireStoreHandler, accountUtil, resourceUtil, feedbackHandler, saveUtil) as T
+        return StartViewModel(gameServicesUtil, accountUtil, resourceUtil, feedbackHandler, saveUtil, userRepository) as T
     }
 }

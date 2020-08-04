@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.challenges
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class ChallengesViewModelFactory @Inject constructor(
     BaseViewModelFactory() {
 
     @Inject
-    lateinit var firestoreHandler: FireStoreHandler
+    lateinit var userRepository: UserRepository
     @Inject
     lateinit var resourceUtil: ResourceUtil
 
@@ -23,6 +24,6 @@ class ChallengesViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ChallengesViewModel(resourceUtil, firestoreHandler) as T
+        return ChallengesViewModel(resourceUtil, userRepository) as T
     }
 }
