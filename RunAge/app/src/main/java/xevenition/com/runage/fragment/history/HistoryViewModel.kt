@@ -48,8 +48,8 @@ class HistoryViewModel(
         _liveNoRunsTextVisibility.postValue(View.GONE)
 
         val disposable = userRepository.getSingleUser()
-            .subscribe({
-                userInfo = it
+            .subscribe({ user ->
+                userInfo = user
                 userInfo?.let {
                     when (page) {
                         PAGE_MINE -> firestoreHandler.loadQuestsMine(it)
@@ -63,6 +63,8 @@ class HistoryViewModel(
                             processQuests(collection)
                         } else {
                             Timber.d("No such document")
+                            _liveProgressVisibility.postValue(View.GONE)
+                            _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                         }
                     }
                         ?.addOnFailureListener { exception ->
