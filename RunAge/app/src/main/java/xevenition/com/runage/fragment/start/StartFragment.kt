@@ -72,8 +72,6 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         super.setUpObservables()
         viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {
             it?.let {
-//                val manager = ImageManager.create(requireContext())
-//                manager.loadImage(binding.imgProfile, it)
                 displayProfileImageAndRetrieveIt(it)
             }
         })
