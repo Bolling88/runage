@@ -113,7 +113,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
-            android:layout_marginTop="@dimen/margin_big"
             android:layout_marginEnd="@dimen/margin_basic"
             android:singleLine="true"
             android:text="@{viewModel.liveTextName}"
@@ -121,7 +120,7 @@
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_profile"
+            app:layout_constraintTop_toBottomOf="@+id/textLevel"
             tools:text="Ludwig Bolling" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -130,6 +129,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
             android:layout_marginEnd="@dimen/margin_basic"
             android:singleLine="true"
             android:text="@{viewModel.liveLevelText}"
@@ -137,7 +137,7 @@
             android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textName"
+            app:layout_constraintTop_toBottomOf="@+id/card_profile"
             tools:text="Level 14" />
 
         <com.google.android.material.button.MaterialButton

@@ -2,11 +2,13 @@ package xevenition.com.runage.fragment.start
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -70,8 +72,9 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         super.setUpObservables()
         viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {
             it?.let {
-                val manager = ImageManager.create(requireContext())
-                manager.loadImage(binding.imgProfile, it)
+//                val manager = ImageManager.create(requireContext())
+//                manager.loadImage(binding.imgProfile, it)
+                displayProfileImageAndRetrieveIt(it)
             }
         })
 
@@ -118,6 +121,17 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
                 )
             )
         }
+    }
+
+    private fun displayProfileImageAndRetrieveIt(uri: Uri){
+        val manager = ImageManager.create(requireContext())
+        val listener = ImageManager.OnImageLoadedListener{ uri: Uri, drawable: Drawable, b: Boolean ->
+            binding.imgProfile.setImageDrawable(drawable)
+            val bitmap = drawable.toBitmap()
+            //val bitmap = (binding.imgProfile.drawable as BitmapDrawable).bitmap
+            viewModel.onProfileImageRetrieved(bitmap)
+        }
+        manager.loadImage(listener, uri, 0)
     }
 
     override fun onLaterClicked() {

@@ -1,8 +1,6 @@
 package xevenition.com.runage.fragment.history
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.google.android.gms.common.images.ImageManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import xevenition.com.runage.R
-
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.util.GlideApp
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import xevenition.com.runage.util.SaveUtil
 import java.time.Instant
 import java.time.ZoneId
 
@@ -25,6 +24,8 @@ class HistoryRecyclerAdapter(
     private val runningUtil: RunningUtil,
     private val listener: OnClickListener
 ) : ListAdapter<SavedQuest, HistoryRecyclerAdapter.ItemViewHolder>(DiffCallback()) {
+
+    var storageRef = Firebase.storage.reference
 
     interface OnClickListener {
         fun onClick(quest: SavedQuest)
@@ -78,9 +79,12 @@ class HistoryRecyclerAdapter(
             if (item.playerImageUri.isEmpty()) {
                 imageRunning.setImageDrawable(resourceUtil.getDrawable(R.drawable.ic_profile))
             } else {
-                val uri = Uri.parse(item.playerImageUri)
-                val manager = ImageManager.create(view.context)
-                manager.loadImage(imageRunning, uri)
+                // Reference to an image file in Cloud Storage
+                val profileImageRef = storageRef.child("images/${item.userId}.jpg")
+
+                GlideApp.with(view.context)
+                    .load(profileImageRef)
+                    .into(imageRunning)
             }
         }
     }

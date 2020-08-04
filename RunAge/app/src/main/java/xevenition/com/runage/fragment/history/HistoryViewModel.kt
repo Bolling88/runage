@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.history
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,16 +10,25 @@ import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.KEY_PAGE
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_ALL
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_FOLLOWING
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_MINE
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.model.UserInfo
 import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.util.LevelCalculator
 import xevenition.com.runage.util.ResourceUtil
 
 class HistoryViewModel(
     resourceUtil: ResourceUtil,
-    private val firestoreHandler: FireStoreHandler
+    private val firestoreHandler: FireStoreHandler,
+    args: Bundle
 ) : BaseViewModel() {
 
+    private var userInfo: UserInfo? = null
     private var lastSnapshot: DocumentSnapshot? = null
     private var allQuests = mutableListOf<SavedQuest>()
 
@@ -31,22 +41,42 @@ class HistoryViewModel(
     private val _liveNoRunsTextVisibility = MutableLiveData<Int>()
     val liveNoRunsTextVisibility: LiveData<Int> = _liveNoRunsTextVisibility
 
+    private val page = args.getInt(KEY_PAGE)
+
     init {
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
-        firestoreHandler.loadQuestsMine()
-            .addOnSuccessListener { collection ->
-                if (collection != null && !collection.isEmpty) {
-                    lastSnapshot = collection.documents.last()
-                    Timber.d("DocumentSnapshot data: ${collection.documents}")
-                    processQuests(collection)
+
+        //TODO replace with ROOM
+        firestoreHandler.getUserInfo()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    userInfo = document.toObject(UserInfo::class.java)
+                    val userInfo = userInfo
+                    if (userInfo != null) {
+                        when (page) {
+                            PAGE_MINE -> firestoreHandler.loadQuestsMine(userInfo)
+                            PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowing(userInfo)
+                            PAGE_ALL -> firestoreHandler.loadQuestsAll()
+                            else -> null
+                        }?.addOnSuccessListener { collection ->
+                            if (collection != null && !collection.isEmpty) {
+                                lastSnapshot = collection.documents.last()
+                                Timber.d("DocumentSnapshot data: ${collection.documents}")
+                                processQuests(collection)
+                            } else {
+                                Timber.d("No such document")
+                            }
+                        }
+                            ?.addOnFailureListener { exception ->
+                                Timber.e("get failed with $exception")
+                            }
+                    }
                 } else {
                     Timber.d("No such document")
                 }
             }
-            .addOnFailureListener { exception ->
-                Timber.e("get failed with $exception")
-            }
+            .addOnFailureListener { }
     }
 
     @SuppressLint("CheckResult")
@@ -72,17 +102,17 @@ class HistoryViewModel(
             })
     }
 
-    fun onQuestClicked(quest: SavedQuest) {
-        observableNavigateTo.postValue(
-            HistoryFragmentDirections.actionHistoryFragmentToHistorySummaryFragment(quest)
-        )
-    }
-
-    fun loadMoreData() {
+    private fun loadMoreData() {
         Timber.d("Load more data")
         lastSnapshot?.let {
-            firestoreHandler.loadQuestsMineMore(it)
-                .addOnSuccessListener { collection ->
+            val userInfo = userInfo
+            if(userInfo != null) {
+                when (page) {
+                    PAGE_MINE -> firestoreHandler.loadQuestsMineMore(userInfo, it)
+                    PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowingMore(userInfo, it)
+                    PAGE_ALL -> firestoreHandler.loadQuestsAllMore(it)
+                    else -> null
+                }?.addOnSuccessListener { collection ->
                     if (collection != null && !collection.isEmpty) {
                         lastSnapshot = collection.documents.last()
                         Timber.d("DocumentSnapshot data: ${collection.documents}")
@@ -90,17 +120,17 @@ class HistoryViewModel(
                     } else {
                         Timber.d("No such document")
                     }
-                }
-                .addOnFailureListener { exception ->
+                }?.addOnFailureListener { exception ->
                     Timber.e("get failed with $exception")
                 }
+            }
         }
     }
 
     fun onReachedItem(position: Int) {
         Timber.d("Reached position $position")
         Timber.d("Items size ${allQuests.size}")
-        if(position == allQuests.size-1){
+        if (position == allQuests.size - 1) {
             loadMoreData()
         }
     }

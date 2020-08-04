@@ -96,13 +96,8 @@
         android:name="xevenition.com.runage.fragment.feed.FeedFragment"
         android:label="FeedFragment">
 
-    </fragment>
-    <fragment
-        android:id="@+id/historyFragment"
-        android:name="xevenition.com.runage.fragment.history.HistoryFragment"
-        android:label="HistoryFragment">
         <action
-            android:id="@+id/action_historyFragment_to_historySummaryFragment"
+            android:id="@+id/action_feedFragment_to_historySummaryFragment"
             app:destination="@id/historySummaryFragment" />
     </fragment>
     <fragment

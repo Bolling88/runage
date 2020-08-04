@@ -34,6 +34,8 @@
             android:backgroundTint="@color/colorPrimary"
             android:layout_height="wrap_content"
             android:elevation="4dip"
+            app:tabIconTint="@color/tab_state_color"
+            app:tabTextColor="@color/grey2"
             app:tabSelectedTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,16 +43,19 @@
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
+                android:icon="@drawable/ic_profile"
                 android:layout_height="wrap_content"
-                android:text="@string/runage_my" />
+                android:text="@string/runage_mine" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
+                android:icon="@drawable/ic_following"
                 android:layout_height="wrap_content"
                 android:text="@string/runage_following" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
+                android:icon="@drawable/ic_earth"
                 android:layout_height="wrap_content"
                 android:text="@string/runage_all" />
 

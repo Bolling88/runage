@@ -1,28 +1,26 @@
 package xevenition.com.runage.fragment.feed
 
 import android.content.Context
-import xevenition.com.runage.fragment.rule.RuleViewModel
-import xevenition.com.runage.fragment.rule.RuleViewModelFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.google.android.material.tabs.TabLayout
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentFeedBinding
-import xevenition.com.runage.databinding.FragmentRuleBinding
 import xevenition.com.runage.fragment.history.HistoryFragment
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_ALL
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_FOLLOWING
+import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_MINE
+import xevenition.com.runage.model.SavedQuest
 
 class FeedFragment : BaseFragment<FeedViewModel>() {
 
@@ -50,6 +48,9 @@ class FeedFragment : BaseFragment<FeedViewModel>() {
         val pagerAdapter = ScreenSlidePagerAdapter(childFragmentManager, requireContext())
         binding.viewPager.adapter = pagerAdapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        binding.tabLayout.getTabAt(PAGE_MINE)?.setIcon(R.drawable.ic_profile)
+        binding.tabLayout.getTabAt(PAGE_FOLLOWING)?.setIcon(R.drawable.ic_following)
+        binding.tabLayout.getTabAt(PAGE_ALL)?.setIcon(R.drawable.ic_earth)
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -77,6 +78,10 @@ class FeedFragment : BaseFragment<FeedViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
     }
+
+    fun onQuestClicked(quest: SavedQuest) {
+        viewModel.onQuestClicked(quest)
+    }
 }
 
 private class ScreenSlidePagerAdapter(fm: FragmentManager, private val context: Context) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
@@ -86,9 +91,9 @@ private class ScreenSlidePagerAdapter(fm: FragmentManager, private val context: 
 
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
-            0 -> context.getString(R.string.runage_mine)
-            1 -> context.getString(R.string.runage_following)
-            2 -> context.getString(R.string.runage_all)
+            PAGE_MINE -> context.getString(R.string.runage_mine)
+            PAGE_FOLLOWING -> context.getString(R.string.runage_following)
+            PAGE_ALL -> context.getString(R.string.runage_all)
             else -> ""
         }
     }

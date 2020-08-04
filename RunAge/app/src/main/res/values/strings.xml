@@ -121,4 +121,5 @@
     <string name="runage_my">My</string>
     <string name="runage_following">Following</string>
     <string name="runage_mine">Mine</string>
+    <string name="runage_follow_user">Follow user</string>
 </resources>
