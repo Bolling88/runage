@@ -130,4 +130,8 @@
     <string name="runage_distance_to_complete">Distance to complete</string>
     <string name="runage_challenge_player">Challenge Player</string>
     <string name="runage_unfollow_player">Unfollow player</string>
+    <string name="runage_reward_for_a_win">Reward for a win:</string>
+    <string name="runage_penalty_for_loosing">Penalty for a loss:</string>
+    <string name="runage_stil_get_running_xp">The reward XP is on top of the regular XP you get by running. Keep running after the challenge is completed to earn a lot of extra XP!</string>
+    <string name="runage_crush_this_players_time">Crush this players time?</string>
 </resources>

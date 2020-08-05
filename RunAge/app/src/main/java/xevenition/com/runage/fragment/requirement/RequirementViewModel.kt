@@ -84,7 +84,7 @@ class RequirementViewModel(
                     _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
                     _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
-                    _liveTextXp.postValue("${it.experience} ${resourceUtil.getString(R.string.runage_xp)}")
+                    _liveTextXp.postValue("+${it.experience} ${resourceUtil.getString(R.string.runage_xp)}")
                 }
                 1->{
                     _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))

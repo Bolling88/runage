@@ -63,8 +63,9 @@ class HistoryViewModel(
             }
         }
 
-        val disposable = userRepository.getSingleUser()
+        val disposable = userRepository.getObservableUser()
             .subscribe({ user ->
+                allQuests.clear()
                 userInfo = user
                 userInfo?.let {
                     when (page) {

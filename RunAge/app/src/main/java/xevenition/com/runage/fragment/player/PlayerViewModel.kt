@@ -41,11 +41,21 @@ class PlayerViewModel(
     private val _liveFollowText = MutableLiveData<String>()
     val liveFollowText: LiveData<String> = _liveFollowText
 
+    private val _liveTextWin = MutableLiveData<String>()
+    val liveTextWin: LiveData<String> = _liveTextWin
+
+    private val _liveTextPenalty = MutableLiveData<String>()
+    val liveTextPenalty: LiveData<String> = _liveTextPenalty
+
+    private val _liveFollowButtonColor = MutableLiveData<Int>()
+    val liveFollowButtonColor: LiveData<Int> = _liveFollowButtonColor
+
     private val _liveFollowIcon = MutableLiveData<Drawable>()
     val liveFollowIcon: LiveData<Drawable> = _liveFollowIcon
 
     private val _observableImage = MutableLiveData<String>()
     val observableImage: LiveData<String> = _observableImage
+
 
     init {
         _observableImage.postValue(quest.userId)
@@ -60,19 +70,25 @@ class PlayerViewModel(
             }
         )
 
+        _liveTextWin.postValue("+" + (quest.xp/2).toString() + " " + resourceUtil.getString(R.string.runage_xp))
+        _liveTextPenalty.postValue("-" + (quest.xp/4).toString() + " " + resourceUtil.getString(R.string.runage_xp))
+
         val userToFollowId = quest.userId
-        userRepository.getSingleUser()
+        val disposable = userRepository.getSingleUser()
             .subscribe({
                 if(it.following.contains(userToFollowId)){
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_cancel))
+                    _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.red))
                 }else{
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_follow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_follow_single))
+                    _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
                 }
             },{
                 Timber.e(it)
             })
+        addDisposable(disposable)
     }
 
     @SuppressLint("CheckResult")
@@ -85,12 +101,14 @@ class PlayerViewModel(
                     newList.remove(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_follow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_follow_single))
+                    _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
                     newList
                 }else{
                     val newList = it.following.toMutableList()
                     newList.add(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_cancel))
+                    _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.red))
                     newList
                 }
                 val newUserInfo = RunageUser(
@@ -111,6 +129,10 @@ class PlayerViewModel(
             },{
                 Timber.e(it)
             })
+    }
+
+    fun onStartClicked(){
+
     }
 
 }
