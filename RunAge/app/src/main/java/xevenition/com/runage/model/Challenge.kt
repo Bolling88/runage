@@ -8,5 +8,6 @@ data class Challenge (
     val level : Int,
     val distance : Int,
     val time : Int,
-    val experience : Int
+    val experience : Int,
+    val isPlayerChallenge: Boolean = false
 ) : Parcelable

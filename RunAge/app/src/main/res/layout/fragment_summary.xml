@@ -223,18 +223,49 @@
                     tools:text="5:34 min/km" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/textExperienceTitle"
+                    android:id="@+id/textExperienceRewardTitle"
                     style="@style/MainFontStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="40dip"
-                    android:text="@string/runage_experience_gained"
+                    android:text="@{viewModel.liveTextRewardTitle}"
+                    android:visibility="@{viewModel.liveTextRewardVisibility}"
                     android:textColor="@color/grey2"
                     android:textSize="@dimen/textSizeNormal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textPace" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textReward"
+                    style="@style/MainFontStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@{viewModel.liveTextReward}"
+                    android:visibility="@{viewModel.liveTextRewardVisibility}"
+                    android:textColor="@{viewModel.liveRewardTextColor}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textExperienceRewardTitle"
+                    tools:text="234 XP" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textExperienceTitle"
+                    style="@style/MainFontStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:text="@string/runage_total_experience_gained"
+                    android:textColor="@color/grey2"
+                    android:textSize="@dimen/textSizeNormal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textReward" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textExperience"
@@ -244,7 +275,7 @@
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@{viewModel.liveTextExperience}"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="@{viewModel.liveXpTextColor}"
                     android:textSize="@dimen/textSizeHuge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -30,7 +30,8 @@ class FireStoreHandler @Inject constructor() {
     fun storeQuest(
         quest: Quest,
         runStats: RunStats,
-        player: Player?
+        player: Player?,
+        totalXp: Int
     ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
@@ -56,6 +57,7 @@ class FireStoreHandler @Inject constructor() {
                     "runDistance" to runStats.runningDistance,
                     "runDuration" to runStats.runningDuration,
                     "xp" to runStats.xp,
+                    "totalXp" to totalXp,
                     "playerName" to player?.displayName,
                     "playerImageUri" to player?.hiResImageUri.toString(),
                     "playerId" to player?.playerId,

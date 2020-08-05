@@ -169,6 +169,10 @@ class MapViewModel(
                     _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - timeMultiplier * 20))
                     _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
                     _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+                }else if(quest.isPlayerChallenge){
+                    _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong()))
+                    _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
+                    _liveChallengeInfoVisibility.postValue(View.VISIBLE)
                 }
 
                 _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))

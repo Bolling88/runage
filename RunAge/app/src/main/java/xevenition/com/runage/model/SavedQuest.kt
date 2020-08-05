@@ -12,6 +12,7 @@ data class SavedQuest(
     val playerImageUri: String = "",
     val userId: String = "",
     val xp: Int = 0,
+    val totalXp: Int = 0,
     val startTimeEpochSeconds: Long = 0,
     val endTimeEpochSeconds: Long = 0,
     val runningPercentage: Double = 0.0,

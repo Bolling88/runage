@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.requirement.RequirementFragmentDirections
+import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.util.GameServicesUtil
@@ -70,22 +72,22 @@ class PlayerViewModel(
             }
         )
 
-        _liveTextWin.postValue("+" + (quest.xp/2).toString() + " " + resourceUtil.getString(R.string.runage_xp))
-        _liveTextPenalty.postValue("-" + (quest.xp/4).toString() + " " + resourceUtil.getString(R.string.runage_xp))
+        _liveTextWin.postValue("+" + (quest.xp / 2).toString() + " " + resourceUtil.getString(R.string.runage_xp))
+        _liveTextPenalty.postValue("-" + (quest.xp / 4).toString() + " " + resourceUtil.getString(R.string.runage_xp))
 
         val userToFollowId = quest.userId
         val disposable = userRepository.getSingleUser()
             .subscribe({
-                if(it.following.contains(userToFollowId)){
+                if (it.following.contains(userToFollowId)) {
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_cancel))
                     _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.red))
-                }else{
+                } else {
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_follow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_follow_single))
                     _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
                 }
-            },{
+            }, {
                 Timber.e(it)
             })
         addDisposable(disposable)
@@ -95,16 +97,16 @@ class PlayerViewModel(
     fun onFollowClicked() {
         val userToFollowId = quest.userId
         userRepository.getSingleUser()
-            .subscribe({
-                val newList = if(it.following.contains(userToFollowId)){
-                    val newList = it.following.toMutableList()
+            .subscribe({ user ->
+                val newList = if (user.following.contains(userToFollowId)) {
+                    val newList = user.following.toMutableList()
                     newList.remove(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_follow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_follow_single))
                     _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
                     newList
-                }else{
-                    val newList = it.following.toMutableList()
+                } else {
+                    val newList = user.following.toMutableList()
                     newList.add(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_cancel))
@@ -112,27 +114,39 @@ class PlayerViewModel(
                     newList
                 }
                 val newUserInfo = RunageUser(
-                    userId = it.userId,
-                    xp = it.xp,
-                    calories = it.calories,
-                    distance = it.distance,
-                    challengeScore = it.challengeScore,
+                    userId = user.userId,
+                    xp = user.xp,
+                    calories = user.calories,
+                    distance = user.distance,
+                    challengeScore = user.challengeScore,
                     following = newList,
-                    duration = it.duration
+                    duration = user.duration
                 )
                 userRepository.updateFollowing(newUserInfo)
                     .subscribe({
                         Timber.d("User following status changed")
-                    },{
+                    }, {
                         Timber.e(it)
                     })
-            },{
+            }, {
                 Timber.e(it)
             })
     }
 
-    fun onStartClicked(){
-
+    fun onStartClicked() {
+        val duration = quest.endTimeEpochSeconds - quest.startTimeEpochSeconds
+        val challenge = Challenge(
+            level = 0,
+            distance = quest.totalDistance,
+            time = duration.toInt(),
+            experience = quest.xp / 2,
+            isPlayerChallenge = true
+        )
+        observableNavigateTo.postValue(
+            PlayerFragmentDirections.actionPlayerFragmentToMapFragment(
+                keyChallenge = challenge
+            )
+        )
     }
 
 }

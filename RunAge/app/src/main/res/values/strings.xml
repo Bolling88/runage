@@ -134,4 +134,6 @@
     <string name="runage_penalty_for_loosing">Penalty for a loss:</string>
     <string name="runage_stil_get_running_xp">The reward XP is on top of the regular XP you get by running. Keep running after the challenge is completed to earn a lot of extra XP!</string>
     <string name="runage_crush_this_players_time">Crush this players time?</string>
+    <string name="runage_total_experience_gained">Total experience gained:</string>
+    <string name="runage_challenge_failed_penalty">Challenge failed penalty:</string>
 </resources>
