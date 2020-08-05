@@ -132,7 +132,7 @@
             android:layout_marginEnd="@dimen/margin_basic"
             android:fontFamily="@font/majora"
             android:text="@string/runage_target_distance"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
+            android:visibility="@{viewModel.liveChallengeTitleVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/viewInfoBackground"
             app:textAllCaps="true" />
@@ -147,7 +147,7 @@
             android:text="@{viewModel.liveTextDistance}"
             android:textColor="@color/colorPrimary"
             android:textSize="25sp"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
+            android:visibility="@{viewModel.liveChallengeDistanceVisibility}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/distanceTitle"
             tools:text="1 km | 0.69 mi" />
@@ -160,10 +160,24 @@
             android:layout_marginTop="@dimen/margin_basic"
             android:fontFamily="@font/majora"
             android:text="@string/runage_time_limit"
-            android:visibility="@{viewModel.liveChallengeInfoVisibility}"
+            android:visibility="@{viewModel.liveChallengeTitleVisibility}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/mapView"
             app:textAllCaps="true" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/textPlayerChallengeTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/majora_bold"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:text="@{viewModel.liveTextTime1}"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp"
+            android:visibility="@{viewModel.livePlayerChallengeDistanceVisibility}"
+             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/durationTitle"
+            tools:text="1 km | 0.69 mi" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageTimer"

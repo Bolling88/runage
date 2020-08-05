@@ -30,7 +30,7 @@ class StartViewModel(
 
     private var userInfo: RunageUser? = null
     private var profileImageUploaded = false
-    var storageRef = Firebase.storage.reference
+    private var storageRef = Firebase.storage.reference
 
     private val _liveTextName = MutableLiveData<String>()
     val liveTextName : LiveData<String> = _liveTextName
@@ -147,7 +147,7 @@ class StartViewModel(
             val data = baos.toByteArray()
 
             val profileImageRef = storageRef.child("images/${userInfo?.userId}.jpg")
-            var uploadTask = profileImageRef.putBytes(data)
+            val uploadTask = profileImageRef.putBytes(data)
             uploadTask.addOnFailureListener {
                 Timber.e("Profile image upload failed")
             }.addOnSuccessListener {

@@ -99,6 +99,15 @@ class MapViewModel(
     private val _liveChallengeInfoVisibility = MutableLiveData<Int>()
     val liveChallengeInfoVisibility: LiveData<Int> = _liveChallengeInfoVisibility
 
+    private val _livePlayerChallengeDistanceVisibility = MutableLiveData<Int>()
+    val livePlayerChallengeDistanceVisibility: LiveData<Int> = _livePlayerChallengeDistanceVisibility
+
+    private val _liveChallengeTitleVisibility = MutableLiveData<Int>()
+    val liveChallengeTitleVisibility: LiveData<Int> = _liveChallengeTitleVisibility
+
+    private val _liveChallengeDistanceVisibility = MutableLiveData<Int>()
+    val liveChallengeDistanceVisibility: LiveData<Int> = _liveChallengeDistanceVisibility
+
     val observableClearMap = SingleLiveEvent<Unit>()
     val observableStopRun = SingleLiveEvent<Unit>()
 
@@ -109,6 +118,9 @@ class MapViewModel(
         _liveLockButtonIconTint.postValue(resourceUtil.getColor(R.color.white))
         _liveImageLock.postValue(resourceUtil.getDrawable(R.drawable.ic_stop))
         _liveChallengeInfoVisibility.postValue(View.GONE)
+        _liveChallengeTitleVisibility.postValue(View.GONE)
+        _livePlayerChallengeDistanceVisibility.postValue(View.GONE)
+        _liveChallengeDistanceVisibility.postValue(View.GONE)
 
         setUpInitialChallengeInfo()
 
@@ -124,7 +136,13 @@ class MapViewModel(
             _liveTextTime2.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 10 * timeMultiplier))
             _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(it.time.toLong() - 20 * timeMultiplier))
             _liveTextDistance.postValue(runningUtil.getDistanceString(it.distance))
-            _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+            _liveChallengeTitleVisibility.postValue(View.VISIBLE)
+            _liveChallengeDistanceVisibility.postValue(View.VISIBLE)
+            if(it.isPlayerChallenge){
+                _livePlayerChallengeDistanceVisibility.postValue(View.VISIBLE)
+            }else {
+                _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+            }
         }
     }
 
@@ -169,10 +187,16 @@ class MapViewModel(
                     _liveTextTime3.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong() - timeMultiplier * 20))
                     _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
                     _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+                    _liveChallengeDistanceVisibility.postValue(View.VISIBLE)
+                    _liveChallengeTitleVisibility.postValue(View.VISIBLE)
+                    _livePlayerChallengeDistanceVisibility.postValue(View.GONE)
                 }else if(quest.isPlayerChallenge){
                     _liveTextTime1.postValue(runningUtil.convertTimeToDurationString(quest.levelTime.toLong()))
                     _liveTextDistance.postValue(runningUtil.getDistanceString(quest.levelDistance))
-                    _liveChallengeInfoVisibility.postValue(View.VISIBLE)
+                    _liveChallengeInfoVisibility.postValue(View.GONE)
+                    _liveChallengeTitleVisibility.postValue(View.VISIBLE)
+                    _liveChallengeDistanceVisibility.postValue(View.VISIBLE)
+                    _livePlayerChallengeDistanceVisibility.postValue(View.VISIBLE)
                 }
 
                 _liveTotalDistance.postValue(runningUtil.getDistanceString(quest.totalDistance.toInt()))

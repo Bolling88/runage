@@ -26,7 +26,7 @@ import javax.inject.Inject
 class PlayerFragment : BaseFragment<PlayerViewModel>() {
 
     private lateinit var binding: FragmentPlayerBinding
-    var storageRef = Firebase.storage.reference
+    private var storageRef = Firebase.storage.reference
 
     @Inject
     lateinit var resourceUtil: ResourceUtil

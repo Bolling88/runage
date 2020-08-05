@@ -118,6 +118,8 @@ class HistoryViewModel(
 
                 if (allQuests.isEmpty()) {
                     _liveNoRunsTextVisibility.postValue(View.VISIBLE)
+                }else{
+                    _liveNoRunsTextVisibility.postValue(View.GONE)
                 }
             }, {
                 Timber.e(it)
