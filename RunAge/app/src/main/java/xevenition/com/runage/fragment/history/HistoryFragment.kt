@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
@@ -36,7 +37,8 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         val factory = HistoryViewModelFactory(getApplication(), requireArguments())
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
 
-        historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        historyRecyclerAdapter = HistoryRecyclerAdapter(userId, resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
             override fun onClick(quest: SavedQuest) {
                 (parentFragment as FeedFragment).onQuestClicked(quest)
             }
