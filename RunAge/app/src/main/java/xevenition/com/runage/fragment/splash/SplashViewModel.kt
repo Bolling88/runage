@@ -19,6 +19,10 @@ class SplashViewModel(private val saveUtil: SaveUtil, private val accountUtil: A
             observableNavigateTo.postValue(SplashFragmentDirections.actionSplashFragmentToMainFragment())
         } else {
             startSplashTimer()
+
+            //Track app openings
+            val openedApp = saveUtil.getInt(SaveUtil.KEY_APP_OPENINGS, 0)
+            saveUtil.saveInt(SaveUtil.KEY_APP_OPENINGS, openedApp+1)
         }
     }
 

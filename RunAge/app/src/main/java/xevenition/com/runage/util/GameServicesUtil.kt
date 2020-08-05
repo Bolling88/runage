@@ -7,9 +7,8 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.location.DetectedActivity
 import com.google.android.gms.tasks.Task
 import xevenition.com.runage.R
-import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.model.RunStats
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 
@@ -38,7 +37,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         }
     }
 
-    fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats, userInfo: UserInfo) {
+    fun storeAchievementsAndLeaderboards(quest: Quest, runStats: RunStats, userInfo: RunageUser) {
         //Total running distance
         incrementAchievements(app.getString(R.string.achievement_10_k), (runStats.runningDistance.toDouble()/1000).toInt())
         incrementAchievements(app.getString(R.string.achievement_100_k), (runStats.runningDistance.toDouble()/1000).toInt())

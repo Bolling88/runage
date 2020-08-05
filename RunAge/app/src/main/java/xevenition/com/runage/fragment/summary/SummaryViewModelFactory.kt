@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.service.FitnessHelper
 import xevenition.com.runage.util.*
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class SummaryViewModelFactory @Inject constructor(
     lateinit var questRepository: QuestRepository
 
     @Inject
-    lateinit var firestoreHandler: FireStoreHandler
+    lateinit var userRepository: UserRepository
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
@@ -45,6 +46,8 @@ class SummaryViewModelFactory @Inject constructor(
 
     @Inject
     lateinit var accountUtil: AccountUtil
+    @Inject
+    lateinit var fireStoreHandler: FireStoreHandler
 
     init {
         app.appComponent.inject(this)
@@ -60,9 +63,10 @@ class SummaryViewModelFactory @Inject constructor(
             feedbackHandler,
             questRepository,
             resourceUtil,
-            firestoreHandler,
             saveUtil,
             runningUtil,
+            userRepository,
+            fireStoreHandler,
             arguments
         ) as T
     }

@@ -118,11 +118,11 @@ class EventService : Service() {
             setUpRunningTimer(currentQuest.startTimeEpochSeconds)
         }
 
-        if(challenge == null) {
+        if (challenge == null) {
             Timber.d("Challenge is null, checking if we have a new challenge with intent")
             //Have null check so we don't replace a non null challenge with a null coming from a new intent
             challenge = intent?.extras?.getParcelable(KEY_CHALLENGE)
-        }else{
+        } else {
             Timber.d("We already have a challenge, ignoring new intent data")
         }
 
@@ -140,9 +140,9 @@ class EventService : Service() {
             }
             .subscribe({
                 if (it < 0L) {
-                    if(challenge != null){
+                    if (challenge != null) {
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_started))
-                    }else {
+                    } else {
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_started))
                     }
                     startNewQuest()
@@ -294,7 +294,7 @@ class EventService : Service() {
         startTimeEpochSeconds: Long,
         distance: Double
     ) {
-        if(challengeFailedOrCompletedReported || currentQuest.levelStars > 0)
+        if (challengeFailedOrCompletedReported || currentQuest.levelStars > 0)
             return
         val duration = Instant.now().epochSecond - startTimeEpochSeconds
         if (duration > challenge.time && distance < challenge.distance) {
@@ -304,17 +304,23 @@ class EventService : Service() {
         } else if (duration < challenge.time && distance > challenge.distance) {
             //challenge completed
             challengeFailedOrCompletedReported = true
-            feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
+            feedbackHandler.speak(
+                resourceUtil.getString(R.string.runage_challenge_completed_info),
                 TextToSpeech.QUEUE_ADD
             )
             currentQuest.levelStars = getChallengeStars(duration)
         } else if (duration > challenge.time && distance > challenge.distance) {
             //We can consider this challenge completed also. It should already have been reported in this case though
             challengeFailedOrCompletedReported = true
-            feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed_info),
+            feedbackHandler.speak(
+                resourceUtil.getString(R.string.runage_challenge_completed_info),
                 TextToSpeech.QUEUE_ADD
             )
-            currentQuest.levelStars = getChallengeStars(duration)
+            currentQuest.levelStars = if (challenge.isPlayerChallenge) {
+                3
+            } else {
+                getChallengeStars(duration)
+            }
         } else {
             //Challenge not yet failed or completed
         }
@@ -322,7 +328,7 @@ class EventService : Service() {
 
     private fun getChallengeStars(duration: Long): Int {
         var timeMultiplier = currentQuest.level % 10
-        if(timeMultiplier == 0)
+        if (timeMultiplier == 0)
             timeMultiplier = 10
         return when {
             duration <= currentQuest.levelTime - timeMultiplier * 20 -> 3

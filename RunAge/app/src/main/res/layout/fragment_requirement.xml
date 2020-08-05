@@ -158,11 +158,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
+                    android:layout_marginBottom="4dip"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime1}"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/textSizeHuge"
-                    android:layout_marginBottom="4dip"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer"
@@ -208,11 +208,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
+                    android:layout_marginBottom="4dip"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime2}"
-                    android:textSize="@dimen/textSizeHuge"
                     android:textColor="@color/colorPrimary"
-                    android:layout_marginBottom="4dip"
+                    android:textSize="@dimen/textSizeHuge"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer2"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer2"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer2"
@@ -269,11 +269,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dip"
+                    android:layout_marginBottom="4dip"
                     android:fontFamily="@font/majora"
                     android:text="@{viewModel.liveTextTime3}"
-                    android:layout_marginBottom="4dip"
-                    android:textSize="@dimen/textSizeHuge"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/textSizeHuge"
                     app:layout_constraintBottom_toBottomOf="@+id/imageTimer3"
                     app:layout_constraintStart_toEndOf="@+id/imageTimer3"
                     app:layout_constraintTop_toTopOf="@+id/imageTimer3"
@@ -342,20 +342,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
-                    android:fontFamily="@font/majora"
+                    android:fontFamily="@font/majora_bold"
                     android:text="@{viewModel.liveTextXp}"
                     android:textColor="@{viewModel.liveRewardTextColor}"
                     android:textSize="@dimen/textSizeHuge"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rewardTitle"
-                    tools:text="100 XP" />
+                    tools:text="+100 XP" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textInfo"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey3"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@string/runage_stil_get_running_xp"
+                    android:textSize="@dimen/textSizeNormal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textReward" />
 
                 <View
-                    app:layout_constraintTop_toBottomOf="@+id/textReward"
                     android:layout_width="match_parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_height="200dip"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_height="200dip" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInfo" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -365,24 +379,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
             android:background="@drawable/gradient_white"
             android:orientation="vertical"
-            android:layout_gravity="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:animateLayoutChanges="true"
             app:layout_constraintStart_toStartOf="parent">
 
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button"
                 style="@style/ButtonStyle"
-                app:icon="@drawable/ic_run_blue"
-                app:iconTint="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="@{()-> viewModel.onStartClicked()}"
-                android:text="@string/runage_start_challenge" />
+                android:text="@string/runage_start_challenge"
+                app:icon="@drawable/ic_run_blue"
+                app:iconTint="@color/white" />
         </LinearLayout>
 
     </FrameLayout>

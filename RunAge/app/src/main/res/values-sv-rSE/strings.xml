@@ -34,7 +34,7 @@
     <string name="runage_quest_completed">Runda slutförd</string>
     <string name="runage_quest_failed">Runda misslyckades</string>
     <string name="runage_completed_runs">Avklarade rundor</string>
-    <string name="runage_no_completed_runs">Inga avklarade uppdrag</string>
+    <string name="runage_no_completed_runs">Inga avklarade rundor</string>
     <string name="runage_running">Löpning</string>
     <string name="runage_walking">Gående</string>
     <string name="runage_driving">Körande</string>
@@ -114,4 +114,25 @@
     <string name="runage_sorry_to_hear_that">Ledsen att höra det!</string>
     <string name="runage_would_you_like_feedback">Skulle du vilja ge oss någon feedback för att hjälp oss bli bättre?</string>
     <string name="runage_challenge_started">Utmaning påbörjad</string>
+    <string name="runage_running_percentage">Löpning %</string>
+    <string name="runage_time">Tid</string>
+    <string name="runage_all">Alla</string>
+    <string name="runage_my">Min</string>
+    <string name="runage_following">Följer</string>
+    <string name="runage_mine">Mina</string>
+    <string name="runage_follow_user">Följ spelare</string>
+    <string name="runage_unknown_player">Okänd spelare</string>
+    <string name="runage_you_are_not_following">Du följer ingen än</string>
+    <string name="runage_player_challenge">Spelarutmaning</string>
+    <string name="runage_follow_player">Följ spelare</string>
+    <string name="runage_time_to_beat">Tid att slå</string>
+    <string name="runage_distance_to_complete">Distans att klå</string>
+    <string name="runage_challenge_player">Utmana spelare</string>
+    <string name="runage_unfollow_player">Avfölj spelare</string>
+    <string name="runage_reward_for_a_win">Belöning vid seger:</string>
+    <string name="runage_penalty_for_loosing">Straff vid förlust:</string>
+    <string name="runage_stil_get_running_xp">Belöningen är på toppen av den vanliga erfarenhetspoängen du får när du springer. Fortsätt springa efter du klarar utmaningen för att få en massa extra XP!</string>
+    <string name="runage_crush_this_players_time">Krossa denna spelares tid?</string>
+    <string name="runage_total_experience_gained">Total erfarenhetspoäng intjänad:</string>
+    <string name="runage_challenge_failed_penalty">Utmaning misslyckades straff:</string>
 </resources>

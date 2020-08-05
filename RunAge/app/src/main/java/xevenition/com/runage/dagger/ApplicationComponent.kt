@@ -4,6 +4,7 @@ import dagger.Component
 import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
 import xevenition.com.runage.fragment.challenges.QuestsFragment
 import xevenition.com.runage.fragment.challenges.ChallengesViewModelFactory
+import xevenition.com.runage.fragment.feed.FeedViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
@@ -21,6 +22,8 @@ import xevenition.com.runage.fragment.path.PathFragment
 import xevenition.com.runage.fragment.path.PathViewModelFactory
 import xevenition.com.runage.fragment.permission.PermissionFragment
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
+import xevenition.com.runage.fragment.player.PlayerFragment
+import xevenition.com.runage.fragment.player.PlayerViewModelFactory
 import xevenition.com.runage.fragment.requirement.RequirementViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
@@ -49,6 +52,7 @@ interface ApplicationComponent {
     fun inject(component: ShareFragment)
     fun inject(component: StartFragment)
     fun inject(component: QuestsFragment)
+    fun inject(component: PlayerFragment)
     fun inject(component: SplashFragment)
     fun inject(component: SupportFragment)
     fun inject(component: HistoryFragment)
@@ -58,21 +62,23 @@ interface ApplicationComponent {
     fun inject(component: PermissionFragment)
     fun inject(component: XpViewModelFactory)
     fun inject(component: MapViewModelFactory)
+    fun inject(component: FeedViewModelFactory)
     fun inject(component: PathViewModelFactory)
     fun inject(component: RuleViewModelFactory)
     fun inject(component: MainViewModelFactory)
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
-    fun inject(component: ChallengesViewModelFactory)
     fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
+    fun inject(component: PlayerViewModelFactory)
     fun inject(component: SummaryViewModelFactory)
     fun inject(component: SupportViewModelFactory)
     fun inject(component: HistoryViewModelFactory)
     fun inject(component: SettingsViewModelFactory)
     fun inject(component: ViewPageViewModelFactory)
     fun inject(component: PermissionViewModelFactory)
+    fun inject(component: ChallengesViewModelFactory)
     fun inject(component: HistorySummaryPathFragment)
     fun inject(component: AppSettingsViewModelFactory)
     fun inject(component: RequirementViewModelFactory)

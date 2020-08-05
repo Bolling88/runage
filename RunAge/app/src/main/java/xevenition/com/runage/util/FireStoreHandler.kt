@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.RunStats
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,7 +30,8 @@ class FireStoreHandler @Inject constructor() {
     fun storeQuest(
         quest: Quest,
         runStats: RunStats,
-        player: Player?
+        player: Player?,
+        totalXp: Int
     ): Single<Task<DocumentReference>> {
         val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
@@ -56,6 +57,7 @@ class FireStoreHandler @Inject constructor() {
                     "runDistance" to runStats.runningDistance,
                     "runDuration" to runStats.runningDuration,
                     "xp" to runStats.xp,
+                    "totalXp" to totalXp,
                     "playerName" to player?.displayName,
                     "playerImageUri" to player?.hiResImageUri.toString(),
                     "playerId" to player?.playerId,
@@ -107,12 +109,58 @@ class FireStoreHandler @Inject constructor() {
         return distance >= 40
     }
 
-    fun getAllQuests(): Task<QuerySnapshot> {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    fun loadQuestsAll(): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
-                .whereEqualTo("userId", userId)
+                .limit(10)
+        return docRef.get()
+    }
+
+    fun loadQuestsAllMore(startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .startAfter(startAfter)
+        return docRef.get()
+    }
+
+    fun loadQuestsFollowing(userInfo: RunageUser): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereIn("userId", userInfo.following)
+        return docRef.get()
+    }
+
+    fun loadQuestsFollowingMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereIn("playerId", userInfo.following)
+                .startAfter(startAfter)
+        return docRef.get()
+    }
+
+    fun loadQuestsMine(userInfo: RunageUser): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .limit(10)
+                .whereEqualTo("userId", userInfo.userId)
+        return docRef.get()
+    }
+
+    fun loadQuestsMineMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("quest")
+                .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
+                .startAfter(startAfter)
+                .limit(10)
+                .whereEqualTo("userId", userInfo.userId)
         return docRef.get()
     }
 
@@ -121,13 +169,6 @@ class FireStoreHandler @Inject constructor() {
         val docRef =
             firestore.collection("users")
                 .document(userId)
-        return docRef.get()
-    }
-
-    fun getChallenges(): Task<DocumentSnapshot> {
-        val docRef =
-            firestore.collection("challenges")
-                .document("QuIYFZx7kYXJF7MWsy8l")
         return docRef.get()
     }
 
@@ -140,7 +181,16 @@ class FireStoreHandler @Inject constructor() {
         )
     }
 
-    fun storeUserInfo(userInfo: UserInfo): Task<Void> {
+    fun storeUserFollowers(following: List<String>): Task<Void> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        return firestore.collection("users").document(userId).set(
+            hashMapOf(
+                "following" to following
+            ), SetOptions.merge()
+        )
+    }
+
+    fun storeUserInfo(userInfo: RunageUser): Task<Void> {
         Timber.d("Storing user info: $userInfo")
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         return firestore.collection("users").document(userId).set(
@@ -149,6 +199,7 @@ class FireStoreHandler @Inject constructor() {
                 "calories" to userInfo.calories,
                 "distance" to userInfo.distance,
                 "duration" to userInfo.duration,
+                "following" to userInfo.following,
                 "challengeScore" to userInfo.challengeScore
             ), SetOptions.merge()
         )

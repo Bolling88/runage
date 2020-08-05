@@ -12,7 +12,7 @@ import javax.inject.Inject
 class BitmapUtil @Inject constructor(private val app: Application) {
 
     fun getBitmapFromVectorDrawable(drawableId: Int): Bitmap? {
-        var drawable =
+        val drawable =
             ContextCompat.getDrawable(app, drawableId)
         return if(drawable == null)
             null

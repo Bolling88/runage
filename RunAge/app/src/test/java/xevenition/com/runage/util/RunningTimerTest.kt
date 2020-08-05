@@ -31,7 +31,7 @@ class RunningTimerTest{
     }
 
     private fun <T> uninitialized(): T = null as T
-    lateinit var runningUtil: RunningUtil
+    private lateinit var runningUtil: RunningUtil
 
     @Before
     fun setUp(){

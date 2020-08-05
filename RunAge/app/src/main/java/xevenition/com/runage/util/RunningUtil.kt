@@ -43,7 +43,6 @@ class RunningUtil @Inject constructor(
             if (distance < 100) {
                 "$distance m"
             } else {
-                Timber.d("Distance: $distance")
                 "${"%.2f".format(distance.toDouble() / 1000)} ${resourceUtil.getString(R.string.runage_km)}"
             }
         } else {

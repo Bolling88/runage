@@ -2,7 +2,6 @@ package xevenition.com.runage.fragment.summary
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
-import android.speech.tts.TextToSpeech
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,14 +14,13 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.RunStats
-import xevenition.com.runage.model.UserInfo
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.room.repository.UserRepository
 import xevenition.com.runage.service.FitnessHelper
 import xevenition.com.runage.util.*
 import java.time.Instant
@@ -35,9 +33,10 @@ class SummaryViewModel(
     private val feedbackHandler: FeedbackHandler,
     private val questRepository: QuestRepository,
     private val resourceUtil: ResourceUtil,
-    private val fireStoreHandler: FireStoreHandler,
     private val saveUtil: SaveUtil,
     private val runningUtil: RunningUtil,
+    private val userRepository: UserRepository,
+    private val fireStoreHandler: FireStoreHandler,
     args: SummaryFragmentArgs
 ) : BaseViewModel() {
     private var runStats: RunStats? = null
@@ -45,6 +44,8 @@ class SummaryViewModel(
     private var quest: Quest? = null
     private val questId = args.keyQuestId
     private var challengeStars = 0
+    private var haveCheated = false
+    private var totalNewXp = 0
 
     private val _liveTotalDistance = MutableLiveData<String>()
     val liveTotalDistance: LiveData<String> = _liveTotalDistance
@@ -103,6 +104,9 @@ class SummaryViewModel(
     private val _liveRunningVisibility = MutableLiveData<Int>()
     val liveRunningVisibility: LiveData<Int> = _liveRunningVisibility
 
+    private val _liveXpTextColor = MutableLiveData<Int>()
+    val liveXpTextColor: LiveData<Int> = _liveXpTextColor
+
     private val _liveWalkingVisibility = MutableLiveData<Int>()
     val liveWalkingVisibility: LiveData<Int> = _liveWalkingVisibility
 
@@ -136,6 +140,18 @@ class SummaryViewModel(
     private val _liveTextExperience = MutableLiveData<String>()
     val liveTextExperience: LiveData<String> = _liveTextExperience
 
+    private val _liveTextRewardTitle = MutableLiveData<String>()
+    val liveTextRewardTitle: LiveData<String> = _liveTextRewardTitle
+
+    private val _liveTextRewardVisibility = MutableLiveData<Int>()
+    val liveTextRewardVisibility: LiveData<Int> = _liveTextRewardVisibility
+
+    private val _liveTextReward = MutableLiveData<String>()
+    val liveTextReward: LiveData<String> = _liveTextReward
+
+    private val _liveRewardTextColor = MutableLiveData<Int>()
+    val liveRewardTextColor: LiveData<Int> = _liveRewardTextColor
+
     private val _liveLoadingVisibility = MutableLiveData<Int>()
     val liveLoadingVisibility: LiveData<Int> = _liveLoadingVisibility
 
@@ -165,7 +181,10 @@ class SummaryViewModel(
         _liveButtonEnabled.postValue(false)
         _liveTextTimer.postValue("00:00:00")
         _liveStarVisibility.postValue(View.GONE)
+        _liveTextRewardVisibility.postValue(View.GONE)
         _liveCheatingTextVisibility.postValue(View.GONE)
+        _liveXpTextColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
+        _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
         _liveTotalDistance.postValue("0 m")
         _liveCalories.postValue("0")
         _liveLoadingVisibility.postValue(View.GONE)
@@ -190,7 +209,6 @@ class SummaryViewModel(
                 if (mapCreated) {
                     displayPath(it)
                 }
-                setUpActivityTypeInfo(it)
                 setUpActivityTypeInfo(it)
             }, {
                 Timber.e(it)
@@ -258,7 +276,7 @@ class SummaryViewModel(
         _livePace.postValue(runningUtil.getPaceString(duration, distance, true))
 
         if (quest.locations.size < 2) {
-            if (quest.level > 0) {
+            if (quest.level > 0 || quest.isPlayerChallenge) {
                 _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
             } else {
@@ -269,55 +287,68 @@ class SummaryViewModel(
             //Quest is so short there is no reason for saving it
             _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
             _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+            _liveTextExperience.postValue("0 ${resourceUtil.getString(R.string.runage_xp)}")
             _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
             _liveDeleteButtonVisibility.postValue(View.GONE)
             _observablePlayFailAnimation.postValue(Unit)
             _liveButtonEnabled.postValue(true)
             //don't update user stats in this case
         } else {
-            if (quest.level > 0) {
+            if (quest.level > 0 || quest.isPlayerChallenge) {
                 challengeStars = quest.levelStars
+                _liveTextRewardVisibility.postValue(View.VISIBLE)
                 if (challengeStars > 0) {
-                    if (runStats.activityPercentage.getOrDefault(
-                            DetectedActivity.ON_BICYCLE,
-                            0.0
-                        ) > 0.05 || runStats.activityPercentage.getOrDefault(
-                            DetectedActivity.IN_VEHICLE,
-                            0.0
-                        ) > 0.05
-                    ) {
+                    if (haveCheated(runStats)) {
                         //Cheating detected!
                         challengeStars = 0
+                        haveCheated = true
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                        _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+                        if(quest.isPlayerChallenge){
+                            _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed_penalty))
+                        }else{
+                            _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
+                        }
                         _observablePlayFailAnimation.postValue(Unit)
                         _liveCheatingTextVisibility.postValue(View.VISIBLE)
                     } else {
-                        _liveStarVisibility.postValue(View.VISIBLE)
+                        if(quest.isPlayerChallenge){
+                            _liveStarVisibility.postValue(View.GONE)
+                        }else {
+                            _liveStarVisibility.postValue(View.VISIBLE)
+                            when (challengeStars) {
+                                3 -> {
+                                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                }
+                                2 -> {
+                                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                                }
+                                else -> {
+                                    _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
+                                    _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                                    _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
+                                }
+                            }
+                        }
+                        _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_completed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_completed))
                         _observablePlaySuccessAnimation.postValue(Unit)
-                        when (challengeStars) {
-                            3 -> {
-                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                            }
-                            2 -> {
-                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                            }
-                            else -> {
-                                _liveStar1Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star))
-                                _liveStar2Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                                _liveStar3Image.postValue(resourceUtil.getDrawable(R.drawable.ic_star_border))
-                            }
-                        }
                     }
                 } else {
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                    _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+                    if(quest.isPlayerChallenge){
+                        _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed_penalty))
+                    }else{
+                        _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
+                    }
                     _observablePlayFailAnimation.postValue(Unit)
                 }
             } else {
@@ -329,12 +360,22 @@ class SummaryViewModel(
         }
     }
 
+    private fun haveCheated(runStats: RunStats): Boolean {
+        return runStats.activityPercentage.getOrDefault(
+            DetectedActivity.ON_BICYCLE,
+            0.0
+        ) > 0.05 || runStats.activityPercentage.getOrDefault(
+            DetectedActivity.IN_VEHICLE,
+            0.0
+        ) > 0.05
+    }
+
     @SuppressLint("CheckResult")
     private fun updateUserStats(quest: Quest, runStats: RunStats) {
         fireStoreHandler.getUserInfo()
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    val userInfo = document.toObject(UserInfo::class.java)
+                    val userInfo = document.toObject(RunageUser::class.java)
                     val userId = userInfo?.userId ?: ""
 
                     val oldUserScoreMap = userInfo?.challengeScore ?: mapOf()
@@ -356,14 +397,29 @@ class SummaryViewModel(
                         oldUserScoreMap
                     }
 
-                    val newXp =
-                        if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime) {
+                    totalNewXp =
+                        if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime && !haveCheated) {
+                            _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
                             runStats.xp + quest.levelExperience
+                        }else if(quest.isPlayerChallenge && challengeStars > 0 && !haveCheated){
+                            _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                            runStats.xp + quest.levelExperience
+                        }else if(quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)){
+                            val minusXp = (quest.levelExperience.toDouble()/2).toInt()
+                            _liveTextReward.postValue("-$minusXp ${resourceUtil.getString(R.string.runage_xp)}")
+                            _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
+                            runStats.xp - minusXp
                         } else {
                             runStats.xp
                         }
-                    _liveTextExperience.postValue("$newXp ${resourceUtil.getString(R.string.runage_xp)}")
-                    val totalXp = newXp + (userInfo?.xp ?: 0)
+
+                    if(totalNewXp > 0){
+                        _liveTextExperience.postValue("+$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
+                    }else{
+                        _liveTextExperience.postValue("$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
+                        _liveXpTextColor.postValue(resourceUtil.getColor(R.color.red))
+                    }
+                    val totalXp = totalNewXp + (userInfo?.xp ?: 0)
 
                     val totalCalories = (userInfo?.calories ?: 0) + quest.calories
                     val totalRunningDistance =
@@ -371,23 +427,27 @@ class SummaryViewModel(
                     val totalRunningDuration =
                         (userInfo?.duration ?: 0) + runStats.runningDuration
 
-                    val newUserInfo = UserInfo(
+                    val newUserInfo = RunageUser(
                         userId = userId,
                         xp = totalXp,
                         calories = totalCalories,
                         distance = totalRunningDistance,
                         challengeScore = scoreMap,
+                        following = userInfo?.following ?: listOf(),
                         duration = totalRunningDuration
                     )
 
-                    fireStoreHandler.storeUserInfo(newUserInfo)
-                        .addOnCompleteListener { _liveButtonEnabled.postValue(true) }
-                        .addOnSuccessListener {
-                            Timber.d("User info have been stored")
-                            storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
-                        }
-                        .addOnFailureListener { Timber.e("get failed with $it") }
-                    Timber.d("Got user info")
+                    userRepository.saveUserInfo(newUserInfo)
+                        .subscribe({
+                            it.addOnCompleteListener { _liveButtonEnabled.postValue(true) }
+                                .addOnSuccessListener {
+                                    Timber.d("User info have been stored")
+                                    storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
+                                }
+                                .addOnFailureListener { Timber.e("get failed with $it") }
+                        }, {
+                            Timber.e(it)
+                        })
                 } else {
                     Timber.d("No such document")
                 }
@@ -402,7 +462,7 @@ class SummaryViewModel(
     private fun storeAchievementsAndLeaderboards(
         quest: Quest,
         runStats: RunStats,
-        userInfo: UserInfo
+        userInfo: RunageUser
     ) {
         Timber.d("Saving achievements and leaderboards")
         Single.fromCallable {
@@ -441,7 +501,7 @@ class SummaryViewModel(
         return Observable.just(quest)
             .subscribeOn(Schedulers.io())
             .subscribe({
-                storeQuestInFirestore(quest, runStats!!, player)
+                storeQuestInFirestore(quest, runStats!!, totalNewXp, player)
             }, {
                 Timber.e(it)
                 _liveLoadingVisibility.postValue(View.GONE)
@@ -468,9 +528,10 @@ class SummaryViewModel(
     private fun storeQuestInFirestore(
         quest: Quest,
         runStats: RunStats,
+        totalXp: Int,
         player: Player?
     ): Disposable {
-        return fireStoreHandler.storeQuest(quest, runStats, player)
+        return fireStoreHandler.storeQuest(quest, runStats, player, totalXp)
             .subscribe({
                 it.addOnCompleteListener {
                     syncWithGoogleFit(quest)

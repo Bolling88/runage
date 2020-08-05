@@ -28,6 +28,11 @@ fun setBackgroundTint(view: FloatingActionButton, tint: Int) {
     view.backgroundTintList = ColorStateList.valueOf(tint)
 }
 
+@BindingAdapter("iconTint")
+fun setButtonIconTint(view: MaterialButton, tint: Int) {
+    view.iconTint = ColorStateList.valueOf(tint)
+}
+
 @BindingAdapter("android:backgroundTint")
 fun setBackgroundTintMaterialButton(view: MaterialButton, tint: Int) {
     view.backgroundTintList = ColorStateList.valueOf(tint)

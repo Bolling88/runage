@@ -4,28 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import timber.log.Timber
+import com.google.firebase.auth.FirebaseAuth
 import xevenition.com.runage.R
-import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentHistoryBinding
+import xevenition.com.runage.fragment.feed.FeedFragment
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
+
 
 class HistoryFragment : BaseFragment<HistoryViewModel>() {
 
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyRecyclerAdapter: HistoryRecyclerAdapter
+    private var loadMore = false
 
     @Inject
     lateinit var resourceUtil: ResourceUtil
@@ -35,12 +34,17 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getApplication().appComponent.inject(this)
-        val factory = HistoryViewModelFactory(getApplication())
+        val factory = HistoryViewModelFactory(getApplication(), requireArguments())
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
 
-        historyRecyclerAdapter = HistoryRecyclerAdapter(resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        historyRecyclerAdapter = HistoryRecyclerAdapter(userId, resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
             override fun onClick(quest: SavedQuest) {
-                viewModel.onQuestClicked(quest)
+                (parentFragment as FeedFragment).onQuestClicked(quest)
+            }
+
+            override fun onReachedItem(position: Int) {
+                viewModel.onReachedItem(position)
             }
         })
     }
@@ -56,10 +60,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = historyRecyclerAdapter
 
-        binding.toolbar.setNavigationOnClickListener {
-            (activity as? MainActivity)?.openMenu()
-        }
-
         return binding.root
     }
 
@@ -73,8 +73,26 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
 
         viewModel.observableQuest.observe(viewLifecycleOwner, Observer {
             it?.let {
+                loadMore = false
                 historyRecyclerAdapter.submitList(it)
             }
         })
+    }
+
+    companion object{
+
+        const val PAGE_MINE = 0
+        const val PAGE_FOLLOWING = 1
+        const val PAGE_ALL = 2
+
+        const val KEY_PAGE = "key_page"
+
+        fun getInstance(position: Int): HistoryFragment{
+            val args = Bundle()
+            args.putInt(KEY_PAGE, position)
+            val fragment = HistoryFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

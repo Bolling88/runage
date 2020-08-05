@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.player.PlayerViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_player_challenge"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+                    app:layout_constraintEnd_toEndOf="@+id/card_profile"
+                    app:layout_constraintStart_toStartOf="@+id/card_profile"
+                    app:layout_constraintTop_toTopOf="@+id/card_profile"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/lottie_ripple_red"
+                    app:lottie_scale="0.2"
+                    app:lottie_speed="0.4" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_profile"
+                    android:layout_width="115dp"
+                    android:layout_height="115dp"
+                    android:layout_marginTop="34dip"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="250dp"
+                    app:cardElevation="10dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="250dp">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/img_profile"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:scaleType="centerCrop" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textName"
+                    style="@style/MainFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:singleLine="true"
+                    android:text="@{viewModel.liveTextName}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_profile"
+                    tools:text="Enemy Player" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonFollow"
+                    style="@style/ButtonStyleText"
+                    android:layout_width="wrap_content"
+                    android:onClick="@{()-> viewModel.onFollowClicked()}"
+                    android:text="@{viewModel.liveFollowText}"
+                    app:icon="@{viewModel.liveFollowIcon}"
+                    app:iconTint="@{viewModel.liveFollowButtonColor}"
+                    android:textColor="@{viewModel.liveFollowButtonColor}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textTitle"
+                    android:layout_width="0dip"
+                     android:gravity="center"
+                    android:fontFamily="@font/majora_bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textColor="@color/black"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:textSize="@dimen/textSizeHuge"
+                    android:text="@string/runage_crush_this_players_time"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/buttonFollow"
+                    android:layout_height="wrap_content" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTimeTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_time_to_beat"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textDistanceTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textDistanceTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDistanceTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_distance_to_complete"
+                    android:textAllCaps="true"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@+id/textTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTime"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@{viewModel.liveTextTime}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey2"
+                    android:textSize="34sp"
+                    app:layout_constraintEnd_toEndOf="@+id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
+                    tools:text="00:00:00" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDistance"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@{viewModel.liveTextDistance}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey2"
+                    android:textSize="34sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
+                    tools:text="4.5 km" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textRewardTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@string/runage_reward_for_a_win"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey2"
+                    android:textSize="@dimen/textSizeNormal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textTime" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textReward"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:text="@{viewModel.liveTextWin}"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textRewardTitle"
+                    tools:text="+100 XP" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textFailureTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@string/runage_penalty_for_loosing"
+                    android:textAllCaps="true"
+                    android:textColor="@color/grey2"
+                    android:textSize="@dimen/textSizeNormal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textReward" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textFailure"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:gravity="center"
+                    android:text="@{viewModel.liveTextPenalty}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textFailureTitle"
+                    tools:text="-50 XP" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textInfo"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_basic"
+                    android:textColor="@color/grey3"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora"
+                    android:text="@string/runage_stil_get_running_xp"
+                    android:textSize="@dimen/textSizeNormal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textFailure" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInfo" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/gradient_white"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="@{()-> viewModel.onStartClicked()}"
+                android:text="@string/runage_start_challenge"
+                app:icon="@drawable/ic_run_blue"
+                app:iconTint="@color/white" />
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>
