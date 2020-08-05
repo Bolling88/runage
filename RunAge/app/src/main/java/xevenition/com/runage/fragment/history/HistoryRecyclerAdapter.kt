@@ -67,7 +67,7 @@ class HistoryRecyclerAdapter(
             textTime.text = runningUtil.convertTimeToDurationString(duration)
             textXp.text = item.xp.toString()
             textPercentage.text = (item.runningPercentage*100).toInt().toString()
-            textName.text = item.playerName
+            textName.text = if(item.playerName.isEmpty()) resourceUtil.getString(R.string.runage_unknown_player) else item.playerName
             textPace.text =
                 runningUtil.getPaceString(
                     duration,
@@ -84,6 +84,8 @@ class HistoryRecyclerAdapter(
 
                 GlideApp.with(view.context)
                     .load(profileImageRef)
+                    .placeholder(resourceUtil.getDrawable(R.drawable.ic_profile))
+                    .fallback(resourceUtil.getDrawable(R.drawable.ic_profile))
                     .into(imageRunning)
             }
         }

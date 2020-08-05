@@ -77,4 +77,18 @@ class UserRepository @Inject constructor(
             .subscribeOn(Schedulers.io())
             .doOnError { Timber.e(it) }
     }
+
+    fun updateFollowing(newUserInfo: RunageUser): Single<Task<Void>> {
+        return Single.fromCallable {
+            fireStoreHandler.storeUserFollowers(newUserInfo.following)
+                .addOnSuccessListener {
+                    Timber.d("User info have been stored")
+                    dbInsertUser(newUserInfo)
+                        .subscribe()
+                }
+                .addOnFailureListener { Timber.e("get failed with $it") }
+        }
+            .subscribeOn(Schedulers.io())
+            .doOnError { Timber.e(it) }
+    }
 }

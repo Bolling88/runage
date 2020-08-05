@@ -122,4 +122,12 @@
     <string name="runage_following">Following</string>
     <string name="runage_mine">Mine</string>
     <string name="runage_follow_user">Follow user</string>
+    <string name="runage_unknown_player">Unknown player</string>
+    <string name="runage_you_are_not_following">You are not following anyone yet.</string>
+    <string name="runage_player_challenge">Player Challenge</string>
+    <string name="runage_follow_player">Follow Player</string>
+    <string name="runage_time_to_beat">Time to beat</string>
+    <string name="runage_distance_to_complete">Distance to complete</string>
+    <string name="runage_challenge_player">Challenge Player</string>
+    <string name="runage_unfollow_player">Unfollow player</string>
 </resources>

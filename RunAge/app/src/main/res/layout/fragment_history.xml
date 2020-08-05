@@ -40,7 +40,7 @@
             android:textSize="@dimen/textSizeBig"
             android:visibility="@{viewModel.liveNoRunsTextVisibility}"
             android:layout_margin="@dimen/margin_basic"
-            android:text="@string/runage_no_completed_runs"
+            android:text="@{viewModel.liveEmptyText}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,6 +66,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
                 R.id.startFragment -> showBottomNav()
                 R.id.challengeFragment -> showBottomNav()
                 R.id.feedFragment -> showBottomNav()
+                R.id.playerFragment -> hideBottomNav()
                 R.id.historySummaryFragment -> hideBottomNav()
                 else -> {}
             }

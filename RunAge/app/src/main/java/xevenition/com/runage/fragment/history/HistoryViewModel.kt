@@ -10,6 +10,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.KEY_PAGE
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_ALL
@@ -41,11 +42,26 @@ class HistoryViewModel(
     private val _liveNoRunsTextVisibility = MutableLiveData<Int>()
     val liveNoRunsTextVisibility: LiveData<Int> = _liveNoRunsTextVisibility
 
+    private val _liveEmptyText = MutableLiveData<String>()
+    val liveEmptyText: LiveData<String> = _liveEmptyText
+
     private val page = args.getInt(KEY_PAGE)
 
     init {
         _liveProgressVisibility.postValue(View.VISIBLE)
         _liveNoRunsTextVisibility.postValue(View.GONE)
+
+        when(page){
+            PAGE_MINE->{
+                _liveEmptyText.postValue(resourceUtil.getString(R.string.runage_no_completed_runs))
+            }
+            PAGE_FOLLOWING->{
+                _liveEmptyText.postValue(resourceUtil.getString(R.string.runage_you_are_not_following))
+            }
+            PAGE_ALL->{
+                _liveEmptyText.postValue(resourceUtil.getString(R.string.runage_unexpected_error))
+            }
+        }
 
         val disposable = userRepository.getSingleUser()
             .subscribe({ user ->
@@ -53,25 +69,32 @@ class HistoryViewModel(
                 userInfo?.let {
                     when (page) {
                         PAGE_MINE -> firestoreHandler.loadQuestsMine(it)
-                        PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowing(it)
+                        PAGE_FOLLOWING -> if (user.following.isEmpty()) {
+                            _liveProgressVisibility.postValue(View.GONE)
+                            _liveNoRunsTextVisibility.postValue(View.VISIBLE)
+                            null
+                        } else firestoreHandler.loadQuestsFollowing(it)
                         PAGE_ALL -> firestoreHandler.loadQuestsAll()
                         else -> null
-                    }?.addOnSuccessListener { collection ->
-                        if (collection != null && !collection.isEmpty) {
-                            lastSnapshot = collection.documents.last()
-                            Timber.d("DocumentSnapshot data: ${collection.documents}")
-                            processQuests(collection)
-                        } else {
-                            Timber.d("No such document")
+                    }
+                        ?.addOnSuccessListener { collection ->
+                            if (collection != null && !collection.isEmpty) {
+                                lastSnapshot = collection.documents.last()
+                                Timber.d("DocumentSnapshot data: ${collection.documents}")
+                                processQuests(collection)
+                            } else {
+                                Timber.d("No such document")
+                                _liveProgressVisibility.postValue(View.GONE)
+                                _liveNoRunsTextVisibility.postValue(View.VISIBLE)
+                            }
+                        }
+                        ?.addOnFailureListener { exception ->
+                            Timber.e("get failed with $exception")
                             _liveProgressVisibility.postValue(View.GONE)
                             _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                         }
-                    }
-                        ?.addOnFailureListener { exception ->
-                            Timber.e("get failed with $exception")
-                        }
                 }
-            },{
+            }, {
                 Timber.e(it)
             })
         addDisposable(disposable)
@@ -103,11 +126,14 @@ class HistoryViewModel(
     private fun loadMoreData() {
         Timber.d("Load more data")
         lastSnapshot?.let {
-            val userInfo = userInfo
-            if(userInfo != null) {
+            val user = userInfo
+            if (user != null) {
                 when (page) {
-                    PAGE_MINE -> firestoreHandler.loadQuestsMineMore(userInfo, it)
-                    PAGE_FOLLOWING -> firestoreHandler.loadQuestsFollowingMore(userInfo, it)
+                    PAGE_MINE -> firestoreHandler.loadQuestsMineMore(user, it)
+                    PAGE_FOLLOWING -> if (user.following.isEmpty()) null else firestoreHandler.loadQuestsFollowingMore(
+                        user,
+                        it
+                    )
                     PAGE_ALL -> firestoreHandler.loadQuestsAllMore(it)
                     else -> null
                 }?.addOnSuccessListener { collection ->

@@ -179,6 +179,15 @@ class FireStoreHandler @Inject constructor() {
         )
     }
 
+    fun storeUserFollowers(following: List<String>): Task<Void> {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        return firestore.collection("users").document(userId).set(
+            hashMapOf(
+                "following" to following
+            ), SetOptions.merge()
+        )
+    }
+
     fun storeUserInfo(userInfo: RunageUser): Task<Void> {
         Timber.d("Storing user info: $userInfo")
         val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -188,6 +197,7 @@ class FireStoreHandler @Inject constructor() {
                 "calories" to userInfo.calories,
                 "distance" to userInfo.distance,
                 "duration" to userInfo.duration,
+                "following" to userInfo.following,
                 "challengeScore" to userInfo.challengeScore
             ), SetOptions.merge()
         )

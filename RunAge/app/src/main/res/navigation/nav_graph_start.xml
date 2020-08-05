@@ -99,6 +99,9 @@
         <action
             android:id="@+id/action_feedFragment_to_historySummaryFragment"
             app:destination="@id/historySummaryFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
     <fragment
         android:id="@+id/historySummaryFragment"
@@ -118,6 +121,17 @@
         <argument
             android:name="key_saved_quest"
             app:argType="xevenition.com.runage.model.SavedQuest" />
+    </fragment>
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="xevenition.com.runage.fragment.player.PlayerFragment"
+        android:label="@string/runage_player_challenge" >
+        <argument
+            android:name="key_saved_quest"
+            app:argType="xevenition.com.runage.model.SavedQuest" />
+        <action
+            android:id="@+id/action_playerFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
 
 
