@@ -47,11 +47,15 @@ class RunningUtil @Inject constructor(
             }
         } else {
             if (distance < 160.9344) {
-                "$distance m"
+                "${"%.2f".format(distance.toDouble() * 3.2808)} ft"
             } else {
                 "${"%.2f".format(distance.toDouble() / 1609.344)} ${resourceUtil.getString(R.string.runage_mi)}"
             }
         }
+    }
+
+    fun convertPoundsToKilograms(pounds: Double): Double {
+        return pounds / 2.2046
     }
 
     fun getSecondsBehindCheckpoint(

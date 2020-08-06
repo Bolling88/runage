@@ -8,7 +8,7 @@ object CalorieCalculator {
      * @param weight in kilograms
      * calculation based on https://fitness.stackexchange.com/a/36045
      */
-    fun getCaloriesBurned(distance: Double, weight: Float): Int {
-        return (distance * weight *  1.036 / 1000).toInt()
+    fun getCaloriesBurned(distance: Double, weight: Double): Int {
+        return (distance * weight * 1.036 / 1000).toInt()
     }
 }

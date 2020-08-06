@@ -55,7 +55,7 @@
             android:paddingBottom="10dip"
             android:singleLine="true"
             android:text="@{viewModel.liveTextXp}"
-            android:textColor="@color/black"
+            android:textColor="@color/grey3"
             android:textSize="@dimen/textSizeHuge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
