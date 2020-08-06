@@ -382,9 +382,13 @@ class EventService : Service() {
                 resultArray
             )
             currentQuest.totalDistance += resultArray.first()
+            val isMetric = saveUtil.getBoolean(SaveUtil.KEY_IS_USING_METRIC, true)
+            var weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT).toDouble()
+            if(!isMetric)
+                weight = runningUtil.convertPoundsToKilograms(weight)
             currentQuest.calories = CalorieCalculator.getCaloriesBurned(
                 distance = currentQuest.totalDistance,
-                weight = saveUtil.getFloat(SaveUtil.KEY_WEIGHT)
+                weight = weight
             )
         }
     }
