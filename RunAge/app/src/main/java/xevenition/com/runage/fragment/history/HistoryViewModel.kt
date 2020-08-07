@@ -1,6 +1,7 @@
 package xevenition.com.runage.fragment.history
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -18,13 +19,14 @@ import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_FOL
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_MINE
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.room.entity.RunageUser
-import xevenition.com.runage.room.repository.UserRepository
-import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.repository.UserRepository
+import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.SingleLiveEvent
 
 class HistoryViewModel(
     resourceUtil: ResourceUtil,
-    private val firestoreHandler: FireStoreHandler,
+    private val firestoreService: FireStoreService,
     private val userRepository: UserRepository,
     args: Bundle
 ) : BaseViewModel() {
@@ -44,6 +46,8 @@ class HistoryViewModel(
 
     private val _liveEmptyText = MutableLiveData<String>()
     val liveEmptyText: LiveData<String> = _liveEmptyText
+
+    val observableOpenPlayerSearch = SingleLiveEvent<Intent>()
 
     private val page = args.getInt(KEY_PAGE)
 
@@ -69,13 +73,13 @@ class HistoryViewModel(
                 userInfo = user
                 userInfo?.let {
                     when (page) {
-                        PAGE_MINE -> firestoreHandler.loadQuestsMine(it)
+                        PAGE_MINE -> firestoreService.loadQuestsMine(it)
                         PAGE_FOLLOWING -> if (user.following.isEmpty()) {
                             _liveProgressVisibility.postValue(View.GONE)
                             _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                             null
-                        } else firestoreHandler.loadQuestsFollowing(it)
-                        PAGE_ALL -> firestoreHandler.loadQuestsAll()
+                        } else firestoreService.loadQuestsFollowing(it)
+                        PAGE_ALL -> firestoreService.loadQuestsAll()
                         else -> null
                     }
                         ?.addOnSuccessListener { collection ->
@@ -132,12 +136,12 @@ class HistoryViewModel(
             val user = userInfo
             if (user != null) {
                 when (page) {
-                    PAGE_MINE -> firestoreHandler.loadQuestsMineMore(user, it)
-                    PAGE_FOLLOWING -> if (user.following.isEmpty()) null else firestoreHandler.loadQuestsFollowingMore(
+                    PAGE_MINE -> firestoreService.loadQuestsMineMore(user, it)
+                    PAGE_FOLLOWING -> if (user.following.isEmpty()) null else firestoreService.loadQuestsFollowingMore(
                         user,
                         it
                     )
-                    PAGE_ALL -> firestoreHandler.loadQuestsAllMore(it)
+                    PAGE_ALL -> firestoreService.loadQuestsAllMore(it)
                     else -> null
                 }?.addOnSuccessListener { collection ->
                     if (collection != null && !collection.isEmpty) {
@@ -160,5 +164,12 @@ class HistoryViewModel(
         if (position == allQuests.size - 1) {
             loadMoreData()
         }
+    }
+
+    fun onSearchClicked(){
+        userRepository.getSearchForUserIntent()
+            ?.addOnSuccessListener {
+                observableOpenPlayerSearch.postValue(it)
+            }
     }
 }

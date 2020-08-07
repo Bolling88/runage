@@ -24,7 +24,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.BuildConfig
 import xevenition.com.runage.BuildConfig.*
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
@@ -34,7 +33,7 @@ import xevenition.com.runage.fragment.map.MapFragment.Companion.KEY_CHALLENGE
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.room.entity.Quest
-import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.service.ActivityBroadcastReceiver.Companion.KEY_EVENT_BROADCAST_ID
 import xevenition.com.runage.util.*
 import java.time.Instant

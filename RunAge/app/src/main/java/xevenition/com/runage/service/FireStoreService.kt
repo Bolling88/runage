@@ -1,4 +1,4 @@
-package xevenition.com.runage.util
+package xevenition.com.runage.service
 
 import android.location.Location
 import com.google.android.gms.games.Player
@@ -21,10 +21,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FireStoreHandler @Inject constructor() {
+class FireStoreService @Inject constructor() {
 
     private var previousLocation: FirestoreLocation? = null
     private val firestore = Firebase.firestore
+    private val firebaseAuth = FirebaseAuth.getInstance()
     private val gson = Gson()
 
     fun storeQuest(
@@ -33,7 +34,6 @@ class FireStoreHandler @Inject constructor() {
         player: Player?,
         totalXp: Int
     ): Single<Task<DocumentReference>> {
-        val firebaseAuth = FirebaseAuth.getInstance()
         return Observable.fromIterable(quest.locations)
             .subscribeOn(Schedulers.io())
             .map { FirestoreLocation(it.latitude, it.longitude) }
@@ -173,34 +173,73 @@ class FireStoreHandler @Inject constructor() {
     }
 
     fun storeUserIfNotExists() {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        firestore.collection("users").document(userId).set(
+        val user = FirebaseAuth.getInstance().currentUser
+        firestore.collection("users").document(user?.uid ?: "").set(
             hashMapOf(
-                "userId" to userId
+                "userId" to user?.uid,
+                "playerName" to user?.displayName
             ), SetOptions.merge()
         )
     }
 
-    fun storeUserFollowers(following: List<String>): Task<Void> {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        return firestore.collection("users").document(userId).set(
+    fun storeUserFollowing(userId: String, userToFollowId: String): Task<Void> {
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("following", FieldValue.arrayUnion(userToFollowId))
+    }
+
+    fun removeUserFollowing(userId: String, userToFollowId: String): Task<Void> {
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("following", FieldValue.arrayRemove(userToFollowId))
+    }
+
+    fun storeFollowerToUser(userId: String, idOfNewFollower: String): Task<Void> {
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("followers", FieldValue.arrayUnion(idOfNewFollower))
+    }
+
+    fun removeFollowerToUser(userId: String, idOfNewFollower: String): Task<Void> {
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("followers", FieldValue.arrayRemove(idOfNewFollower))
+    }
+
+    fun incrementCompletedRuns(): Task<Void> {
+        val userId = firebaseAuth.currentUser?.uid ?: ""
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("completedRuns", FieldValue.increment(1))
+    }
+
+    fun incrementPlayerChallengesWon(): Task<Void> {
+        val userId = firebaseAuth.currentUser?.uid ?: ""
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("playerChallengesWon", FieldValue.increment(1))
+    }
+
+    fun incrementPlayerChallengesLost(): Task<Void> {
+        val userId = firebaseAuth.currentUser?.uid ?: ""
+        val ref = firestore.collection("users").document(userId)
+        return ref.update("playerChallengesLost", FieldValue.increment(1))
+    }
+
+    fun storeUserInfo(user: RunageUser): Task<Void> {
+        Timber.d("Storing user info: $user")
+        return firestore.collection("users").document(user.userId).set(
             hashMapOf(
-                "following" to following
+                "xp" to user.xp,
+                "calories" to user.calories,
+                "distance" to user.distance,
+                "duration" to user.duration,
+                "following" to user.following,
+                "challengeScore" to user.challengeScore
             ), SetOptions.merge()
         )
     }
 
-    fun storeUserInfo(userInfo: RunageUser): Task<Void> {
-        Timber.d("Storing user info: $userInfo")
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    fun storeUserName(playerName: String): Task<Void> {
+        val userId = firebaseAuth.currentUser?.uid ?: ""
+        Timber.d("Storing user name: $playerName")
         return firestore.collection("users").document(userId).set(
             hashMapOf(
-                "xp" to userInfo.xp,
-                "calories" to userInfo.calories,
-                "distance" to userInfo.distance,
-                "duration" to userInfo.duration,
-                "following" to userInfo.following,
-                "challengeScore" to userInfo.challengeScore
+                "playerName" to playerName
             ), SetOptions.merge()
         )
     }

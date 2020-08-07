@@ -3,7 +3,6 @@ package xevenition.com.runage.fragment.historysummary
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil

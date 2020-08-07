@@ -20,7 +20,7 @@ import xevenition.com.runage.R
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.PositionPoint
-import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.util.LocationUtil
 import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil

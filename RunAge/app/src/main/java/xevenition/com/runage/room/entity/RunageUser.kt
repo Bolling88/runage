@@ -12,5 +12,7 @@ data class RunageUser(
     @ColumnInfo(name = "distance") val distance: Int = 0,
     @ColumnInfo(name = "following") val following: List<String> = listOf(),
     @ColumnInfo(name = "challengeScore") val challengeScore: Map<String, Int> = mapOf(),
-    @ColumnInfo(name = "duration") val duration: Int = 0
+    @ColumnInfo(name = "duration") val duration: Int = 0,
+    @ColumnInfo(name = "playerName") val playerName: String = "",
+    @ColumnInfo(name = "completedRuns") val completedRuns: Int = 0
 )

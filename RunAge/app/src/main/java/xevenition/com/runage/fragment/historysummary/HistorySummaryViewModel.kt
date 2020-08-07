@@ -14,12 +14,9 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
-import xevenition.com.runage.room.entity.Quest
-import xevenition.com.runage.util.FireStoreHandler
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil
-import java.time.Instant
 import kotlin.math.roundToInt
 
 class HistorySummaryViewModel(

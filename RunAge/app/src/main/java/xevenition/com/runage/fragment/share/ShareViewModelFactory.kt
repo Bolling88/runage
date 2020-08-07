@@ -1,12 +1,9 @@
 package xevenition.com.runage.fragment.share
 
-import xevenition.com.runage.fragment.rule.RuleViewModel
-
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.util.GameServicesUtil
+import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject

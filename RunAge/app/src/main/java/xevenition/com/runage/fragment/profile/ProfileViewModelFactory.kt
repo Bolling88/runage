@@ -1,4 +1,4 @@
-package xevenition.com.runage.fragment.feed
+package xevenition.com.runage.fragment.profile
 
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
@@ -8,7 +8,7 @@ import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
 
-class FeedViewModelFactory @Inject constructor(
+class ProfileViewModelFactory @Inject constructor(
     app: MainApplication
 ) :
     BaseViewModelFactory() {
@@ -26,6 +26,6 @@ class FeedViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return FeedViewModel(gameServicesUtil, resourceUtil, userRepository) as T
+        return ProfileViewModel(gameServicesUtil, resourceUtil, userRepository) as T
     }
 }

@@ -9,7 +9,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.room.entity.Quest
-import xevenition.com.runage.room.repository.QuestRepository
+import xevenition.com.runage.repository.QuestRepository
 
 
 class PathViewModel(

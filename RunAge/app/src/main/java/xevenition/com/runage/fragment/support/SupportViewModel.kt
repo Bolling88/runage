@@ -2,7 +2,7 @@ package xevenition.com.runage.fragment.support
 
 
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.AccountUtil
+import xevenition.com.runage.util.GameServicesService
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 import xevenition.com.runage.util.SingleLiveEvent
@@ -10,7 +10,7 @@ import xevenition.com.runage.util.SingleLiveEvent
 class SupportViewModel(
     private val saveUtil: SaveUtil,
     private val gameServicesUtil: GameServicesUtil,
-    private val accountUtil: AccountUtil
+    private val gameServicesService: GameServicesService
 ) : BaseViewModel(){
 
     val observableSendEmail = SingleLiveEvent<Unit>()

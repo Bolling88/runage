@@ -1,11 +1,9 @@
 package xevenition.com.runage.fragment.support
 
-import xevenition.com.runage.fragment.appsettings.AppSettingsViewModel
-
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.util.AccountUtil
+import xevenition.com.runage.util.GameServicesService
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
@@ -24,10 +22,10 @@ class SupportViewModelFactory @Inject constructor(
     @Inject
     lateinit var gameServicesUtil: GameServicesUtil
     @Inject
-    lateinit var accountUtil: AccountUtil
+    lateinit var gameServicesService: GameServicesService
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return SupportViewModel(saveUtil, gameServicesUtil, accountUtil) as T
+        return SupportViewModel(saveUtil, gameServicesUtil, gameServicesService) as T
     }
 }

@@ -11,7 +11,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import javax.inject.Inject
 
-class AccountUtil @Inject constructor(private val app: Application) {
+class GameServicesService @Inject constructor(private val app: Application) {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -36,6 +36,21 @@ class AccountUtil @Inject constructor(private val app: Application) {
             Games.getPlayersClient(app, account).getCompareProfileIntent(player)
         }else null
     }
+
+    fun getPlayerSearchIntent(): Task<Intent>? {
+        val account = getGamesAccount()
+        return if (account != null) {
+            Games.getPlayersClient(app, account).playerSearchIntent
+        }else null
+    }
+
+    fun getPlayerProfile(playerId: String): Task<AnnotatedData<Player>>? {
+        val account = getGamesAccount()
+        return if (account != null) {
+            Games.getPlayersClient(app, account).loadPlayer(playerId)
+        }else null
+    }
+
 
     fun openProfileSettings(){
         Games.GamesOptions.GAMES

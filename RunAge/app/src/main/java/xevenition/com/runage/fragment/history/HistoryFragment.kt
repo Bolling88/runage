@@ -14,6 +14,7 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentHistoryBinding
 import xevenition.com.runage.fragment.feed.FeedFragment
+import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
@@ -77,6 +78,12 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
                 historyRecyclerAdapter.submitList(it)
             }
         })
+
+        viewModel.observableOpenPlayerSearch.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                startActivityForResult(it, SEARCH_REQUEST_CODE)
+            }
+        })
     }
 
     companion object{
@@ -86,6 +93,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         const val PAGE_ALL = 2
 
         const val KEY_PAGE = "key_page"
+        const val SEARCH_REQUEST_CODE = 2321
 
         fun getInstance(position: Int): HistoryFragment{
             val args = Bundle()

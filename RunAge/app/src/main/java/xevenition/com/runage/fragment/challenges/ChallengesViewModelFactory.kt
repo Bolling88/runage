@@ -3,8 +3,7 @@ package xevenition.com.runage.fragment.challenges
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.room.repository.UserRepository
-import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
 

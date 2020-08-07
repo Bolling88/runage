@@ -19,16 +19,17 @@ import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
-import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.room.repository.UserRepository
-import xevenition.com.runage.service.FitnessHelper
+import xevenition.com.runage.repository.QuestRepository
+import xevenition.com.runage.repository.UserRepository
+import xevenition.com.runage.service.FireStoreService
+import xevenition.com.runage.service.GoogleFitService
 import xevenition.com.runage.util.*
 import java.time.Instant
 
 class SummaryViewModel(
     private val gameServicesUtil: GameServicesUtil,
-    private val accountUtil: AccountUtil,
-    private val fitnessHelper: FitnessHelper,
+    private val gameServicesService: GameServicesService,
+    private val googleFitService: GoogleFitService,
     private val locationUtil: LocationUtil,
     private val feedbackHandler: FeedbackHandler,
     private val questRepository: QuestRepository,
@@ -36,7 +37,7 @@ class SummaryViewModel(
     private val saveUtil: SaveUtil,
     private val runningUtil: RunningUtil,
     private val userRepository: UserRepository,
-    private val fireStoreHandler: FireStoreHandler,
+    private val fireStoreService: FireStoreService,
     args: SummaryFragmentArgs
 ) : BaseViewModel() {
     private var runStats: RunStats? = null
@@ -372,7 +373,7 @@ class SummaryViewModel(
 
     @SuppressLint("CheckResult")
     private fun updateUserStats(quest: Quest, runStats: RunStats) {
-        fireStoreHandler.getUserInfo()
+        fireStoreService.getUserInfo()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     val userInfo = document.toObject(RunageUser::class.java)
@@ -403,11 +404,13 @@ class SummaryViewModel(
                             runStats.xp + quest.levelExperience
                         }else if(quest.isPlayerChallenge && challengeStars > 0 && !haveCheated){
                             _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                            userRepository.incrementPlayerChallengesWon()
                             runStats.xp + quest.levelExperience
                         }else if(quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)){
                             val minusXp = (quest.levelExperience.toDouble()/2).toInt()
                             _liveTextReward.postValue("-$minusXp ${resourceUtil.getString(R.string.runage_xp)}")
                             _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
+                            userRepository.incrementPlayerChallengesLost()
                             runStats.xp - minusXp
                         } else {
                             runStats.xp
@@ -433,6 +436,8 @@ class SummaryViewModel(
                         calories = totalCalories,
                         distance = totalRunningDistance,
                         challengeScore = scoreMap,
+                        playerName = userInfo?.playerName ?: "",
+                        completedRuns = userInfo?.completedRuns ?: 0 + 1,
                         following = userInfo?.following ?: listOf(),
                         duration = totalRunningDuration
                     )
@@ -486,7 +491,7 @@ class SummaryViewModel(
             quest?.let { quest ->
                 Timber.d("Saving quest")
                 _liveLoadingVisibility.postValue(View.VISIBLE)
-                val task = accountUtil.getGamesPlayerInfo()
+                val task = gameServicesService.getGamesPlayerInfo()
                 task?.addOnSuccessListener {
                     commenceSavingQuest(quest, it)
                 }
@@ -531,7 +536,7 @@ class SummaryViewModel(
         totalXp: Int,
         player: Player?
     ): Disposable {
-        return fireStoreHandler.storeQuest(quest, runStats, player, totalXp)
+        return fireStoreService.storeQuest(quest, runStats, player, totalXp)
             .subscribe({
                 it.addOnCompleteListener {
                     syncWithGoogleFit(quest)
@@ -547,7 +552,7 @@ class SummaryViewModel(
 
     private fun syncWithGoogleFit(quest: Quest) {
         if (saveUtil.getBoolean(SaveUtil.KEY_SYNC_GOOGLE_FIT, true)) {
-            val task = fitnessHelper.storeSession(
+            val task = googleFitService.storeSession(
                 quest.id,
                 "${quest.totalDistance} meters",
                 quest.startTimeEpochSeconds,

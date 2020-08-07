@@ -89,6 +89,9 @@
         <action
             android:id="@+id/action_startFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 
     <fragment
@@ -102,6 +105,9 @@
         <action
             android:id="@+id/action_feedFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
     <fragment
         android:id="@+id/historySummaryFragment"
@@ -132,7 +138,14 @@
         <action
             android:id="@+id/action_playerFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_playerFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="xevenition.com.runage.fragment.profile.ProfileFragment"
+        android:label="ProfileFragment" />
 
 
 </navigation>
