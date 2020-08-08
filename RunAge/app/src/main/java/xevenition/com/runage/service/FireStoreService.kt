@@ -31,7 +31,7 @@ class FireStoreService @Inject constructor() {
     fun storeQuest(
         quest: Quest,
         runStats: RunStats,
-        player: Player?,
+        player: Player,
         totalXp: Int
     ): Single<Task<DocumentReference>> {
         return Observable.fromIterable(quest.locations)
@@ -58,9 +58,9 @@ class FireStoreService @Inject constructor() {
                     "runDuration" to runStats.runningDuration,
                     "xp" to runStats.xp,
                     "totalXp" to totalXp,
-                    "playerName" to player?.displayName,
-                    "playerImageUri" to player?.hiResImageUri.toString(),
-                    "playerId" to player?.playerId,
+                    "playerName" to player.displayName,
+                    "playerImageUri" to player.hiResImageUri.toString(),
+                    "playerId" to player.playerId,
                     "startTimeEpochSeconds" to quest.startTimeEpochSeconds,
                     "endTimeEpochSeconds" to quest.locations.lastOrNull()?.timeStampEpochSeconds,
                     "runningPercentage" to runStats.activityPercentage.getOrDefault(

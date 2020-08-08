@@ -64,7 +64,7 @@ class PlayerViewModel(
         _liveTextTime.postValue(runningUtil.convertTimeToDurationString(duration))
         _liveTextDistance.postValue(runningUtil.getDistanceString(quest.totalDistance))
         _liveTextName.postValue(
-            if (quest.playerName.isEmpty()) {
+            if (quest.playerName.isNullOrEmpty()) {
                 resourceUtil.getString(R.string.runage_unknown_player)
             } else {
                 quest.playerName

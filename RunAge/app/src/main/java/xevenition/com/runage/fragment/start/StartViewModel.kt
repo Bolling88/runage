@@ -160,6 +160,6 @@ class StartViewModel(
     }
 
     companion object{
-        const val NUMBER_OF_APP_OPENINGS = 30
+        const val NUMBER_OF_APP_OPENINGS = 10
     }
 }

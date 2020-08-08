@@ -496,13 +496,13 @@ class SummaryViewModel(
                     commenceSavingQuest(quest, it)
                 }
                 task?.addOnFailureListener {
-                    commenceSavingQuest(quest, null)
+                    Timber.e(it)
                 }
             }
         }
     }
 
-    private fun commenceSavingQuest(quest: Quest, player: Player?): Disposable? {
+    private fun commenceSavingQuest(quest: Quest, player: Player): Disposable? {
         return Observable.just(quest)
             .subscribeOn(Schedulers.io())
             .subscribe({
@@ -534,7 +534,7 @@ class SummaryViewModel(
         quest: Quest,
         runStats: RunStats,
         totalXp: Int,
-        player: Player?
+        player: Player
     ): Disposable {
         return fireStoreService.storeQuest(quest, runStats, player, totalXp)
             .subscribe({

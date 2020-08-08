@@ -129,7 +129,7 @@ class HistoryRecyclerAdapter(
             val duration = item.endTimeEpochSeconds - item.startTimeEpochSeconds
             textTime.text = runningUtil.convertTimeToDurationString(duration)
             textName.text =
-                if (item.playerName.isEmpty()) resourceUtil.getString(R.string.runage_unknown_player) else item.playerName
+                if (item.playerName.isNullOrEmpty()) resourceUtil.getString(R.string.runage_unknown_player) else item.playerName
             textPace.text =
                 runningUtil.getPaceString(
                     duration,
