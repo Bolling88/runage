@@ -426,6 +426,8 @@ class SummaryViewModel(
                 val totalRunningDuration =
                     (it?.duration ?: 0) + runStats.runningDuration
 
+                val completedRuns = (it?.completedRuns ?: 0) + 1
+
                 val newUserInfo = RunageUser(
                     userId = it.userId,
                     xp = totalXp,
@@ -433,12 +435,15 @@ class SummaryViewModel(
                     distance = totalRunningDistance,
                     challengeScore = scoreMap,
                     playerName = it?.playerName ?: "",
-                    completedRuns = it?.completedRuns ?: 0 + 1,
+                    completedRuns = completedRuns,
                     following = it?.following ?: listOf(),
+                    followers = it?.followers ?: listOf(),
+                    playerChallengesLost = it?.playerChallengesLost ?: 0,
+                    playerChallengesWon = it?.playerChallengesWon ?: 0,
                     duration = totalRunningDuration
                 )
 
-                userRepository.saveUserInfo(newUserInfo)
+                userRepository.updateUser(newUserInfo)
                     .subscribe({ task ->
                         task.addOnCompleteListener { _liveButtonEnabled.postValue(true) }
                             .addOnSuccessListener {

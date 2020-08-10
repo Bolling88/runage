@@ -66,7 +66,7 @@
                     android:id="@+id/card_profile"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:layout_marginTop="@dimen/margin_huge"
+                    android:layout_marginTop="@dimen/margin_big"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="80dip"
                     app:cardElevation="10dip"
@@ -140,7 +140,6 @@
                     android:layout_width="wrap_content"
                     android:padding="@dimen/margin_basic"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    app:layout_constraintTop_toTopOf="@+id/card_profile"
                     app:layout_constraintBottom_toBottomOf="@+id/card_profile"
                     app:layout_constraintStart_toEndOf="@+id/card_profile"
                     android:layout_height="wrap_content"
@@ -157,9 +156,9 @@
                     android:text="@string/runage_total_running_distance"
                     android:textAllCaps="true"
                     android:textSize="14sp"
+                     app:layout_constraintBottom_toBottomOf="@+id/textTimeTitle"
                     app:layout_constraintEnd_toStartOf="@+id/textTimeTitle"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textTimeTitle" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textDistance"
@@ -167,6 +166,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:text="@{viewModel.liveTextDistance}"
                     app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
                     app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
@@ -177,7 +177,7 @@
                     android:id="@+id/textTimeTitle"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_big"
                     android:gravity="center"
                     android:fontFamily="@font/majora_bold"
                     android:text="@string/runage_total_experience"
@@ -192,11 +192,10 @@
                     android:id="@+id/textTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
                     android:text="@{viewModel.liveTextExperience}"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/textTimeTitle"
                     app:layout_constraintStart_toStartOf="@+id/textTimeTitle"
                     app:layout_constraintTop_toBottomOf="@+id/textTimeTitle"
@@ -212,14 +211,15 @@
                     android:gravity="center"
                     android:layout_marginEnd="@dimen/margin_basic"
                     android:textSize="14sp"
+                     app:layout_constraintBottom_toBottomOf="@+id/textTimeTitle"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textTimeTitle"
-                    app:layout_constraintTop_toTopOf="@+id/textTimeTitle" />
+                    app:layout_constraintStart_toEndOf="@+id/textTimeTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textPace"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
                     android:text="@{viewModel.liveTextDuration}"
@@ -235,12 +235,12 @@
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/majora_bold"
-                    android:text="@string/runage_total_running_distance"
+                    android:text="@string/runage_followers"
                     android:textAllCaps="true"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/textTotalRunsTitle"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textTotalRunsTitle" />
+                    app:layout_constraintBottom_toBottomOf="@+id/textTotalRunsTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textFollowers"
@@ -248,7 +248,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
-                    android:text="@{viewModel.liveTextDistance}"
+                    android:text="@{viewModel.liveTextFollowers}"
                     app:layout_constraintEnd_toEndOf="@+id/textFollowersTitle"
                     app:layout_constraintStart_toStartOf="@+id/textFollowersTitle"
                     app:layout_constraintTop_toBottomOf="@+id/textFollowersTitle"
@@ -258,10 +258,10 @@
                     android:id="@+id/textTotalRunsTitle"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_big"
                     android:gravity="center"
                     android:fontFamily="@font/majora_bold"
-                    android:text="@string/runage_total_experience"
+                    android:text="@string/runage_total_runs"
                     android:textAllCaps="true"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toStartOf="@+id/textChallengeStarsTitle"
@@ -276,7 +276,7 @@
                     android:layout_marginBottom="@dimen/margin_basic"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
-                    android:text="@{viewModel.liveTextExperience}"
+                    android:text="@{viewModel.liveTextTotalRuns}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/textTotalRunsTitle"
                     app:layout_constraintStart_toStartOf="@+id/textTotalRunsTitle"
@@ -288,14 +288,14 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/majora_bold"
-                    android:text="@string/runage_total_running_duration"
+                    android:text="@string/runage_challenge_stars"
                     android:textAllCaps="true"
                     android:gravity="center"
                     android:layout_marginEnd="@dimen/margin_basic"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textTotalRunsTitle"
-                    app:layout_constraintTop_toTopOf="@+id/textTotalRunsTitle" />
+                    app:layout_constraintBottom_toBottomOf="@+id/textTotalRunsTitle" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textChallengeStarts"
@@ -303,7 +303,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/light"
                     android:textSize="20sp"
-                    android:text="@{viewModel.liveTextDuration}"
+                    android:text="@{viewModel.liveTextStars}"
                     app:layout_constraintEnd_toEndOf="@+id/textChallengeStarsTitle"
                     app:layout_constraintStart_toStartOf="@+id/textChallengeStarsTitle"
                     app:layout_constraintTop_toBottomOf="@+id/textChallengeStarsTitle"
@@ -311,5 +311,30 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/gradient_white"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:onClick="@{()-> viewModel.onFollowClicked()}"
+                android:text="@{viewModel.liveFollowText}"
+                android:backgroundTint="@{viewModel.liveFollowButtonColor}"
+                app:icon="@{viewModel.liveFollowIcon}"
+                app:iconTint="@{viewModel.liveFollowButtonTextColor}"
+                android:textColor="@{viewModel.liveFollowButtonTextColor}" />
+        </LinearLayout>
     </FrameLayout>
 </layout>

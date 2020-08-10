@@ -134,16 +134,20 @@ class PlayerViewModel(
         user: RunageUser,
         newList: MutableList<String>
     ): RunageUser {
-        val newUserInfo = RunageUser(
+        return RunageUser(
             userId = user.userId,
             xp = user.xp,
             calories = user.calories,
             distance = user.distance,
             challengeScore = user.challengeScore,
             following = newList,
+            followers = user.followers,
+            playerName = user.playerName,
+            playerChallengesLost = user.playerChallengesLost,
+            playerChallengesWon = user.playerChallengesWon,
+            completedRuns = user.completedRuns,
             duration = user.duration
         )
-        return newUserInfo
     }
 
     fun onStartClicked() {

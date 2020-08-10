@@ -202,12 +202,6 @@ class FireStoreService @Inject constructor() {
         return ref.update("followers", FieldValue.arrayRemove(idOfNewFollower))
     }
 
-    fun incrementCompletedRuns(): Task<Void> {
-        val userId = firebaseAuth.currentUser?.uid ?: ""
-        val ref = firestore.collection("users").document(userId)
-        return ref.update("completedRuns", FieldValue.increment(1))
-    }
-
     fun incrementPlayerChallengesWon(): Task<Void> {
         val userId = firebaseAuth.currentUser?.uid ?: ""
         val ref = firestore.collection("users").document(userId)
@@ -220,7 +214,7 @@ class FireStoreService @Inject constructor() {
         return ref.update("playerChallengesLost", FieldValue.increment(1))
     }
 
-    fun storeUserInfo(user: RunageUser): Task<Void> {
+    fun updateUserRunningStats(user: RunageUser): Task<Void> {
         Timber.d("Storing user info: $user")
         return firestore.collection("users").document(user.userId).set(
             hashMapOf(
@@ -228,7 +222,6 @@ class FireStoreService @Inject constructor() {
                 "calories" to user.calories,
                 "distance" to user.distance,
                 "duration" to user.duration,
-                "following" to user.following,
                 "challengeScore" to user.challengeScore
             ), SetOptions.merge()
         )

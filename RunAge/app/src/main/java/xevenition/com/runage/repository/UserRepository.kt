@@ -11,7 +11,6 @@ import xevenition.com.runage.room.AppDatabase
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.GameServicesService
-import xevenition.com.runage.util.GameServicesUtil
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
@@ -69,9 +68,9 @@ class UserRepository @Inject constructor(
             .doOnError { Timber.e(it) }
     }
 
-    fun saveUserInfo(newUserInfo: RunageUser): Single<Task<Void>> {
+    fun updateUser(newUserInfo: RunageUser): Single<Task<Void>> {
         return Single.fromCallable {
-            fireStoreService.storeUserInfo(newUserInfo)
+            fireStoreService.updateUserRunningStats(newUserInfo)
                 .addOnSuccessListener {
                     Timber.d("User info have been stored")
                     dbInsertUser(newUserInfo)
@@ -98,10 +97,6 @@ class UserRepository @Inject constructor(
         }
             .subscribeOn(Schedulers.io())
             .doOnError { Timber.e(it) }
-    }
-
-    fun incrementCompletedRuns(): Task<Void> {
-        return fireStoreService.incrementCompletedRuns()
     }
 
     fun incrementPlayerChallengesWon(): Task<Void> {

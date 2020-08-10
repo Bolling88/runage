@@ -142,4 +142,7 @@
     <string name="runage_total_running_duration">Total running duraton</string>
     <string name="runage_total_experience">Total experience</string>
     <string name="runage_login_failed">Login failed</string>
+    <string name="runage_followers">Followers</string>
+    <string name="runage_total_runs">Total runs</string>
+    <string name="runage_challenge_stars">Challenge stars</string>
 </resources>
