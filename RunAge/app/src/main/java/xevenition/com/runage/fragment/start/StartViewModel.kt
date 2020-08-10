@@ -34,19 +34,19 @@ class StartViewModel(
     private var storageRef = Firebase.storage.reference
 
     private val _liveTextName = MutableLiveData<String>()
-    val liveTextName : LiveData<String> = _liveTextName
+    val liveTextName: LiveData<String> = _liveTextName
 
     private val _liveLevelProgress = MutableLiveData<Float>()
-    val liveLevelProgress : LiveData<Float> = _liveLevelProgress
+    val liveLevelProgress: LiveData<Float> = _liveLevelProgress
 
     private val _liveLevelNext = MutableLiveData<Float>()
-    val liveLevelNext : LiveData<Float> = _liveLevelNext
+    val liveLevelNext: LiveData<Float> = _liveLevelNext
 
     private val _liveLevelText = MutableLiveData<String>()
-    val liveLevelText : LiveData<String> = _liveLevelText
+    val liveLevelText: LiveData<String> = _liveLevelText
 
     private val _liveTextXp = MutableLiveData<String>()
-    val liveTextXp : LiveData<String> = _liveTextXp
+    val liveTextXp: LiveData<String> = _liveTextXp
 
     val observableOpenMenu = SingleLiveEvent<Unit>()
     val observableShowProfile = SingleLiveEvent<Bundle>()
@@ -58,13 +58,13 @@ class StartViewModel(
     val observableShowRateDialog = SingleLiveEvent<Unit>()
 
     init {
-        if(serviceIsRunning){
+        if (serviceIsRunning) {
             observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToMapFragment())
         }
 
         val openedApp = saveUtil.getInt(SaveUtil.KEY_APP_OPENINGS, 0)
         val rated = saveUtil.getBoolean(SaveUtil.KEY_RATED, false)
-        if(openedApp >= NUMBER_OF_APP_OPENINGS && !rated){
+        if (openedApp >= NUMBER_OF_APP_OPENINGS && !rated) {
             observableShowRateDialog.call()
         }
 
@@ -89,9 +89,15 @@ class StartViewModel(
                 _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
                 _liveTextName.postValue(it.playerName)
 
-                gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
-                gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
-            },{
+                gameServicesUtil.saveLeaderBoard(
+                    resourceUtil.getString(R.string.leaderboard_most_experience),
+                    userXp.toLong()
+                )
+                gameServicesUtil.saveLeaderBoard(
+                    resourceUtil.getString(R.string.leaderboard_highest_level),
+                    level.toLong()
+                )
+            }, {
                 Timber.e("Failed to get the user")
             })
         addDisposable(disposable)
@@ -114,21 +120,30 @@ class StartViewModel(
         }
     }
 
-    fun onStartClicked(){
+    fun onStartClicked() {
         observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToMapFragment())
     }
 
-    fun onProfileClicked(){
+    fun onProfileClicked() {
 //        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
 //            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
 //                observableShowAchievements.postValue(it)
 //            }
 //        }
-        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToProfileFragment(keyUserId = userInfo?.userId ?: "", keyIsUser = true))
-//        val result = Bundle()
-//        result.putString("key_user_id", userInfo?.userId ?: "")
-//        result.putBoolean("key_is_user", true)
-//        observableShowProfile.postValue(result)
+//        observableNavigateTo.postValue(
+//            StartFragmentDirections.actionStartFragmentToProfileFragment(
+//                keyUserId = userInfo?.userId ?: "",
+//                keyIsUser = true
+//            )
+//        )
+        val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
+        val levelString = "${resourceUtil.getString(R.string.runage_level)} $level"
+        val result = Bundle()
+        result.putString("key_user_id", userInfo?.userId ?: "")
+        result.putBoolean("key_is_user", true)
+        result.putString("key_user_name", userInfo?.playerName ?: "")
+        result.putString("key_user_level", levelString)
+        observableShowProfile.postValue(result)
     }
 
     fun onRateLaterClicked() {
@@ -146,7 +161,7 @@ class StartViewModel(
 
     fun onProfileImageRetrieved(bitmap: Bitmap?) {
         //We need to update it every time, because we don't know when it could have changed
-        if(bitmap != null && !profileImageUploaded){
+        if (bitmap != null && !profileImageUploaded) {
             Timber.d("Got profile image bitmap")
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -160,12 +175,12 @@ class StartViewModel(
                 Timber.d("Profile image uploaded")
                 profileImageUploaded = true
             }
-        }else{
+        } else {
             Timber.e("Profile image already uploaded")
         }
     }
 
-    companion object{
+    companion object {
         const val NUMBER_OF_APP_OPENINGS = 10
     }
 }

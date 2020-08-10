@@ -154,6 +154,14 @@
         <argument
             android:name="key_is_user"
             app:argType="boolean" />
+
+        <argument
+            android:name="key_user_name"
+            app:argType="string" />
+
+        <argument
+            android:name="key_user_level"
+            app:argType="string" />
     </fragment>
 
 

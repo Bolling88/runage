@@ -28,6 +28,9 @@ class ProfileViewModel(
     private val _observableProfileImage = MutableLiveData<String>()
     val observableProfileImage: LiveData<String> = _observableProfileImage
 
+    private val _observableLevel = MutableLiveData<String>()
+    val observableLevel: LiveData<String> = _observableLevel
+
     private val _liveLevelText = MutableLiveData<String>()
     val liveLevelText: LiveData<String> = _liveLevelText
 
@@ -132,7 +135,7 @@ class ProfileViewModel(
         userInfo: RunageUser
     ) {
         val level = LevelCalculator.getLevel(userInfo.xp ?: 0)
-        _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
+        _observableLevel.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
         _liveTextName.postValue(userInfo.playerName)
         _liveTextDistance.postValue(
             runningUtil.getDistanceString(
