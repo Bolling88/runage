@@ -24,6 +24,7 @@ import xevenition.com.runage.fragment.permission.PermissionFragment
 import xevenition.com.runage.fragment.permission.PermissionViewModelFactory
 import xevenition.com.runage.fragment.player.PlayerFragment
 import xevenition.com.runage.fragment.player.PlayerViewModelFactory
+import xevenition.com.runage.fragment.profile.ProfileFragment
 import xevenition.com.runage.fragment.profile.ProfileViewModelFactory
 import xevenition.com.runage.fragment.requirement.RequirementViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
@@ -58,6 +59,7 @@ interface ApplicationComponent {
     fun inject(component: SupportFragment)
     fun inject(component: HistoryFragment)
     fun inject(component: SummaryFragment)
+    fun inject(component: ProfileFragment)
     fun inject(component: ViewPageFragment)
     fun inject(component: SettingsFragment)
     fun inject(component: PermissionFragment)

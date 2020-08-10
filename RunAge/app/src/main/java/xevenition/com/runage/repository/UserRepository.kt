@@ -45,6 +45,10 @@ class UserRepository @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
+    fun getUserInfo(userId: String): Task<DocumentSnapshot> {
+        return fireStoreService.getUserInfo(userId)
+    }
+
     fun getObservableUser(): Flowable<RunageUser> {
         return db.userDao().getFlowableUser()
             .subscribeOn(Schedulers.io())

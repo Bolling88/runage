@@ -373,94 +373,86 @@ class SummaryViewModel(
 
     @SuppressLint("CheckResult")
     private fun updateUserStats(quest: Quest, runStats: RunStats) {
-        fireStoreService.getUserInfo()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    val userInfo = document.toObject(RunageUser::class.java)
-                    val userId = userInfo?.userId ?: ""
-
-                    val oldUserScoreMap = userInfo?.challengeScore ?: mapOf()
-                    var challengeCompletedFirstTime = false
-                    val scoreMap = if (quest.level > 0) {
-                        val stars = oldUserScoreMap.getOrDefault(quest.level.toString(), 0)
-                        if (stars < challengeStars) {
-                            if (stars == 0) {
-                                //Previous score was 0, and we have gotten at least one star, which means first time completion
-                                challengeCompletedFirstTime = true
-                            }
-                            val newScoreMap = oldUserScoreMap.toMutableMap()
-                            newScoreMap[quest.level.toString()] = challengeStars
-                            newScoreMap.toMap()
-                        } else {
-                            oldUserScoreMap
+        userRepository.getSingleUser()
+            .subscribe({
+                val oldUserScoreMap = it?.challengeScore ?: mapOf()
+                var challengeCompletedFirstTime = false
+                val scoreMap = if (quest.level > 0) {
+                    val stars = oldUserScoreMap.getOrDefault(quest.level.toString(), 0)
+                    if (stars < challengeStars) {
+                        if (stars == 0) {
+                            //Previous score was 0, and we have gotten at least one star, which means first time completion
+                            challengeCompletedFirstTime = true
                         }
+                        val newScoreMap = oldUserScoreMap.toMutableMap()
+                        newScoreMap[quest.level.toString()] = challengeStars
+                        newScoreMap.toMap()
                     } else {
                         oldUserScoreMap
                     }
-
-                    totalNewXp =
-                        if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime && !haveCheated) {
-                            _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
-                            runStats.xp + quest.levelExperience
-                        }else if(quest.isPlayerChallenge && challengeStars > 0 && !haveCheated){
-                            _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
-                            userRepository.incrementPlayerChallengesWon()
-                            runStats.xp + quest.levelExperience
-                        }else if(quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)){
-                            val minusXp = (quest.levelExperience.toDouble()/2).toInt()
-                            _liveTextReward.postValue("-$minusXp ${resourceUtil.getString(R.string.runage_xp)}")
-                            _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
-                            userRepository.incrementPlayerChallengesLost()
-                            runStats.xp - minusXp
-                        } else {
-                            runStats.xp
-                        }
-
-                    if(totalNewXp > 0){
-                        _liveTextExperience.postValue("+$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
-                    }else{
-                        _liveTextExperience.postValue("$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
-                        _liveXpTextColor.postValue(resourceUtil.getColor(R.color.red))
-                    }
-                    val totalXp = totalNewXp + (userInfo?.xp ?: 0)
-
-                    val totalCalories = (userInfo?.calories ?: 0) + quest.calories
-                    val totalRunningDistance =
-                        (userInfo?.distance ?: 0) + runStats.runningDistance
-                    val totalRunningDuration =
-                        (userInfo?.duration ?: 0) + runStats.runningDuration
-
-                    val newUserInfo = RunageUser(
-                        userId = userId,
-                        xp = totalXp,
-                        calories = totalCalories,
-                        distance = totalRunningDistance,
-                        challengeScore = scoreMap,
-                        playerName = userInfo?.playerName ?: "",
-                        completedRuns = userInfo?.completedRuns ?: 0 + 1,
-                        following = userInfo?.following ?: listOf(),
-                        duration = totalRunningDuration
-                    )
-
-                    userRepository.saveUserInfo(newUserInfo)
-                        .subscribe({
-                            it.addOnCompleteListener { _liveButtonEnabled.postValue(true) }
-                                .addOnSuccessListener {
-                                    Timber.d("User info have been stored")
-                                    storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
-                                }
-                                .addOnFailureListener { Timber.e("get failed with $it") }
-                        }, {
-                            Timber.e(it)
-                        })
                 } else {
-                    Timber.d("No such document")
+                    oldUserScoreMap
                 }
-            }
-            .addOnFailureListener { exception ->
-                Timber.e("get failed with $exception")
+
+                totalNewXp =
+                    if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime && !haveCheated) {
+                        _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                        runStats.xp + quest.levelExperience
+                    }else if(quest.isPlayerChallenge && challengeStars > 0 && !haveCheated){
+                        _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                        userRepository.incrementPlayerChallengesWon()
+                        runStats.xp + quest.levelExperience
+                    }else if(quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)){
+                        val minusXp = (quest.levelExperience.toDouble()/2).toInt()
+                        _liveTextReward.postValue("-$minusXp ${resourceUtil.getString(R.string.runage_xp)}")
+                        _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
+                        userRepository.incrementPlayerChallengesLost()
+                        runStats.xp - minusXp
+                    } else {
+                        runStats.xp
+                    }
+
+                if(totalNewXp > 0){
+                    _liveTextExperience.postValue("+$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
+                }else{
+                    _liveTextExperience.postValue("$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
+                    _liveXpTextColor.postValue(resourceUtil.getColor(R.color.red))
+                }
+                val totalXp = totalNewXp + (it?.xp ?: 0)
+
+                val totalCalories = (it?.calories ?: 0) + quest.calories
+                val totalRunningDistance =
+                    (it?.distance ?: 0) + runStats.runningDistance
+                val totalRunningDuration =
+                    (it?.duration ?: 0) + runStats.runningDuration
+
+                val newUserInfo = RunageUser(
+                    userId = it.userId,
+                    xp = totalXp,
+                    calories = totalCalories,
+                    distance = totalRunningDistance,
+                    challengeScore = scoreMap,
+                    playerName = it?.playerName ?: "",
+                    completedRuns = it?.completedRuns ?: 0 + 1,
+                    following = it?.following ?: listOf(),
+                    duration = totalRunningDuration
+                )
+
+                userRepository.saveUserInfo(newUserInfo)
+                    .subscribe({ task ->
+                        task.addOnCompleteListener { _liveButtonEnabled.postValue(true) }
+                            .addOnSuccessListener {
+                                Timber.d("User info have been stored")
+                                storeAchievementsAndLeaderboards(quest, runStats, newUserInfo)
+                            }
+                            .addOnFailureListener { Timber.e("get failed with $it") }
+                    }, { throwable ->
+                        Timber.e(throwable)
+                    })
+            },{
+                Timber.e(it)
                 _liveButtonEnabled.postValue(true)
-            }
+            })
     }
 
     @SuppressLint("CheckResult")

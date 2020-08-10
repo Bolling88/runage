@@ -6,10 +6,12 @@ import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject
 
 class ProfileViewModelFactory @Inject constructor(
-    app: MainApplication
+    app: MainApplication,
+    private val args: ProfileFragmentArgs
 ) :
     BaseViewModelFactory() {
 
@@ -18,7 +20,7 @@ class ProfileViewModelFactory @Inject constructor(
     }
 
     @Inject
-    lateinit var gameServicesUtil: GameServicesUtil
+    lateinit var runningUtil: RunningUtil
     @Inject
     lateinit var resourceUtil: ResourceUtil
     @Inject
@@ -26,6 +28,6 @@ class ProfileViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProfileViewModel(gameServicesUtil, resourceUtil, userRepository) as T
+        return ProfileViewModel(runningUtil, resourceUtil, userRepository, args) as T
     }
 }

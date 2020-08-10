@@ -137,4 +137,9 @@
     <string name="runage_total_experience_gained">Total experience gained:</string>
     <string name="runage_challenge_failed_penalty">Challenge failed penalty:</string>
     <string name="runage_profile">Profile</string>
+    <string name="runage_player_profile">Player Profile</string>
+    <string name="runage_total_running_distance">Total running distance</string>
+    <string name="runage_total_running_duration">Total running duraton</string>
+    <string name="runage_total_experience">Total experience</string>
+    <string name="runage_login_failed">Login failed</string>
 </resources>

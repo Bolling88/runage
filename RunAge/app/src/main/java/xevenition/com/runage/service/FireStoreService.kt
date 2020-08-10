@@ -164,8 +164,8 @@ class FireStoreService @Inject constructor() {
         return docRef.get()
     }
 
-    fun getUserInfo(): Task<DocumentSnapshot> {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    fun getUserInfo(userId: String? = null): Task<DocumentSnapshot> {
+        val userId = userId ?: FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
             firestore.collection("users")
                 .document(userId)

@@ -101,7 +101,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
             if (result?.isSuccess == true) {
                 val account = result.signInAccount
                 if(account != null) {
-                    firebaseAuthWithPlayGames(account)
+                    viewModel.firebaseAuthWithPlayGames(account)
                 }else{
                     handleError(result)
                 }
@@ -118,26 +118,6 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
         }
         AlertDialog.Builder(requireContext()).setMessage(message)
             .setNeutralButton(android.R.string.ok, null).show()
-    }
-
-    // Call this both in the silent sign-in task's OnCompleteListener and in the
-    // Activity's onActivityResult handler.
-    private fun firebaseAuthWithPlayGames(acct: GoogleSignInAccount) {
-        val auth = FirebaseAuth.getInstance()
-        val credential = PlayGamesAuthProvider.getCredential(acct.serverAuthCode!!)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener{ task ->
-                if (task.isSuccessful) {
-                    Timber.d("signInWithCredential:success")
-                    viewModel.onLoginSuccess()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Timber.w("signInWithCredential:failure ${task.exception}")
-                    Toast.makeText(requireContext(), "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
-                    activity?.finish()
-                }
-            }
     }
 
     companion object {
