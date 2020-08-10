@@ -21,6 +21,7 @@ import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentProfileBinding
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragmentArgs
+import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.util.GlideApp
 import xevenition.com.runage.util.ResourceUtil
 import javax.inject.Inject
@@ -77,6 +78,10 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
                     .fallback(resourceUtil.getDrawable(R.drawable.ic_profile))
                     .into(binding.imgProfile)
             }
+        })
+
+        viewModel.observableEditProfile.observe(viewLifecycleOwner, Observer {
+            startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
         })
     }
 }

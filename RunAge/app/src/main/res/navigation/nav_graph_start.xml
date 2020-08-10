@@ -150,6 +150,10 @@
         <argument
             android:name="key_user_id"
             app:argType="string" />
+
+        <argument
+            android:name="key_is_user"
+            app:argType="boolean" />
     </fragment>
 
 

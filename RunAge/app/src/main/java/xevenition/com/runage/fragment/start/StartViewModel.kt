@@ -122,7 +122,7 @@ class StartViewModel(
 //                observableShowAchievements.postValue(it)
 //            }
 //        }
-        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToProfileFragment(keyUserId = userInfo?.userId ?: ""))
+        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToProfileFragment(keyUserId = userInfo?.userId ?: "", keyIsUser = true))
     }
 
     fun onRateLaterClicked() {

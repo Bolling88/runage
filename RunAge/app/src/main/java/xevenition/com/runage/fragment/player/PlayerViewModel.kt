@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
+import xevenition.com.runage.fragment.feed.FeedFragmentDirections
+import xevenition.com.runage.fragment.start.StartFragmentDirections
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.repository.UserRepository
@@ -75,7 +77,7 @@ class PlayerViewModel(
         _liveTextPenalty.postValue("-" + (quest.xp / 4).toString() + " " + resourceUtil.getString(R.string.runage_xp))
 
         val userToFollowId = quest.userId
-        val disposable = userRepository.getSingleUser()
+        val disposable = userRepository.getObservableUser()
             .subscribe({
                 if (it.following.contains(userToFollowId)) {
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
@@ -147,6 +149,15 @@ class PlayerViewModel(
             playerChallengesWon = user.playerChallengesWon,
             completedRuns = user.completedRuns,
             duration = user.duration
+        )
+    }
+
+    fun onViewProfileClicked() {
+        observableNavigateTo.postValue(
+            PlayerFragmentDirections.actionPlayerFragmentToProfileFragment(
+                keyUserId = quest.userId,
+                keyIsUser = false
+            )
         )
     }
 

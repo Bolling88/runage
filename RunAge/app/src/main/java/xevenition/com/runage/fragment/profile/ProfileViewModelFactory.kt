@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.repository.UserRepository
+import xevenition.com.runage.util.GameServicesService
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
@@ -25,9 +26,11 @@ class ProfileViewModelFactory @Inject constructor(
     lateinit var resourceUtil: ResourceUtil
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var gameServicesService: GameServicesService
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ProfileViewModel(runningUtil, resourceUtil, userRepository, args) as T
+        return ProfileViewModel(gameServicesService, runningUtil, resourceUtil, userRepository, args) as T
     }
 }

@@ -145,4 +145,5 @@
     <string name="runage_followers">Followers</string>
     <string name="runage_total_runs">Total runs</string>
     <string name="runage_challenge_stars">Challenge stars</string>
+    <string name="runage_view_profile">View profile</string>
 </resources>

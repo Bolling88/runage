@@ -59,6 +59,7 @@
                     android:layout_marginTop="34dip"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="250dp"
+                    android:onClick="@{()-> viewModel.onViewProfileClicked()}"
                     app:cardElevation="10dip"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +87,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
+                    android:onClick="@{()-> viewModel.onViewProfileClicked()}"
                     android:layout_marginTop="@dimen/margin_basic"
                     android:layout_marginEnd="@dimen/margin_basic"
                     android:singleLine="true"
@@ -98,6 +100,19 @@
                     tools:text="Enemy Player" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonViewProfile"
+                    style="@style/ButtonStyleText"
+                    android:layout_width="wrap_content"
+                    android:onClick="@{()-> viewModel.onViewProfileClicked()}"
+                    android:text="@string/runage_view_profile"
+                    app:icon="@drawable/ic_profile"
+                    app:iconTint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                     app:layout_constraintEnd_toStartOf="@+id/buttonFollow"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonFollow"
                     style="@style/ButtonStyleText"
                     android:layout_width="wrap_content"
@@ -107,7 +122,7 @@
                     app:iconTint="@{viewModel.liveFollowButtonColor}"
                     android:textColor="@{viewModel.liveFollowButtonColor}"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/buttonViewProfile"
                     app:layout_constraintTop_toBottomOf="@+id/textName" />
 
                 <com.google.android.material.textview.MaterialTextView
