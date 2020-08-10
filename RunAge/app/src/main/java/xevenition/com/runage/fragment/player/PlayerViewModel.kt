@@ -156,7 +156,9 @@ class PlayerViewModel(
         observableNavigateTo.postValue(
             PlayerFragmentDirections.actionPlayerFragmentToProfileFragment(
                 keyUserId = quest.userId,
-                keyIsUser = false
+                keyIsUser = false,
+                keyUserLevel = "0",
+                keyUserName = quest.playerName
             )
         )
     }

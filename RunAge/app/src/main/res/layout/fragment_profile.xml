@@ -48,33 +48,33 @@
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/ripple"
-                    app:lottie_scale="0.3"
+                    app:lottie_scale="0.2"
                     app:lottie_speed="0.4" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_profile"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:layout_marginTop="@dimen/margin_big"
                     app:cardBackgroundColor="@color/white"
                     android:transitionName="imageView"
-                    app:cardCornerRadius="80dip"
+                    app:cardCornerRadius="55dip"
+                    android:layout_marginStart="@dimen/margin_basic"
                     android:onClick="@{()->viewModel.onEditClicked()}"
                     app:cardElevation="10dip"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="75dip">
+                        app:cardCornerRadius="50dip">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/img_profile"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:scaleType="centerCrop" />
 
                     </androidx.cardview.widget.CardView>
@@ -84,65 +84,50 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textName"
                     style="@style/MainFontStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
                     android:layout_marginEnd="@dimen/margin_basic"
+                    android:layout_marginTop="10dip"
                     android:transitionName="name"
-                    android:gravity="center"
                     android:singleLine="true"
-                    android:text="@{viewModel.liveTextName}"
                     android:textColor="@color/black"
                     android:onClick="@{()->viewModel.onEditClicked()}"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textLevel"
+                    app:layout_constraintStart_toEndOf="@+id/card_profile"
+                    app:layout_constraintTop_toTopOf="@+id/card_profile"
                     tools:text="Ludwig Bolling" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->viewModel.onEditClicked()}"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/margin_basic"
-                    android:visibility="@{viewModel.liveIsUserVisibility}"
-                    app:layout_constraintBottom_toBottomOf="@+id/textName"
-                    app:layout_constraintStart_toEndOf="@+id/textName"
-                    app:layout_constraintTop_toTopOf="@+id/textName"
-                    app:srcCompat="@drawable/ic_edit"
-                    app:tint="@color/colorPrimary" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/textLevel"
                     style="@style/MainFontStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_basic"
-                    android:layout_marginTop="@dimen/margin_basic"
                     android:layout_marginEnd="@dimen/margin_basic"
-                    android:gravity="center"
                     android:transitionName="level"
                     android:singleLine="true"
-                    android:text="@{viewModel.liveLevelText}"
                     android:textColor="@color/black"
-                    android:textSize="50sp"
+                    android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card_profile"
+                    app:layout_constraintStart_toEndOf="@+id/card_profile"
+                    app:layout_constraintTop_toBottomOf="@+id/textName"
                     tools:text="Level 14" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonViewProfile"
+                    style="@style/ButtonStyleText"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="@dimen/margin_basic"
-                    android:onClick="@{()->viewModel.onEditClicked()}"
+                    android:onClick="@{()-> viewModel.onEditClicked()}"
                     android:visibility="@{viewModel.liveIsUserVisibility}"
-                    app:layout_constraintBottom_toBottomOf="@+id/card_profile"
-                    app:layout_constraintStart_toEndOf="@+id/card_profile"
-                    app:srcCompat="@drawable/ic_edit"
-                    app:tint="@color/colorPrimary" />
+                    android:text="@string/runage_edit_profile"
+                    app:icon="@drawable/ic_edit"
+                    android:layout_margin="@dimen/margin_basic"
+                    app:iconTint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_profile" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textDistanceTitle"
@@ -186,7 +171,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
-                    app:layout_constraintTop_toBottomOf="@+id/textName" />
+                    app:layout_constraintTop_toBottomOf="@+id/buttonViewProfile" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/textTime"

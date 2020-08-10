@@ -29,6 +29,7 @@ import javax.inject.Inject
 
 class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
+    private lateinit var args: ProfileFragmentArgs
     private lateinit var binding: FragmentProfileBinding
     private var storageRef = Firebase.storage.reference
 
@@ -39,7 +40,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         super.onCreate(savedInstanceState)
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
         sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
-        val args = ProfileFragmentArgs.fromBundle(requireArguments())
+        args = ProfileFragmentArgs.fromBundle(requireArguments())
         val factory = ProfileViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)
     }
@@ -52,6 +53,9 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.textLevel.text = args.keyUserLevel
+        binding.textName.text = args.keyUserName
 
         val navController = (activity as MainActivity).findNavController(R.id.nav_host_tab_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -79,6 +83,12 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
                     .placeholder(resourceUtil.getDrawable(R.drawable.ic_profile))
                     .fallback(resourceUtil.getDrawable(R.drawable.ic_profile))
                     .into(binding.imgProfile)
+            }
+        })
+
+        viewModel.observableLevel.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.textLevel.text = it
             }
         })
 
