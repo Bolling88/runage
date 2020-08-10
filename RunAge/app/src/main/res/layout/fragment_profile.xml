@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="xevenition.com.runage.fragment.profile.ProfileViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/Theme.Toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu"
+            app:title="@string/runage_profile"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
+            app:titleTextColor="@color/white" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize">
+
+            <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottieLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+                    app:layout_constraintEnd_toEndOf="@+id/card_profile"
+                    app:layout_constraintStart_toStartOf="@+id/card_profile"
+                    app:layout_constraintTop_toTopOf="@+id/card_profile"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/ripple"
+                    app:lottie_scale="0.3"
+                    app:lottie_speed="0.4" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_profile"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
+                    android:layout_marginTop="@dimen/margin_big"
+                    app:cardBackgroundColor="@color/white"
+                    android:transitionName="imageView"
+                    app:cardCornerRadius="80dip"
+                    android:onClick="@{()->viewModel.onEditClicked()}"
+                    app:cardElevation="10dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="75dip">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/img_profile"
+                            android:layout_width="150dp"
+                            android:layout_height="150dp"
+                            android:scaleType="centerCrop" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textName"
+                    style="@style/MainFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:transitionName="name"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="@{viewModel.liveTextName}"
+                    android:textColor="@color/black"
+                    android:onClick="@{()->viewModel.onEditClicked()}"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textLevel"
+                    tools:text="Ludwig Bolling" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->viewModel.onEditClicked()}"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/margin_basic"
+                    android:visibility="@{viewModel.liveIsUserVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@+id/textName"
+                    app:layout_constraintStart_toEndOf="@+id/textName"
+                    app:layout_constraintTop_toTopOf="@+id/textName"
+                    app:srcCompat="@drawable/ic_edit"
+                    app:tint="@color/colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textLevel"
+                    style="@style/MainFontStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:layout_marginTop="@dimen/margin_basic"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:gravity="center"
+                    android:transitionName="level"
+                    android:singleLine="true"
+                    android:text="@{viewModel.liveLevelText}"
+                    android:textColor="@color/black"
+                    android:textSize="50sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card_profile"
+                    tools:text="Level 14" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/margin_basic"
+                    android:onClick="@{()->viewModel.onEditClicked()}"
+                    android:visibility="@{viewModel.liveIsUserVisibility}"
+                    app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+                    app:layout_constraintStart_toEndOf="@+id/card_profile"
+                    app:srcCompat="@drawable/ic_edit"
+                    app:tint="@color/colorPrimary" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDistanceTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_total_running_distance"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textTimeTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/textTimeTitle"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextDistance}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="@+id/textDistanceTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textDistanceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textDistanceTitle"
+                    tools:text="100" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTimeTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_big"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_total_experience"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textPaceTitle"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toEndOf="@+id/textDistanceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textName" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextExperience}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="@+id/textTimeTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textTimeTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textTimeTitle"
+                    tools:text="00:00:00" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textPaceTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_total_running_duration"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textTimeTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textTimeTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textPace"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextDuration}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="@+id/textPaceTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textPaceTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textPaceTitle"
+                    tools:text="99" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textFollowersTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_followers"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textTotalRunsTitle"
+                    app:layout_constraintEnd_toStartOf="@+id/textTotalRunsTitle"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textFollowers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextFollowers}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="@+id/textFollowersTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textFollowersTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textFollowersTitle"
+                    tools:text="100" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTotalRunsTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_big"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_total_runs"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textChallengeStarsTitle"
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:layout_constraintStart_toEndOf="@+id/textFollowersTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textTime" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textTotalRuns"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextTotalRuns}"
+                    android:textSize="@dimen/textSizeHuge"
+                    app:layout_constraintEnd_toEndOf="@+id/textTotalRunsTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textTotalRunsTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textTotalRunsTitle"
+                    tools:text="00:00:00" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textChallengeStarsTitle"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_basic"
+                    android:fontFamily="@font/majora_bold"
+                    android:gravity="center"
+                    android:text="@string/runage_challenge_stars"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textTotalRunsTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textTotalRunsTitle" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textChallengeStarts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/majora"
+                    android:text="@{viewModel.liveTextStars}"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@+id/textChallengeStarsTitle"
+                    app:layout_constraintStart_toStartOf="@+id/textChallengeStarsTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/textChallengeStarsTitle"
+                    tools:text="99" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dip"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textChallengeStarts" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/gradient_white"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.liveFollowVisibility}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/button"
+                style="@style/ButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@{viewModel.liveFollowButtonColor}"
+                android:onClick="@{()-> viewModel.onFollowClicked()}"
+                android:text="@{viewModel.liveFollowText}"
+                android:textColor="@{viewModel.liveFollowButtonTextColor}"
+                app:icon="@{viewModel.liveFollowIcon}"
+                app:iconTint="@{viewModel.liveFollowButtonTextColor}" />
+        </LinearLayout>
+    </FrameLayout>
+</layout>

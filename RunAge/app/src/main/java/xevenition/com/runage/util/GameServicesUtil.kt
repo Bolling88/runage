@@ -13,10 +13,10 @@ import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
 
 
-class GameServicesUtil @Inject constructor(private val app: Application, private val accountUtil: AccountUtil){
+class GameServicesUtil @Inject constructor(private val app: Application, private val gameServicesService: GameServicesService){
 
     fun saveLeaderBoard(leaderboardId: String, score: Long){
-        val gameAccount = accountUtil.getGamesAccount()
+        val gameAccount = gameServicesService.getGamesAccount()
         gameAccount?.let {
             Games.getLeaderboardsClient(app, it)
                 .submitScore(leaderboardId, score)
@@ -24,14 +24,14 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
     }
 
     fun unlockAchievement(achievementId: String){
-        val gameAccount = accountUtil.getGamesAccount()
+        val gameAccount = gameServicesService.getGamesAccount()
         gameAccount?.let {
             Games.getAchievementsClient(app, it).unlock(achievementId)
         }
     }
 
     private fun incrementAchievements(achievementId: String, value: Int){
-        val gameAccount = accountUtil.getGamesAccount()
+        val gameAccount = gameServicesService.getGamesAccount()
         gameAccount?.let {
             Games.getAchievementsClient(app, it).increment(achievementId, value)
         }

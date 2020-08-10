@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.AccountUtil
+import xevenition.com.runage.util.GameServicesService
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 
@@ -15,7 +15,7 @@ import xevenition.com.runage.util.SaveUtil
 class AppSettingsViewModel(
     private val saveUtil: SaveUtil,
     private val gameServicesUtil: GameServicesUtil,
-    private val accountUtil: AccountUtil
+    private val gameServicesService: GameServicesService
 ) : BaseViewModel() {
 
 
@@ -66,8 +66,8 @@ class AppSettingsViewModel(
     }
 
     fun onProfileClicked(){
-        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
-            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
+        gameServicesService.getGamesPlayerInfo()?.addOnSuccessListener { player ->
+            gameServicesService.getPlayerProfileIntent(player)?.addOnSuccessListener {
                 observableShowAchievements.postValue(it)
             }
         }

@@ -12,9 +12,7 @@ import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.room.entity.RunageUser
-import xevenition.com.runage.room.repository.UserRepository
-import xevenition.com.runage.util.FireStoreHandler
+import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.util.ResourceUtil
 
 class ChallengesViewModel(

@@ -1,4 +1,4 @@
-package xevenition.com.runage.room.repository
+package xevenition.com.runage.repository
 
 import io.reactivex.Flowable
 import io.reactivex.Single

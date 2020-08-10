@@ -1,13 +1,9 @@
 package xevenition.com.runage.fragment.path
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
-import xevenition.com.runage.util.ResourceUtil
-import xevenition.com.runage.room.repository.QuestRepository
-import xevenition.com.runage.util.LocationUtil
+import xevenition.com.runage.repository.QuestRepository
 import javax.inject.Inject
 
 class PathViewModelFactory @Inject constructor(

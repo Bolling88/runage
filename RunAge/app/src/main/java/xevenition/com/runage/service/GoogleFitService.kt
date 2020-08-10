@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class FitnessHelper @Inject constructor(val app: Application){
+class GoogleFitService @Inject constructor(val app: Application){
     private val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(app)
 
     fun storeSession(

@@ -7,15 +7,11 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.path.PathFragmentArgs
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
-import xevenition.com.runage.room.entity.Quest
-import xevenition.com.runage.room.repository.QuestRepository
 
 
 class HistorySummaryPathViewModel(

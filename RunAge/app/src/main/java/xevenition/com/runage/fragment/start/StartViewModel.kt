@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.start
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,15 +16,15 @@ import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.room.entity.RunageUser
-import xevenition.com.runage.room.repository.UserRepository
+import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.util.*
 import java.io.ByteArrayOutputStream
 
 class StartViewModel(
     private val gameServicesUtil: GameServicesUtil,
-    private val accountUtil: AccountUtil,
-    resourceUtil: ResourceUtil,
-    feedbackHandler: FeedbackHandler,
+    private val gameServicesService: GameServicesService,
+    private val resourceUtil: ResourceUtil,
+    private val feedbackHandler: FeedbackHandler,
     private val saveUtil: SaveUtil,
     private val userRepository: UserRepository
 ) : BaseViewModel() {
@@ -48,6 +49,7 @@ class StartViewModel(
     val liveTextXp : LiveData<String> = _liveTextXp
 
     val observableOpenMenu = SingleLiveEvent<Unit>()
+    val observableShowProfile = SingleLiveEvent<Bundle>()
 
     private val _observableProfileImage = MutableLiveData<Uri>()
     val observableProfileImage: LiveData<Uri> = _observableProfileImage
@@ -69,6 +71,8 @@ class StartViewModel(
         userRepository.refreshUserInfo()
             .subscribe()
 
+        getGameServicesInfo()
+
         val disposable = userRepository.getObservableUser()
             .subscribe({
                 Timber.d("Got user info")
@@ -83,8 +87,7 @@ class StartViewModel(
                 _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
                 _liveLevelProgress.postValue(progress.toFloat())
                 _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
-
-                getGameServicesInfo(feedbackHandler, resourceUtil)
+                _liveTextName.postValue(it.playerName)
 
                 gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_most_experience), userXp.toLong())
                 gameServicesUtil.saveLeaderBoard(resourceUtil.getString(R.string.leaderboard_highest_level), level.toLong())
@@ -94,11 +97,8 @@ class StartViewModel(
         addDisposable(disposable)
     }
 
-    private fun getGameServicesInfo(
-        feedbackHandler: FeedbackHandler,
-        resourceUtil: ResourceUtil
-    ) {
-        val task = accountUtil.getGamesPlayerInfo()
+    private fun getGameServicesInfo() {
+        val task = gameServicesService.getGamesPlayerInfo()
         task?.addOnSuccessListener {
             if (!serviceIsRunning && !welcomeMessagePlayed) {
                 feedbackHandler.speak(
@@ -108,6 +108,7 @@ class StartViewModel(
                 welcomeMessagePlayed = true
             }
             _liveTextName.postValue(it.displayName)
+            userRepository.updateUserName(it.displayName)
 
             _observableProfileImage.postValue(it.hiResImageUri)
         }
@@ -118,11 +119,16 @@ class StartViewModel(
     }
 
     fun onProfileClicked(){
-        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
-            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
-                observableShowAchievements.postValue(it)
-            }
-        }
+//        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
+//            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
+//                observableShowAchievements.postValue(it)
+//            }
+//        }
+        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToProfileFragment(keyUserId = userInfo?.userId ?: "", keyIsUser = true))
+//        val result = Bundle()
+//        result.putString("key_user_id", userInfo?.userId ?: "")
+//        result.putBoolean("key_is_user", true)
+//        observableShowProfile.postValue(result)
     }
 
     fun onRateLaterClicked() {

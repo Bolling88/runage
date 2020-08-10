@@ -1,27 +1,27 @@
-package xevenition.com.runage.room.repository
+package xevenition.com.runage.repository
 
+import android.content.Intent
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
-import xevenition.com.runage.R
 import xevenition.com.runage.room.AppDatabase
 import xevenition.com.runage.room.entity.RunageUser
-import xevenition.com.runage.util.FireStoreHandler
-import xevenition.com.runage.util.LevelCalculator
+import xevenition.com.runage.service.FireStoreService
+import xevenition.com.runage.util.GameServicesService
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val db: AppDatabase,
-    private val fireStoreHandler: FireStoreHandler
+    private val gameServicesService: GameServicesService,
+    private val fireStoreService: FireStoreService
 ) {
 
     fun refreshUserInfo(): Single<Task<DocumentSnapshot>> {
         return Single.fromCallable {
-            fireStoreHandler.getUserInfo()
+            fireStoreService.getUserInfo()
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         val userInfo = document.toObject(RunageUser::class.java)
@@ -44,6 +44,10 @@ class UserRepository @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
+    fun getUserInfo(userId: String): Task<DocumentSnapshot> {
+        return fireStoreService.getUserInfo(userId)
+    }
+
     fun getObservableUser(): Flowable<RunageUser> {
         return db.userDao().getFlowableUser()
             .subscribeOn(Schedulers.io())
@@ -64,9 +68,9 @@ class UserRepository @Inject constructor(
             .doOnError { Timber.e(it) }
     }
 
-    fun saveUserInfo(newUserInfo: RunageUser): Single<Task<Void>> {
+    fun updateUser(newUserInfo: RunageUser): Single<Task<Void>> {
         return Single.fromCallable {
-            fireStoreHandler.storeUserInfo(newUserInfo)
+            fireStoreService.updateUserRunningStats(newUserInfo)
                 .addOnSuccessListener {
                     Timber.d("User info have been stored")
                     dbInsertUser(newUserInfo)
@@ -78,17 +82,53 @@ class UserRepository @Inject constructor(
             .doOnError { Timber.e(it) }
     }
 
-    fun updateFollowing(newUserInfo: RunageUser): Single<Task<Void>> {
+    fun addUserFollowing(user: RunageUser, followingUserId: String): Single<Task<Void>> {
         return Single.fromCallable {
-            fireStoreHandler.storeUserFollowers(newUserInfo.following)
+            fireStoreService.storeUserFollowing(user.userId, followingUserId)
                 .addOnSuccessListener {
-                    Timber.d("User info have been stored")
-                    dbInsertUser(newUserInfo)
+                    fireStoreService.storeFollowerToUser(followingUserId, user.userId)
+                        .addOnFailureListener { Timber.d("Fail to add the user as follower to the other user") }
+                        .addOnSuccessListener { Timber.d("Added the user as follower to the other user") }
+                    Timber.d("Added following")
+                    dbInsertUser(user)
                         .subscribe()
                 }
                 .addOnFailureListener { Timber.e("get failed with $it") }
         }
             .subscribeOn(Schedulers.io())
             .doOnError { Timber.e(it) }
+    }
+
+    fun incrementPlayerChallengesWon(): Task<Void> {
+        return fireStoreService.incrementPlayerChallengesWon()
+    }
+
+    fun incrementPlayerChallengesLost(): Task<Void> {
+        return fireStoreService.incrementPlayerChallengesLost()
+    }
+
+    fun removeUserFollowing(user: RunageUser, followingUserId: String): Single<Task<Void>> {
+        return Single.fromCallable {
+            fireStoreService.removeUserFollowing(user.userId, followingUserId)
+                .addOnSuccessListener {
+                    fireStoreService.removeFollowerToUser(followingUserId, user.userId)
+                        .addOnFailureListener { Timber.d("Fail to remove the user as follower to the other user") }
+                        .addOnSuccessListener { Timber.d("Removed the user as follower to the other user") }
+                    Timber.d("Removed following")
+                    dbInsertUser(user)
+                        .subscribe()
+                }
+                .addOnFailureListener { Timber.e("get failed with $it") }
+        }
+            .subscribeOn(Schedulers.io())
+            .doOnError { Timber.e(it) }
+    }
+
+    fun getSearchForUserIntent(): Task<Intent>? {
+        return gameServicesService.getPlayerSearchIntent()
+    }
+
+    fun updateUserName(name: String): Task<Void> {
+        return fireStoreService.storeUserName(name)
     }
 }

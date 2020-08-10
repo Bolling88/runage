@@ -135,4 +135,14 @@
     <string name="runage_crush_this_players_time">Krossa denna spelares tid?</string>
     <string name="runage_total_experience_gained">Total erfarenhetspoäng intjänad:</string>
     <string name="runage_challenge_failed_penalty">Utmaning misslyckades straff:</string>
+    <string name="runage_profile">Profil</string>
+    <string name="runage_player_profile">Spelarprofil</string>
+    <string name="runage_total_running_distance">Total springdistans</string>
+    <string name="runage_total_running_duration">Total springtid</string>
+    <string name="runage_total_experience">Total XP</string>
+    <string name="runage_login_failed">Inloggning misslyckades</string>
+    <string name="runage_followers">Följare</string>
+    <string name="runage_total_runs">Totalt antal rundor</string>
+    <string name="runage_challenge_stars">Utmanings-\nstjärnor</string>
+    <string name="runage_view_profile">Visa profil</string>
 </resources>

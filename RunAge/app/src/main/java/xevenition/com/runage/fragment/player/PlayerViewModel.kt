@@ -7,10 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.requirement.RequirementFragmentDirections
+import xevenition.com.runage.fragment.feed.FeedFragmentDirections
+import xevenition.com.runage.fragment.start.StartFragmentDirections
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.room.entity.RunageUser
-import xevenition.com.runage.room.repository.UserRepository
+import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
@@ -76,7 +77,7 @@ class PlayerViewModel(
         _liveTextPenalty.postValue("-" + (quest.xp / 4).toString() + " " + resourceUtil.getString(R.string.runage_xp))
 
         val userToFollowId = quest.userId
-        val disposable = userRepository.getSingleUser()
+        val disposable = userRepository.getObservableUser()
             .subscribe({
                 if (it.following.contains(userToFollowId)) {
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
@@ -98,39 +99,66 @@ class PlayerViewModel(
         val userToFollowId = quest.userId
         userRepository.getSingleUser()
             .subscribe({ user ->
-                val newList = if (user.following.contains(userToFollowId)) {
+                if (user.following.contains(userToFollowId)) {
                     val newList = user.following.toMutableList()
                     newList.remove(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_follow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_follow_single))
                     _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.colorPrimary))
-                    newList
+
+                    val newUserInfo = setUpNewUser(user, newList)
+                    userRepository.removeUserFollowing(newUserInfo, userToFollowId)
+                        .subscribe({
+                            Timber.d("User following status changed")
+                        }, {
+                            Timber.e(it)
+                        })
                 } else {
                     val newList = user.following.toMutableList()
                     newList.add(userToFollowId)
                     _liveFollowText.postValue(resourceUtil.getString(R.string.runage_unfollow_player))
                     _liveFollowIcon.postValue(resourceUtil.getDrawable(R.drawable.ic_cancel))
                     _liveFollowButtonColor.postValue(resourceUtil.getColor(R.color.red))
-                    newList
+                    val newUserInfo = setUpNewUser(user, newList)
+                    userRepository.addUserFollowing(newUserInfo, userToFollowId)
+                        .subscribe({
+                            Timber.d("User following status changed")
+                        }, {
+                            Timber.e(it)
+                        })
                 }
-                val newUserInfo = RunageUser(
-                    userId = user.userId,
-                    xp = user.xp,
-                    calories = user.calories,
-                    distance = user.distance,
-                    challengeScore = user.challengeScore,
-                    following = newList,
-                    duration = user.duration
-                )
-                userRepository.updateFollowing(newUserInfo)
-                    .subscribe({
-                        Timber.d("User following status changed")
-                    }, {
-                        Timber.e(it)
-                    })
             }, {
                 Timber.e(it)
             })
+    }
+
+    private fun setUpNewUser(
+        user: RunageUser,
+        newList: MutableList<String>
+    ): RunageUser {
+        return RunageUser(
+            userId = user.userId,
+            xp = user.xp,
+            calories = user.calories,
+            distance = user.distance,
+            challengeScore = user.challengeScore,
+            following = newList,
+            followers = user.followers,
+            playerName = user.playerName,
+            playerChallengesLost = user.playerChallengesLost,
+            playerChallengesWon = user.playerChallengesWon,
+            completedRuns = user.completedRuns,
+            duration = user.duration
+        )
+    }
+
+    fun onViewProfileClicked() {
+        observableNavigateTo.postValue(
+            PlayerFragmentDirections.actionPlayerFragmentToProfileFragment(
+                keyUserId = quest.userId,
+                keyIsUser = false
+            )
+        )
     }
 
     fun onStartClicked() {
