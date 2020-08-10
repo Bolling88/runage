@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.TransitionInflater
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import timber.log.Timber
@@ -37,6 +38,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity?.applicationContext as MainApplication).appComponent.inject(this)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         val args = ProfileFragmentArgs.fromBundle(requireArguments())
         val factory = ProfileViewModelFactory(getApplication(), args)
         viewModel = ViewModelProvider(this, factory).get(ProfileViewModel::class.java)

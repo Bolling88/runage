@@ -12,6 +12,8 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.images.ImageManager
 import timber.log.Timber
 import xevenition.com.runage.MainApplication
@@ -81,12 +83,32 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         })
 
         viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
-                startActivityForResult(it, PROFILE_REQUEST_CODE)
+            startActivityForResult(it, PROFILE_REQUEST_CODE)
         })
 
         viewModel.observableShowRateDialog.observe(viewLifecycleOwner, Observer {
             RateDialogFragment.newInstance().show(childFragmentManager, "dialog_fragment")
         })
+
+        viewModel.observableShowProfile.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showProfile(it)
+            }
+        })
+    }
+
+    private fun showProfile(args: Bundle) {
+        val extras = FragmentNavigatorExtras(
+            binding.cardProfile to "imageView",
+            binding.textName to "name",
+            binding.textLevel to "level"
+        )
+        findNavController().navigate(
+            R.id.action_startFragment_to_profileFragment,
+            args,
+            null,
+            extras
+        )
     }
 
     override fun onLikeClicked() {
@@ -121,14 +143,15 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         }
     }
 
-    private fun displayProfileImageAndRetrieveIt(uri: Uri){
+    private fun displayProfileImageAndRetrieveIt(uri: Uri) {
         val manager = ImageManager.create(requireContext())
-        val listener = ImageManager.OnImageLoadedListener{ uri: Uri, drawable: Drawable, b: Boolean ->
-            binding.imgProfile.setImageDrawable(drawable)
-            val bitmap = drawable.toBitmap()
-            //val bitmap = (binding.imgProfile.drawable as BitmapDrawable).bitmap
-            viewModel.onProfileImageRetrieved(bitmap)
-        }
+        val listener =
+            ImageManager.OnImageLoadedListener { uri: Uri, drawable: Drawable, b: Boolean ->
+                binding.imgProfile.setImageDrawable(drawable)
+                val bitmap = drawable.toBitmap()
+                //val bitmap = (binding.imgProfile.drawable as BitmapDrawable).bitmap
+                viewModel.onProfileImageRetrieved(bitmap)
+            }
         manager.loadImage(listener, uri, 0)
     }
 
@@ -144,7 +167,12 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
             )
         )
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "RunAge Support")
-        startActivity(Intent.createChooser(emailIntent, resourceUtil.getString(R.string.runage_send_email)))
+        startActivity(
+            Intent.createChooser(
+                emailIntent,
+                resourceUtil.getString(R.string.runage_send_email)
+            )
+        )
     }
 
     companion object {

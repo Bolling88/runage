@@ -131,25 +131,25 @@ class ProfileViewModel(
     private fun setUpUserInfo(
         userInfo: RunageUser
     ) {
-        val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
+        val level = LevelCalculator.getLevel(userInfo.xp ?: 0)
         _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
-        _liveTextName.postValue(userInfo?.playerName)
+        _liveTextName.postValue(userInfo.playerName)
         _liveTextDistance.postValue(
             runningUtil.getDistanceString(
-                userInfo?.distance ?: 0
+                userInfo.distance
             )
         )
         _liveTextDuration.postValue(
             runningUtil.convertTimeToDurationString(
-                userInfo?.duration?.toLong() ?: 0
+                userInfo.duration.toLong()
             )
         )
-        _liveTextExperience.postValue(userInfo?.xp?.toString() ?: "0")
-        _liveTextFollowers.postValue(userInfo?.followers?.size?.toString() ?: "0")
-        _liveTextTotalRuns.postValue(userInfo?.completedRuns?.toString() ?: "0")
+        _liveTextExperience.postValue(userInfo.xp.toString() ?: "0")
+        _liveTextFollowers.postValue(userInfo.followers.size.toString() ?: "0")
+        _liveTextTotalRuns.postValue(userInfo.completedRuns.toString() ?: "0")
 
         var totalStars = 0
-        for ((key, value) in userInfo?.challengeScore ?: mapOf()) {
+        for ((key, value) in userInfo.challengeScore ?: mapOf()) {
             totalStars += value
         }
         _liveTextStars.postValue(totalStars.toString())

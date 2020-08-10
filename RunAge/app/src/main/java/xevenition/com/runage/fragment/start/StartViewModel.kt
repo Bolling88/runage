@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.start
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -48,6 +49,7 @@ class StartViewModel(
     val liveTextXp : LiveData<String> = _liveTextXp
 
     val observableOpenMenu = SingleLiveEvent<Unit>()
+    val observableShowProfile = SingleLiveEvent<Bundle>()
 
     private val _observableProfileImage = MutableLiveData<Uri>()
     val observableProfileImage: LiveData<Uri> = _observableProfileImage
@@ -123,6 +125,10 @@ class StartViewModel(
 //            }
 //        }
         observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToProfileFragment(keyUserId = userInfo?.userId ?: "", keyIsUser = true))
+//        val result = Bundle()
+//        result.putString("key_user_id", userInfo?.userId ?: "")
+//        result.putBoolean("key_is_user", true)
+//        observableShowProfile.postValue(result)
     }
 
     fun onRateLaterClicked() {

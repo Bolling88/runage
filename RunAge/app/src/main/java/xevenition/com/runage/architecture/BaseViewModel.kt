@@ -2,6 +2,7 @@ package xevenition.com.runage.architecture
 
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigator
 import xevenition.com.runage.util.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
