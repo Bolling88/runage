@@ -54,6 +54,22 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="achievement_getting_started_iii" translatable="false">CgkI4-yzqpMZEAIQHw</string>
     <!-- achievement Ruler -->
     <string name="achievement_ruler" translatable="false">CgkI4-yzqpMZEAIQIA</string>
+    <!-- achievement Completed Challenge 10 -->
+    <string name="achievement_completed_challenge_10" translatable="false">CgkI4-yzqpMZEAIQKQ</string>
+    <!-- achievement Completed Challenge 20 -->
+    <string name="achievement_completed_challenge_20" translatable="false">CgkI4-yzqpMZEAIQKg</string>
+    <!-- achievement Completed Challenge 30 -->
+    <string name="achievement_completed_challenge_30" translatable="false">CgkI4-yzqpMZEAIQKw</string>
+    <!-- achievement Completed Challenge 40 -->
+    <string name="achievement_completed_challenge_40" translatable="false">CgkI4-yzqpMZEAIQLA</string>
+    <!-- achievement Completed Challenge 50 -->
+    <string name="achievement_completed_challenge_50" translatable="false">CgkI4-yzqpMZEAIQLQ</string>
+    <!-- achievement Win 1 Player Challenge -->
+    <string name="achievement_win_1_player_challenge" translatable="false">CgkI4-yzqpMZEAIQLg</string>
+    <!-- achievement Win 5 Player Challenges -->
+    <string name="achievement_win_5_player_challenges" translatable="false">CgkI4-yzqpMZEAIQLw</string>
+    <!-- achievement Win 10 Player Challenges -->
+    <string name="achievement_win_10_player_challenges" translatable="false">CgkI4-yzqpMZEAIQMA</string>
     <!-- leaderboard Total Running Distance (meters) -->
     <string name="leaderboard_total_running_distance_meters" translatable="false">CgkI4-yzqpMZEAIQAQ</string>
     <!-- leaderboard Most Experience -->
@@ -72,4 +88,6 @@ Save this file as res/values/games-ids.xml in your project.
     <string name="leaderboard_most_experience_single_run" translatable="false">CgkI4-yzqpMZEAIQJw</string>
     <!-- leaderboard Most Challenges Completed -->
     <string name="leaderboard_most_challenges_completed" translatable="false">CgkI4-yzqpMZEAIQKA</string>
+    <!-- leaderboard Most Players Defeated -->
+    <string name="leaderboard_most_players_defeated" translatable="false">CgkI4-yzqpMZEAIQMQ</string>
 </resources>

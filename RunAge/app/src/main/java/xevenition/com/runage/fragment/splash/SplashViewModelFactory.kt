@@ -3,7 +3,7 @@ package xevenition.com.runage.fragment.splash
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 

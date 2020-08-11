@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.SaveUtil
 

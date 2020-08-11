@@ -23,6 +23,7 @@ import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.service.FireStoreService
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.service.GoogleFitService
 import xevenition.com.runage.util.*
 import java.time.Instant

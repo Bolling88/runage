@@ -5,7 +5,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.SaveUtil
 import java.util.concurrent.TimeUnit
 

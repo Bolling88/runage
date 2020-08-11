@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.repository.QuestRepository
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import javax.inject.Inject
 
 class ViewPageViewModelFactory @Inject constructor(app: MainApplication) :

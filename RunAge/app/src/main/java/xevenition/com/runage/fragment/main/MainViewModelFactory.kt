@@ -3,7 +3,7 @@ package xevenition.com.runage.fragment.main
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import javax.inject.Inject
 
 class MainViewModelFactory @Inject constructor(app: MainApplication) :

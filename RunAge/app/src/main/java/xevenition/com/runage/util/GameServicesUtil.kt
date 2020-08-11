@@ -10,6 +10,7 @@ import xevenition.com.runage.R
 import xevenition.com.runage.model.RunStats
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
+import xevenition.com.runage.service.GameServicesService
 import javax.inject.Inject
 
 
@@ -51,6 +52,36 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
             incrementAchievements(app.getString(R.string.achievement_getting_started_iii), 1)
         }
 
+        when {
+            userInfo.challengeScore.size >= 50 -> {
+                unlockAchievement(app.getString(R.string.achievement_completed_challenge_50))
+            }
+            userInfo.challengeScore.size >= 40 -> {
+                unlockAchievement(app.getString(R.string.achievement_completed_challenge_40))
+            }
+            userInfo.challengeScore.size >= 30 -> {
+                unlockAchievement(app.getString(R.string.achievement_completed_challenge_30))
+            }
+            userInfo.challengeScore.size >= 20 -> {
+                unlockAchievement(app.getString(R.string.achievement_completed_challenge_20))
+            }
+            userInfo.challengeScore.size >= 10 -> {
+                unlockAchievement(app.getString(R.string.achievement_completed_challenge_10))
+            }
+        }
+
+        when {
+            userInfo.playerChallengesWon >= 10 -> {
+                unlockAchievement(app.getString(R.string.achievement_win_10_player_challenges))
+            }
+            userInfo.playerChallengesWon >= 5 -> {
+                unlockAchievement(app.getString(R.string.achievement_win_5_player_challenges))
+            }
+            userInfo.playerChallengesWon >= 1 -> {
+                unlockAchievement(app.getString(R.string.achievement_win_1_player_challenge))
+            }
+        }
+
         //Total calories
         incrementAchievements(app.getString(R.string.achievement_calorie_king_i), quest.calories)
         incrementAchievements(app.getString(R.string.achievement_calorie_king_ii), quest.calories)
@@ -79,6 +110,7 @@ class GameServicesUtil @Inject constructor(private val app: Application, private
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_distance_meters), userInfo.distance.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_most_challenges_completed), userInfo.challengeScore.size.toLong())
         saveLeaderBoard(app.getString(R.string.leaderboard_total_running_duration), userInfo.duration.toLong().times(1000))
+        saveLeaderBoard(app.getString(R.string.leaderboard_most_players_defeated), userInfo.playerChallengesWon.toLong())
 
         //Long runner
         when {
