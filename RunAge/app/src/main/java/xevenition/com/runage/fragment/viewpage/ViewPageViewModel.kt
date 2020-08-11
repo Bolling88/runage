@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.repository.QuestRepository
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 
 class ViewPageViewModel(private  val questRepository: QuestRepository,
                         private val gameServicesService: GameServicesService

@@ -1,4 +1,4 @@
-package xevenition.com.runage.util
+package xevenition.com.runage.service
 
 import android.app.Application
 import android.content.Intent

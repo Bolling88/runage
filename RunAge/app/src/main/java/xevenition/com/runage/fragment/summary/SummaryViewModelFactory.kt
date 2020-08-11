@@ -6,6 +6,7 @@ import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.service.FireStoreService
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.service.GoogleFitService
 import xevenition.com.runage.util.*
 import javax.inject.Inject

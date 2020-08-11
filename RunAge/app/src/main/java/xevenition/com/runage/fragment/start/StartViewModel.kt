@@ -17,6 +17,7 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.repository.UserRepository
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.*
 import java.io.ByteArrayOutputStream
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 
 class MainViewModel(private val gameServicesService: GameServicesService) : BaseViewModel() {
 

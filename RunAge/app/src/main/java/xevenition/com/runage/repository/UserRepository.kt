@@ -10,7 +10,7 @@ import timber.log.Timber
 import xevenition.com.runage.room.AppDatabase
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.service.FireStoreService
-import xevenition.com.runage.util.GameServicesService
+import xevenition.com.runage.service.GameServicesService
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(

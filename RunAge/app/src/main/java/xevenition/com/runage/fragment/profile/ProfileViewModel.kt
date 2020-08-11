@@ -3,7 +3,6 @@ package xevenition.com.runage.fragment.profile
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +11,7 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.room.entity.RunageUser
+import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.*
 
 class ProfileViewModel(
