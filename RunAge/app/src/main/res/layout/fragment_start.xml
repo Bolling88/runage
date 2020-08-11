@@ -26,6 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_menu"
+            app:menu="@menu/start_menu"
             app:title="@string/runage_start"
             app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
             app:titleTextColor="@color/white" />

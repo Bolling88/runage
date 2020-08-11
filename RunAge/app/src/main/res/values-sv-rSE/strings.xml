@@ -145,4 +145,5 @@
     <string name="runage_total_runs">Totalt antal rundor</string>
     <string name="runage_challenge_stars">Utmanings-\nstjärnor</string>
     <string name="runage_view_profile">Visa profil</string>
+    <string name="runage_play_music">Spela musik</string>
 </resources>
