@@ -1,7 +1,9 @@
 package xevenition.com.runage.fragment.start
 
 import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -26,6 +28,7 @@ import xevenition.com.runage.dialog.CommenceRateDialogFragment
 import xevenition.com.runage.dialog.FeedbackDialogFragment
 import xevenition.com.runage.dialog.RateDialogFragment
 import xevenition.com.runage.util.ResourceUtil
+import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -53,11 +56,47 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        binding.toolbar.setOnMenuItemClickListener {
+            launchMusicIntent()
+            false
+        }
+
+        if (!isPackageInstalled("com.spotify.music", requireContext().packageManager))
+            binding.toolbar.menu.findItem(R.id.action_music).isVisible = false
+
         binding.toolbar.setNavigationOnClickListener {
             (activity as? MainActivity)?.openMenu()
         }
 
         return binding.root
+    }
+
+    private fun launchMusicIntent() {
+        try {
+            val intent = Intent()
+            intent.action = Intent.ACTION_VIEW
+            if (isPackageInstalled("com.spotify.music", requireContext().packageManager)) {
+                intent.component =
+                    ComponentName("com.spotify.music", "com.spotify.music.MainActivity")
+            } else {
+                intent.setDataAndType(Uri.parse("http://"), "audio/*")
+            }
+            startActivity(intent)
+        } catch (error: Exception) {
+            Timber.e(error)
+        }
+    }
+
+    private fun isPackageInstalled(
+        packageName: String,
+        packageManager: PackageManager
+    ): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

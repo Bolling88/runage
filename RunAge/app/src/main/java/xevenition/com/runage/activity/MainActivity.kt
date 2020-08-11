@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         Games.getGamesClient(this, googleSignInAccount)
             .setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
         val gamesClient = Games.getGamesClient(this@MainActivity, googleSignInAccount)
-        gamesClient.setViewForPopups(window.decorView.findViewById(android.R.id.content))
+        gamesClient.setViewForPopups(findViewById(R.id.container_pop_up))
     }
 
     override fun onBackPressed() {
