@@ -54,11 +54,11 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_profile"
-                    android:layout_width="115dp"
-                    android:layout_height="115dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:layout_marginTop="34dip"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="250dp"
+                    app:cardCornerRadius="60dp"
                     android:onClick="@{()-> viewModel.onViewProfileClicked()}"
                     app:cardElevation="10dip"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
                         android:layout_width="110dp"
                         android:layout_height="110dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="250dp">
+                        app:cardCornerRadius="55dp">
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/img_profile"

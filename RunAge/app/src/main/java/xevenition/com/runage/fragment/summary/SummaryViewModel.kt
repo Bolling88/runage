@@ -2,6 +2,7 @@ package xevenition.com.runage.fragment.summary
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -286,23 +287,19 @@ class SummaryViewModel(
             }
 
             //Quest is so short there is no reason for saving it
-            _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
-            _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
-            _liveTextExperience.postValue("0 ${resourceUtil.getString(R.string.runage_xp)}")
-            _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
-            _liveDeleteButtonVisibility.postValue(View.GONE)
+            setSaveButtonAsCloseButton()
             _observablePlayFailAnimation.postValue(Unit)
             _liveButtonEnabled.postValue(true)
             //don't update user stats in this case
         } else {
+            haveCheated = haveCheated(runStats)
             if (quest.level > 0 || quest.isPlayerChallenge) {
                 challengeStars = quest.levelStars
                 _liveTextRewardVisibility.postValue(View.VISIBLE)
                 if (challengeStars > 0) {
-                    if (haveCheated(runStats)) {
+                    if (haveCheated) {
                         //Cheating detected!
                         challengeStars = 0
-                        haveCheated = true
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                         _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
@@ -311,6 +308,7 @@ class SummaryViewModel(
                         }else{
                             _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
                         }
+                        setSaveButtonAsCloseButton()
                         _observablePlayFailAnimation.postValue(Unit)
                         _liveCheatingTextVisibility.postValue(View.VISIBLE)
                     } else {
@@ -342,6 +340,7 @@ class SummaryViewModel(
                         _observablePlaySuccessAnimation.postValue(Unit)
                     }
                 } else {
+                    //Challenge failed
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                     _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
@@ -353,12 +352,29 @@ class SummaryViewModel(
                     _observablePlayFailAnimation.postValue(Unit)
                 }
             } else {
-                _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
-                feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_completed))
-                _observablePlaySuccessAnimation.postValue(Unit)
+                if(haveCheated){
+                    _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
+                    _observablePlayFailAnimation.postValue(Unit)
+                    _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+                    _liveCheatingTextVisibility.postValue(View.VISIBLE)
+                    setSaveButtonAsCloseButton()
+                }else {
+                    _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_completed))
+                    _observablePlaySuccessAnimation.postValue(Unit)
+                }
             }
             updateUserStats(quest, runStats)
         }
+    }
+
+    private fun setSaveButtonAsCloseButton() {
+        _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
+        _liveButtonText.postValue(resourceUtil.getString(R.string.runage_close))
+        _liveTextExperience.postValue("0 ${resourceUtil.getString(R.string.runage_xp)}")
+        _liveSaveButtonBackgroundColor.postValue(resourceUtil.getColor(R.color.red))
+        _liveDeleteButtonVisibility.postValue(View.GONE)
     }
 
     private fun haveCheated(runStats: RunStats): Boolean {
@@ -368,8 +384,19 @@ class SummaryViewModel(
         ) > 0.05 || runStats.activityPercentage.getOrDefault(
             DetectedActivity.IN_VEHICLE,
             0.0
-        ) > 0.05
+        ) > 0.05 || isProbablyAnEmulator()
     }
+
+    private fun isProbablyAnEmulator() = Build.FINGERPRINT.startsWith("generic")
+            || Build.FINGERPRINT.startsWith("unknown")
+            || Build.MODEL.contains("google_sdk")
+            || Build.MODEL.contains("Emulator")
+            || Build.MODEL.contains("Android SDK built for x86")
+            || Build.BOARD == "QC_Reference_Phone" //bluestacks
+            || Build.MANUFACTURER.contains("Genymotion")
+            || Build.HOST.startsWith("Build") //MSI App Player
+            || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
+            || "google_sdk" == Build.PRODUCT
 
     @SuppressLint("CheckResult")
     private fun updateUserStats(quest: Quest, runStats: RunStats) {
@@ -408,7 +435,9 @@ class SummaryViewModel(
                         _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
                         userRepository.incrementPlayerChallengesLost()
                         runStats.xp - minusXp
-                    } else {
+                    } else if(haveCheated){
+                      0
+                    }else{
                         runStats.xp
                     }
 
@@ -480,7 +509,7 @@ class SummaryViewModel(
 
     fun onSaveProgressClicked() {
         Timber.d("Save clicked")
-        if (quest?.locations?.size ?: 0 < 2) {
+        if (quest?.locations?.size ?: 0 < 2 || haveCheated) {
             quest?.let {
                 deleteAndExit(it)
             }
