@@ -147,4 +147,8 @@
     <string name="runage_challenge_stars">Challenge stars</string>
     <string name="runage_view_profile">View profile</string>
     <string name="runage_play_music">Play Music</string>
+    <string name="runage_claim_reward">Claim reward</string>
+    <string name="runage_reward_info">Daily reward:</string>
+    <string name="runage_im_good">No thanks, not today</string>
+    <string name="runage_100_xp">100 XP</string>
 </resources>

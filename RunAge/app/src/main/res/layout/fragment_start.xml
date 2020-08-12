@@ -41,6 +41,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="6dip"
+            android:onClick="@{()->viewModel.onPresentClicked()}"
             android:layout_marginEnd="45dip"
             app:layout_constraintTop_toTopOf="@+id/toolbar"
             app:lottie_autoPlay="true"

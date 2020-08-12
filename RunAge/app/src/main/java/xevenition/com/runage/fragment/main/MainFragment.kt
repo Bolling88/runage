@@ -69,6 +69,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
                 R.id.playerFragment -> hideBottomNav()
                 R.id.historySummaryFragment -> hideBottomNav()
                 R.id.profileFragment -> hideBottomNav()
+                R.id.presentFragment -> hideBottomNav()
                 else -> {}
             }
         }

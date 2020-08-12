@@ -126,17 +126,6 @@ class StartViewModel(
     }
 
     fun onProfileClicked() {
-//        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
-//            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
-//                observableShowAchievements.postValue(it)
-//            }
-//        }
-//        observableNavigateTo.postValue(
-//            StartFragmentDirections.actionStartFragmentToProfileFragment(
-//                keyUserId = userInfo?.userId ?: "",
-//                keyIsUser = true
-//            )
-//        )
         val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
         val levelString = "${resourceUtil.getString(R.string.runage_level)} $level"
         val result = Bundle()
@@ -145,6 +134,10 @@ class StartViewModel(
         result.putString("key_user_name", userInfo?.playerName ?: "")
         result.putString("key_user_level", levelString)
         observableShowProfile.postValue(result)
+    }
+
+    fun onPresentClicked(){
+        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToPresentFragment())
     }
 
     fun onRateLaterClicked() {

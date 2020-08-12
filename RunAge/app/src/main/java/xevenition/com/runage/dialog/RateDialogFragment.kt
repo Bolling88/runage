@@ -9,7 +9,7 @@ import xevenition.com.runage.R
 
 class RateDialogFragment : DialogFragment() {
 
-    private lateinit  var callback: RateDialogFragment.RateDialogCallback
+    private lateinit  var callback: RateDialogCallback
 
     interface RateDialogCallback{
         fun onLikeClicked()
