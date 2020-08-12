@@ -1,6 +1,8 @@
 package xevenition.com.runage.repository
 
 import android.content.Intent
+import com.google.android.gms.games.AnnotatedData
+import com.google.android.gms.games.Player
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import io.reactivex.Flowable
@@ -128,7 +130,15 @@ class UserRepository @Inject constructor(
         return gameServicesService.getPlayerSearchIntent()
     }
 
-    fun updateUserName(name: String): Task<Void> {
-        return fireStoreService.storeUserName(name)
+    fun getGameServicesUserInfo(): Task<Player>? {
+        return gameServicesService.getGamesPlayerInfo()
+    }
+
+    fun getGameServicesUserInfo(userId: String): Task<AnnotatedData<Player>>? {
+        return gameServicesService.getPlayerProfile(userId)
+    }
+
+    fun updateGameServicesInfo(name: String, gameServicesId: String): Task<Void> {
+        return fireStoreService.storeUserName(name, gameServicesId)
     }
 }

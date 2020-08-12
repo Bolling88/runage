@@ -3,6 +3,7 @@ package xevenition.com.runage.fragment.profile
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -85,6 +86,7 @@ class ProfileViewModel(
                     Timber.e(it)
                 })
             addDisposable(disposable)
+
         } else {
             _liveIsUserVisibility.postValue(View.GONE)
             _liveFollowVisibility.postValue(View.VISIBLE)

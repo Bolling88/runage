@@ -115,7 +115,7 @@ class StartViewModel(
                 welcomeMessagePlayed = true
             }
             _liveTextName.postValue(it.displayName)
-            userRepository.updateUserName(it.displayName)
+            userRepository.updateGameServicesInfo(it.displayName, it.playerId)
 
             _observableProfileImage.postValue(it.hiResImageUri)
         }
