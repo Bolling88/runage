@@ -165,10 +165,10 @@ class FireStoreService @Inject constructor() {
     }
 
     fun getUserInfo(userId: String? = null): Task<DocumentSnapshot> {
-        val userId = userId ?: FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val id = userId ?: FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
             firestore.collection("users")
-                .document(userId)
+                .document(id)
         return docRef.get()
     }
 
@@ -227,12 +227,13 @@ class FireStoreService @Inject constructor() {
         )
     }
 
-    fun storeUserName(playerName: String): Task<Void> {
+    fun storeUserName(playerName: String, gameServicesId: String): Task<Void> {
         val userId = firebaseAuth.currentUser?.uid ?: ""
         Timber.d("Storing user name: $playerName")
         return firestore.collection("users").document(userId).set(
             hashMapOf(
-                "playerName" to playerName
+                "playerName" to playerName,
+                "gameServicesId" to gameServicesId
             ), SetOptions.merge()
         )
     }
