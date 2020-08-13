@@ -100,6 +100,7 @@ class PresentFragment : BaseFragment<PresentViewModel>() {
                 }
                 override fun onUserEarnedReward(@NonNull reward: RewardItem) {
                     Timber.d("onUserEarnedReward")
+                    viewModel.onUserEarnedReward()
                 }
                 override fun onRewardedAdFailedToShow(adError: AdError) {
                     Timber.e(adError.message)

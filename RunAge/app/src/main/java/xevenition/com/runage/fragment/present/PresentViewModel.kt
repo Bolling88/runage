@@ -3,16 +3,10 @@ package xevenition.com.runage.fragment.present
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.util.GameServicesUtil
-import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.SingleLiveEvent
 
-class PresentViewModel(
-    gameServicesUtil: GameServicesUtil,
-    resourceUtil: ResourceUtil
-) : BaseViewModel() {
+class PresentViewModel() : BaseViewModel() {
 
 
     private val _liveButtonVisibility = MutableLiveData<Int>()
@@ -38,5 +32,9 @@ class PresentViewModel(
 
     fun onAdLoading() {
         _liveButtonVisibility.postValue(View.GONE)
+    }
+
+    fun onUserEarnedReward() {
+      observableNavigateTo.postValue(PresentFragmentDirections.actionPresentFragmentToGiftedFragment())
     }
 }

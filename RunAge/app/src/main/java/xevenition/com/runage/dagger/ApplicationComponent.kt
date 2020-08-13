@@ -5,6 +5,7 @@ import xevenition.com.runage.fragment.appsettings.AppSettingsViewModelFactory
 import xevenition.com.runage.fragment.challenges.QuestsFragment
 import xevenition.com.runage.fragment.challenges.ChallengesViewModelFactory
 import xevenition.com.runage.fragment.feed.FeedViewModelFactory
+import xevenition.com.runage.fragment.gifted.GiftedViewModelFactory
 import xevenition.com.runage.fragment.history.HistoryFragment
 import xevenition.com.runage.fragment.history.HistoryViewModelFactory
 import xevenition.com.runage.fragment.historysummary.HistorySummaryFragment
@@ -73,6 +74,7 @@ interface ApplicationComponent {
     fun inject(component: StartViewModelFactory)
     fun inject(component: LoginViewModelFactory)
     fun inject(component: ShareViewModelFactory)
+    fun inject(component: GiftedViewModelFactory)
     fun inject(component: HistorySummaryFragment)
     fun inject(component: SplashViewModelFactory)
     fun inject(component: PlayerViewModelFactory)

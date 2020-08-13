@@ -173,7 +173,17 @@
     <fragment
         android:id="@+id/presentFragment"
         android:name="xevenition.com.runage.fragment.present.PresentFragment"
-        android:label="PresentFragment" />
+        android:label="PresentFragment" >
+        <action
+            android:id="@+id/action_presentFragment_to_giftedFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="false"
+            app:destination="@id/giftedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/giftedFragment"
+        android:name="xevenition.com.runage.fragment.gifted.GiftedFragment"
+        android:label="GiftedFragment" />
 
 
 </navigation>

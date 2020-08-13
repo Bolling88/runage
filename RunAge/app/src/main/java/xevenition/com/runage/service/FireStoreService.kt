@@ -227,6 +227,14 @@ class FireStoreService @Inject constructor() {
         )
     }
 
+    fun updateUserXp(userId: String, xp: Int): Task<Void> {
+        return firestore.collection("users").document(userId).set(
+            hashMapOf(
+                "xp" to xp
+            ), SetOptions.merge()
+        )
+    }
+
     fun storeUserName(playerName: String, gameServicesId: String): Task<Void> {
         val userId = firebaseAuth.currentUser?.uid ?: ""
         Timber.d("Storing user name: $playerName")
