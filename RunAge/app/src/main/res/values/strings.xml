@@ -150,7 +150,7 @@
     <string name="runage_claim_reward">Claim reward</string>
     <string name="runage_reward_info">Daily reward:</string>
     <string name="runage_im_good">No thanks, not today</string>
-    <string name="runage_100_xp">100 XP</string>
+    <string name="runage_100_xp" translatable="false">100 XP</string>
     <string name="runage_save_xp">Save XP</string>
     <string name="runage_congrats_xp">Congratulations, you gained:</string>
 </resources>
