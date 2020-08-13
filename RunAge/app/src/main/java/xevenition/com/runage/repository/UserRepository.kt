@@ -5,8 +5,10 @@ import com.google.android.gms.games.AnnotatedData
 import com.google.android.gms.games.Player
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.room.AppDatabase
@@ -62,8 +64,8 @@ class UserRepository @Inject constructor(
             .doOnError { Timber.e(it) }
     }
 
-    private fun dbInsertUser(user: RunageUser): Single<Long> {
-        return Single.fromCallable {
+    private fun dbInsertUser(user: RunageUser): Completable {
+        return Completable.fromCallable {
             db.userDao().insert(user)
         }
             .subscribeOn(Schedulers.io())
@@ -82,6 +84,22 @@ class UserRepository @Inject constructor(
         }
             .subscribeOn(Schedulers.io())
             .doOnError { Timber.e(it) }
+    }
+
+    fun addUserXp(xp: Int): Single<RunageUser> {
+        return getSingleUser()
+            .doOnSuccess { user ->
+                val newXp = user.xp + xp
+                fireStoreService.updateUserXp(user.userId, newXp)
+                    .addOnSuccessListener {
+                        val newUser = user.copy(xp = newXp)
+                        dbInsertUser(newUser)
+                            .subscribe()
+                    }
+                    .addOnFailureListener {
+                        Timber.e(it)
+                    }
+            }
     }
 
     fun addUserFollowing(user: RunageUser, followingUserId: String): Single<Task<Void>> {

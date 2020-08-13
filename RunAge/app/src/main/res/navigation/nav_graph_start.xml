@@ -92,6 +92,13 @@
         <action
             android:id="@+id/action_startFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_presentFragment"
+            app:destination="@id/presentFragment"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_close_exit"
+            app:popEnterAnim="@anim/fragment_open_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
     </fragment>
 
     <fragment
@@ -163,6 +170,20 @@
             android:name="key_user_level"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/presentFragment"
+        android:name="xevenition.com.runage.fragment.present.PresentFragment"
+        android:label="PresentFragment" >
+        <action
+            android:id="@+id/action_presentFragment_to_giftedFragment"
+            app:popUpTo="@+id/startFragment"
+            app:popUpToInclusive="false"
+            app:destination="@id/giftedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/giftedFragment"
+        android:name="xevenition.com.runage.fragment.gifted.GiftedFragment"
+        android:label="GiftedFragment" />
 
 
 </navigation>

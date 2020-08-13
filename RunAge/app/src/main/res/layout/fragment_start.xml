@@ -29,7 +29,27 @@
             app:menu="@menu/start_menu"
             app:title="@string/runage_start"
             app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white" >
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottiePresent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="4dip"
+            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="6dip"
+            android:visibility="@{viewModel.livePresentVisibility}"
+            android:onClick="@{()->viewModel.onPresentClicked()}"
+            android:layout_marginEnd="45dip"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_present"
+            app:lottie_scale="0.12"
+            app:lottie_speed="1" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieLocation"
@@ -69,7 +89,6 @@
             android:layout_height="wrap_content"
             app:cpb_background_progressbar_color="@color/grey1"
             app:cpb_background_progressbar_width="5dp"
-            app:cpb_progress="@{viewModel.liveLevelProgress}"
             app:cpb_progress_direction="to_right"
             app:cpb_progress_max="@{viewModel.liveLevelNext}"
             app:cpb_progressbar_color="@color/colorPrimary"

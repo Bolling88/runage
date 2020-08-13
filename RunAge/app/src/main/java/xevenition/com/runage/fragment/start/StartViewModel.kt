@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.ktx.Firebase
@@ -20,6 +21,8 @@ import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.*
 import java.io.ByteArrayOutputStream
+import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 class StartViewModel(
     private val gameServicesUtil: GameServicesUtil,
@@ -37,8 +40,8 @@ class StartViewModel(
     private val _liveTextName = MutableLiveData<String>()
     val liveTextName: LiveData<String> = _liveTextName
 
-    private val _liveLevelProgress = MutableLiveData<Float>()
-    val liveLevelProgress: LiveData<Float> = _liveLevelProgress
+    private val _observableLevelProgress = MutableLiveData<Float>()
+    val observableLevelProgress: LiveData<Float> = _observableLevelProgress
 
     private val _liveLevelNext = MutableLiveData<Float>()
     val liveLevelNext: LiveData<Float> = _liveLevelNext
@@ -48,6 +51,9 @@ class StartViewModel(
 
     private val _liveTextXp = MutableLiveData<String>()
     val liveTextXp: LiveData<String> = _liveTextXp
+
+    private val _livePresentVisibility = MutableLiveData<Int>()
+    val livePresentVisibility: LiveData<Int> = _livePresentVisibility
 
     val observableOpenMenu = SingleLiveEvent<Unit>()
     val observableShowProfile = SingleLiveEvent<Bundle>()
@@ -62,6 +68,8 @@ class StartViewModel(
         if (serviceIsRunning) {
             observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToMapFragment())
         }
+
+        _livePresentVisibility.postValue(View.GONE)
 
         val openedApp = saveUtil.getInt(SaveUtil.KEY_APP_OPENINGS, 0)
         val rated = saveUtil.getBoolean(SaveUtil.KEY_RATED, false)
@@ -86,7 +94,7 @@ class StartViewModel(
                 val progress = userXp - xpPreviousLevel
                 _liveTextXp.postValue("$progress / $totalXpForNextLevel")
                 _liveLevelNext.postValue(totalXpForNextLevel.toFloat())
-                _liveLevelProgress.postValue(progress.toFloat())
+                _observableLevelProgress.postValue(progress.toFloat())
                 _liveLevelText.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
                 _liveTextName.postValue(it.playerName)
 
@@ -102,6 +110,16 @@ class StartViewModel(
                 Timber.e("Failed to get the user")
             })
         addDisposable(disposable)
+    }
+
+    fun onViewResumed(){
+        val dateClaimed = saveUtil.getLong(SaveUtil.KEY_REWARD_CLAIMED_DATE, 0)
+        val dateNow = Instant.now().epochSecond
+        if(dateNow - dateClaimed > SECONDS_24_HOURS){
+            _livePresentVisibility.postValue(View.VISIBLE)
+        }else{
+            _livePresentVisibility.postValue(View.GONE)
+        }
     }
 
     private fun getGameServicesInfo() {
@@ -126,17 +144,6 @@ class StartViewModel(
     }
 
     fun onProfileClicked() {
-//        accountUtil.getGamesPlayerInfo()?.addOnSuccessListener { player ->
-//            accountUtil.getPlayerProfileIntent(player)?.addOnSuccessListener {
-//                observableShowAchievements.postValue(it)
-//            }
-//        }
-//        observableNavigateTo.postValue(
-//            StartFragmentDirections.actionStartFragmentToProfileFragment(
-//                keyUserId = userInfo?.userId ?: "",
-//                keyIsUser = true
-//            )
-//        )
         val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
         val levelString = "${resourceUtil.getString(R.string.runage_level)} $level"
         val result = Bundle()
@@ -145,6 +152,10 @@ class StartViewModel(
         result.putString("key_user_name", userInfo?.playerName ?: "")
         result.putString("key_user_level", levelString)
         observableShowProfile.postValue(result)
+    }
+
+    fun onPresentClicked(){
+        observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToPresentFragment())
     }
 
     fun onRateLaterClicked() {
@@ -183,5 +194,6 @@ class StartViewModel(
 
     companion object {
         const val NUMBER_OF_APP_OPENINGS = 10
+        const val SECONDS_24_HOURS = 86400
     }
 }

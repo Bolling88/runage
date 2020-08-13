@@ -146,4 +146,9 @@
     <string name="runage_challenge_stars">Utmanings-\nstjärnor</string>
     <string name="runage_view_profile">Visa profil</string>
     <string name="runage_play_music">Spela musik</string>
+    <string name="runage_claim_reward">Hämta belöning:</string>
+    <string name="runage_reward_info">Daglig belöning:</string>
+    <string name="runage_im_good">Nej tack, inte idag</string>
+    <string name="runage_save_xp">Spara XP</string>
+    <string name="runage_congrats_xp">Grattis, du fick:</string>
 </resources>

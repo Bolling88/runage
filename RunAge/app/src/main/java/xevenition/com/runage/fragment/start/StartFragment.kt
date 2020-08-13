@@ -68,6 +68,8 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
             (activity as? MainActivity)?.openMenu()
         }
 
+        viewModel.onViewResumed()
+
         return binding.root
     }
 
@@ -132,6 +134,12 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
         viewModel.observableShowProfile.observe(viewLifecycleOwner, Observer {
             it?.let {
                 showProfile(it)
+            }
+        })
+
+        viewModel.observableLevelProgress.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.circularProgressBar.setProgressWithAnimation(it, 1000)
             }
         })
     }

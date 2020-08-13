@@ -3,6 +3,7 @@ package xevenition.com.runage.util
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.firestore.v1.DocumentTransform
 import xevenition.com.runage.R
 import javax.inject.Inject
 
@@ -30,6 +31,14 @@ class SaveUtil @Inject constructor(app: Application) {
         }
     }
 
+    fun saveLong(key: String, value: Long){
+        with (sharedPref.edit()) {
+            putLong(key, value)
+            apply()
+        }
+    }
+
+
     fun saveFloat(key: String, value: Float){
         with (sharedPref.edit()) {
             putFloat(key, value)
@@ -39,6 +48,10 @@ class SaveUtil @Inject constructor(app: Application) {
 
     fun getInt(key: String, default: Int = 0): Int {
         return sharedPref.getInt(key, 0)
+    }
+
+    fun getLong(key: String, default: Long = 0): Long {
+        return sharedPref.getLong(key, 0)
     }
 
     fun getBoolean(key: String, default: Boolean = false): Boolean {
@@ -55,6 +68,7 @@ class SaveUtil @Inject constructor(app: Application) {
         const val KEY_WEIGHT = "key_weight"
         const val KEY_SYNC_GOOGLE_FIT = "key_sync_google_fit"
         const val KEY_APP_OPENINGS = "key_app_openings"
+        const val KEY_REWARD_CLAIMED_DATE = "key_reward_claimed_date"
         const val KEY_RATED = "key_rated"
 
         private const val KEY = "xevenition.com.runage.SAVE_KEY"
