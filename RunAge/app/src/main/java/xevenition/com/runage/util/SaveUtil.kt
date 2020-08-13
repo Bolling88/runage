@@ -70,6 +70,7 @@ class SaveUtil @Inject constructor(app: Application) {
         const val KEY_APP_OPENINGS = "key_app_openings"
         const val KEY_REWARD_CLAIMED_DATE = "key_reward_claimed_date"
         const val KEY_RATED = "key_rated"
+        const val KEY_CURRENT_LEVEL = "key_current_level"
 
         private const val KEY = "xevenition.com.runage.SAVE_KEY"
     }

@@ -1,5 +1,6 @@
 package xevenition.com.runage.fragment.start
 
+import android.animation.Animator
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
@@ -28,7 +29,6 @@ import xevenition.com.runage.dialog.CommenceRateDialogFragment
 import xevenition.com.runage.dialog.FeedbackDialogFragment
 import xevenition.com.runage.dialog.RateDialogFragment
 import xevenition.com.runage.util.ResourceUtil
-import java.lang.Exception
 import javax.inject.Inject
 
 
@@ -135,6 +135,25 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
             it?.let {
                 showProfile(it)
             }
+        })
+
+        viewModel.observableShowLevelUp.observe(viewLifecycleOwner, Observer {
+            binding.lottieLevelUp.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) {
+                    binding.lottieLevelUp.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.lottieLevelUp.visibility = View.GONE
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+            })
+            binding.lottieLevelUp.playAnimation()
         })
 
         viewModel.observableLevelProgress.observe(viewLifecycleOwner, Observer {
