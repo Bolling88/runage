@@ -1,5 +1,6 @@
 package xevenition.com.runage.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Gravity
 import android.view.WindowManager
@@ -14,6 +15,9 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.games.Games
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import xevenition.com.runage.R
 import xevenition.com.runage.databinding.ActivityMainBinding
 
@@ -21,20 +25,27 @@ import xevenition.com.runage.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private val navController by lazy {
         Navigation.findNavController(this, R.id.nav_host_fragment)
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
 
         MobileAds.initialize(this) { }
 
+        firebaseAnalytics = Firebase.analytics
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.navigation.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            firebaseAnalytics.setCurrentScreen(this, destination.displayName, null /* class override */)
+        }
         binding.navigation.setNavigationItemSelectedListener {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
             when(it.itemId){

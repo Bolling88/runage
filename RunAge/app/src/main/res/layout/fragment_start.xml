@@ -13,6 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         tools:context=".fragment.start.StartFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -127,6 +128,21 @@
             </androidx.cardview.widget.CardView>
 
         </androidx.cardview.widget.CardView>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLevelUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/card_profile"
+            app:layout_constraintEnd_toEndOf="@+id/card_profile"
+            app:layout_constraintStart_toStartOf="@+id/card_profile"
+            app:layout_constraintTop_toTopOf="@+id/card_profile"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            android:elevation="10dip"
+            app:lottie_rawRes="@raw/lottie_level_up"
+            app:lottie_scale="1"
+            app:lottie_speed="1" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textName"

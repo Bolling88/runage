@@ -33,6 +33,7 @@ class StartViewModel(
     private val userRepository: UserRepository
 ) : BaseViewModel() {
 
+    private var level: Int = 0
     private var userInfo: RunageUser? = null
     private var profileImageUploaded = false
     private var storageRef = Firebase.storage.reference
@@ -63,6 +64,7 @@ class StartViewModel(
 
     val observableShowAchievements = SingleLiveEvent<Intent>()
     val observableShowRateDialog = SingleLiveEvent<Unit>()
+    val observableShowLevelUp = SingleLiveEvent<Unit>()
 
     init {
         if (serviceIsRunning) {
@@ -80,13 +82,11 @@ class StartViewModel(
         userRepository.refreshUserInfo()
             .subscribe()
 
-        getGameServicesInfo()
-
         val disposable = userRepository.getObservableUser()
             .subscribe({
                 Timber.d("Got user info")
                 userInfo = it
-                val level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
+                level = LevelCalculator.getLevel(userInfo?.xp ?: 0)
                 val xpPreviousLevel = LevelCalculator.getXpForLevel(level)
                 val xpNextLevel = LevelCalculator.getXpForLevel(level + 1)
                 val totalXpForNextLevel = xpNextLevel - xpPreviousLevel
@@ -112,30 +112,41 @@ class StartViewModel(
         addDisposable(disposable)
     }
 
-    fun onViewResumed(){
+    fun onViewResumed() {
         val dateClaimed = saveUtil.getLong(SaveUtil.KEY_REWARD_CLAIMED_DATE, 0)
         val dateNow = Instant.now().epochSecond
-        if(dateNow - dateClaimed > SECONDS_24_HOURS){
+        if (dateNow - dateClaimed > SECONDS_24_HOURS) {
             _livePresentVisibility.postValue(View.VISIBLE)
-        }else{
+        } else {
             _livePresentVisibility.postValue(View.GONE)
         }
+
+        getGameServicesInfo()
     }
 
     private fun getGameServicesInfo() {
         val task = gameServicesService.getGamesPlayerInfo()
         task?.addOnSuccessListener {
             if (!serviceIsRunning && !welcomeMessagePlayed) {
-                feedbackHandler.speak(
-                    "${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}",
-                    TextToSpeech.QUEUE_FLUSH
-                )
+                if (level > saveUtil.getInt(SaveUtil.KEY_CURRENT_LEVEL, 0)) {
+                    feedbackHandler.speak(resourceUtil.getString(R.string.runage_congrats_level_up) + " " + level)
+                    observableShowLevelUp.call()
+                    saveUtil.saveInt(SaveUtil.KEY_CURRENT_LEVEL, level)
+                } else {
+                    feedbackHandler.speak(
+                        "${resourceUtil.getString(R.string.runage_welcome_back)} ${it.displayName}",
+                        TextToSpeech.QUEUE_FLUSH
+                    )
+                }
+                userRepository.updateGameServicesInfo(it.displayName, it.playerId)
+                _observableProfileImage.postValue(it.hiResImageUri)
                 welcomeMessagePlayed = true
+            } else if (level > saveUtil.getInt(SaveUtil.KEY_CURRENT_LEVEL, 0)) {
+                feedbackHandler.speak(resourceUtil.getString(R.string.runage_congrats_level_up) + " " + level)
+                observableShowLevelUp.call()
+                saveUtil.saveInt(SaveUtil.KEY_CURRENT_LEVEL, level)
             }
             _liveTextName.postValue(it.displayName)
-            userRepository.updateGameServicesInfo(it.displayName, it.playerId)
-
-            _observableProfileImage.postValue(it.hiResImageUri)
         }
     }
 
@@ -154,7 +165,7 @@ class StartViewModel(
         observableShowProfile.postValue(result)
     }
 
-    fun onPresentClicked(){
+    fun onPresentClicked() {
         observableNavigateTo.postValue(StartFragmentDirections.actionStartFragmentToPresentFragment())
     }
 
