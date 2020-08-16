@@ -139,13 +139,13 @@ class StartViewModel(
                     )
                 }
                 userRepository.updateGameServicesInfo(it.displayName, it.playerId)
-                _observableProfileImage.postValue(it.hiResImageUri)
                 welcomeMessagePlayed = true
-            } else if (level > saveUtil.getInt(SaveUtil.KEY_CURRENT_LEVEL, 0)) {
+            } else if (!serviceIsRunning && level > saveUtil.getInt(SaveUtil.KEY_CURRENT_LEVEL, 0)) {
                 feedbackHandler.speak(resourceUtil.getString(R.string.runage_congrats_level_up) + " " + level)
                 observableShowLevelUp.call()
                 saveUtil.saveInt(SaveUtil.KEY_CURRENT_LEVEL, level)
             }
+            _observableProfileImage.postValue(it.hiResImageUri)
             _liveTextName.postValue(it.displayName)
         }
     }

@@ -164,6 +164,13 @@ class FireStoreService @Inject constructor() {
         return docRef.get()
     }
 
+    fun searchUsers(searchString: String): Task<QuerySnapshot> {
+        val docRef =
+            firestore.collection("users")
+                .whereEqualTo("userName", searchString)
+        return docRef.get()
+    }
+
     fun getUserInfo(userId: String? = null): Task<DocumentSnapshot> {
         val id = userId ?: FirebaseAuth.getInstance().currentUser?.uid ?: ""
         val docRef =
