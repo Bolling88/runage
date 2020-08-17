@@ -107,11 +107,13 @@ class HistoryViewModel(
 
     @SuppressLint("CheckResult")
     private fun processQuests(collection: QuerySnapshot) {
-        Observable.just(collection)
+        Observable.fromIterable(collection)
             .subscribeOn(Schedulers.computation())
             .map {
-                collection.toObjects(SavedQuest::class.java)
+                val quest = it.toObject(SavedQuest::class.java)
+                quest.copy(questId = it.id)
             }
+            .toList()
             .subscribe({
                 Timber.d("Quests processed")
                 val newList = allQuests.toMutableList()

@@ -28,6 +28,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/runage_summary"
+                app:menu="@menu/history_summary_menu"
                 app:titleTextAppearance="@style/TextAppearance.ToolbarTitle"
                 app:titleTextColor="@color/white" />
 

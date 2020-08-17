@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -56,6 +57,11 @@ class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.mapView.onCreate(arguments)
 
+        binding.toolbar.setOnMenuItemClickListener {
+            viewModel.onDeleteClicked()
+            false
+        }
+
         val navController = (activity as MainActivity).findNavController(R.id.nav_host_tab_fragment)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
         binding.toolbar
@@ -93,6 +99,23 @@ class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
         viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
             it?.let {
                 drawEndMarker(it)
+            }
+        })
+
+        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, Observer {
+            it?.let { pair ->
+                context?.let { context ->
+                    val alertDialog: AlertDialog = AlertDialog.Builder(context).create()
+                    alertDialog.setTitle(pair.first)
+                    alertDialog.setMessage(pair.second)
+                    alertDialog.setButton(
+                        AlertDialog.BUTTON_NEGATIVE, resources.getString(R.string.runage_no)
+                    ) { dialog, _ -> dialog.dismiss() }
+                    alertDialog.setButton(
+                        AlertDialog.BUTTON_POSITIVE, resources.getString(R.string.runage_yes)
+                    ) { _, _ -> viewModel.onDeleteConfirmed() }
+                    alertDialog.show()
+                }
             }
         })
     }
