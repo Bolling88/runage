@@ -304,18 +304,18 @@ class SummaryViewModel(
                         _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                         feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                         _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
-                        if(quest.isPlayerChallenge){
+                        if (quest.isPlayerChallenge) {
                             _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed_penalty))
-                        }else{
+                        } else {
                             _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
                         }
                         setSaveButtonAsCloseButton()
                         _observablePlayFailAnimation.postValue(Unit)
                         _liveCheatingTextVisibility.postValue(View.VISIBLE)
                     } else {
-                        if(quest.isPlayerChallenge){
+                        if (quest.isPlayerChallenge) {
                             _liveStarVisibility.postValue(View.GONE)
-                        }else {
+                        } else {
                             _liveStarVisibility.postValue(View.VISIBLE)
                             when (challengeStars) {
                                 3 -> {
@@ -345,22 +345,22 @@ class SummaryViewModel(
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                     _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
-                    if(quest.isPlayerChallenge){
+                    if (quest.isPlayerChallenge) {
                         _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed_penalty))
-                    }else{
+                    } else {
                         _liveTextRewardTitle.postValue(resourceUtil.getString(R.string.runage_reward))
                     }
                     _observablePlayFailAnimation.postValue(Unit)
                 }
             } else {
-                if(haveCheated){
+                if (haveCheated) {
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_challenge_failed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_challenge_failed))
                     _observablePlayFailAnimation.postValue(Unit)
                     _liveTimerColor.postValue(resourceUtil.getColor(R.color.red))
                     _liveCheatingTextVisibility.postValue(View.VISIBLE)
                     setSaveButtonAsCloseButton()
-                }else {
+                } else {
                     _liveTextTitle.postValue(resourceUtil.getString(R.string.runage_run_completed))
                     feedbackHandler.speak(resourceUtil.getString(R.string.runage_run_completed))
                     _observablePlaySuccessAnimation.postValue(Unit)
@@ -390,14 +390,19 @@ class SummaryViewModel(
 
     private fun isProbablyAnEmulator() = Build.FINGERPRINT.startsWith("generic")
             || Build.FINGERPRINT.startsWith("unknown")
+            || Build.HARDWARE.contains("goldfish")
+            || Build.HARDWARE.contains("ranchu")
             || Build.MODEL.contains("google_sdk")
             || Build.MODEL.contains("Emulator")
             || Build.MODEL.contains("Android SDK built for x86")
-            || Build.BOARD == "QC_Reference_Phone" //bluestacks
             || Build.MANUFACTURER.contains("Genymotion")
-            || Build.HOST.startsWith("Build") //MSI App Player
-            || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
-            || "google_sdk" == Build.PRODUCT
+            || Build.PRODUCT.contains("sdk_google")
+            || Build.PRODUCT.contains("google_sdk")
+            || Build.PRODUCT.contains("sdk")
+            || Build.PRODUCT.contains("sdk_x86")
+            || Build.PRODUCT.contains("vbox86p")
+            || Build.PRODUCT.contains("emulator")
+            || Build.PRODUCT.contains("simulator");
 
     @SuppressLint("CheckResult")
     private fun updateUserStats(quest: Quest, runStats: RunStats) {
@@ -424,27 +429,35 @@ class SummaryViewModel(
 
                 totalNewXp =
                     if (quest.level > 0 && challengeStars > 0 && challengeCompletedFirstTime && !haveCheated) {
-                        _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                        _liveTextReward.postValue(
+                            "+${quest.levelExperience} ${resourceUtil.getString(
+                                R.string.runage_xp
+                            )}"
+                        )
                         runStats.xp + quest.levelExperience
-                    }else if(quest.isPlayerChallenge && challengeStars > 0 && !haveCheated){
-                        _liveTextReward.postValue("+${quest.levelExperience} ${resourceUtil.getString(R.string.runage_xp)}")
+                    } else if (quest.isPlayerChallenge && challengeStars > 0 && !haveCheated) {
+                        _liveTextReward.postValue(
+                            "+${quest.levelExperience} ${resourceUtil.getString(
+                                R.string.runage_xp
+                            )}"
+                        )
                         userRepository.incrementPlayerChallengesWon()
                         runStats.xp + quest.levelExperience
-                    }else if(quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)){
-                        val minusXp = (quest.levelExperience.toDouble()/2).toInt()
+                    } else if (quest.isPlayerChallenge && (challengeStars <= 0 || haveCheated)) {
+                        val minusXp = (quest.levelExperience.toDouble() / 2).toInt()
                         _liveTextReward.postValue("-$minusXp ${resourceUtil.getString(R.string.runage_xp)}")
                         _liveRewardTextColor.postValue(resourceUtil.getColor(R.color.red))
                         userRepository.incrementPlayerChallengesLost()
                         runStats.xp - minusXp
-                    } else if(haveCheated){
-                      0
-                    }else{
+                    } else if (haveCheated) {
+                        0
+                    } else {
                         runStats.xp
                     }
 
-                if(totalNewXp > 0){
+                if (totalNewXp > 0) {
                     _liveTextExperience.postValue("+$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
-                }else{
+                } else {
                     _liveTextExperience.postValue("$totalNewXp ${resourceUtil.getString(R.string.runage_xp)}")
                     _liveXpTextColor.postValue(resourceUtil.getColor(R.color.red))
                 }
@@ -484,7 +497,7 @@ class SummaryViewModel(
                     }, { throwable ->
                         Timber.e(throwable)
                     })
-            },{
+            }, {
                 Timber.e(it)
                 _liveButtonEnabled.postValue(true)
             })
