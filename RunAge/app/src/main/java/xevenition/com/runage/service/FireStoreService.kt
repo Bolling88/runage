@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import io.reactivex.Observable
@@ -15,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.RunStats
+import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.room.entity.Quest
 import javax.inject.Inject
@@ -27,6 +29,13 @@ class FireStoreService @Inject constructor() {
     private val firestore = Firebase.firestore
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val gson = Gson()
+
+    init {
+        val settings = firestoreSettings {
+            isPersistenceEnabled = true
+        }
+        firestore.firestoreSettings = settings
+    }
 
     fun storeQuest(
         quest: Quest,
@@ -135,7 +144,10 @@ class FireStoreService @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsFollowingMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+    fun loadQuestsFollowingMore(
+        userInfo: RunageUser,
+        startAfter: DocumentSnapshot
+    ): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -154,7 +166,10 @@ class FireStoreService @Inject constructor() {
         return docRef.get()
     }
 
-    fun loadQuestsMineMore(userInfo: RunageUser, startAfter: DocumentSnapshot): Task<QuerySnapshot> {
+    fun loadQuestsMineMore(
+        userInfo: RunageUser,
+        startAfter: DocumentSnapshot
+    ): Task<QuerySnapshot> {
         val docRef =
             firestore.collection("quest")
                 .orderBy("startTimeEpochSeconds", Query.Direction.DESCENDING)
@@ -251,5 +266,12 @@ class FireStoreService @Inject constructor() {
                 "gameServicesId" to gameServicesId
             ), SetOptions.merge()
         )
+    }
+
+    fun deleteQuest(savedQuest: SavedQuest) {
+        firestore.collection("quest").document(savedQuest.questId)
+            .delete()
+            .addOnSuccessListener { Timber.d("Quest deleted in Firestore") }
+            .addOnFailureListener { e -> Timber.e(e.toString()) }
     }
 }

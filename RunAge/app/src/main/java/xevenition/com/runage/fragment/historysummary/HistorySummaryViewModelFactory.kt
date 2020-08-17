@@ -3,6 +3,8 @@ package xevenition.com.runage.fragment.historysummary
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.repository.QuestRepository
+import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil
@@ -21,12 +23,12 @@ class HistorySummaryViewModelFactory @Inject constructor(
     @Inject
     lateinit var resourceUtil: ResourceUtil
     @Inject
-    lateinit var saveUtil: SaveUtil
-    @Inject
     lateinit var runningUtil: RunningUtil
+    @Inject
+    lateinit var fireStoreService: FireStoreService
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HistorySummaryViewModel(args, resourceUtil, saveUtil, runningUtil) as T
+        return HistorySummaryViewModel(args, resourceUtil, runningUtil, fireStoreService) as T
     }
 }

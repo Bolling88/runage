@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.firestore.ktx.firestoreSettings
+import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 import xevenition.com.runage.dagger.AppModule
 import xevenition.com.runage.dagger.ApplicationComponent

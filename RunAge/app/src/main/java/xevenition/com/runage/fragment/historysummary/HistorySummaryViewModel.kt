@@ -14,16 +14,20 @@ import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.repository.QuestRepository
+import xevenition.com.runage.room.entity.Quest
+import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import xevenition.com.runage.util.SaveUtil
+import xevenition.com.runage.util.SingleLiveEvent
 import kotlin.math.roundToInt
 
 class HistorySummaryViewModel(
     args: HistorySummaryFragmentArgs,
     private val resourceUtil: ResourceUtil,
-    private val saveUtil: SaveUtil,
-    private val runningUtil: RunningUtil
+    private val runningUtil: RunningUtil,
+    private val fireStoreService: FireStoreService
 ) : BaseViewModel() {
 
 
@@ -95,6 +99,8 @@ class HistorySummaryViewModel(
 
     private val _observableEndMarker = MutableLiveData<LatLng>()
     val observableEndMarker: LiveData<LatLng> = _observableEndMarker
+
+    val observableYesNoDialog = SingleLiveEvent<Pair<String, String>>()
 
     init {
         displayRunningPercentage(savedQuest)
@@ -205,6 +211,32 @@ class HistorySummaryViewModel(
     fun onMapCreated() {
         mapIsReady = true
         displayPath(savedQuest)
+    }
+
+    fun onDeleteClicked() {
+        observableYesNoDialog.postValue(
+            Pair(
+                resourceUtil.getString(R.string.runage_delete_run_title),
+                resourceUtil.getString(R.string.runage_delete_run_message)
+            )
+        )
+    }
+
+    fun onDeleteConfirmed(){
+        deleteAndExit()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun deleteAndExit() {
+        Observable.just(savedQuest)
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                fireStoreService.deleteQuest(savedQuest)
+                observableBackNavigation.call()
+            }, {
+                Timber.e(it)
+                observableBackNavigation.call()
+            })
     }
 
 }
