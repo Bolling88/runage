@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
+import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
@@ -21,6 +22,8 @@ class HistoryViewModelFactory @Inject constructor(
     lateinit var resourceUtil: ResourceUtil
     @Inject
     lateinit var userRepository: UserRepository
+    @Inject
+    lateinit var questRepository: QuestRepository
 
     init {
         app.appComponent.inject(this)
@@ -28,6 +31,6 @@ class HistoryViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HistoryViewModel(resourceUtil, firestoreService, userRepository, args) as T
+        return HistoryViewModel(resourceUtil, firestoreService, userRepository, questRepository, args) as T
     }
 }

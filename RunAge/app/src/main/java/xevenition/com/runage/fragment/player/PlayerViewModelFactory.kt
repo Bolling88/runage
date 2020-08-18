@@ -20,8 +20,6 @@ class PlayerViewModelFactory @Inject constructor(
     }
 
     @Inject
-    lateinit var gameServicesUtil: GameServicesUtil
-    @Inject
     lateinit var resourceUtil: ResourceUtil
     @Inject
     lateinit var runningUtil: RunningUtil
@@ -30,6 +28,6 @@ class PlayerViewModelFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return PlayerViewModel(gameServicesUtil, resourceUtil, runningUtil, userRepository, playerFragmentArgs) as T
+        return PlayerViewModel(resourceUtil, runningUtil, userRepository, playerFragmentArgs) as T
     }
 }

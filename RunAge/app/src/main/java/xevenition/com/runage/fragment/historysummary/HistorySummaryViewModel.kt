@@ -15,11 +15,9 @@ import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.model.FirestoreLocation
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.repository.QuestRepository
-import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import xevenition.com.runage.util.SaveUtil
 import xevenition.com.runage.util.SingleLiveEvent
 import kotlin.math.roundToInt
 
@@ -27,7 +25,8 @@ class HistorySummaryViewModel(
     args: HistorySummaryFragmentArgs,
     private val resourceUtil: ResourceUtil,
     private val runningUtil: RunningUtil,
-    private val fireStoreService: FireStoreService
+    private val fireStoreService: FireStoreService,
+    private val questRepository: QuestRepository
 ) : BaseViewModel() {
 
 
@@ -232,6 +231,8 @@ class HistorySummaryViewModel(
             .subscribeOn(Schedulers.io())
             .subscribe({
                 fireStoreService.deleteQuest(savedQuest)
+                //Notify observers that this quest have been deleted
+                questRepository.deletedSavedQuests.onNext(savedQuest.questId)
                 observableBackNavigation.call()
             }, {
                 Timber.e(it)

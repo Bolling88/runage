@@ -3,14 +3,20 @@ package xevenition.com.runage.repository
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import timber.log.Timber
 import xevenition.com.runage.model.Challenge
 import xevenition.com.runage.room.AppDatabase
 import xevenition.com.runage.room.entity.Quest
 import java.time.Instant
 import javax.inject.Inject
+import javax.inject.Singleton
 
+
+@Singleton
 class QuestRepository @Inject constructor(private val db: AppDatabase) {
+
+    val deletedSavedQuests = BehaviorSubject.create<String>()
 
     fun startNewQuest(challenge: Challenge?): Single<Quest> {
         return Single.fromCallable {

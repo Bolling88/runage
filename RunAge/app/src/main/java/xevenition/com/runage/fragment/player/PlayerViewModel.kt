@@ -17,7 +17,6 @@ import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 
 class PlayerViewModel(
-    gameServicesUtil: GameServicesUtil,
     private val resourceUtil: ResourceUtil,
     runningUtil: RunningUtil,
     private val userRepository: UserRepository,
