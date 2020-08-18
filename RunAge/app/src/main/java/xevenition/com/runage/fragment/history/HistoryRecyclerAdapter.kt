@@ -178,7 +178,7 @@ class HistoryRecyclerAdapter(
 
 class DiffCallback : DiffUtil.ItemCallback<SavedQuest>() {
     override fun areItemsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {
-        return oldItem == newItem
+        return oldItem.questId == newItem.questId
     }
 
     override fun areContentsTheSame(oldItem: SavedQuest, newItem: SavedQuest): Boolean {

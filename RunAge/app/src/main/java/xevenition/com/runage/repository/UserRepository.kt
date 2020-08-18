@@ -16,7 +16,9 @@ import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.service.GameServicesService
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UserRepository @Inject constructor(
     private val db: AppDatabase,
     private val gameServicesService: GameServicesService,

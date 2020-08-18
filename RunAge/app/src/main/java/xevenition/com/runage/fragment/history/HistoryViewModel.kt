@@ -18,6 +18,7 @@ import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_ALL
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_FOLLOWING
 import xevenition.com.runage.fragment.history.HistoryFragment.Companion.PAGE_MINE
 import xevenition.com.runage.model.SavedQuest
+import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.service.FireStoreService
@@ -28,6 +29,7 @@ class HistoryViewModel(
     resourceUtil: ResourceUtil,
     private val firestoreService: FireStoreService,
     private val userRepository: UserRepository,
+    private val questRepository: QuestRepository,
     args: Bundle
 ) : BaseViewModel() {
 
@@ -67,6 +69,8 @@ class HistoryViewModel(
             }
         }
 
+        setUpObservableDeletedQuest()
+
         val disposable = userRepository.getObservableUser()
             .subscribe({ user ->
                 allQuests.clear()
@@ -98,6 +102,22 @@ class HistoryViewModel(
                             _liveProgressVisibility.postValue(View.GONE)
                             _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                         }
+                }
+            }, {
+                Timber.e(it)
+            })
+        addDisposable(disposable)
+    }
+
+    private fun setUpObservableDeletedQuest() {
+        val disposable = questRepository.deletedSavedQuests.subscribeOn(Schedulers.io())
+            .subscribe({
+                val deleted = allQuests.removeAll { savedQuest -> savedQuest.questId == it }
+                if(deleted){
+                    Timber.d("Quest deleted")
+                    _observableQuests.postValue(allQuests)
+                }else{
+                    Timber.d("Quest not found")
                 }
             }, {
                 Timber.e(it)

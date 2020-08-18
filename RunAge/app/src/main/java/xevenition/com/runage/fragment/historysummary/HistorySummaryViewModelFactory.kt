@@ -26,9 +26,11 @@ class HistorySummaryViewModelFactory @Inject constructor(
     lateinit var runningUtil: RunningUtil
     @Inject
     lateinit var fireStoreService: FireStoreService
+    @Inject
+    lateinit var questRepository: QuestRepository
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return HistorySummaryViewModel(args, resourceUtil, runningUtil, fireStoreService) as T
+        return HistorySummaryViewModel(args, resourceUtil, runningUtil, fireStoreService, questRepository) as T
     }
 }
