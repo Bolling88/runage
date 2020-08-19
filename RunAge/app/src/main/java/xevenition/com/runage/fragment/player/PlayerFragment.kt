@@ -64,7 +64,7 @@ class PlayerFragment : BaseFragment<PlayerViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableImage.observe(viewLifecycleOwner, Observer {
+        viewModel.observableImage.observe(viewLifecycleOwner, {
             it?.let {
                 val profileImageRef = storageRef.child("images/${it}.jpg")
                 Timber.d("Loading player image")

@@ -5,11 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.repository.QuestRepository
+import xevenition.com.runage.room.entity.Quest
 
 
 class PathViewModel(

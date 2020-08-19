@@ -64,11 +64,11 @@ class SupportFragment : BaseFragment<SupportViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableSendEmail.observe(viewLifecycleOwner, Observer {
+        viewModel.observableSendEmail.observe(viewLifecycleOwner, {
             sendEmail()
         })
 
-        viewModel.observableOpenBrowser.observe(viewLifecycleOwner, Observer {
+        viewModel.observableOpenBrowser.observe(viewLifecycleOwner, {
             openBrowser()
         })
     }

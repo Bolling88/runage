@@ -84,25 +84,25 @@ class HistorySummaryFragment : BaseFragment<HistorySummaryViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, {
             it?.let {
                 setUpPolyline(it)
             }
         })
 
-        viewModel.observableStartMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStartMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawStartMarker(it)
             }
         })
 
-        viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableEndMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawEndMarker(it)
             }
         })
 
-        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, Observer {
+        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, {
             it?.let { pair ->
                 context?.let { context ->
                     val alertDialog: AlertDialog = AlertDialog.Builder(context).create()

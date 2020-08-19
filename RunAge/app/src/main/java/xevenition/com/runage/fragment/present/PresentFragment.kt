@@ -83,7 +83,7 @@ class PresentFragment : BaseFragment<PresentViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableShowAdd.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowAdd.observe(viewLifecycleOwner, {
             showAd()
         })
     }

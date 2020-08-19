@@ -72,7 +72,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {
+        viewModel.observableProfileImage.observe(viewLifecycleOwner, {
             it?.let {
                 val profileImageRef = storageRef.child("images/${it}.jpg")
                 Timber.d("Loading player image")
@@ -84,13 +84,13 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
             }
         })
 
-        viewModel.observableLevel.observe(viewLifecycleOwner, Observer {
+        viewModel.observableLevel.observe(viewLifecycleOwner, {
             it?.let {
                 binding.textLevel.text = it
             }
         })
 
-        viewModel.observableEditProfile.observe(viewLifecycleOwner, Observer {
+        viewModel.observableEditProfile.observe(viewLifecycleOwner, {
             startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
         })
     }

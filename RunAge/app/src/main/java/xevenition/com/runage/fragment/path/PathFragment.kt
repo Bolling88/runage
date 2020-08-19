@@ -69,19 +69,19 @@ class PathFragment : BaseFragment<PathViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, {
             it?.let {
                 setUpPolyline(it)
             }
         })
 
-        viewModel.observableStartMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStartMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawStartMarker(it)
             }
         })
 
-        viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableEndMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawEndMarker(it)
             }

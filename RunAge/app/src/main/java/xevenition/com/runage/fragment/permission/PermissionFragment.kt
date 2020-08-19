@@ -52,7 +52,7 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableCheckPermissionActivity.observe(viewLifecycleOwner, Observer {
+        viewModel.observableCheckPermissionActivity.observe(viewLifecycleOwner, {
             // Here, thisActivity is the current activity
             if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACTIVITY_RECOGNITION)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -70,7 +70,7 @@ class PermissionFragment : BaseFragment<PermissionViewModel>() {
             }
         })
 
-        viewModel.observableCheckPermissionLocation.observe(viewLifecycleOwner, Observer {
+        viewModel.observableCheckPermissionLocation.observe(viewLifecycleOwner, {
             // Here, thisActivity is the current activity
             if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {

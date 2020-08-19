@@ -92,7 +92,7 @@ class QuestsFragment : BaseFragment<ChallengesViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableChallenges.observe(viewLifecycleOwner, Observer {
+        viewModel.observableChallenges.observe(viewLifecycleOwner, {
             it?.let {
                 challengeListRecyclerAdapter.setItems(it)
             }
