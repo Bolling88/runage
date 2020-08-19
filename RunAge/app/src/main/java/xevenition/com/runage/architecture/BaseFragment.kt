@@ -15,17 +15,17 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment() {
 
     @CallSuper
     open fun setUpObservables() {
-        viewModel.observableNavigateTo.observe(viewLifecycleOwner, Observer {
+        viewModel.observableNavigateTo.observe(viewLifecycleOwner, {
             it?.let {
                 findNavController().navigate(it)
             }
         })
 
-        viewModel.observableBackNavigation.observe(viewLifecycleOwner, Observer {
+        viewModel.observableBackNavigation.observe(viewLifecycleOwner, {
             activity?.onBackPressed()
         })
 
-        viewModel.observableToast.observe(viewLifecycleOwner, Observer {
+        viewModel.observableToast.observe(viewLifecycleOwner, {
             it?.let { toast ->
                 context?.let { context ->
                     Toast.makeText(context, toast, Toast.LENGTH_LONG).show()
@@ -33,7 +33,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment() {
             }
         })
 
-        viewModel.observableInfoDialog.observe(viewLifecycleOwner, Observer {
+        viewModel.observableInfoDialog.observe(viewLifecycleOwner, {
             it?.let { triple ->
                 context?.let { context ->
                     val alertDialog: AlertDialog = AlertDialog.Builder(context).create()

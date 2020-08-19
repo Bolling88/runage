@@ -186,12 +186,16 @@ class HistoryRecyclerAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         listener.onReachedItem(position)
-        if (holder is UserViewHolder) {
-            holder.bind(getItem(position).savedQuest!!)
-        } else if (holder is PlayerViewHolder) {
-            holder.bind(getItem(position).savedQuest!!)
-        }else if(holder is UnifiedNativeAdViewHolder){
-            populateNativeAdView(getItem(position).ad!!, holder.adView)
+        when (holder) {
+            is UserViewHolder -> {
+                holder.bind(getItem(position).savedQuest!!)
+            }
+            is PlayerViewHolder -> {
+                holder.bind(getItem(position).savedQuest!!)
+            }
+            is UnifiedNativeAdViewHolder -> {
+                populateNativeAdView(getItem(position).ad!!, holder.adView)
+            }
         }
     }
 

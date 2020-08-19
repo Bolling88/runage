@@ -132,7 +132,7 @@ class MapFragment : BaseFragment<MapViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, Observer {
+        viewModel.observableAnimateMapPosition.observe(viewLifecycleOwner, {
             it?.let {
                 //only move camera for user position if we don't have a polyline to focus on
                 if (polyLine == null || polyLine?.points?.isEmpty() == true)
@@ -140,29 +140,29 @@ class MapFragment : BaseFragment<MapViewModel>() {
             }
         })
 
-        viewModel.observableUserMarkerPosition.observe(viewLifecycleOwner, Observer {
+        viewModel.observableUserMarkerPosition.observe(viewLifecycleOwner, {
             it?.let {
                 drawUserMarker(it)
             }
         })
 
-        viewModel.observableStartMarkerPosition.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStartMarkerPosition.observe(viewLifecycleOwner, {
             it?.let {
                 drawStartMarker(it)
             }
         })
 
-        viewModel.observableClearMap.observe(viewLifecycleOwner, Observer {
+        viewModel.observableClearMap.observe(viewLifecycleOwner, {
             googleMap?.clear()
         })
 
-        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, {
             it?.let {
                 setUpPolyline(it)
             }
         })
 
-        viewModel.observableStopRun.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStopRun.observe(viewLifecycleOwner, {
             stopEventService()
             backPressCallback?.isEnabled = false
         })

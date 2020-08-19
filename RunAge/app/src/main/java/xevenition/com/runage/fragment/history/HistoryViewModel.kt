@@ -54,7 +54,7 @@ class HistoryViewModel(
     private val _liveEmptyText = MutableLiveData<String>()
     val liveEmptyText: LiveData<String> = _liveEmptyText
 
-    val observableOpenPlayerSearch = SingleLiveEvent<Intent>()
+    private val observableOpenPlayerSearch = SingleLiveEvent<Intent>()
 
     private val page = args.getInt(KEY_PAGE)
 

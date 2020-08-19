@@ -76,13 +76,13 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableWeight.observe(viewLifecycleOwner, Observer {
+        viewModel.observableWeight.observe(viewLifecycleOwner, {
             it?.let {
                 binding.textWeightField.setText(it.toString())
             }
         })
 
-        viewModel.observableUnitType.observe(viewLifecycleOwner, Observer {
+        viewModel.observableUnitType.observe(viewLifecycleOwner, {
             it?.let {
                 if(it) {
                     binding.radioMetric.isChecked = true
@@ -94,11 +94,11 @@ class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {
             }
         })
 
-        viewModel.observableCloseApp.observe(viewLifecycleOwner, Observer {
+        viewModel.observableCloseApp.observe(viewLifecycleOwner, {
             closeApp()
         })
 
-        viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowAchievements.observe(viewLifecycleOwner, {
             startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
         })
     }

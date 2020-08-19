@@ -90,47 +90,47 @@ class SummaryFragment : BaseFragment<SummaryViewModel>() {
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
-        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, {
             it?.let {
                 setUpPolyline(it)
             }
         })
 
-        viewModel.observableStartMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStartMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawStartMarker(it)
             }
         })
 
-        viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableEndMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawEndMarker(it)
             }
         })
 
-        viewModel.observableBackPressedEnabled.observe(viewLifecycleOwner, Observer {
+        viewModel.observableBackPressedEnabled.observe(viewLifecycleOwner, {
             it?.let {
                 backPressedEnabled.isEnabled = it
             }
         })
 
-        viewModel.observablePlaySuccessAnimation.observe(viewLifecycleOwner, Observer {
+        viewModel.observablePlaySuccessAnimation.observe(viewLifecycleOwner, {
             binding.animationSuccess.visibility = View.VISIBLE
             binding.animationSuccess.playAnimation()
             binding.animation2.playAnimation()
         })
 
-        viewModel.observablePlayFailAnimation.observe(viewLifecycleOwner, Observer {
+        viewModel.observablePlayFailAnimation.observe(viewLifecycleOwner, {
             binding.animationFail.visibility = View.VISIBLE
             binding.animationFail.playAnimation()
         })
 
 
-        viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowAd.observe(viewLifecycleOwner, {
             showAdAndReturn()
         })
 
-        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, Observer {
+        viewModel.observableYesNoDialog.observe(viewLifecycleOwner, {
             it?.let { pair ->
                 context?.let { context ->
                     val alertDialog: AlertDialog = AlertDialog.Builder(context).create()

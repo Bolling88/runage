@@ -74,7 +74,7 @@ class LoginFragment : BaseFragment<LoginViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableLoginClicked.observe(viewLifecycleOwner, Observer {
+        viewModel.observableLoginClicked.observe(viewLifecycleOwner, {
             startSignInIntent()
         })
     }

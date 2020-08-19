@@ -94,7 +94,7 @@ class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableUserAccount.observe(viewLifecycleOwner, Observer {
+        viewModel.observableUserAccount.observe(viewLifecycleOwner, {
             it?.let {
                 (activity as? MainActivity)?.setUpAchievementsLayout(it)
             }

@@ -90,33 +90,33 @@ class ShareFragment : BaseFragment<ShareViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableRunningPath.observe(viewLifecycleOwner, Observer {
+        viewModel.observableRunningPath.observe(viewLifecycleOwner, {
             it?.let {
                 setUpPolyline(it)
             }
         })
 
-        viewModel.observableStartMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableStartMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawStartMarker(it)
             }
         })
 
-        viewModel.observableEndMarker.observe(viewLifecycleOwner, Observer {
+        viewModel.observableEndMarker.observe(viewLifecycleOwner, {
             it?.let {
                 drawEndMarker(it)
             }
         })
 
-        viewModel.observableShowAd.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowAd.observe(viewLifecycleOwner, {
             showAdAndReturn()
         })
 
-        viewModel.observableShare.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShare.observe(viewLifecycleOwner, {
             loadBitmapFromMaps()
         })
 
-        viewModel.observableMapType.observe(viewLifecycleOwner, Observer {
+        viewModel.observableMapType.observe(viewLifecycleOwner, {
             it?.let {
                 googleMap?.mapType = it
             }

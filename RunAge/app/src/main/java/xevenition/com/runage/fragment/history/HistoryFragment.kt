@@ -91,7 +91,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     override fun setUpObservables() {
         super.setUpObservables()
 
-        viewModel.observableQuest.observe(viewLifecycleOwner, Observer {
+        viewModel.observableQuest.observe(viewLifecycleOwner, {
             it?.let {
                 loadMore = false
                 historyRecyclerAdapter.submitList(it)

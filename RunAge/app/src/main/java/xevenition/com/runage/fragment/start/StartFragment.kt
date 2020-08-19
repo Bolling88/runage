@@ -113,31 +113,31 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
 
     override fun setUpObservables() {
         super.setUpObservables()
-        viewModel.observableProfileImage.observe(viewLifecycleOwner, Observer {
+        viewModel.observableProfileImage.observe(viewLifecycleOwner, {
             it?.let {
                 displayProfileImageAndRetrieveIt(it)
             }
         })
 
-        viewModel.observableOpenMenu.observe(viewLifecycleOwner, Observer {
+        viewModel.observableOpenMenu.observe(viewLifecycleOwner, {
             (activity as? MainActivity)?.openMenu()
         })
 
-        viewModel.observableShowAchievements.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowAchievements.observe(viewLifecycleOwner, {
             startActivityForResult(it, PROFILE_REQUEST_CODE)
         })
 
-        viewModel.observableShowRateDialog.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowRateDialog.observe(viewLifecycleOwner, {
             RateDialogFragment.newInstance().show(childFragmentManager, "dialog_fragment")
         })
 
-        viewModel.observableShowProfile.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowProfile.observe(viewLifecycleOwner, {
             it?.let {
                 showProfile(it)
             }
         })
 
-        viewModel.observableShowLevelUp.observe(viewLifecycleOwner, Observer {
+        viewModel.observableShowLevelUp.observe(viewLifecycleOwner, {
             binding.lottieLevelUp.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
                     binding.lottieLevelUp.visibility = View.VISIBLE
@@ -156,7 +156,7 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
             binding.lottieLevelUp.playAnimation()
         })
 
-        viewModel.observableLevelProgress.observe(viewLifecycleOwner, Observer {
+        viewModel.observableLevelProgress.observe(viewLifecycleOwner, {
             it?.let {
                 binding.circularProgressBar.setProgressWithAnimation(it, 1000)
             }
