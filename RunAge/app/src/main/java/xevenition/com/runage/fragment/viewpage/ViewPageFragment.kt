@@ -1,22 +1,10 @@
 package xevenition.com.runage.fragment.viewpage
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.content.ContextCompat.startForegroundService
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import timber.log.Timber
@@ -27,11 +15,6 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentViewPageBinding
-import xevenition.com.runage.fragment.map.MapFragment
-import xevenition.com.runage.fragment.requirement.RequirementFragment
-import xevenition.com.runage.fragment.start.StartFragment
-import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
-import xevenition.com.runage.service.EventService
 
 class ViewPageFragment : BaseFragment<ViewPageViewModel>() {
 

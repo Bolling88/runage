@@ -39,9 +39,7 @@ class QuestsRecyclerAdapter(
         private val imageStar1: ImageView = view.findViewById(R.id.star1)
         private val imageStar2: ImageView = view.findViewById(R.id.star2)
         private val imageStar3: ImageView = view.findViewById(R.id.star3)
-        private val imageLock: ImageView = view.findViewById(R.id.imageLock)
         private val cardView: CardView = view.findViewById(R.id.card)
-        private val textLevel: TextView = view.findViewById(R.id.textLevel)
 
         @SuppressLint("SetTextI18n")
         fun bind(item: Challenge, position: Int) = with(itemView) {

@@ -1,16 +1,15 @@
 package xevenition.com.runage.fragment.login
 
-import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PlayGamesAuthProvider
 import timber.log.Timber
 import xevenition.com.runage.R
-import xevenition.com.runage.util.SingleLiveEvent
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.SaveUtil
+import xevenition.com.runage.util.SingleLiveEvent
 
 class LoginViewModel(
     private val saveUtil: SaveUtil,

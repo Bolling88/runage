@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
@@ -86,6 +85,6 @@ class ActivityActivator @Inject constructor(private val context: Context){
     }
 
     companion object{
-         val TAG = ActivityActivator::class.java.name
+         val TAG: String = ActivityActivator::class.java.name
     }
 }

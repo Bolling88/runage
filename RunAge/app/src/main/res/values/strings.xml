@@ -155,4 +155,5 @@
     <string name="runage_congrats_xp">Congratulations, you gained:</string>
     <string name="runage_congrats_level_up">Congratulations, you have reached level</string>
     <string name="runage_search">Search</string>
+    <string name="runage_ad">Ad</string>
 </resources>

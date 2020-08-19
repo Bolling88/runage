@@ -19,7 +19,6 @@ class PathViewModel(
 
     private var mapIsReady: Boolean = false
     private var currentQuest: Quest? = null
-    private var questDisposable: Disposable? = null
     private val questId = arguments.keyQuestId
 
     private val _observableStartMarker = MutableLiveData<LatLng>()

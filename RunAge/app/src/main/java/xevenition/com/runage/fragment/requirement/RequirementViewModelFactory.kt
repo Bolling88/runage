@@ -3,8 +3,9 @@ package xevenition.com.runage.fragment.requirement
 import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
-import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.util.*
+import xevenition.com.runage.util.FeedbackHandler
+import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject
 
 class RequirementViewModelFactory @Inject constructor(app: MainApplication, private val args: RequirementFragmentArgs) :

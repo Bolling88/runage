@@ -5,7 +5,6 @@ import com.google.android.gms.location.DetectedActivity
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.model.PositionPoint
 import xevenition.com.runage.model.RunStats

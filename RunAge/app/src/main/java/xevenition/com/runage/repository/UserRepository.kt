@@ -8,7 +8,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import xevenition.com.runage.room.AppDatabase

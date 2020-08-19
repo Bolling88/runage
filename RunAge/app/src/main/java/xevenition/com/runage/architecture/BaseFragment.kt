@@ -1,7 +1,6 @@
 package xevenition.com.runage.architecture
 
 
-import android.content.DialogInterface
 import android.widget.Toast
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AlertDialog

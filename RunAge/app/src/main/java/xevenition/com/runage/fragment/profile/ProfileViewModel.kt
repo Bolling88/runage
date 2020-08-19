@@ -3,7 +3,6 @@ package xevenition.com.runage.fragment.profile
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,10 @@ import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.repository.UserRepository
 import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.service.GameServicesService
-import xevenition.com.runage.util.*
+import xevenition.com.runage.util.LevelCalculator
+import xevenition.com.runage.util.ResourceUtil
+import xevenition.com.runage.util.RunningUtil
+import xevenition.com.runage.util.SingleLiveEvent
 
 class ProfileViewModel(
     private val gameServicesService: GameServicesService,
@@ -23,17 +25,11 @@ class ProfileViewModel(
     private val args: ProfileFragmentArgs
 ) : BaseViewModel() {
 
-    private val _liveTextName = MutableLiveData<String>()
-    val liveTextName: LiveData<String> = _liveTextName
-
     private val _observableProfileImage = MutableLiveData<String>()
     val observableProfileImage: LiveData<String> = _observableProfileImage
 
     private val _observableLevel = MutableLiveData<String>()
     val observableLevel: LiveData<String> = _observableLevel
-
-    private val _liveLevelText = MutableLiveData<String>()
-    val liveLevelText: LiveData<String> = _liveLevelText
 
     private val _liveTextDistance = MutableLiveData<String>()
     val liveTextDistance: LiveData<String> = _liveTextDistance
@@ -136,9 +132,8 @@ class ProfileViewModel(
     private fun setUpUserInfo(
         userInfo: RunageUser
     ) {
-        val level = LevelCalculator.getLevel(userInfo.xp ?: 0)
+        val level = LevelCalculator.getLevel(userInfo.xp)
         _observableLevel.postValue("${resourceUtil.getString(R.string.runage_level)} $level")
-        _liveTextName.postValue(userInfo.playerName)
         _liveTextDistance.postValue(
             runningUtil.getDistanceString(
                 userInfo.distance
@@ -149,12 +144,12 @@ class ProfileViewModel(
                 userInfo.duration.toLong()
             )
         )
-        _liveTextExperience.postValue(userInfo.xp.toString() ?: "0")
-        _liveTextFollowers.postValue(userInfo.followers.size.toString() ?: "0")
-        _liveTextTotalRuns.postValue(userInfo.completedRuns.toString() ?: "0")
+        _liveTextExperience.postValue(userInfo.xp.toString())
+        _liveTextFollowers.postValue(userInfo.followers.size.toString())
+        _liveTextTotalRuns.postValue(userInfo.completedRuns.toString())
 
         var totalStars = 0
-        for ((key, value) in userInfo.challengeScore ?: mapOf()) {
+        for ((key, value) in userInfo.challengeScore) {
             totalStars += value
         }
         _liveTextStars.postValue(totalStars.toString())

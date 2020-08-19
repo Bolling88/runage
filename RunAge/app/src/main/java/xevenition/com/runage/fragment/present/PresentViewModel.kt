@@ -6,17 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import xevenition.com.runage.architecture.BaseViewModel
 import xevenition.com.runage.util.SingleLiveEvent
 
-class PresentViewModel() : BaseViewModel() {
+class PresentViewModel : BaseViewModel() {
 
 
     private val _liveButtonVisibility = MutableLiveData<Int>()
     val liveButtonVisibility : LiveData<Int> = _liveButtonVisibility
 
     val observableShowAdd = SingleLiveEvent<Unit>()
-
-    init {
-
-    }
 
     fun onViewAdClicked(){
         observableShowAdd.call()

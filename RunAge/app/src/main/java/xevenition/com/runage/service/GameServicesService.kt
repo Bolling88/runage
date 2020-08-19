@@ -52,7 +52,4 @@ class GameServicesService @Inject constructor(private val app: Application) {
     }
 
 
-    fun openProfileSettings(){
-        Games.GamesOptions.GAMES
-    }
 }

@@ -7,7 +7,6 @@ import xevenition.com.runage.repository.QuestRepository
 import xevenition.com.runage.service.FireStoreService
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
-import xevenition.com.runage.util.SaveUtil
 import javax.inject.Inject
 
 class HistorySummaryViewModelFactory @Inject constructor(

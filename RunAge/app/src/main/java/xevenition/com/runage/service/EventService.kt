@@ -296,6 +296,7 @@ class EventService : Service() {
         if (challengeFailedOrCompletedReported || currentQuest.levelStars > 0)
             return
         val duration = Instant.now().epochSecond - startTimeEpochSeconds
+        @Suppress("ControlFlowWithEmptyBody")
         if (duration > challenge.time && distance < challenge.distance) {
             //challenge completed
             challengeFailedOrCompletedReported = true

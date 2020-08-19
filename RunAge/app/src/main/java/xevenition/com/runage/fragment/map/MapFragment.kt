@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,15 +22,12 @@ import timber.log.Timber
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
-import xevenition.com.runage.util.TypedValueUtil
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentMapBinding
-import xevenition.com.runage.fragment.main.MainFragment
-import xevenition.com.runage.fragment.requirement.RequirementFragmentArgs
 import xevenition.com.runage.service.EventService
 import xevenition.com.runage.util.BitmapUtil
-import java.util.logging.Logger
+import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject
 
 

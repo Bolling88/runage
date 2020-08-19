@@ -92,7 +92,7 @@ class FeedbackHandler @Inject constructor(
     }
 
     private fun getCaloriesFeedback(quest: Quest): String {
-        val caloriesValues = SeparatorUtil.separateValue(quest.calories.toInt())
+        val caloriesValues = SeparatorUtil.separateValue(quest.calories)
         return ". ${resourceUtil.getString(R.string.runage_calories_burned)} " +
                 if (caloriesValues.first != 0) {
                     "${caloriesValues.first}. "

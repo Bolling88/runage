@@ -3,9 +3,7 @@ package xevenition.com.runage.util
 import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import javax.inject.Inject
 
 

@@ -7,18 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.common.images.ImageManager
 import xevenition.com.runage.R
 import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentRequirementBinding
-import xevenition.com.runage.fragment.start.StartFragment
-import xevenition.com.runage.fragment.summary.SummaryFragmentArgs
-import xevenition.com.runage.model.Challenge
 
 class RequirementFragment : BaseFragment<RequirementViewModel>() {
 

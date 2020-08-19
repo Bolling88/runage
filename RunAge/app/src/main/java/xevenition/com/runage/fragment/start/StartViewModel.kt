@@ -10,19 +10,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import xevenition.com.runage.util.SingleLiveEvent
 import timber.log.Timber
 import xevenition.com.runage.MainApplication.Companion.serviceIsRunning
 import xevenition.com.runage.MainApplication.Companion.welcomeMessagePlayed
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.repository.UserRepository
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.service.GameServicesService
 import xevenition.com.runage.util.*
 import java.io.ByteArrayOutputStream
 import java.time.Instant
-import java.util.concurrent.TimeUnit
 
 class StartViewModel(
     private val gameServicesUtil: GameServicesUtil,

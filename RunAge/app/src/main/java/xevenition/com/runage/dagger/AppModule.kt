@@ -24,7 +24,7 @@ class AppModule(private val application: Application) {
     @Singleton
     fun provideTextToSpeech(app: Application): TextToSpeech {
         var speech : TextToSpeech? = null
-        speech = TextToSpeech(app, TextToSpeech.OnInitListener {
+        speech = TextToSpeech(app, {
             Timber.d("Text to speech initiated")
             speech?.language  = if(Locale.getDefault().isO3Language == "swe"){
                 if(speech?.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_COUNTRY_AVAILABLE) {
