@@ -7,12 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseViewModel
-import xevenition.com.runage.fragment.feed.FeedFragmentDirections
-import xevenition.com.runage.fragment.start.StartFragmentDirections
 import xevenition.com.runage.model.Challenge
-import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.repository.UserRepository
-import xevenition.com.runage.util.GameServicesUtil
+import xevenition.com.runage.room.entity.RunageUser
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 
@@ -27,12 +24,6 @@ class PlayerViewModel(
 
     private val _liveTextName = MutableLiveData<String>()
     val liveTextName: LiveData<String> = _liveTextName
-
-    private val _liveLevelProgress = MutableLiveData<Float>()
-    val liveLevelProgress: LiveData<Float> = _liveLevelProgress
-
-    private val _liveLevelNext = MutableLiveData<Float>()
-    val liveLevelNext: LiveData<Float> = _liveLevelNext
 
     private val _liveTextTime = MutableLiveData<String>()
     val liveTextTime: LiveData<String> = _liveTextTime
@@ -65,7 +56,7 @@ class PlayerViewModel(
         _liveTextTime.postValue(runningUtil.convertTimeToDurationString(duration))
         _liveTextDistance.postValue(runningUtil.getDistanceString(quest.totalDistance))
         _liveTextName.postValue(
-            if (quest.playerName.isNullOrEmpty()) {
+            if (quest.playerName.isEmpty()) {
                 resourceUtil.getString(R.string.runage_unknown_player)
             } else {
                 quest.playerName

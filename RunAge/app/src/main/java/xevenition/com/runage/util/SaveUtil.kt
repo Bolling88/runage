@@ -3,8 +3,6 @@ package xevenition.com.runage.util
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.firestore.v1.DocumentTransform
-import xevenition.com.runage.R
 import javax.inject.Inject
 
 class SaveUtil @Inject constructor(app: Application) {

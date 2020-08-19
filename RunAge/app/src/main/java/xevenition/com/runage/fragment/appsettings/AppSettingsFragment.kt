@@ -16,7 +16,6 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentAppSettingsBinding
-import xevenition.com.runage.databinding.FragmentSettingsBinding
 import xevenition.com.runage.fragment.start.StartFragment
 
 class AppSettingsFragment : BaseFragment<AppSettingsViewModel>() {

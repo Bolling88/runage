@@ -177,14 +177,21 @@ class HistoryViewModel(
 
     @SuppressLint("CheckResult")
     private fun combineQuestsWithAds(){
-        Observable.fromIterable(quests)
+        Observable.just(quests)
             .subscribeOn(Schedulers.computation())
             .map {
                 val feedList = mutableListOf<FeedItem>()
-                for((counter, quest) in quests.withIndex()){
+                var adCounter = 0
+                for((counter, quest) in it.withIndex()){
                     feedList.add(FeedItem(savedQuest = quest, ad = null))
                     if(counter % 3 == 0 && ads.isNotEmpty()){
-                        feedList.add(FeedItem(savedQuest = null, ad = ads.first()))
+                        if(adCounter < ads.size) {
+                            feedList.add(FeedItem(savedQuest = null, ad = ads[adCounter]))
+                            adCounter++
+                        }else{
+                            feedList.add(FeedItem(savedQuest = null, ad = ads[0]))
+                            adCounter = 0
+                        }
                     }
                 }
                 feedList

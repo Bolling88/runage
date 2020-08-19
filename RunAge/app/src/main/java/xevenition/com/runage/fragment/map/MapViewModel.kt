@@ -335,9 +335,4 @@ class MapViewModel(
         locationUtil.removeLocationUpdates(locationCallback)
     }
 
-    fun onQuestFinished() {
-        observableClearMap.call()
-        runningTimerDisposable?.dispose()
-        resetTimers()
-    }
 }

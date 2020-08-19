@@ -16,12 +16,8 @@ import xevenition.com.runage.MainApplication
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
-import xevenition.com.runage.databinding.FragmentPathBinding
 import xevenition.com.runage.databinding.FragmentSummaryHistoryPathBinding
 import xevenition.com.runage.fragment.path.PathFragment
-import xevenition.com.runage.fragment.path.PathFragmentArgs
-import xevenition.com.runage.fragment.path.PathViewModel
-import xevenition.com.runage.fragment.path.PathViewModelFactory
 import xevenition.com.runage.util.BitmapUtil
 import xevenition.com.runage.util.TypedValueUtil
 import javax.inject.Inject

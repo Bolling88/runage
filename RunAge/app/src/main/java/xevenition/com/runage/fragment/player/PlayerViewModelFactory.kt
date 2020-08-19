@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import xevenition.com.runage.MainApplication
 import xevenition.com.runage.architecture.BaseViewModelFactory
 import xevenition.com.runage.repository.UserRepository
-import xevenition.com.runage.util.GameServicesUtil
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
 import javax.inject.Inject

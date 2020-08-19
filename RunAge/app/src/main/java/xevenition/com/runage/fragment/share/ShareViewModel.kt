@@ -22,7 +22,7 @@ class ShareViewModel(
     private val runningUtil: RunningUtil,
     private val resourceUtil: ResourceUtil,
     private val questRepository: QuestRepository,
-    private val arguments: ShareFragmentArgs
+    arguments: ShareFragmentArgs
 ) : BaseViewModel() {
 
     private var quest: Quest? = null

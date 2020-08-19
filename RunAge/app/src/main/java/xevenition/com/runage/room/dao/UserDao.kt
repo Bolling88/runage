@@ -3,7 +3,6 @@ package xevenition.com.runage.room.dao
 import androidx.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
-import xevenition.com.runage.room.entity.Quest
 import xevenition.com.runage.room.entity.RunageUser
 
 @Dao

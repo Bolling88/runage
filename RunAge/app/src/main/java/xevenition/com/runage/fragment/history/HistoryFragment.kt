@@ -15,6 +15,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.firebase.auth.FirebaseAuth
 import timber.log.Timber
+import xevenition.com.runage.BuildConfig
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
@@ -31,9 +32,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyRecyclerAdapter: HistoryRecyclerAdapter
     private var loadMore = false
-
-    // The number of native ads to load and display.
-    val NUMBER_OF_ADS = 5
 
     // The AdLoader used to load ads.§
     private var adLoader: AdLoader? = null
@@ -102,13 +100,16 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     }
 
     private fun loadNativeAds() {
-        val builder: AdLoader.Builder =
+        val builder: AdLoader.Builder =  if (BuildConfig.DEBUG) {
             AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
-         adLoader =
+        } else {
+            AdLoader.Builder(requireContext(), "ca-app-pub-9607319032304025/8633628403")
+        }
+        adLoader =
             builder.forUnifiedNativeAd { unifiedNativeAd -> // A native ad loaded successfully, check if the ad loader has finished loading
                 // and if so, insert the ads into the list.
                 mNativeAds.add(unifiedNativeAd)
-                if (adLoader?.isLoading == false) {
+                if (adLoader?.isLoading == false && mNativeAds.size > 0) {
                     viewModel.insertAdsInMenuItems(mNativeAds)
                 }
             }.withAdListener(
@@ -121,7 +122,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
                             "The previous native ad failed to load. Attempting to"
                                     + " load another."
                         )
-                        if (adLoader?.isLoading == false) {
+                        if (adLoader?.isLoading == false && mNativeAds.size > 0) {
                             viewModel.insertAdsInMenuItems(mNativeAds)
                         }
                     }
@@ -139,8 +140,9 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         const val PAGE_FOLLOWING = 1
         const val PAGE_ALL = 2
 
+        const val NUMBER_OF_ADS = 5
+
         const val KEY_PAGE = "key_page"
-        const val SEARCH_REQUEST_CODE = 2321
 
         fun getInstance(position: Int): HistoryFragment {
             val args = Bundle()

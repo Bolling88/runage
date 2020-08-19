@@ -1,7 +1,6 @@
 package xevenition.com.runage.util
 
-import org.junit.Assert.*
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class LevelCalculatorTest{

@@ -1,13 +1,9 @@
 package xevenition.com.runage.fragment.profile
 
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
-import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +11,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.transition.TransitionInflater
-import com.bumptech.glide.Glide
-import com.google.android.gms.common.images.ImageManager
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import timber.log.Timber
@@ -26,7 +20,6 @@ import xevenition.com.runage.activity.MainActivity
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentProfileBinding
-import xevenition.com.runage.fragment.historysummary.HistorySummaryFragmentArgs
 import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.util.GlideApp
 import xevenition.com.runage.util.ResourceUtil
