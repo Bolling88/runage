@@ -37,20 +37,24 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
             android:fontFamily="@font/majora_bold"
             android:textColor="@color/grey2"
             android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageHolder"
             app:layout_constraintTop_toTopOf="@+id/imageHolder"
             tools:text="Lord Bolling" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_basic"
             android:layout_marginStart="@dimen/margin_basic"
             android:fontFamily="@font/light"
             android:textColor="@color/grey2"
