@@ -1,5 +1,6 @@
 package xevenition.com.runage.fragment.history
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +9,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.formats.UnifiedNativeAd
 import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber
 import xevenition.com.runage.R
 import xevenition.com.runage.architecture.BaseFragment
 import xevenition.com.runage.architecture.getApplication
 import xevenition.com.runage.databinding.FragmentHistoryBinding
 import xevenition.com.runage.fragment.feed.FeedFragment
-import xevenition.com.runage.fragment.start.StartFragment
 import xevenition.com.runage.model.SavedQuest
 import xevenition.com.runage.util.ResourceUtil
 import xevenition.com.runage.util.RunningUtil
@@ -27,8 +32,18 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
     private lateinit var historyRecyclerAdapter: HistoryRecyclerAdapter
     private var loadMore = false
 
+    // The number of native ads to load and display.
+    val NUMBER_OF_ADS = 5
+
+    // The AdLoader used to load ads.§
+    private var adLoader: AdLoader? = null
+
+    // List of native ads that have been successfully loaded.
+    private val mNativeAds: MutableList<UnifiedNativeAd> = ArrayList()
+
     @Inject
     lateinit var resourceUtil: ResourceUtil
+
     @Inject
     lateinit var runningUtil: RunningUtil
 
@@ -38,16 +53,22 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         val factory = HistoryViewModelFactory(getApplication(), requireArguments())
         viewModel = ViewModelProvider(this, factory).get(HistoryViewModel::class.java)
 
-        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        historyRecyclerAdapter = HistoryRecyclerAdapter(userId, resourceUtil, runningUtil, object: HistoryRecyclerAdapter.OnClickListener{
-            override fun onClick(quest: SavedQuest) {
-                (parentFragment as FeedFragment).onQuestClicked(quest)
-            }
+        loadNativeAds()
 
-            override fun onReachedItem(position: Int) {
-                viewModel.onReachedItem(position)
-            }
-        })
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        historyRecyclerAdapter = HistoryRecyclerAdapter(
+            userId,
+            resourceUtil,
+            runningUtil,
+            object : HistoryRecyclerAdapter.OnClickListener {
+                override fun onClick(quest: SavedQuest) {
+                    (parentFragment as FeedFragment).onQuestClicked(quest)
+                }
+
+                override fun onReachedItem(position: Int) {
+                    viewModel.onReachedItem(position)
+                }
+            })
     }
 
     override fun onCreateView(
@@ -78,15 +99,41 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
                 historyRecyclerAdapter.submitList(it)
             }
         })
-
-        viewModel.observableOpenPlayerSearch.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                startActivityForResult(it, SEARCH_REQUEST_CODE)
-            }
-        })
     }
 
-    companion object{
+    private fun loadNativeAds() {
+        val builder: AdLoader.Builder =
+            AdLoader.Builder(requireContext(), "ca-app-pub-3940256099942544/2247696110")
+         adLoader =
+            builder.forUnifiedNativeAd { unifiedNativeAd -> // A native ad loaded successfully, check if the ad loader has finished loading
+                // and if so, insert the ads into the list.
+                mNativeAds.add(unifiedNativeAd)
+                if (adLoader?.isLoading == false) {
+                    viewModel.insertAdsInMenuItems(mNativeAds)
+                }
+            }.withAdListener(
+                object : AdListener() {
+                    @SuppressLint("BinaryOperationInTimber")
+                    override fun onAdFailedToLoad(errorCode: Int) {
+                        // A native ad failed to load, check if the ad loader has finished loading
+                        // and if so, insert the ads into the list.
+                        Timber.e(
+                            "The previous native ad failed to load. Attempting to"
+                                    + " load another."
+                        )
+                        if (adLoader?.isLoading == false) {
+                            viewModel.insertAdsInMenuItems(mNativeAds)
+                        }
+                    }
+                }).build()
+
+        // Load the Native Express ad.
+
+        // Load the Native Express ad.
+        adLoader?.loadAds(AdRequest.Builder().build(), NUMBER_OF_ADS)
+    }
+
+    companion object {
 
         const val PAGE_MINE = 0
         const val PAGE_FOLLOWING = 1
@@ -95,7 +142,7 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
         const val KEY_PAGE = "key_page"
         const val SEARCH_REQUEST_CODE = 2321
 
-        fun getInstance(position: Int): HistoryFragment{
+        fun getInstance(position: Int): HistoryFragment {
             val args = Bundle()
             args.putInt(KEY_PAGE, position)
             val fragment = HistoryFragment()
