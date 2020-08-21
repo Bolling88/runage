@@ -91,7 +91,9 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         })
 
         viewModel.observableEditProfile.observe(viewLifecycleOwner, {
-            startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
+            it?.let {
+                startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
+            }
         })
     }
 }
