@@ -171,7 +171,7 @@ class RunningTimerTest{
         observer.assertComplete()
         observer.assertNoErrors()
         observer.assertValue {
-            assertEquals(5, it.xp)
+            assertEquals(10, it.xp)
             assertEquals(120, it.runningDistance)
             assertEquals(60, it.runningDuration)
             true
