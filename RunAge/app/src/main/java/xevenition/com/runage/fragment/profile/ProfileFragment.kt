@@ -104,9 +104,9 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
         viewModel.observableEditProfile.observe(viewLifecycleOwner, {
             it?.let {
-                openPostActivity.launch(
-                  it
-                )
+//                openPostActivity.launch(
+//                  it
+//                )
             }
         })
     }
