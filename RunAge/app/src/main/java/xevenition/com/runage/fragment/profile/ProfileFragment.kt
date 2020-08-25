@@ -1,9 +1,14 @@
 package xevenition.com.runage.fragment.profile
 
+import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -68,6 +73,13 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         setUpObservables()
     }
 
+    // General activity result contract
+    private val openPostActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+            }
+        }
+
     @Override
     override fun setUpObservables() {
         super.setUpObservables()
@@ -92,7 +104,9 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
         viewModel.observableEditProfile.observe(viewLifecycleOwner, {
             it?.let {
-                startActivityForResult(it, StartFragment.PROFILE_REQUEST_CODE)
+//                openPostActivity.launch(
+//                  it
+//                )
             }
         })
     }

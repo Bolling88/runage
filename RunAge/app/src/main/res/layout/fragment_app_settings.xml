@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_basic"
             android:layout_marginTop="@dimen/margin_basic"
-            android:fontFamily="@font/bold"
+            android:fontFamily="@font/majora_bold"
             android:text="@string/unit_type"
             android:textSize="@dimen/textSizeBig"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,38 +89,52 @@
                 android:text="@string/imperial" />
         </RadioGroup>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/buttonProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-             android:fontFamily="@font/majora_bold"
-            android:layout_margin="@dimen/margin_basic"
-            android:onClick="@{()->viewModel.onProfileClicked()}"
-            android:text="@string/runage_edit_profile"
-            app:icon="@drawable/ic_edit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+        <!--        <com.google.android.material.button.MaterialButton-->
+        <!--            android:id="@+id/buttonProfile"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--             android:fontFamily="@font/majora_bold"-->
+        <!--            android:layout_margin="@dimen/margin_basic"-->
+        <!--            android:onClick="@{()->viewModel.onProfileClicked()}"-->
+        <!--            android:text="@string/runage_edit_profile"-->
+        <!--            app:icon="@drawable/ic_edit"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />-->
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageGoogleFit"
             android:layout_width="wrap_content"
-            app:srcCompat="@drawable/ic_google_fit"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_basic"
-            app:layout_constraintTop_toBottomOf="@+id/buttonProfile"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_height="wrap_content" />
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+            app:srcCompat="@drawable/ic_google_fit" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchFit"
-            android:text="@string/runage_sync_google_fit"
             android:layout_width="wrap_content"
-            android:checked="@{viewModel.liveSyncGoogleFit}"
-            app:layout_constraintStart_toEndOf="@+id/imageGoogleFit"
-            android:fontFamily="@font/medium"
+            android:layout_height="wrap_content"
             android:layout_marginStart="8dip"
-            app:layout_constraintTop_toTopOf="@+id/imageGoogleFit"
+            android:checked="@{viewModel.liveSyncGoogleFit}"
+            android:fontFamily="@font/medium"
+            android:text="@string/runage_sync_google_fit"
             app:layout_constraintBottom_toBottomOf="@+id/imageGoogleFit"
-            android:layout_height="wrap_content" />
+            app:layout_constraintStart_toEndOf="@+id/imageGoogleFit"
+            app:layout_constraintTop_toTopOf="@+id/imageGoogleFit" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textProfileInfo"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_basic"
+            android:layout_marginEnd="@dimen/margin_basic"
+            android:layout_marginTop="@dimen/margin_basic"
+            android:fontFamily="@font/majora"
+            android:text="@string/runage_edit_profile_info"
+            android:textSize="@dimen/textSizeNormal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchFit" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button"

@@ -54,6 +54,7 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as? MainActivity)?.unlockDrawer()
         setUpObservables()
         Timber.d("onViewCreated")
 
@@ -81,11 +82,6 @@ class MainFragment : BaseFragment<MainViewModel>() {
 
     private fun showBottomNav() {
         binding.bottomNavigation.visibility = View.VISIBLE
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        (activity as? MainActivity)?.unlockDrawer()
     }
 
     override fun onResume() {

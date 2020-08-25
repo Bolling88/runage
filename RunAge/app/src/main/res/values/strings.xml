@@ -156,4 +156,5 @@
     <string name="runage_congrats_level_up">Congratulations, you have reached level</string>
     <string name="runage_search">Search</string>
     <string name="runage_ad">Ad</string>
+    <string name="runage_edit_profile_info">"You can edit your profile image and name in the Google Play Games app that you have installed. "</string>
 </resources>

@@ -154,4 +154,5 @@
     <string name="runage_congrats_level_up">Grattis, du har nått level</string>
     <string name="runage_search">Sök</string>
     <string name="runage_ad">Annons</string>
+    <string name="runage_edit_profile_info">"Du kan editera din profil i Google Play Spel appen som du har installerad. "</string>
 </resources>
