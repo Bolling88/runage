@@ -67,7 +67,7 @@ class SearchViewModel(
                                 _liveNoRunsTextVisibility.postValue(View.VISIBLE)
                             }
                         }
-                        ?.addOnFailureListener { exception ->
+                        .addOnFailureListener { exception ->
                             Timber.e("get failed with $exception")
                             _liveProgressVisibility.postValue(View.GONE)
                             _liveNoRunsTextVisibility.postValue(View.VISIBLE)
@@ -93,7 +93,7 @@ class SearchViewModel(
                         } else {
                             Timber.d("No such document")
                         }
-                    }?.addOnFailureListener { exception ->
+                    }.addOnFailureListener { exception ->
                         Timber.e("get failed with $exception")
                     }
             }
