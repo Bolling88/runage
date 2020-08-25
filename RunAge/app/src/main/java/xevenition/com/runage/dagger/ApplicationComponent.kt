@@ -30,6 +30,7 @@ import xevenition.com.runage.fragment.profile.ProfileFragment
 import xevenition.com.runage.fragment.profile.ProfileViewModelFactory
 import xevenition.com.runage.fragment.requirement.RequirementViewModelFactory
 import xevenition.com.runage.fragment.rule.RuleViewModelFactory
+import xevenition.com.runage.fragment.search.SearchFragment
 import xevenition.com.runage.fragment.search.SearchViewModelFactory
 import xevenition.com.runage.fragment.settings.SettingsFragment
 import xevenition.com.runage.fragment.settings.SettingsViewModelFactory
@@ -58,6 +59,7 @@ interface ApplicationComponent {
     fun inject(component: StartFragment)
     fun inject(component: QuestsFragment)
     fun inject(component: PlayerFragment)
+    fun inject(component: SearchFragment)
     fun inject(component: SplashFragment)
     fun inject(component: SupportFragment)
     fun inject(component: HistoryFragment)

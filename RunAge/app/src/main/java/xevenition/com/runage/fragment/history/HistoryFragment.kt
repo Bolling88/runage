@@ -129,8 +129,6 @@ class HistoryFragment : BaseFragment<HistoryViewModel>() {
                 }).build()
 
         // Load the Native Express ad.
-
-        // Load the Native Express ad.
         adLoader?.loadAds(AdRequest.Builder().build(), NUMBER_OF_ADS)
     }
 
