@@ -212,9 +212,9 @@ class StartFragment : BaseFragment<StartViewModel>(), RateDialogFragment.RateDia
     private fun displayProfileImageAndRetrieveIt(uri: Uri) {
         val manager = ImageManager.create(requireContext())
         val listener =
-            ImageManager.OnImageLoadedListener { uri: Uri, drawable: Drawable, b: Boolean ->
+            ImageManager.OnImageLoadedListener { uri: Uri, drawable: Drawable?, b: Boolean ->
                 binding.imgProfile.setImageDrawable(drawable)
-                val bitmap = drawable.toBitmap()
+                val bitmap = drawable?.toBitmap()
                 //val bitmap = (binding.imgProfile.drawable as BitmapDrawable).bitmap
                 viewModel.onProfileImageRetrieved(bitmap)
             }
