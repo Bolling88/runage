@@ -119,7 +119,7 @@ class QuestsRecyclerAdapter(
                 }
                 else -> {
                     card.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        dimensionRatio = "H,1:1"
+                        dimensionRatio = null
                     }
                 }
             }
